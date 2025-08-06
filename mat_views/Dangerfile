@@ -43,10 +43,10 @@ end
 # Add one helpful message at the end if there were any fails or warns
 if !danger_fails.empty? || !danger_warnings.empty?
   message = <<~MSG
-    ---  
-    🔧 **How to fix and re-trigger:**  
-    Please address the above issues and push your changes. The checks will automatically re-run on each push.  
-    If you want to manually re-run the checks on GitHub, you can do so from the "Actions" tab or the "Checks" section of this PR.  
+    ---#{'  '}
+    🔧 **How to fix and re-trigger:**#{'  '}
+    Please address the above issues and push your changes. The checks will automatically re-run on each push.#{'  '}
+    If you want to manually re-run the checks on GitHub, you can do so from the "Actions" tab or the "Checks" section of this PR.#{'  '}
   MSG
 
   markdown(message)
