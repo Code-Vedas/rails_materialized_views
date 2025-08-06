@@ -1,0 +1,134 @@
+name-template: "v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+
+autolabeler:
+  - label: "feature"
+    branch:
+      - /^feat\//
+    title:
+      - /^feat:/
+
+  - label: "bug"
+    branch:
+      - /^bugfix\//
+    title:
+      - /^bugfix:/
+
+  - label: "docs"
+    branch:
+      - /^docs\//
+    title:
+      - /^docs:/
+
+  - label: "release"
+    branch:
+      - /^release\//
+    title:
+      - /^release:/
+
+  - label: "chore"
+    branch:
+      - /^chore\//
+    title:
+      - /^chore:/
+
+  - label: "refactor"
+    branch:
+      - /^refactor\//
+    title:
+      - /^refactor:/
+
+  - label: "test"
+    branch:
+      - /^test\//
+    title:
+      - /^test:/
+
+  - label: "style"
+    branch:
+      - /^style\//
+    title:
+      - /^style:/
+
+  - label: "ci"
+    branch:
+      - /^ci\//
+    title:
+      - /^ci:/
+
+  - label: "perf"
+    branch:
+      - /^perf\//
+    title:
+      - /^perf:/
+
+  - label: "build"
+    branch:
+      - /^build\//
+    title:
+      - /^build:/
+
+categories:
+  - title: "🚀 Features"
+    labels:
+      - "feature"
+
+  - title: "🐛 Bug Fixes"
+    labels:
+      - "bug"
+
+  - title: "📝 Documentation"
+    labels:
+      - "docs"
+
+  - title: "🔖 Releases"
+    labels:
+      - "release"
+
+  - title: "🧰 Maintenance"
+    labels:
+      - "chore"
+      - "refactor"
+
+  - title: "🧪 Tests"
+    labels:
+      - "test"
+
+  - title: "💅 Styling"
+    labels:
+      - "style"
+
+  - title: "⚙️ CI"
+    labels:
+      - "ci"
+
+  - title: "🚀 Performance"
+    labels:
+      - "perf"
+
+  - title: "📦 Build"
+    labels:
+      - "build"
+
+change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
+no-changes-template: "- No user-facing changes."
+
+version-resolver:
+  major:
+    labels:
+      - "breaking"
+  minor:
+    labels:
+      - "feature"
+  patch:
+    labels:
+      - "bugfix"
+      - "chore"
+
+exclude-labels:
+  - "skip-changelog"
+
+template: |
+  ## Changes
+
+  $CHANGES
