@@ -1,0 +1,53 @@
+valid_prefixes = %w[feat/ bugfix/ docs/ release/ chore/ refactor/ test/ style/ ci/ perf/ build/]
+
+if github.pr_body.strip.length < 10
+  fail("📝 Please include a more detailed description of your change.")
+end
+
+if github.pr_head && !valid_prefixes.any? { |prefix| github.pr_head.start_with?(prefix) }
+  fail("⚠️ PR branch name should start with one of: #{valid_prefixes.join(', ')}")
+end
+
+# pr title should match with prefix minus / and colon
+if github.pr_title && !valid_prefixes.any? { |prefix| github.pr_title.start_with?(prefix.delete_suffix('/') + ':') }
+  fail("⚠️ PR title should start with one of: #{valid_prefixes.map { |p| p.delete_suffix('/') + ':' }.join(', ')}")
+end
+
+if git.modified_files.include?("Gemfile") && !git.modified_files.include?("Gemfile.lock")
+  fail("📦 Gemfile changed but Gemfile.lock did not. Did you forget to run bundle install?")
+end
+
+git.added_files.each do |f|
+  if f =~ /binding\.pry/
+    fail("🚫 Do not commit binding.pry!")
+  end
+
+  if f.end_with?(".swp", ".DS_Store")
+    fail("🧹 Remove temporary or system files like #{f}.")
+  end
+end
+
+if github.pr_head&.start_with?("release/")
+  changelog_modified = git.modified_files.include?("CHANGELOG.md") ||
+                       git.added_files.include?("CHANGELOG.md")
+  fail("🚨 CHANGELOG.md must be updated in a release branch.") unless changelog_modified
+end
+
+unless git.modified_files.grep(/\.rb$/).empty?
+  test_files = git.modified_files.grep(/spec\/|test\//)
+  if test_files.empty?
+    warn("⚠️ No tests/specs modified. Please ensure tests are updated for any Ruby code changes.")
+  end
+end
+
+# Add one helpful message at the end if there were any fails or warns
+if !danger_fails.empty? || !danger_warnings.empty?
+  message = <<~MSG
+    ---  
+    🔧 **How to fix and re-trigger:**  
+    Please address the above issues and push your changes. The checks will automatically re-run on each push.  
+    If you want to manually re-run the checks on GitHub, you can do so from the "Actions" tab or the "Checks" section of this PR.  
+  MSG
+
+  markdown(message)
+end
