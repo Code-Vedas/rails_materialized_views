@@ -1,10 +1,17 @@
 valid_prefixes = %w[feat/ bugfix/ docs/ release/ chore/ refactor/ test/ style/ ci/ perf/ build/]
 
+def all_modified_files(git)
+    all_added = git.added_files + git.modified_files + git.renamed_files.map { |file| file[:after] }
+    all_removed = git.deleted_files + git.renamed_files.map { |file| file[:before] }
+
+    (all_added - all_removed).uniq
+end
+
 if github.pr_body.strip.length < 10
   fail("📝 Please include a more detailed description of your change.")
 end
 
-if github.pr_head && !valid_prefixes.any? { |prefix| github.pr_head.start_with?(prefix) }
+if github.branch_for_head && !valid_prefixes.any? { |prefix| github.branch_for_head.start_with?(prefix) }
   fail("⚠️ PR branch name should start with one of: #{valid_prefixes.join(', ')}")
 end
 
@@ -13,7 +20,7 @@ if github.pr_title && !valid_prefixes.any? { |prefix| github.pr_title.start_with
   fail("⚠️ PR title should start with one of: #{valid_prefixes.map { |p| p.delete_suffix('/') + ':' }.join(', ')}")
 end
 
-if git.modified_files.include?("Gemfile") && !git.modified_files.include?("Gemfile.lock")
+if !all_modified_files(git).include?("Gemfile") && !all_modified_files(git).include?("Gemfile.lock")
   fail("📦 Gemfile changed but Gemfile.lock did not. Did you forget to run bundle install?")
 end
 
@@ -27,14 +34,13 @@ git.added_files.each do |f|
   end
 end
 
-if github.pr_head&.start_with?("release/")
-  changelog_modified = git.modified_files.include?("CHANGELOG.md") ||
-                       git.added_files.include?("CHANGELOG.md")
+if github.branch_for_head&.start_with?("release/")
+  changelog_modified = all_modified_files(git).include?("CHANGELOG.md")
   fail("🚨 CHANGELOG.md must be updated in a release branch.") unless changelog_modified
 end
 
-unless git.modified_files.grep(/\.rb$/).empty?
-  test_files = git.modified_files.grep(/spec\/|test\//)
+unless all_modified_files(git).grep(/\.rb$/).empty?
+  test_files = all_modified_files(git).grep(/spec\/|test\//)
   if test_files.empty?
     warn("⚠️ No tests/specs modified. Please ensure tests are updated for any Ruby code changes.")
   end
