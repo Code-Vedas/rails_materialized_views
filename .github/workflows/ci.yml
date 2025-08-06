@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./mat_views
+        working-directory: mat_views
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,7 +20,7 @@ jobs:
         with:
           ruby-version: 3.4.3
           bundler-cache: true
-          working-directory: ./mat_views
+          working-directory: mat_views
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./mat_views
+        working-directory: mat_views
 
     services:
       postgres:
@@ -59,7 +59,7 @@ jobs:
         with:
           ruby-version: 3.4.3
           bundler-cache: true
-          working-directory: ./mat_views
+          working-directory: mat_views
 
       - name: Run tests
         env:
