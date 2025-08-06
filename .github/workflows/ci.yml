@@ -27,9 +27,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}/mat_views
 
     services:
       postgres:
@@ -62,6 +59,7 @@ jobs:
           working-directory: ${{ github.workspace }}/mat_views
 
       - name: Run tests
+        working-directory: ${{ github.workspace }}/mat_views
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
