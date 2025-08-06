@@ -3,11 +3,14 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mat_views
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -17,12 +20,16 @@ jobs:
         with:
           ruby-version: 3.4.3
           bundler-cache: true
+          working-directory: ./mat_views
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mat_views
 
     services:
       postgres:
@@ -52,6 +59,7 @@ jobs:
         with:
           ruby-version: 3.4.3
           bundler-cache: true
+          working-directory: ./mat_views
 
       - name: Run tests
         env:
@@ -65,5 +73,5 @@ jobs:
         if: failure()
         with:
           name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
+          path: ${{ github.workspace }}/mat_views/tmp/screenshots
           if-no-files-found: ignore
