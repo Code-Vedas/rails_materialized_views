@@ -46,9 +46,10 @@ unless all_modified_files(git).grep(/\.rb$/).empty?
   end
 end
 
-if !danger.errors.empty? || !danger.warnings.empty?
+if violation_report[:errors].any? || violation_report[:warnings].any?
   message = <<~MSG
     ---
+    ⚠️ You got #{violation_report[:errors].count} error(s) and #{violation_report[:warnings].count} warning(s) in your PR.
     🔧 **How to fix and re-trigger:**
     Please address the above issues and push your changes. The checks will automatically re-run on each push.
     If you want to manually re-run the checks on GitHub, you can do so from the "Actions" tab or the "Checks" section of this PR.

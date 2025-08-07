@@ -16,12 +16,9 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.4.3"
-
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install || true
+          ruby-version: 3.4.3
+          bundler-cache: true
+          working-directory: ${{ github.workspace }}/mat_views
 
       - name: Run Danger
         run: bundle exec danger
