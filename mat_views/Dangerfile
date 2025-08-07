@@ -3,7 +3,6 @@ valid_prefixes = %w[feat/ bugfix/ docs/ release/ chore/ refactor/ test/ style/ c
 def all_modified_files(git)
     all_added = git.added_files + git.modified_files + git.renamed_files.map { |file| file[:after] }
     all_removed = git.deleted_files + git.renamed_files.map { |file| file[:before] }
-    puts "(all_added - all_removed).uniq => #{(all_added - all_removed).uniq.inspect}"
     (all_added - all_removed).uniq
 end
 
@@ -20,7 +19,7 @@ if github.pr_title && !valid_prefixes.any? { |prefix| github.pr_title.start_with
   fail("⚠️ PR title should start with one of: #{valid_prefixes.map { |p| p.delete_suffix('/') + ':' }.join(', ')}")
 end
 
-if !all_modified_files(git).include?("Gemfile") && !all_modified_files(git).include?("Gemfile.lock")
+if all_modified_files(git).detect("Gemfile") && !all_modified_files(git).detect("Gemfile.lock")
   fail("📦 Gemfile changed but Gemfile.lock did not. Did you forget to run bundle install?")
 end
 
