@@ -6,6 +6,8 @@ def all_modified_files(git)
     (all_added - all_removed).uniq
 end
 
+modified_files = all_modified_files(git)
+
 if github.pr_body.strip.length < 10
   fail("📝 Please include a more detailed description of your change.")
 end
@@ -19,15 +21,15 @@ if github.pr_title && !valid_prefixes.any? { |prefix| github.pr_title.start_with
   fail("⚠️ PR title should start with one of: #{valid_prefixes.map { |p| p.delete_suffix('/') + ':' }.join(', ')}")
 end
 
-if all_modified_files(git).include?("Gemfile") && !all_modified_files(git).include?("Gemfile.lock")
+if modified_files.include?("Gemfile") && !modified_files.include?("Gemfile.lock")
   fail("📦 Gemfile changed but Gemfile.lock did not. Did you forget to run bundle install?")
 end
 
-all_modified_files(git).each do |f|
+modified_files.each do |f|
   diff = git.diff_for_file(f)
   debug_statements = [ "binding.pry", "binding.b", "byebug", "debugger" ]
   if f.end_with?(".rb") && diff && debug_statements.any? { |stmt| diff.patch.include?(stmt) }
-    fail("🚫 Do not commit debugging statements like binding.pry, binding.b, byebug, or debugger!. Found in #{diff.patch}")
+    fail("🚫 Do not commit debugging statements like binding.pry, binding.b, byebug, or debugger!. Found in #{f}")
   end
 
   if f.end_with?(".swp", ".DS_Store")
@@ -36,12 +38,12 @@ all_modified_files(git).each do |f|
 end
 
 if github.branch_for_head&.start_with?("release/")
-  changelog_modified = all_modified_files(git).include?("CHANGELOG.md")
+  changelog_modified = modified_files.include?("CHANGELOG.md")
   fail("🚨 CHANGELOG.md must be updated in a release branch.") unless changelog_modified
 end
 
-unless all_modified_files(git).grep(/\.rb$/).empty?
-  test_files = all_modified_files(git).grep(/spec\/|test\//)
+unless modified_files.grep(/\.rb$/).empty?
+  test_files = modified_files.grep(/spec\/|test\//)
   if test_files.empty?
     warn("⚠️ No tests/specs modified. Please ensure tests are updated for any Ruby code changes.")
   end
