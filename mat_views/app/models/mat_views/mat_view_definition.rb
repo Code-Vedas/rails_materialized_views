@@ -16,8 +16,10 @@ module MatViews
     validates :name, presence: true, uniqueness: true, format: { with: /\A[a-zA-Z_][a-zA-Z0-9_]*\z/ }
     validates :sql, presence: true, format: { with: /\A\s*SELECT/i, message: 'must begin with a SELECT' }
 
-    def refresh(concurrently: false)
-      MatViews::MatViewRefreshJob.perform_later(id, concurrently: concurrently)
+    enum :refresh_strategy, { regular: 0, concurrent: 1, swap: 2 }
+
+    def refresh
+      MatViews::MatViewRefreshJob.perform_later(id, refresh_strategy: refresh_strategy)
     end
   end
 end
