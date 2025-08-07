@@ -24,7 +24,7 @@ if all_modified_files(git).include?("Gemfile") && !all_modified_files(git).inclu
 end
 
 git.added_files.each do |f|
-  if File.read(f).include?("binding.pry")
+  if git.diff_for_file(f).include?("binding.pry")
     fail("🚫 Do not commit binding.pry!")
   end
 
