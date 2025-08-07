@@ -12,6 +12,7 @@ group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]
   # gem "debug", ">= 1.0.0"
   gem 'danger'
+  gem 'faker'
   gem 'faraday-retry', '~> 2.3'
   gem 'generator_spec', '~> 0.10.0'
   gem 'rspec-rails'
@@ -19,4 +20,5 @@ group :development, :test do
   gem 'rubocop-rake', '~> 0.7.1'
   gem 'rubocop-rspec', '~> 3.6'
   gem 'rubocop-rspec_rails', '~> 2.31'
+  gem 'shoulda-matchers'
 end

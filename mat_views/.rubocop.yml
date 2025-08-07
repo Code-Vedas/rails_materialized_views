@@ -16,3 +16,5 @@ RSpec/ExampleLength:
   Max: 15
 Layout/LineLength:
   Max: 150
+RSpecRails/InferredSpecType:
+  Enabled: false
