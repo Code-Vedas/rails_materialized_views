@@ -12,9 +12,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 20_250_807_144_142) do
+ActiveRecord::Schema[8.0].define(version: 20_250_807_153_908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'pg_catalog.plpgsql'
+
+  create_table 'accounts', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.string 'plan'
+    t.string 'status'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['user_id'], name: 'index_accounts_on_user_id'
+  end
+
+  create_table 'events', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.string 'event_type'
+    t.jsonb 'properties'
+    t.datetime 'occurred_at'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['user_id'], name: 'index_events_on_user_id'
+  end
 
   create_table 'mat_view_definitions', force: :cascade do |t|
     t.string 'name', null: false, comment: 'The name of the materialized view'
@@ -30,10 +49,8 @@ ActiveRecord::Schema[8.0].define(version: 20_250_807_144_142) do
   end
 
   create_table 'mat_view_refresh_runs', force: :cascade do |t|
-    t.bigint 'mat_view_definition_id', null: false,
-                                       comment: 'Reference to the materialized view definition being refreshed'
-    t.integer 'status', default: 0, null: false,
-                        comment: 'Status of the refresh run. Options: pending, running, success, failed'
+    t.bigint 'mat_view_definition_id', null: false, comment: 'Reference to the materialized view definition being refreshed'
+    t.integer 'status', default: 0, null: false, comment: 'Status of the refresh run. Options: pending, running, success, failed'
     t.datetime 'started_at', comment: 'Timestamp when the refresh operation started'
     t.datetime 'finished_at', comment: 'Timestamp when the refresh operation finished'
     t.integer 'duration_ms', comment: 'Duration of the refresh operation in milliseconds'
@@ -45,5 +62,26 @@ ActiveRecord::Schema[8.0].define(version: 20_250_807_144_142) do
     t.index ['mat_view_definition_id'], name: 'index_mat_view_refresh_runs_on_mat_view_definition_id'
   end
 
+  create_table 'sessions', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.string 'session_token'
+    t.datetime 'started_at'
+    t.datetime 'ended_at'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['user_id'], name: 'index_sessions_on_user_id'
+  end
+
+  create_table 'users', force: :cascade do |t|
+    t.string 'name'
+    t.string 'email'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['email'], name: 'index_users_on_email'
+  end
+
+  add_foreign_key 'accounts', 'users'
+  add_foreign_key 'events', 'users'
   add_foreign_key 'mat_view_refresh_runs', 'mat_view_definitions'
+  add_foreign_key 'sessions', 'users'
 end
