@@ -27,4 +27,23 @@ RSpec.describe MatViews::MatViewDefinition do
     expect(assoc.macro).to eq(:has_many)
     expect(assoc.options[:dependent]).to eq(:destroy)
   end
+
+  describe 'refresh strategy' do
+    it 'has a default refresh strategy' do
+      expect(model.refresh_strategy).to eq('regular')
+    end
+
+    it 'allows setting a different refresh strategy' do
+      model.refresh_strategy = 'concurrent'
+      expect(model.refresh_strategy).to eq('concurrent')
+    end
+
+    it 'validates the refresh strategy' do
+      expect { model.refresh_strategy = 'invalid' }.to raise_error(ArgumentError)
+    end
+
+    it 'has correct enum values' do
+      expect(described_class.refresh_strategies.keys).to contain_exactly('regular', 'concurrent', 'swap')
+    end
+  end
 end

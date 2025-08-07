@@ -14,3 +14,5 @@ RSpec/MultipleExpectations:
   Max: 5
 RSpec/ExampleLength:
   Max: 15
+Layout/LineLength:
+  Max: 150
