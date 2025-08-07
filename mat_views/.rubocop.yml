@@ -7,3 +7,6 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2
   SuggestExtensions: true
+
+Metrics/MethodLength:
+  Max: 20
