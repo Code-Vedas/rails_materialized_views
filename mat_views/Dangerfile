@@ -3,7 +3,7 @@ valid_prefixes = %w[feat/ bugfix/ docs/ release/ chore/ refactor/ test/ style/ c
 def all_modified_files(git)
     all_added = git.added_files + git.modified_files + git.renamed_files.map { |file| file[:after] }
     all_removed = git.deleted_files + git.renamed_files.map { |file| file[:before] }
-
+    puts "(all_added - all_removed).uniq => #{(all_added - all_removed).uniq.inspect}"
     (all_added - all_removed).uniq
 end
 
