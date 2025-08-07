@@ -123,6 +123,8 @@ GEM
       faraday (>= 0.8)
     faraday-net_http (3.4.1)
       net-http (>= 0.5.0)
+    faraday-retry (2.3.2)
+      faraday (~> 2.0)
     git (2.3.3)
       activesupport (>= 5.0)
       addressable (~> 2.8)
@@ -299,16 +301,16 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.38.0, < 2.0)
-    rubocop-rails (2.32.0)
-      activesupport (>= 4.2.0)
+    rubocop-rake (0.7.1)
       lint_roller (~> 1.1)
-      rack (>= 1.1)
-      rubocop (>= 1.75.0, < 2.0)
-      rubocop-ast (>= 1.44.0, < 2.0)
-    rubocop-rails-omakase (1.1.0)
-      rubocop (>= 1.72)
-      rubocop-performance (>= 1.24)
-      rubocop-rails (>= 2.30)
+      rubocop (>= 1.72.1)
+    rubocop-rspec (3.6.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
+    rubocop-rspec_rails (2.31.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
+      rubocop-rspec (~> 3.5)
     ruby-progressbar (1.13.0)
     sawyer (0.9.2)
       addressable (>= 2.3.5)
@@ -346,12 +348,16 @@ PLATFORMS
 
 DEPENDENCIES
   danger
+  faraday-retry (~> 2.3)
   mat_views!
   pg
   propshaft
   puma
   rspec-rails
-  rubocop-rails-omakase
+  rubocop-performance (~> 1.25)
+  rubocop-rake (~> 0.7.1)
+  rubocop-rspec (~> 3.6)
+  rubocop-rspec_rails (~> 2.31)
 
 BUNDLED WITH
    2.6.8
