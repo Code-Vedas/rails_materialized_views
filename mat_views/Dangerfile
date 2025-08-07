@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/SignalException
 valid_prefixes = %w[feat/ bugfix/ docs/ release/ chore/ refactor/ test/ style/ ci/ perf/ build/]
 
 def all_modified_files(git)
@@ -10,34 +11,34 @@ end
 
 modified_files = all_modified_files(git)
 
-raise('📝 Please include a more detailed description of your change.') if github.pr_body.strip.length < 10
+fail('📝 Please include a more detailed description of your change.') if github.pr_body.strip.length < 10
 
 if github.branch_for_head && valid_prefixes.none? { |prefix| github.branch_for_head.start_with?(prefix) }
-  raise("⚠️ PR branch name should start with one of: #{valid_prefixes.join(', ')}")
+  fail("⚠️ PR branch name should start with one of: #{valid_prefixes.join(', ')}")
 end
 
 # pr title should match with prefix minus / and colon
 if github.pr_title && valid_prefixes.none? { |prefix| github.pr_title.start_with?("#{prefix.delete_suffix('/')}:") }
-  raise("⚠️ PR title should start with one of: #{valid_prefixes.map { |p| "#{p.delete_suffix('/')}:" }.join(', ')}")
+  fail("⚠️ PR title should start with one of: #{valid_prefixes.map { |p| "#{p.delete_suffix('/')}:" }.join(', ')}")
 end
 
 if modified_files.include?('Gemfile') && !modified_files.include?('Gemfile.lock')
-  raise('📦 Gemfile changed but Gemfile.lock did not. Did you forget to run bundle install?')
+  fail('📦 Gemfile changed but Gemfile.lock did not. Did you forget to run bundle install?')
 end
 
 modified_files.each do |f|
   diff = git.diff_for_file(f)
   debug_statements = ['binding.pry', 'binding.b', 'byebug', 'debugger']
   if f.end_with?('.rb') && diff && debug_statements.any? { |stmt| diff.patch.include?(stmt) }
-    raise("🚫 Do not commit debugging statements like binding.pry, binding.b, byebug, or debugger!. Found in #{f}")
+    fail("🚫 Do not commit debugging statements like binding.pry, binding.b, byebug, or debugger!. Found in #{f}")
   end
 
-  raise("🧹 Remove temporary or system files like #{f}.") if f.end_with?('.swp', '.DS_Store')
+  fail("🧹 Remove temporary or system files like #{f}.") if f.end_with?('.swp', '.DS_Store')
 end
 
 if github.branch_for_head&.start_with?('release/')
   changelog_modified = modified_files.include?('CHANGELOG.md')
-  raise('🚨 CHANGELOG.md must be updated in a release branch.') unless changelog_modified
+  fail('🚨 CHANGELOG.md must be updated in a release branch.') unless changelog_modified
 end
 
 unless modified_files.grep(/\.rb$/).empty?
@@ -56,3 +57,4 @@ if violation_report[:errors].any? || violation_report[:warnings].any?
 
   markdown(message)
 end
+# rubocop:enable Style/SignalException
