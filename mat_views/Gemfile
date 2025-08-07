@@ -1,17 +1,21 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-# Specify your gem's dependencies in mat_views.gemspec.
+source 'https://rubygems.org'
+
 gemspec
 
-gem "puma"
+gem 'pg'
+gem 'propshaft'
+gem 'puma'
 
-gem "pg"
-
-gem "propshaft"
-
-# Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
-gem "rubocop-rails-omakase", require: false
-
-# Start debugger with binding.b [https://github.com/ruby/debug]
-# gem "debug", ">= 1.0.0"
-gem "danger"
+group :development, :test do
+  # Start debugger with binding.b [https://github.com/ruby/debug]
+  # gem "debug", ">= 1.0.0"
+  gem 'danger'
+  gem 'faraday-retry', '~> 2.3'
+  gem 'rspec-rails'
+  gem 'rubocop-performance', '~> 1.25'
+  gem 'rubocop-rake', '~> 0.7.1'
+  gem 'rubocop-rspec', '~> 3.6'
+  gem 'rubocop-rspec_rails', '~> 2.31'
+end

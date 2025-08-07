@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
 require 'rails'
 ENV['RAILS_ENV'] ||= 'test'
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 
 require 'spec_helper'
-require File.expand_path("dummy/config/environment", __dir__) if File.exist?(File.expand_path("dummy/config/environment.rb", __dir__))
-require "rspec/rails"
+require File.expand_path('dummy/config/environment', __dir__) if File.exist?(File.expand_path(
+                                                                               'dummy/config/environment.rb', __dir__
+                                                                             ))
+require 'rspec/rails'
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
