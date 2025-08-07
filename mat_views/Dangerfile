@@ -19,12 +19,12 @@ if github.pr_title && !valid_prefixes.any? { |prefix| github.pr_title.start_with
   fail("⚠️ PR title should start with one of: #{valid_prefixes.map { |p| p.delete_suffix('/') + ':' }.join(', ')}")
 end
 
-if all_modified_files(git).detect("Gemfile") && !all_modified_files(git).detect("Gemfile.lock")
+if all_modified_files(git).include?("Gemfile") && !all_modified_files(git).include?("Gemfile.lock")
   fail("📦 Gemfile changed but Gemfile.lock did not. Did you forget to run bundle install?")
 end
 
 git.added_files.each do |f|
-  if f =~ /binding\.pry/
+  if File.read(f).include?("binding.pry")
     fail("🚫 Do not commit binding.pry!")
   end
 

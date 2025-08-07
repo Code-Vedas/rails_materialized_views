@@ -122,7 +122,7 @@ version-resolver:
       - "feature"
   patch:
     labels:
-      - "bugfix"
+      - "bug"
       - "chore"
       - "refactor"
       - "test"
