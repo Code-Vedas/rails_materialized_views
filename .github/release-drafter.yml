@@ -124,6 +124,12 @@ version-resolver:
     labels:
       - "bugfix"
       - "chore"
+      - "refactor"
+      - "test"
+      - "style"
+      - "ci"
+      - "perf"
+      - "build"
 
 exclude-labels:
   - "skip-changelog"
