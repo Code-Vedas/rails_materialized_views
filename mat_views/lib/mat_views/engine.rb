@@ -8,5 +8,9 @@ module MatViews
   # leverage its features.
   class Engine < ::Rails::Engine
     isolate_namespace MatViews
+
+    initializer 'mat_views.load_config' do
+      MatViews.configuration ||= MatViews::Configuration.new
+    end
   end
 end

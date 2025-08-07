@@ -2,6 +2,7 @@
 
 require 'mat_views/version'
 require 'mat_views/engine'
+require 'mat_views/configuration'
 
 # MatViews is a Rails engine that provides support for materialized views.
 #
@@ -9,4 +10,12 @@ require 'mat_views/engine'
 # within a Rails application. This engine can be mounted in a Rails application to
 # leverage its features.
 module MatViews
+  class << self
+    attr_accessor :configuration
+
+    def configure
+      self.configuration ||= Configuration.new
+      yield(configuration)
+    end
+  end
 end

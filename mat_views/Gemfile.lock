@@ -125,6 +125,9 @@ GEM
       net-http (>= 0.5.0)
     faraday-retry (2.3.2)
       faraday (~> 2.0)
+    generator_spec (0.10.0)
+      activesupport (>= 3.0.0)
+      railties (>= 3.0.0)
     git (2.3.3)
       activesupport (>= 5.0)
       addressable (~> 2.8)
@@ -349,6 +352,7 @@ PLATFORMS
 DEPENDENCIES
   danger
   faraday-retry (~> 2.3)
+  generator_spec (~> 0.10.0)
   mat_views!
   pg
   propshaft
