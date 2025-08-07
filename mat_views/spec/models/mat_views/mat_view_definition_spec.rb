@@ -43,7 +43,7 @@ RSpec.describe MatViews::MatViewDefinition do
     end
 
     it 'has correct enum values' do
-      expect(described_class.refresh_strategies.keys).to contain_exactly('regular', 'concurrent', 'swap')
+      expect(described_class.refresh_strategies).to eq({ 'regular' => 0, 'concurrent' => 1, 'swap' => 2 })
     end
   end
 end
