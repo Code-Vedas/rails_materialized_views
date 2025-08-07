@@ -46,7 +46,7 @@ unless all_modified_files(git).grep(/\.rb$/).empty?
   end
 end
 
-if !failures.empty? || !danger_warnings.empty?
+if !danger.errors.empty? || !danger.warnings.empty?
   message = <<~MSG
     ---
     🔧 **How to fix and re-trigger:**
