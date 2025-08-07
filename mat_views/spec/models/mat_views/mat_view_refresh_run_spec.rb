@@ -47,7 +47,6 @@ RSpec.describe MatViews::MatViewRefreshRun do
         3 => [0, 1, 2]  # failed
       }
     end
-    
 
     it 'validates status transitions by integer' do
       matrix.each do |from_status, to_statuses|
