@@ -23,8 +23,9 @@ if all_modified_files(git).include?("Gemfile") && !all_modified_files(git).inclu
   fail("📦 Gemfile changed but Gemfile.lock did not. Did you forget to run bundle install?")
 end
 
-git.added_files.each do |f|
-  if git.diff_for_file(f).include?("binding.pry")
+all_modified_files(git).each do |f|
+  diff = git.diff_for_file(f)
+  if diff && diff.patch.include?("binding.pry")
     fail("🚫 Do not commit binding.pry!")
   end
 
