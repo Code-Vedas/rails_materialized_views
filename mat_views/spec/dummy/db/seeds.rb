@@ -59,11 +59,14 @@ ActiveRecord::Base.transaction do
     end
 
     rand(1..5).times do
+      started_at = Faker::Time.backward(days: 7)
+      duration = rand((5 * 60)..(8 * 60 * 60))
+      ended_at = started_at + duration
       sessions << {
         user_id: uid,
         session_token: SecureRandom.hex(10),
-        started_at: Faker::Time.backward(days: 7),
-        ended_at: Faker::Time.backward(days: 1),
+        started_at: started_at,
+        ended_at: ended_at,
         created_at: now,
         updated_at: now
       }
