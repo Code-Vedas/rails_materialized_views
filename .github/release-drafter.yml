@@ -6,7 +6,8 @@ autolabeler:
     branch:
       - /^dependabot\//
     title:
-      - /^chore\(.*\):/
+      - /^chore\(deps\):/
+      - /^chore\(dependencies\):/
   - label: "feature"
     branch:
       - /^feat\//
