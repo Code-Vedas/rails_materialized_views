@@ -3,6 +3,7 @@ plugins:
   - rubocop-rspec_rails
   - rubocop-performance
   - rubocop-rake
+  - rubocop-factory_bot
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2
