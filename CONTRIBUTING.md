@@ -75,6 +75,17 @@ Before creating an issue, perform the following:
 
 Both approaches are suitable for various changes, including bug fixes and new features, while adhering to the code of conduct.
 
+### Using factories
+
+We use `factory_bot_rails` for concise test data:
+
+- Factories live in `spec/factories/`.
+- Engine models:
+  - `create(:mat_view_definition, name: "public.mv_users", sql: "SELECT ...", refresh_strategy: :regular)`
+  - `create(:mat_view_refresh_run, mat_view_definition: defn, status: :pending)`
+
+Seed data for dummy app tables (`users`, `accounts`, `events`, `sessions`) is provided via `mat_views/spec/dummy/db/seeds.rb` file. Run `rails db:seed` to populate the database with this data when you are in `mat_views` directory.
+
 ## Enhance Security
 
 Contributions to the security aspects of the project are highly appreciated. To report a security vulnerability, please follow the instructions outlined in the [SECURITY.md](SECURITY.md) file.
