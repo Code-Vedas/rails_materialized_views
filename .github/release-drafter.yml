@@ -2,6 +2,11 @@ name-template: "v$RESOLVED_VERSION"
 tag-template: "v$RESOLVED_VERSION"
 
 autolabeler:
+  - label: "dependencies"
+    branch:
+      - /^dependabot\//
+    title:
+      - /^dependabot:/
   - label: "feature"
     branch:
       - /^feat\//
@@ -89,6 +94,7 @@ categories:
     labels:
       - "chore"
       - "refactor"
+      - "dependencies"
 
   - title: "🧪 Tests"
     labels:
@@ -130,6 +136,7 @@ version-resolver:
       - "ci"
       - "perf"
       - "build"
+      - "dependencies"
 
 exclude-labels:
   - "skip-changelog"
