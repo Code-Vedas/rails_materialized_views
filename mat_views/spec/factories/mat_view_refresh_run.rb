@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :mat_view_refresh_run, class: 'MatViews::MatViewRefreshRun' do
-    mat_view_definition { { class: 'MatViews::MatViewDefinition' } }
+    mat_view_definition factory: :mat_view_definition
     status      { :pending }
     started_at  { Time.current }
     finished_at { nil }
