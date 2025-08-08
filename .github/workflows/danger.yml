@@ -5,6 +5,7 @@ on:
 
 jobs:
   danger:
+    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' && !startsWith(github.head_ref, 'dependabot/') }}
     runs-on: ubuntu-latest
     defaults:
       run:
