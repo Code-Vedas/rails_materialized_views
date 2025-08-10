@@ -8,10 +8,10 @@ module MatViews
     belongs_to :mat_view_definition, class_name: 'MatViews::MatViewDefinition'
 
     enum :status, {
-      pending: 0, # The refresh operation is queued but not yet started.
-      running: 1, # The refresh operation is currently in progress.
-      success: 2, # The refresh operation completed successfully.
-      failed: 3   # The refresh operation encountered an error.
+      pending: 0, # The creation operation is queued but not yet started.
+      running: 1, # The creation operation is currently in progress.
+      success: 2, # The creation operation completed successfully.
+      failed: 3   # The creation operation encountered an error.
     }
 
     validates :status, presence: true
