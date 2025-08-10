@@ -86,6 +86,42 @@ We use `factory_bot_rails` for concise test data:
 
 Seed data for dummy app tables (`users`, `accounts`, `events`, `sessions`) is provided via `mat_views/spec/dummy/db/seeds.rb` file. Run `rails db:seed` to populate the database with this data when you are in `mat_views` directory.
 
+### Testing job adapters
+
+Our engine supports multiple background processors via `MatViews.config.job_adapter`:
+
+- `:active_job` (default)
+- `:sidekiq`
+- `:resque`
+
+The smoke specs verify that `MatViews::Jobs::Adapter.enqueue` dispatches correctly to each adapter.
+
+**How to switch adapters when running specs**
+
+Specs set the adapter explicitly, but you can override locally in a console:
+
+```ruby
+MatViews.configure do |c|
+  c.job_adapter = :sidekiq   # or :active_job, :resque
+  c.job_queue   = 'mat_views'
+end
+```
+
+**ActiveJob tests**
+
+We use the ActiveJob test adapter. RSpec tag `:active_job` sets:
+
+```ruby
+ActiveJob::Base.queue_adapter = :test
+```
+
+**Sidekiq + Resque**
+
+Specs expect the gems to be present and assert calls to:
+
+* `Sidekiq::Client.push(...)`
+* `Resque.enqueue_to(queue, klass, *args)`
+
 ## Enhance Security
 
 Contributions to the security aspects of the project are highly appreciated. To report a security vulnerability, please follow the instructions outlined in the [SECURITY.md](SECURITY.md) file.
