@@ -67,7 +67,7 @@ RSpec.describe MatViews::Jobs::Adapter do
 
       described_class.enqueue(job_class, queue: queue, args: args)
 
-      expect(Resque).to have_received(:enqueue_to).with(queue, job_class.to_s, *args)
+      expect(Resque).to have_received(:enqueue_to).with(queue, job_class, *args)
     end
   end
 end

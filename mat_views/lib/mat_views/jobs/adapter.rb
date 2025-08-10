@@ -34,7 +34,7 @@ module MatViews
             'args' => args
           )
         when :resque
-          Resque.enqueue_to(queue.to_s, job_class.to_s, *args)
+          Resque.enqueue_to(queue.to_s, job_class, *args)
         else
           raise ArgumentError, "Unknown job adapter: #{MatViews.configuration.job_adapter.inspect}"
         end
