@@ -14,9 +14,6 @@ if ENV['CI']
   rescue LoadError
     # fallback to default text formatter
   end
-else
-  require 'simplecov-html'
-  SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
 end
 
 SimpleCov.start do

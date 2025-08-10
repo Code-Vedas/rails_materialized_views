@@ -17,7 +17,7 @@ module MatViews
       response.to_h
     rescue StandardError => e
       fail_run!(run, e) if run
-      raise
+      raise e
     end
 
     private
