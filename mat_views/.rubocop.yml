@@ -19,3 +19,9 @@ Layout/LineLength:
   Max: 150
 RSpecRails/InferredSpecType:
   Enabled: false
+Metrics/ClassLength:
+  Max: 200
+Metrics/AbcSize:
+  Max: 25
+RSpec/MultipleMemoizedHelpers:
+  Max: 10

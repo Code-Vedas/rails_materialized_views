@@ -31,7 +31,7 @@ RSpec.describe MatViews::MatViewRefreshRun do
       matrix.each do |from_status, to_statuses|
         to_statuses.each do |to_status|
           run = described_class.create!(mat_view_definition: definition, status: from_status)
-          run.send("#{to_status}!")
+          run.send("status_#{to_status}!")
           expect(run.status).to eq(to_status)
         end
       end

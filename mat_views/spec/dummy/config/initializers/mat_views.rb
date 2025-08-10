@@ -17,8 +17,8 @@ MatViews.configure do |config|
   # config.job_adapter = :active_job
 
   # job_queue is the queue name for the job adapter.
-  # Default is :mat_views.
+  # Default is :default.
   # This is used to specify the queue where MatViews jobs will be enqueued.
   # Uncomment the line below to set the job queue.
-  # config.job_queue = :mat_views
+  # config.job_queue = :default
 end

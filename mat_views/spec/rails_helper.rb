@@ -9,6 +9,7 @@ require File.expand_path('dummy/config/environment', __dir__) if File.exist?(Fil
                                                                                'dummy/config/environment.rb', __dir__
                                                                              ))
 require 'rspec/rails'
+Dir[File.expand_path('support/**/*.rb', __dir__)].each { |f| require f }
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
@@ -29,7 +30,7 @@ RSpec.configure do |config|
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
   ]
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
   config.filter_rails_from_backtrace!
 
   config.before(:suite) do

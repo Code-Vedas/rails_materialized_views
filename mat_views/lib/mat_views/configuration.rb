@@ -11,7 +11,7 @@ module MatViews
     def initialize
       @retry_on_failure = true
       @job_adapter = :active_job
-      @job_queue = :mat_views
+      @job_queue = :default
     end
   end
 end

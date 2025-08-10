@@ -12,7 +12,7 @@ module MatViews
       running: 1, # The creation operation is currently in progress.
       success: 2, # The creation operation completed successfully.
       failed: 3   # The creation operation encountered an error.
-    }
+    }, prefix: :status
 
     validates :status, presence: true
   end

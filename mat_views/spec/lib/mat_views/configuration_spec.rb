@@ -7,7 +7,7 @@ RSpec.describe MatViews::Configuration do
     it 'sets default values' do
       expect(configuration.retry_on_failure).to be true
       expect(configuration.job_adapter).to eq :active_job
-      expect(configuration.job_queue).to eq :mat_views
+      expect(configuration.job_queue).to eq :default
     end
   end
 

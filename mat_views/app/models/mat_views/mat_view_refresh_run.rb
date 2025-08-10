@@ -12,7 +12,7 @@ module MatViews
       running: 1, # The refresh operation is currently in progress.
       success: 2, # The refresh operation completed successfully.
       failed: 3   # The refresh operation encountered an error.
-    }
+    }, prefix: :status
 
     validates :status, presence: true
   end
