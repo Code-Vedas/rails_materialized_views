@@ -7,13 +7,15 @@
 # Load first thing when running specs
 require 'simplecov'
 
-if ENV['CI']
-  begin
-    require 'simplecov-console'
-    SimpleCov.formatter = SimpleCov::Formatter::Console
-  rescue LoadError
-    # fallback to default text formatter
-  end
+SimpleCov.formatters = [
+  SimpleCov::Formatter::HTMLFormatter
+]
+
+begin
+  require 'simplecov-console'
+  SimpleCov.formatters << SimpleCov::Formatter::Console
+rescue LoadError
+  # fallback to default text formatter
 end
 
 SimpleCov.start do

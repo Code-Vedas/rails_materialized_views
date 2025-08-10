@@ -66,6 +66,13 @@ jobs:
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare && bin/rails db:seed && bin/rspec --format documentation --color --profile
 
+      - name: Upload simplecov report
+        uses: actions/upload-artifact@v4
+        with:
+          name: simplecov-report
+          path: ${{ github.workspace }}/mat_views/coverage
+          if-no-files-found: ignore
+
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
         if: failure()
