@@ -10,7 +10,6 @@ RSpec.describe MatViews::ServiceResponse do
       expect(res.status).to eq(:ok)
       expect(res.payload).to eq({})
       expect(res.error).to be_nil
-      expect(res.duration_ms).to be_nil
       expect(res.meta).to eq({})
     end
 
@@ -25,13 +24,11 @@ RSpec.describe MatViews::ServiceResponse do
         status: :updated,
         payload: { rows: 10 },
         error: err,
-        duration_ms: 123,
         meta: { attempt: 2 }
       )
 
       expect(res.payload).to eq(rows: 10)
       expect(res.error).to eq(err)
-      expect(res.duration_ms).to eq(123)
       expect(res.meta).to eq(attempt: 2)
     end
   end
@@ -79,7 +76,6 @@ RSpec.describe MatViews::ServiceResponse do
         status: :noop,
         payload: { count: 1 },
         error: err,
-        duration_ms: 45,
         meta: { source: 'spec' }
       )
 
@@ -87,7 +83,6 @@ RSpec.describe MatViews::ServiceResponse do
         status: :noop,
         payload: { count: 1 },
         error: err,
-        duration_ms: 45,
         meta: { source: 'spec' }
       )
     end

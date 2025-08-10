@@ -5,13 +5,12 @@ module MatViews
   # It includes the status of the operation, any payload data, error information,
   # duration of the operation, and additional metadata.
   class ServiceResponse
-    attr_reader :status, :payload, :error, :duration_ms, :meta
+    attr_reader :status, :payload, :error, :meta
 
-    def initialize(status:, payload: {}, error: nil, duration_ms: nil, meta: {})
+    def initialize(status:, payload: {}, error: nil, meta: {})
       @status = status.to_sym
       @payload = payload
       @error = error
-      @duration_ms = duration_ms
       @meta = meta
     end
 
@@ -24,7 +23,7 @@ module MatViews
     end
 
     def to_h
-      { status:, payload:, error:, duration_ms:, meta: }
+      { status:, payload:, error:, meta: }
     end
   end
 end

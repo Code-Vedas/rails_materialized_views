@@ -162,7 +162,7 @@ module MatViews
       # ────────────────────────────────────────────────────────────────
 
       def ok(payload = {})
-        MatViews::ServiceResponse.new(status: :created, payload: payload, duration_ms: nil)
+        MatViews::ServiceResponse.new(status: :created, payload: payload)
       end
 
       def err(msg)
@@ -178,19 +178,19 @@ module MatViews
       end
 
       def strategy
-        @strategy || definition.refresh_strategy.to_s
+        @strategy ||= definition.refresh_strategy.to_s
       end
 
       def rel
-        @rel || definition.name.to_s
+        @rel ||= definition.name.to_s
       end
 
       def sql
-        @sql || definition.sql.to_s
+        @sql ||= definition.sql.to_s
       end
 
       def cols
-        @cols || Array(definition.unique_index_columns).map(&:to_s).uniq
+        @cols ||= Array(definition.unique_index_columns).map(&:to_s).uniq
       end
     end
   end
