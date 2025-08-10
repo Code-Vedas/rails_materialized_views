@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module MatViews
-  # MatViewRefreshRun is an ActiveRecord model that tracks the status of materialized view refresh operations.
-  class MatViewRefreshRun < ApplicationRecord
-    self.table_name = 'mat_view_refresh_runs'
+  # MatViewCreateRun is an ActiveRecord model that tracks the creation runs of materialized views.
+  class MatViewCreateRun < ApplicationRecord
+    self.table_name = 'mat_view_create_runs'
 
     belongs_to :mat_view_definition, class_name: 'MatViews::MatViewDefinition'
 

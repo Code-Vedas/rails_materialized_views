@@ -12,6 +12,7 @@ module MatViews
     self.table_name = 'mat_view_definitions'
 
     has_many :mat_view_refresh_runs, dependent: :destroy, class_name: 'MatViews::MatViewRefreshRun'
+    has_many :mat_view_create_runs, dependent: :destroy, class_name: 'MatViews::MatViewCreateRun'
 
     validates :name, presence: true, uniqueness: true, format: { with: /\A[a-zA-Z_][a-zA-Z0-9_]*\z/ }
     validates :sql, presence: true, format: { with: /\A\s*SELECT/i, message: 'must begin with a SELECT' }
