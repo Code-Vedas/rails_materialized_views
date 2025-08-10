@@ -46,7 +46,7 @@ RSpec.describe MatViews::Jobs::Adapter do
 
       expect(Sidekiq::Client).to have_received(:push).with(
         hash_including(
-          'class' => job_class,
+          'class' => job_class.name,
           'queue' => queue,
           'args' => args
         )
@@ -67,7 +67,7 @@ RSpec.describe MatViews::Jobs::Adapter do
 
       described_class.enqueue(job_class, queue: queue, args: args)
 
-      expect(Resque).to have_received(:enqueue_to).with(queue, job_class, *args)
+      expect(Resque).to have_received(:enqueue_to).with(queue, job_class.to_s, *args)
     end
   end
 end
