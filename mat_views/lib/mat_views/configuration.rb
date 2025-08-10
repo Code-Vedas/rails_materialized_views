@@ -6,12 +6,12 @@ module MatViews
   # This class allows customization of the MatViews engine's behavior,
   # such as setting the default refresh strategy, retry behavior, and cron schedule.
   class Configuration
-    attr_accessor :refresh_strategy, :retry_on_failure, :default_cron
+    attr_accessor :retry_on_failure, :job_adapter, :job_queue
 
     def initialize
-      @refresh_strategy = :manual
       @retry_on_failure = true
-      @default_cron = '0 * * * *'
+      @job_adapter = :active_job
+      @job_queue = :mat_views
     end
   end
 end

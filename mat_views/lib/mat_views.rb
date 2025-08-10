@@ -3,6 +3,7 @@
 require 'mat_views/version'
 require 'mat_views/engine'
 require 'mat_views/configuration'
+require 'mat_views/jobs/adapter'
 
 # MatViews is a Rails engine that provides support for materialized views.
 #

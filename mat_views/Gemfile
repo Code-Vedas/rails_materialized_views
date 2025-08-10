@@ -24,3 +24,8 @@ group :development, :test do
   gem 'rubocop-rspec_rails'
   gem 'shoulda-matchers'
 end
+
+group :test do
+  gem 'resque'
+  gem 'sidekiq'
+end

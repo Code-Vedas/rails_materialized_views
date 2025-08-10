@@ -16,7 +16,16 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 RSpec.configure do |config|
+  config.include ActiveJob::TestHelper
   config.include FactoryBot::Syntax::Methods
+
+  # Use AJ test adapter for specs that hit ActiveJob
+  config.before(:each, :active_job) do
+    ActiveJob::Base.queue_adapter = :test
+    clear_enqueued_jobs
+    clear_performed_jobs
+  end
+
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
   ]
@@ -26,6 +35,12 @@ RSpec.configure do |config|
   config.before(:suite) do
     FactoryBot.definition_file_paths = [File.expand_path('factories', __dir__)]
     FactoryBot.find_definitions
+  end
+
+  config.after do
+    # Reset to default configuration after each example
+    MatViews.instance_variable_set(:@configuration, nil)
+    MatViews.configure { |c| } # triggers lazy re-init with defaults
   end
 end
 
