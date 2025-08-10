@@ -3,7 +3,7 @@
 # This migration creates the mat_view_definitions table, which stores definitions for materialized views.
 # It includes fields for the view name, SQL definition, refresh strategy, schedule, unique index columns,
 # dependencies, last refreshed timestamp, and timestamps for creation and updates.
-class CreateMatViewDefinitions < ActiveRecord::Migration[7.0]
+class CreateMatViewDefinitions < ActiveRecord::Migration[7.1]
   def change
     create_table :mat_view_definitions do |t|
       t.string :name, null: false, comment: 'The name of the materialized view'

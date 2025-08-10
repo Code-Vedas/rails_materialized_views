@@ -2,14 +2,6 @@
 
 module MatViews
   # MatViewRefreshRun is an ActiveRecord model that tracks the status of materialized view refresh operations.
-  #
-  # It belongs to a MatViewDefinition and has a status that can be one of the following:
-  # - pending: The refresh operation is queued but not yet started.
-  # - running: The refresh operation is currently in progress.
-  # - success: The refresh operation completed successfully.
-  # - failed: The refresh operation encountered an error.
-  #
-  # This model is used to manage and monitor the lifecycle of materialized view refreshes.
   class MatViewRefreshRun < ApplicationRecord
     self.table_name = 'mat_view_refresh_runs'
 
