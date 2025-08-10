@@ -28,4 +28,6 @@ end
 group :test do
   gem 'resque'
   gem 'sidekiq'
+  gem 'simplecov', require: false
+  gem 'simplecov-console', require: false
 end

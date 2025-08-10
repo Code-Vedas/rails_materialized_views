@@ -120,6 +120,23 @@ RSpec.describe MatViews::CreateViewJob, type: :job do
         expect(fields['error']).to match(/StandardError: kaboom/)
       end
     end
+
+    context 'when run fails to save' do
+      it 'raises and does not attempt to update the run' do
+        resp = service_response_double(status: :created, payload: { view: 'public.mv' })
+        svc  = instance_spy(MatViews::Services::CreateView, run: resp)
+        allow(MatViews::Services::CreateView)
+          .to receive(:new).with(definition, force: false).and_return(svc)
+
+        allow(MatViews::MatViewCreateRun).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
+
+        expect do
+          perform_now_and_return(definition.id)
+        end.to raise_error(Minitest::UnexpectedError)
+
+        expect(MatViews::MatViewCreateRun).to have_received(:create!).once
+      end
+    end
   end
 
   # helpers

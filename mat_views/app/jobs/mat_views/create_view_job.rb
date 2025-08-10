@@ -60,8 +60,6 @@ module MatViews
     end
 
     def fail_run!(run, exception)
-      return unless run
-
       run.update!(
         finished_at: Time.current,
         duration_ms: run.duration_ms || 0,
