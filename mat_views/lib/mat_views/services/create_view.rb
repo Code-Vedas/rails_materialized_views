@@ -4,11 +4,7 @@ module MatViews
   module Services
     # CreateView is a service that handles the creation of materialized views.
     class CreateView
-      attr_reader :definition, :force, :conn, :schema
-
-      def self.call(definition, force: false)
-        new(definition, force: force).run
-      end
+      attr_reader :definition, :force
 
       def initialize(definition, force: false)
         @definition = definition
@@ -28,9 +24,9 @@ module MatViews
 
         # For concurrent strategy, ensure the unique index so future
         # REFRESH MATERIALIZED VIEW CONCURRENTLY is allowed.
-        created_indexes = ensure_unique_index_if_needed
+        index_info = ensure_unique_index_if_needed
 
-        ok(view: qualified_rel, created_indexes: created_indexes)
+        ok(view: qualified_rel, **index_info)
       rescue StandardError => e
         error_response(e)
       end
@@ -44,8 +40,6 @@ module MatViews
         return err('SQL must start with SELECT') unless valid_sql?
         return err('refresh_strategy=concurrent requires unique_index_columns (non-empty)') if strategy == 'concurrent' && cols.empty?
 
-        @conn     = ActiveRecord::Base.connection
-        @schema   = first_existing_schema
         nil
       end
 
@@ -67,18 +61,17 @@ module MatViews
       end
 
       def ensure_unique_index_if_needed
-        return [] unless strategy == 'concurrent'
+        return { created_indexes: [] } unless strategy == 'concurrent'
 
         # Name like: public_mvname_uniq_col1_col2
         idx_name = [schema, rel, 'uniq', *cols].join('_')
-        return [] if index_exists?(idx_name)
 
         concurrently = pg_idle?
         conn.execute(<<~SQL)
           CREATE UNIQUE INDEX #{'CONCURRENTLY ' if concurrently}#{quote_ident(idx_name)}
           ON #{qualified_rel} (#{cols.map { |c| quote_ident(c) }.join(', ')})
         SQL
-        [idx_name]
+        { created_indexes: [idx_name] }
       end
 
       # ────────────────────────────────────────────────────────────────
@@ -109,16 +102,6 @@ module MatViews
       def drop_view
         conn.execute(<<~SQL)
           DROP MATERIALIZED VIEW IF EXISTS #{qualified_rel}
-        SQL
-      end
-
-      def index_exists?(index_name)
-        conn.select_value(<<~SQL).to_i.positive?
-          SELECT COUNT(*)
-          FROM pg_indexes
-          WHERE schemaname = #{conn.quote(schema)}
-            AND tablename  = #{conn.quote(rel)}
-            AND indexname  = #{conn.quote(index_name)}
         SQL
       end
 
@@ -191,6 +174,14 @@ module MatViews
 
       def cols
         @cols ||= Array(definition.unique_index_columns).map(&:to_s).uniq
+      end
+
+      def conn
+        @conn ||= ActiveRecord::Base.connection
+      end
+
+      def schema
+        @schema ||= first_existing_schema
       end
     end
   end

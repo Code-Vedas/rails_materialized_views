@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe MatViews::ServiceResponse do
   describe '#initialize' do
     it 'sets attributes with defaults' do

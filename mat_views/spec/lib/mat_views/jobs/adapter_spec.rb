@@ -70,4 +70,19 @@ RSpec.describe MatViews::Jobs::Adapter do
       expect(Resque).to have_received(:enqueue_to).with(queue, job_class, *args)
     end
   end
+
+  describe 'Unknown adapter' do
+    before do
+      MatViews.configure do |c|
+        c.job_adapter = :unknown
+        c.job_queue   = queue
+      end
+    end
+
+    it 'raises an error when trying to enqueue' do
+      expect do
+        described_class.enqueue(job_class, queue: queue, args: args)
+      end.to raise_error(ArgumentError, /Unknown job adapter/)
+    end
+  end
 end

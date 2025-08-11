@@ -18,9 +18,5 @@ module MatViews
     validates :sql, presence: true, format: { with: /\A\s*SELECT/i, message: 'must begin with a SELECT' }
 
     enum :refresh_strategy, { regular: 0, concurrent: 1, swap: 2 }
-
-    def refresh
-      MatViews::MatViewRefreshJob.perform_later(id, refresh_strategy: refresh_strategy)
-    end
   end
 end

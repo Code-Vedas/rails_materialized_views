@@ -80,6 +80,7 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    ansi (1.5.0)
     ast (2.4.3)
     base64 (0.3.0)
     benchmark (0.4.1)
@@ -112,6 +113,7 @@ GEM
       terminal-table (>= 1, < 5)
     date (3.4.1)
     diff-lcs (1.6.2)
+    docile (1.4.1)
     drb (2.2.3)
     erb (5.0.2)
     erubi (1.13.1)
@@ -357,6 +359,16 @@ GEM
       logger (>= 1.6.2)
       rack (>= 3.1.0)
       redis-client (>= 0.23.2)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-console (0.9.4)
+      ansi
+      simplecov
+      terminal-table
+    simplecov-html (0.13.2)
+    simplecov_json_formatter (0.1.4)
     sinatra (4.1.1)
       logger (>= 1.6.0)
       mustermann (~> 3.0)
@@ -414,6 +426,8 @@ DEPENDENCIES
   rubocop-rspec_rails
   shoulda-matchers
   sidekiq
+  simplecov
+  simplecov-console
 
 BUNDLED WITH
    2.6.8

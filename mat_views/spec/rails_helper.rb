@@ -1,13 +1,29 @@
 # frozen_string_literal: true
 
+require 'simplecov'
+
+SimpleCov.start do
+  track_files '{app,lib,spec}/**/*.rb'
+  add_filter '/spec/'
+  add_filter '/config/'
+  add_filter '/generators/'
+  add_filter 'application_controller.rb'
+  add_filter 'application_helper.rb'
+  add_filter 'application_job.rb'
+  add_filter 'application_mailer.rb'
+  add_filter %r{^/lib/.*/version\.rb$}
+
+  enable_coverage :branch
+  minimum_coverage 100
+end
+
 require 'rails'
 ENV['RAILS_ENV'] ||= 'test'
 abort('The Rails environment is running in production mode!') if Rails.env.production?
-
-require 'spec_helper'
 require File.expand_path('dummy/config/environment', __dir__) if File.exist?(File.expand_path(
                                                                                'dummy/config/environment.rb', __dir__
                                                                              ))
+require 'mat_views'
 require 'rspec/rails'
 Dir[File.expand_path('support/**/*.rb', __dir__)].each { |f| require f }
 

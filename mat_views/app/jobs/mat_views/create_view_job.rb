@@ -17,7 +17,7 @@ module MatViews
       response.to_h
     rescue StandardError => e
       fail_run!(run, e) if run
-      raise
+      raise e
     end
 
     private
@@ -60,8 +60,6 @@ module MatViews
     end
 
     def fail_run!(run, exception)
-      return unless run
-
       run.update!(
         finished_at: Time.current,
         duration_ms: run.duration_ms || 0,
