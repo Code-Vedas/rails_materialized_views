@@ -26,12 +26,13 @@ RSpec.describe MatViews::Services::RegularRefresh do
     conn.select_value(<<~SQL).to_i.positive?
       SELECT COUNT(*)
       FROM pg_matviews
-      WHERE schemaname='#{schema}' AND matviewname='#{rel}'
+      WHERE schemaname=#{conn.quote(schema)} AND matviewname=#{conn.quote(rel)}
     SQL
   end
 
   def create_mv!(rel, schema: 'public')
-    conn.execute(%(CREATE MATERIALIZED VIEW "#{schema}"."#{rel}" AS SELECT id FROM users WITH DATA))
+    quoted_table = conn.quote_table_name("#{schema}.#{rel}")
+    conn.execute("CREATE MATERIALIZED VIEW #{quoted_table} AS SELECT id FROM users WITH DATA")
   end
 
   describe 'validations' do

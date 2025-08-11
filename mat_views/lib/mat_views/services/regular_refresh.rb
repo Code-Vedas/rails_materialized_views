@@ -22,7 +22,7 @@ module MatViews
         conn.execute(sql)
 
         payload = { view: "#{schema}.#{rel}" }
-        payload[:rows_count] = fetch_rows_count if row_count_strategy
+        payload[:rows_count] = fetch_rows_count if row_count_strategy.present?
 
         MatViews::ServiceResponse.new(status: :updated,
                                       payload: payload,
@@ -73,7 +73,7 @@ module MatViews
       def first_existing_schema
         raw_path   = conn.schema_search_path.presence || 'public'
         candidates = raw_path.split(',').filter_map { |t| resolve_schema_token(t.strip) }
-        candidates << 'public' unless candidates.include?('public')
+        candidates << 'public' unless Set.new(candidates).include?('public')
         candidates.find { |s| schema_exists?(s) } || 'public'
       end
 
