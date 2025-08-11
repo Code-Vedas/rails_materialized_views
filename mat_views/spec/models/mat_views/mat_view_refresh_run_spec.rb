@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# Copyright Codevedas Inc. 2025-present
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
 RSpec.describe MatViews::MatViewRefreshRun do
   let(:definition) { MatViews::MatViewDefinition.create!(name: 'sample', sql: 'SELECT 1') }
 

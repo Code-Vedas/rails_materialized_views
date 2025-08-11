@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# Copyright Codevedas Inc. 2025-present
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
 MatViews.configure do |config|
   # Set the retry behavior for MatViews, globally
   # This determines whether MatViews will retry failed refreshes.

@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# Copyright Codevedas Inc. 2025-present
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
 # This migration creates the mat_view_create_runs table, which tracks the creation runs of materialized views.
 # It includes fields for the associated materialized view definition, status of the run, timestamps for start and finish,
 # duration of the run, any error messages, and additional metadata.
