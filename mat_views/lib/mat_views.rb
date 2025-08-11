@@ -14,6 +14,7 @@ require 'mat_views/services/base_service'
 require 'mat_views/services/create_view'
 require 'mat_views/services/regular_refresh'
 require 'mat_views/services/concurrent_refresh'
+require 'mat_views/services/swap_refresh'
 
 # MatViews is a Rails engine that provides support for materialized views.
 #
