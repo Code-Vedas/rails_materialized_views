@@ -6,6 +6,7 @@ require 'mat_views/configuration'
 require 'mat_views/jobs/adapter'
 require 'mat_views/service_response'
 require 'mat_views/services/create_view'
+require 'mat_views/services/regular_refresh'
 
 # MatViews is a Rails engine that provides support for materialized views.
 #
