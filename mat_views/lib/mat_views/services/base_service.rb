@@ -37,7 +37,7 @@ module MatViews
       end
 
       def qualified_rel
-        %(#{quote_table_name(schema)}.#{quote_table_name(rel)})
+        %(#{quote_column_name(schema)}.#{quote_table_name(rel)})
       end
 
       def drop_view
