@@ -35,6 +35,16 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
     )
   end
 
+  let!(:definition_swap) do
+    create(
+      :mat_view_definition,
+      name: 'mv_swap_refresh_runner_job_spec',
+      sql: 'SELECT 1 AS id',
+      refresh_strategy: :swap,
+      unique_index_columns: []
+    )
+  end
+
   def service_response_double(status:, payload: {}, error: nil)
     success = (status != :error)
     instance_double(
@@ -207,6 +217,13 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
   context 'when the definition uses concurrent refresh' do
     let(:definition) { definition_concurrent }
     let(:svc_class) { MatViews::Services::ConcurrentRefresh }
+
+    it_behaves_like 'a refresh job'
+  end
+
+  context 'when the definition uses swap refresh' do
+    let(:definition) { definition_swap }
+    let(:svc_class) { MatViews::Services::SwapRefresh }
 
     it_behaves_like 'a refresh job'
   end

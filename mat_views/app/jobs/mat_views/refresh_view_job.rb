@@ -49,6 +49,8 @@ module MatViews
       case definition.refresh_strategy
       when 'concurrent'
         MatViews::Services::ConcurrentRefresh
+      when 'swap'
+        MatViews::Services::SwapRefresh
       else
         MatViews::Services::RegularRefresh
       end
