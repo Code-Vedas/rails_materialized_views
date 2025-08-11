@@ -3,12 +3,12 @@
 module MatViews
   module Services
     # CreateView is a service that handles the creation of materialized views.
-    class CreateView
-      attr_reader :definition, :force
+    class CreateView < BaseService
+      attr_reader :force
 
       def initialize(definition, force: false)
-        @definition = definition
-        @force      = !!force
+        super(definition)
+        @force = !!force
       end
 
       def run
@@ -26,9 +26,11 @@ module MatViews
         # REFRESH MATERIALIZED VIEW CONCURRENTLY is allowed.
         index_info = ensure_unique_index_if_needed
 
-        ok(view: qualified_rel, **index_info)
+        ok(:created, payload: { view: qualified_rel, **index_info })
       rescue StandardError => e
-        error_response(e)
+        error_response(e, payload: { view: qualified_rel },
+                          meta: { sql: sql,
+                                  force: force })
       end
 
       # ────────────────────────────────────────────────────────────────
@@ -68,8 +70,8 @@ module MatViews
 
         concurrently = pg_idle?
         conn.execute(<<~SQL)
-          CREATE UNIQUE INDEX #{'CONCURRENTLY ' if concurrently}#{quote_ident(idx_name)}
-          ON #{qualified_rel} (#{cols.map { |c| quote_ident(c) }.join(', ')})
+          CREATE UNIQUE INDEX #{'CONCURRENTLY ' if concurrently}#{quote_table_name(idx_name)}
+          ON #{qualified_rel} (#{cols.map { |c| quote_column_name(c) }.join(', ')})
         SQL
         { created_indexes: [idx_name] }
       end
@@ -86,102 +88,11 @@ module MatViews
         definition.sql.to_s.strip.upcase.start_with?('SELECT')
       end
 
-      def qualified_rel
-        %(#{quote_ident(schema)}.#{quote_ident(rel)})
-      end
-
-      def view_exists?
-        conn.select_value(<<~SQL).to_i.positive?
-          SELECT COUNT(*)
-          FROM pg_matviews
-          WHERE schemaname = #{conn.quote(schema)}
-            AND matviewname = #{conn.quote(rel)}
-        SQL
-      end
-
-      def drop_view
-        conn.execute(<<~SQL)
-          DROP MATERIALIZED VIEW IF EXISTS #{qualified_rel}
-        SQL
-      end
-
-      def first_existing_schema
-        raw_path   = conn.schema_search_path.presence || 'public'
-        candidates = raw_path.split(',').filter_map { |t| resolve_schema_token(t.strip) }
-        candidates << 'public' unless candidates.include?('public')
-        candidates.find { |s| schema_exists?(s) } || 'public'
-      end
-
       def resolve_schema_token(token)
         cleaned = token.delete_prefix('"').delete_suffix('"')
         return current_user if cleaned == '$user'
 
         cleaned
-      end
-
-      def current_user
-        @current_user ||= conn.select_value('SELECT current_user')
-      end
-
-      def schema_exists?(name)
-        conn.select_value("SELECT to_regnamespace(#{conn.quote(name)}) IS NOT NULL")
-      end
-
-      def pg_idle?
-        rc = conn.raw_connection
-        status = rc.respond_to?(:transaction_status) ? rc.transaction_status : nil
-        # Only use CONCURRENTLY outside any tx/savepoint.
-        status.nil? || status == PG::PQTRANS_IDLE
-      rescue StandardError
-        false
-      end
-
-      def quote_ident(name)
-        %("#{name.to_s.gsub('"', '""')}")
-      end
-
-      # ────────────────────────────────────────────────────────────────
-      # responses
-      # ────────────────────────────────────────────────────────────────
-
-      def ok(payload = {})
-        MatViews::ServiceResponse.new(status: :created, payload: payload)
-      end
-
-      def err(msg)
-        MatViews::ServiceResponse.new(status: :error, error: msg)
-      end
-
-      def error_response(exception)
-        MatViews::ServiceResponse.new(
-          status: :error,
-          error: "#{exception.class}: #{exception.message}",
-          meta: { backtrace: Array(exception.backtrace) }
-        )
-      end
-
-      def strategy
-        @strategy ||= definition.refresh_strategy.to_s
-      end
-
-      def rel
-        @rel ||= definition.name.to_s
-      end
-
-      def sql
-        @sql ||= definition.sql.to_s
-      end
-
-      def cols
-        @cols ||= Array(definition.unique_index_columns).map(&:to_s).uniq
-      end
-
-      def conn
-        @conn ||= ActiveRecord::Base.connection
-      end
-
-      def schema
-        @schema ||= first_existing_schema
       end
     end
   end

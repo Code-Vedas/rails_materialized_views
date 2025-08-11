@@ -5,6 +5,7 @@ require 'mat_views/engine'
 require 'mat_views/configuration'
 require 'mat_views/jobs/adapter'
 require 'mat_views/service_response'
+require 'mat_views/services/base_service'
 require 'mat_views/services/create_view'
 require 'mat_views/services/regular_refresh'
 
