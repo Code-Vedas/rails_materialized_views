@@ -36,10 +36,17 @@ module MatViews
 
     def execute(definition, row_count_strategy:)
       started  = monotime
-      response = MatViews::Services::RegularRefresh
-                 .new(definition, row_count_strategy: row_count_strategy)
-                 .run
+      response = service(definition).new(definition, row_count_strategy: row_count_strategy).run
       [response, elapsed_ms(started)]
+    end
+
+    def service(definition)
+      case definition.refresh_strategy
+      when 'concurrent'
+        MatViews::Services::ConcurrentRefresh
+      else
+        MatViews::Services::RegularRefresh
+      end
     end
 
     def start_run(definition)
