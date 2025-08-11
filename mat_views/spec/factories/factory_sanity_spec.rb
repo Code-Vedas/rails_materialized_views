@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# Copyright Codevedas Inc. 2025-present
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
 RSpec.describe 'Factory sanity' do # rubocop:disable RSpec/DescribeClass
   let(:defn) { create(:mat_view_definition) }
   let(:run) { create(:mat_view_refresh_run, status: :pending) }

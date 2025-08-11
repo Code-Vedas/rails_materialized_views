@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# Copyright Codevedas Inc. 2025-present
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this source tree.
+
 # This migration creates the mat_view_refresh_runs table,
 # which stores information about refresh runs for materialized views.
 # It includes fields for the associated mat_view_definition, status, timestamps for start and finish,
