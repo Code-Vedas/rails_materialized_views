@@ -24,9 +24,9 @@ module MatViews
 
         # For concurrent strategy, ensure the unique index so future
         # REFRESH MATERIALIZED VIEW CONCURRENTLY is allowed.
-        indexes_summary = ensure_unique_index_if_needed
+        index_info = ensure_unique_index_if_needed
 
-        ok(view: qualified_rel, **indexes_summary)
+        ok(view: qualified_rel, **index_info)
       rescue StandardError => e
         error_response(e)
       end
@@ -61,7 +61,7 @@ module MatViews
       end
 
       def ensure_unique_index_if_needed
-        return { created_indexes: [], indexes_exist: [] } unless strategy == 'concurrent'
+        return { created_indexes: [] } unless strategy == 'concurrent'
 
         # Name like: public_mvname_uniq_col1_col2
         idx_name = [schema, rel, 'uniq', *cols].join('_')
@@ -71,7 +71,7 @@ module MatViews
           CREATE UNIQUE INDEX #{'CONCURRENTLY ' if concurrently}#{quote_ident(idx_name)}
           ON #{qualified_rel} (#{cols.map { |c| quote_ident(c) }.join(', ')})
         SQL
-        { created_indexes: [idx_name], indexes_exist: [] }
+        { created_indexes: [idx_name] }
       end
 
       # ────────────────────────────────────────────────────────────────
