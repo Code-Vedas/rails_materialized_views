@@ -70,7 +70,7 @@ module MatViews
 
         concurrently = pg_idle?
         conn.execute(<<~SQL)
-          CREATE UNIQUE INDEX #{'CONCURRENTLY ' if concurrently}#{quote_column_name(idx_name)}
+          CREATE UNIQUE INDEX #{'CONCURRENTLY ' if concurrently}#{quote_table_name(idx_name)}
           ON #{qualified_rel} (#{cols.map { |c| quote_column_name(c) }.join(', ')})
         SQL
         { created_indexes: [idx_name] }
