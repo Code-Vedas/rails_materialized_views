@@ -74,6 +74,15 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
       expect(MatViews::Jobs::Adapter).not_to have_received(:enqueue)
     end
 
+    # NEW: covers case where $stdin.gets returns nil (EOF)
+    it 'aborts when STDIN returns nil (EOF)' do
+      allow($stdin).to receive(:gets).and_return(nil)
+      expect do
+        invoke('mat_views:create_by_name', defn.name, nil, nil)
+      end.to raise_error(/Aborted/i)
+      expect(MatViews::Jobs::Adapter).not_to have_received(:enqueue)
+    end
+
     it 'raises when name unknown' do
       expect do
         invoke('mat_views:create_by_name', 'does_not_exist', nil, '--yes')
@@ -263,14 +272,6 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
         .with(MatViews::RefreshViewJob, queue: anything, args: [defs[0].id, :exact])
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
         .with(MatViews::RefreshViewJob, queue: anything, args: [defs[1].id, :exact])
-    end
-
-    it 'honors YES env (Y=1) to skip confirm' do
-      defs = create_list(:mat_view_definition, 1)
-      with_env('Y' => '1') { invoke('mat_views:refresh_all', nil, nil) }
-
-      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::RefreshViewJob, queue: anything, args: [defs.first.id, :estimated])
     end
 
     it 'logs a message when there are no definitions' do

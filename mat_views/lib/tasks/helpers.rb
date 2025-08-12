@@ -22,7 +22,7 @@ module MatViews
       end
 
       def skip_confirm?(arg)
-        booleanish_true?(arg || ENV['YES'] || ENV.fetch('Y', nil))
+        booleanish_true?(arg || ENV.fetch('YES', nil))
       end
 
       def parse_force?(arg)
@@ -74,8 +74,8 @@ module MatViews
         logger.info("[mat_views] #{message}")
         $stdout.print('Proceed? [y/N]: ')
         $stdout.flush
-        ans = $stdin.gets
-        return if ans && ans.strip.downcase.start_with?('y')
+        ans = $stdin.gets&.strip&.downcase
+        return if ans&.start_with?('y')
 
         raise 'Aborted.'
       end
