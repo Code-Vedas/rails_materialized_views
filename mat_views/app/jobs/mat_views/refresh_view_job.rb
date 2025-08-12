@@ -14,11 +14,11 @@ module MatViews
     # perform(definition_id, row_count_strategy: :estimated)
     # Also supports symbol/string argument: perform(definition_id, :exact)
     def perform(definition_id, strategy_arg = nil)
-      strategy   = normalize_strategy(strategy_arg)
+      row_count_strategy = normalize_strategy(strategy_arg)
       definition = MatViews::MatViewDefinition.find(definition_id)
       run        = start_run(definition)
 
-      response, duration_ms = execute(definition, row_count_strategy: strategy)
+      response, duration_ms = execute(definition, row_count_strategy: row_count_strategy)
       finalize_run!(run, response, duration_ms)
       response.to_h
     rescue StandardError => e
@@ -31,7 +31,7 @@ module MatViews
     def normalize_strategy(arg)
       case arg
       when Hash
-        (arg[:row_count_strategy] || arg['row_count_strategy'] || arg[:strategy] || arg['strategy'] || :estimated).to_sym
+        (arg[:row_count_strategy] || arg['row_count_strategy'] || :estimated).to_sym
       when String, Symbol
         arg.to_sym
       else
