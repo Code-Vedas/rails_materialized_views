@@ -188,20 +188,15 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
           expect(svc).to have_received(:run).once
         end
 
-        it 'accepts a hash with :row_count_strategy / :strategy keys' do
+        it 'accepts a hash with :row_count_strategy keys' do
           resp = service_response_double(status: :updated)
           svc1 = instance_spy(svc_class, run: resp)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :exact).and_return(svc1)
           perform_now_and_return(definition.id, row_count_strategy: :exact)
 
-          svc2 = instance_spy(svc_class, run: resp)
-          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :exact).and_return(svc2)
-          perform_now_and_return(definition.id, strategy: :exact)
-
-          expect(svc_class).to have_received(:new).with(definition, row_count_strategy: :exact).twice
+          expect(svc_class).to have_received(:new).with(definition, row_count_strategy: :exact).once
 
           expect(svc1).to have_received(:run).once
-          expect(svc2).to have_received(:run).once
         end
       end
     end

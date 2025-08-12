@@ -57,6 +57,8 @@ RSpec.configure do |config|
   config.before(:suite) do
     FactoryBot.definition_file_paths = [File.expand_path('factories', __dir__)]
     FactoryBot.find_definitions
+
+    Rails.application.load_tasks
   end
 
   config.after do
