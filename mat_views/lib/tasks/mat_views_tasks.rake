@@ -22,7 +22,7 @@ namespace :mat_views do
 
   desc 'Enqueue a CREATE for a specific view by its definition ID'
   task :create_by_id, %i[definition_id force yes] => :environment do |_t, args|
-    raise 'definition_id is required' if args[:definition_id].to_s.strip.empty?
+    raise 'mat_views:create_by_id requires a definition_id parameter' if args[:definition_id].to_s.strip.empty?
 
     force = helpers.parse_force?(args[:force])
     skip  = helpers.skip_confirm?(args[:yes])
@@ -67,7 +67,7 @@ namespace :mat_views do
 
   desc 'Enqueue a REFRESH for a specific view by its definition ID'
   task :refresh_by_id, %i[definition_id row_count_strategy yes] => :environment do |_t, args|
-    raise 'definition_id is required' if args[:definition_id].to_s.strip.empty?
+    raise 'mat_views:refresh_by_id requires a definition_id parameter' if args[:definition_id].to_s.strip.empty?
 
     rcs  = helpers.parse_row_count_strategy(args[:row_count_strategy])
     skip = helpers.skip_confirm?(args[:yes])
@@ -95,6 +95,51 @@ namespace :mat_views do
     helpers.confirm!("Enqueue REFRESH for ALL (#{count}) views, row_count_strategy=#{rcs}", skip: skip)
     scope.find_each { |defn| helpers.enqueue_refresh!(defn.id, rcs) }
     helpers.logger.info("[mat_views] Enqueued #{count} RefreshViewJob(s), row_count_strategy=#{rcs}.")
+  end
+
+  # ───────────── DELETE ─────────────
+
+  desc 'Enqueue a DELETE (DROP MATERIALIZED VIEW) for a specific view by its name (optionally schema-qualified)'
+  task :delete_by_name, %i[view_name cascade yes] => :environment do |_t, args|
+    cascade = helpers.parse_cascade?(args[:cascade])
+    skip    = helpers.skip_confirm?(args[:yes])
+    defn    = helpers.find_definition_by_name!(args[:view_name])
+
+    helpers.confirm!("Enqueue DELETE for view=#{defn.name} (id=#{defn.id}), cascade=#{cascade}", skip: skip)
+    helpers.enqueue_delete!(defn.id, cascade)
+    helpers.logger.info("[mat_views] Enqueued DeleteViewJob for definition ##{defn.id} (#{defn.name}), cascade=#{cascade}")
+  end
+
+  desc 'Enqueue a DELETE (DROP MATERIALIZED VIEW) for a specific view by its definition ID'
+  task :delete_by_id, %i[definition_id cascade yes] => :environment do |_t, args|
+    raise 'mat_views:delete_by_id requires a definition_id parameter' if args[:definition_id].to_s.strip.empty?
+
+    cascade = helpers.parse_cascade?(args[:cascade])
+    skip    = helpers.skip_confirm?(args[:yes])
+
+    defn = MatViews::MatViewDefinition.find_by(id: args[:definition_id])
+    raise "No MatViews::MatViewDefinition found for id=#{args[:definition_id]}" unless defn
+
+    helpers.confirm!("Enqueue DELETE for id=#{defn.id} (#{defn.name}), cascade=#{cascade}", skip: skip)
+    helpers.enqueue_delete!(defn.id, cascade)
+    helpers.logger.info("[mat_views] Enqueued DeleteViewJob for definition ##{defn.id} (#{defn.name}), cascade=#{cascade}")
+  end
+
+  desc 'Enqueue DELETE jobs for ALL defined materialized views'
+  task :delete_all, %i[cascade yes] => :environment do |_t, args|
+    cascade = helpers.parse_cascade?(args[:cascade])
+    skip    = helpers.skip_confirm?(args[:yes])
+
+    scope = MatViews::MatViewDefinition.all
+    count = scope.count
+    if count.zero?
+      helpers.logger.info('[mat_views] No mat view definitions found.')
+      next
+    end
+
+    helpers.confirm!("Enqueue DELETE for ALL (#{count}) views, cascade=#{cascade}", skip: skip)
+    scope.find_each { |defn| helpers.enqueue_delete!(defn.id, cascade) }
+    helpers.logger.info("[mat_views] Enqueued #{count} DeleteViewJob(s), cascade=#{cascade}.")
   end
 end
 # rubocop:enable Metrics/BlockLength

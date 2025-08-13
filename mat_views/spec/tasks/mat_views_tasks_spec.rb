@@ -140,7 +140,7 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
     it 'errors when definition_id is missing/blank' do
       expect do
         invoke('mat_views:create_by_id', '', nil, '--yes')
-      end.to raise_error(/definition_id is required/)
+      end.to raise_error(/mat_views:create_by_id requires a definition_id parameter/)
     end
   end
 
@@ -247,7 +247,7 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
     it 'errors when definition_id is missing/blank' do
       expect do
         invoke('mat_views:refresh_by_id', '', nil, '--yes')
-      end.to raise_error(/definition_id is required/)
+      end.to raise_error(/mat_views:refresh_by_id requires a definition_id parameter/)
     end
   end
 
@@ -276,6 +276,120 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
 
     it 'logs a message when there are no definitions' do
       expect { invoke('mat_views:refresh_all', nil, '--yes') }.not_to raise_error
+      expect(fake_logger).to have_received(:info).with(/\[mat_views\] No mat view definitions found\./)
+    end
+  end
+
+  # ───────────── DELETE ─────────────
+
+  describe 'mat_views:delete_by_name', type: :rake do
+    let!(:defn) { create(:mat_view_definition, name: 'sales_daily') }
+
+    it 'enqueues DeleteViewJob (default cascade=false) and skips confirm with --yes' do
+      invoke('mat_views:delete_by_name', defn.name, nil, '--yes')
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false])
+    end
+
+    it 'passes cascade=true' do
+      invoke('mat_views:delete_by_name', defn.name, 'true', '--yes')
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, true])
+    end
+
+    it 'accepts YES=1 via env to skip confirm' do
+      with_env('YES' => '1') { invoke('mat_views:delete_by_name', defn.name, nil, nil) }
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false])
+    end
+
+    it 'prompts and aborts when confirm is declined' do
+      expect do
+        with_stdin("\n") { invoke('mat_views:delete_by_name', defn.name, nil, nil) }
+      end.to raise_error(/Aborted/i)
+      expect(MatViews::Jobs::Adapter).not_to have_received(:enqueue)
+    end
+
+    it 'aborts when STDIN returns nil (EOF)' do
+      allow($stdin).to receive(:gets).and_return(nil)
+      expect { invoke('mat_views:delete_by_name', defn.name, nil, nil) }.to raise_error(/Aborted/i)
+      expect(MatViews::Jobs::Adapter).not_to have_received(:enqueue)
+    end
+
+    it 'raises when name unknown' do
+      expect do
+        invoke('mat_views:delete_by_name', 'does_not_exist', nil, '--yes')
+      end.to raise_error(/No MatViews::MatViewDefinition/)
+    end
+  end
+
+  describe 'mat_views:delete_by_id', type: :rake do
+    let!(:defn) { create(:mat_view_definition) }
+
+    it 'enqueues DeleteViewJob (default cascade=false) and skips confirm with --yes' do
+      invoke('mat_views:delete_by_id', defn.id.to_s, nil, '--yes')
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false])
+    end
+
+    it 'passes cascade=true' do
+      invoke('mat_views:delete_by_id', defn.id.to_s, 'true', '--yes')
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, true])
+    end
+
+    it "prompts and proceeds when user types 'y'" do
+      with_stdin("y\n") { invoke('mat_views:delete_by_id', defn.id.to_s, nil, nil) }
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false])
+    end
+
+    it 'raises for unknown id' do
+      expect do
+        invoke('mat_views:delete_by_id', '999999', nil, '--yes')
+      end.to raise_error(/No MatViews::MatViewDefinition/)
+    end
+
+    it 'errors when definition_id is missing/blank' do
+      expect do
+        invoke('mat_views:delete_by_id', '', nil, '--yes')
+      end.to raise_error(/mat_views:delete_by_id requires a definition_id parameter/)
+    end
+  end
+
+  describe 'mat_views:delete_all', type: :rake do
+    it 'enqueues for each definition and skips confirm with --yes' do
+      defs = create_list(:mat_view_definition, 3)
+      invoke('mat_views:delete_all', nil, '--yes')
+
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[0].id, false])
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[1].id, false])
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[2].id, false])
+    end
+
+    it 'passes cascade=true for all' do
+      defs = create_list(:mat_view_definition, 2)
+      invoke('mat_views:delete_all', 'true', '--yes')
+
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[0].id, true])
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[1].id, true])
+    end
+
+    it 'honors YES=1 env to skip confirm' do
+      defs = create_list(:mat_view_definition, 1)
+      with_env('YES' => '1') { invoke('mat_views:delete_all', nil, nil) }
+
+      expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs.first.id, false])
+    end
+
+    it 'logs a message when there are no definitions' do
+      expect { invoke('mat_views:delete_all', nil, '--yes') }.not_to raise_error
       expect(fake_logger).to have_received(:info).with(/\[mat_views\] No mat view definitions found\./)
     end
   end
