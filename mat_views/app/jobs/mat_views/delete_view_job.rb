@@ -29,12 +29,25 @@ module MatViews
     private
 
     def normalize_cascade?(arg)
-      case arg
-      when Hash
-        v = arg[:cascade] || arg['cascade']
-        !!(v == true || v.to_s.strip.casecmp('true').zero? || v.to_s.strip == '1' || v.to_s.strip.casecmp('yes').zero?)
+      value = if arg.is_a?(Hash)
+                arg[:cascade] || arg['cascade']
+              else
+                arg
+              end
+      cascade_value_trueish?(value)
+    end
+
+    # Returns true if the value represents a "truthy" cascade flag.
+    def cascade_value_trueish?(value)
+      case value
+      when true
+        true
+      when String
+        %w[true 1 yes].include?(value.strip.downcase)
+      when Integer
+        value == 1
       else
-        !!arg
+        false
       end
     end
 

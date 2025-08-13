@@ -175,12 +175,12 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
           .to have_received(:new).with(definition, cascade: true, if_exists: true)
       end
 
-      it 'treats cascade: "0" as false' do
+      it 'treats cascade: 0 as false' do
         resp = service_response_double(status: :deleted, payload: {})
         svc  = instance_spy(MatViews::Services::DeleteView, run: resp)
         allow(MatViews::Services::DeleteView).to receive(:new).and_return(svc)
 
-        perform_now_and_return(definition.id, cascade: '0')
+        perform_now_and_return(definition.id, cascade: 0)
 
         expect(MatViews::Services::DeleteView)
           .to have_received(:new).with(definition, cascade: false, if_exists: true)
