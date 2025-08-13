@@ -92,13 +92,6 @@ module MatViews
       def valid_sql?
         definition.sql.to_s.strip.upcase.start_with?('SELECT')
       end
-
-      def resolve_schema_token(token)
-        cleaned = token.delete_prefix('"').delete_suffix('"')
-        return current_user if cleaned == '$user'
-
-        cleaned
-      end
     end
   end
 end

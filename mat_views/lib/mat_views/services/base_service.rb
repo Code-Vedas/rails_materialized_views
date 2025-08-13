@@ -24,6 +24,13 @@ module MatViews
         candidates.find { |s| schema_exists?(s) } || 'public'
       end
 
+      def resolve_schema_token(token)
+        cleaned = token.delete_prefix('"').delete_suffix('"')
+        return current_user if cleaned == '$user'
+
+        cleaned
+      end
+
       def current_user
         @current_user ||= conn.select_value('SELECT current_user')
       end

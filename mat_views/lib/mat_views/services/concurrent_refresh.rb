@@ -65,13 +65,6 @@ module MatViews
         /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
       end
 
-      def resolve_schema_token(token)
-        cleaned = token.delete_prefix('"').delete_suffix('"')
-        return current_user if cleaned == '$user'
-
-        cleaned
-      end
-
       # Any UNIQUE index on the matview satisfies the CONCURRENTLY requirement.
       def unique_index_exists?
         conn.select_value(<<~SQL).to_i.positive?
