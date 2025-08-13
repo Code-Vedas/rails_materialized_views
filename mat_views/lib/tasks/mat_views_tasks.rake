@@ -22,7 +22,7 @@ namespace :mat_views do
 
   desc 'Enqueue a CREATE for a specific view by its definition ID'
   task :create_by_id, %i[definition_id force yes] => :environment do |_t, args|
-    raise 'definition_id is required' if args[:definition_id].to_s.strip.empty?
+    raise 'mat_views:create_by_id requires a definition_id parameter' if args[:definition_id].to_s.strip.empty?
 
     force = helpers.parse_force?(args[:force])
     skip  = helpers.skip_confirm?(args[:yes])
@@ -67,7 +67,7 @@ namespace :mat_views do
 
   desc 'Enqueue a REFRESH for a specific view by its definition ID'
   task :refresh_by_id, %i[definition_id row_count_strategy yes] => :environment do |_t, args|
-    raise 'definition_id is required' if args[:definition_id].to_s.strip.empty?
+    raise 'mat_views:refresh_by_id requires a definition_id parameter' if args[:definition_id].to_s.strip.empty?
 
     rcs  = helpers.parse_row_count_strategy(args[:row_count_strategy])
     skip = helpers.skip_confirm?(args[:yes])
@@ -112,7 +112,7 @@ namespace :mat_views do
 
   desc 'Enqueue a DELETE (DROP MATERIALIZED VIEW) for a specific view by its definition ID'
   task :delete_by_id, %i[definition_id cascade yes] => :environment do |_t, args|
-    raise 'definition_id is required' if args[:definition_id].to_s.strip.empty?
+    raise 'mat_views:delete_by_id requires a definition_id parameter' if args[:definition_id].to_s.strip.empty?
 
     cascade = helpers.parse_cascade?(args[:cascade])
     skip    = helpers.skip_confirm?(args[:yes])
