@@ -8,7 +8,7 @@
 # This migration creates the mat_view_delete_runs table,
 # which stores information about delete runs for materialized views.
 # It includes fields for the associated mat_view_definition, status, timestamps for start and finish,
-# duration in milliseconds, row count, error messages, and additional metadata.
+# duration in milliseconds, error messages, and additional metadata.
 class CreateMatViewDeleteRuns < ActiveRecord::Migration[7.1]
   def change
     create_table :mat_view_delete_runs do |t|
