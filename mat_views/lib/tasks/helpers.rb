@@ -97,6 +97,19 @@ module MatViews
           args: [definition_id, row_count_strategy]
         )
       end
+
+      def parse_cascade?(arg)
+        booleanish_true?(arg || ENV.fetch('CASCADE', nil))
+      end
+
+      def enqueue_delete!(definition_id, cascade)
+        q = MatViews.configuration.job_queue || :default
+        MatViews::Jobs::Adapter.enqueue(
+          MatViews::DeleteViewJob,
+          queue: q,
+          args: [definition_id, cascade]
+        )
+      end
     end
   end
 end
