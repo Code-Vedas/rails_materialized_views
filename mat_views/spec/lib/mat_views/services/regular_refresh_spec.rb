@@ -161,7 +161,6 @@ RSpec.describe MatViews::Services::RegularRefresh do
       create_mv!(relname, schema: 'public')
       allow(conn).to receive(:schema_search_path).and_return('public')
 
-      # Make execute raise to exercise the rescue path.
       allow(ActiveRecord::Base).to receive(:connection).and_wrap_original do |orig, *args|
         c = orig.call(*args)
         allow(c).to receive(:execute).with(%(REFRESH MATERIALIZED VIEW "public"."#{relname}"))

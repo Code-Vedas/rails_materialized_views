@@ -20,7 +20,7 @@ module MatViews
     end
 
     def success?
-      !error? && %i[ok created updated noop].include?(status)
+      !error? && %i[ok created updated noop skipped deleted].include?(status)
     end
 
     def error?

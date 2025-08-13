@@ -28,3 +28,5 @@ RSpec/MultipleMemoizedHelpers:
   Max: 10
 Metrics/CyclomaticComplexity:
   Max: 10
+RSpec/NestedGroups:
+  Max: 5
