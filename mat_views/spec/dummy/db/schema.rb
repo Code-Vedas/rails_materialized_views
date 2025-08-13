@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-# Copyright Codevedas Inc. 2025-present
-#
-# This source code is licensed under the MIT license found in the
-# LICENSE file in the root directory of this source tree.
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -66,6 +61,19 @@ ActiveRecord::Schema[8.0].define(version: 20_250_807_153_908) do
     t.datetime 'updated_at', null: false
   end
 
+  create_table 'mat_view_delete_runs', force: :cascade do |t|
+    t.bigint 'mat_view_definition_id', null: false, comment: 'Reference to the materialized view definition being deleted from'
+    t.integer 'status', default: 0, null: false, comment: '0=pending,1=running,2=success,3=failed'
+    t.datetime 'started_at', comment: 'Timestamp when the delete operation started'
+    t.datetime 'finished_at', comment: 'Timestamp when the delete operation finished'
+    t.integer 'duration_ms', comment: 'Duration of the delete operation in milliseconds'
+    t.text 'error', comment: 'Error message if the delete operation failed'
+    t.jsonb 'meta', default: {}, comment: 'Additional metadata about the delete run, such as job ID or parameters'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['mat_view_definition_id'], name: 'index_mat_view_delete_runs_on_mat_view_definition_id'
+  end
+
   create_table 'mat_view_refresh_runs', force: :cascade do |t|
     t.bigint 'mat_view_definition_id', null: false, comment: 'Reference to the materialized view definition being refreshed'
     t.integer 'status', default: 0, null: false, comment: '0=pending,1=running,2=success,3=failed'
@@ -101,6 +109,7 @@ ActiveRecord::Schema[8.0].define(version: 20_250_807_153_908) do
   add_foreign_key 'accounts', 'users'
   add_foreign_key 'events', 'users'
   add_foreign_key 'mat_view_create_runs', 'mat_view_definitions'
+  add_foreign_key 'mat_view_delete_runs', 'mat_view_definitions'
   add_foreign_key 'mat_view_refresh_runs', 'mat_view_definitions'
   add_foreign_key 'sessions', 'users'
 end

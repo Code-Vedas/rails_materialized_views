@@ -24,6 +24,7 @@ module MatViews
         migration_template 'create_mat_view_definitions.rb', 'db/migrate/create_mat_view_definitions.rb'
         migration_template 'create_mat_view_refresh_runs.rb', 'db/migrate/create_mat_view_refresh_runs.rb'
         migration_template 'create_mat_view_create_runs.rb', 'db/migrate/create_mat_view_create_runs.rb'
+        migration_template 'create_mat_view_delete_runs.rb', 'db/migrate/create_mat_view_delete_runs.rb'
       end
 
       def create_initializer
