@@ -111,7 +111,7 @@ RSpec.describe MatViews::Services::DeleteView do
     expect(res.error).to match(/Invalid view name format/i)
   end
 
-  context 'when statandard error is raised' do
+  context 'when standard error is raised' do
     before do
       allow(ActiveRecord::Base).to receive(:connection).and_wrap_original do |orig, *args|
         c = orig.call(*args)

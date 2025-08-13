@@ -60,7 +60,8 @@ module MatViews
 
       def skip_early_if_absent
         # If we want idempotency and the view doesn't exist, skip early.
-        return if view_exists?
+        return nil unless if_exists
+        return nil if view_exists?
 
         ok(:skipped,
            payload: { view: "#{schema}.#{rel}" },
