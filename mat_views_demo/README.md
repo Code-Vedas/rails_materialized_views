@@ -46,7 +46,7 @@ config.active_job.queue_adapter = :inline
 ### Bootstrap (seed → define → create → index → refresh)
 
 ```bash
-bundle exec rake mat_views:bootstrap_demo[1]
+bundle exec rake mat_views:bootstrap_demo\[1]
 ```
 
 ### Validate (baseline vs MV → CSV)

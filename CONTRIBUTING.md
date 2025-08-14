@@ -8,7 +8,7 @@ Feel free to contribute through various avenues such as suggestions, comments, b
 
 There are several ways to become an active part of our community:
 
-1. [Create an issue](https://www.github.com/Code-Vedas/rails_materialized_views/issues/new/choose) in the repository.
+1. [Create an issue](https://github.com/Code-Vedas/rails_materialized_views/issues/new/choose) in the repository.
 2. Join our mailing list by sending an email to [Join mailing list](mailto:mailing-list@codevedas.com).
 3. Participate in our Slack channel by sending an email to [Join slack](mailto:join-slack@codevedas.com).
 4. Apply for project membership by sending an email to [Join project](mailto:join-project@codevedas.com). Following an initial screening, an invitation will be extended to you. This membership allows you to create issues, pull requests, and more, directly in the repository without the need to fork it.
