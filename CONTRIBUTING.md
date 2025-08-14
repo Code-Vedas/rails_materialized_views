@@ -126,3 +126,80 @@ We require all contributors to sign a Contributor License Agreement (CLA) before
 You will be prompted to sign a CLA when you open your first pull request. Please follow the instructions provided in the prompt to complete the process. Without a signed CLA, we will not be able to accept your contributions.
 
 There is no expiration date for CLAs. Once signed, your CLA will remain valid for all future contributions to this project.
+
+got it — here’s a cleaned-up, copy-pasteable **Release Process** that preserves your exact step order and intent, with a few precision tweaks (commands, wording) that won’t disrupt your existing CI.
+
+## Release Process
+
+To release a new version of the `mat_views` engine, follow these steps.
+
+Pick the version number from draft release notes on the
+[releases page](https://github.com/Code-Vedas/rails_materialized_views/releases).
+
+1. **Create a release branch**  
+   Branch off `main` to a new branch named `release/<version>`.
+```bash
+   git checkout main
+   git pull
+   git checkout -b release/<version>
+```
+
+2. **Update the version**
+   Update the version in `mat_views.gemspec` to `<version>`.
+
+3. **Update CHANGELOG**
+   Copy the draft release notes from the
+   [releases page](https://github.com/Code-Vedas/rails_materialized_views/releases)
+   and paste them into `CHANGELOG.md` under a new `## <version> - YYYY-MM-DD` section.
+
+4. **Docs sweep**
+   Update all relevant docs to reflect this version (version number, features, fixes, usage):
+
+   * Root `README.md` and `mat_views/README.md`
+   * `mat_views_demo/README.md` (new commands/configs if any)
+   * `CONTRIBUTING.md` (if contributor process changed)
+
+5. **Verify release notes**
+   Ensure the notes accurately reflect all user-visible changes in this version.
+
+6. **Pre-flight checks (must pass)**
+   Run lint and tests locally (CI will run them again):
+
+   ```bash
+   bundle exec rubocop
+   bundle exec rspec
+   ```
+
+   Fix any failures before proceeding.
+
+7. **Commit and push the release branch**
+
+   ```bash
+   git add -A
+   git commit -m "release: prepare v<version>"
+   git push -u origin release/<version>
+   ```
+
+8. **Open a PR to `main`**
+   Create a pull request to merge `release/<version>` into `main`.
+
+9. **Label the PR**
+   Tag the PR with `release`, `release/<version>`, and `skip-changelog`.
+
+10. **Create a GitHub Release**
+    After the PR is approved and merged, create a new Release on the
+    [GitHub releases page](https://github.com/Code-Vedas/rails_materialized_views/releases).
+    Use **tag name** `v<version>` and include the release notes (same as `CHANGELOG.md`).
+
+11. **Publish via GitHub Actions**
+    Once the Release is created, GitHub Actions will automatically build
+    and publish the gem to RubyGems.org.
+
+12. **Done 🎉**
+    Optionally verify the published version:
+
+    ```bash
+    gem install mat_views -v <version>
+    ```
+
+    and sanity-check a basic rake task in a fresh Rails app.
