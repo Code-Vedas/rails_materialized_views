@@ -1,6 +1,6 @@
 # mat_views_demo (demo app)
 
-[![CI](https://img.shields.io/github/actions/workflow/status/your-org/rails_materialized_views/ci.yml?style=flat-square&label=Demo%20CI)](https://github.com/your-org/rails_materialized_views/actions)
+[![CI](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml/badge.svg)](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml)
 ![Not Shipped](https://img.shields.io/badge/shipping-NOT%20IN%20GEM-informational?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 

@@ -1,7 +1,7 @@
 # mat_views (engine)
 
 [![Gem](https://img.shields.io/gem/v/mat_views.svg?style=flat-square)](https://rubygems.org/gems/mat_views)
-[![CI](https://img.shields.io/github/actions/workflow/status/your-org/rails_materialized_views/ci.yml?style=flat-square&label=CI)](https://github.com/your-org/rails_materialized_views/actions)
+[![CI](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml/badge.svg)](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 
 Rails engine that manages **PostgreSQL materialized views** with definitions, services, background jobs, and Rake tasks.
