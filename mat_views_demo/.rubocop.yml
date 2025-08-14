@@ -1,0 +1,20 @@
+plugins:
+  - rubocop-rails
+  - rubocop-capybara
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.2
+  SuggestExtensions: true
+
+Style/Documentation:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 50
+Layout/LineLength:
+  Max: 150
+Metrics/AbcSize:
+  Max: 50
+Metrics/BlockLength:
+  Max: 200
+Rails/SkipsModelValidations:
+  Enabled: false
