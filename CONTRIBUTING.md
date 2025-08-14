@@ -8,7 +8,7 @@ Feel free to contribute through various avenues such as suggestions, comments, b
 
 There are several ways to become an active part of our community:
 
-1. [Create an issue](https://www.github.com/Code-Vedas/template-repo/issues/new/choose) in the repository.
+1. [Create an issue](https://www.github.com/Code-Vedas/rails_materialized_views/issues/new/choose) in the repository.
 2. Join our mailing list by sending an email to [Join mailing list](mailto:mailing-list@codevedas.com).
 3. Participate in our Slack channel by sending an email to [Join slack](mailto:join-slack@codevedas.com).
 4. Apply for project membership by sending an email to [Join project](mailto:join-project@codevedas.com). Following an initial screening, an invitation will be extended to you. This membership allows you to create issues, pull requests, and more, directly in the repository without the need to fork it.
@@ -22,17 +22,10 @@ This project comprises various modules/components, each housed in its dedicated 
 
 The table below provides an overview of all possible modules/components:
 
-| Module/Component | Description   | Related Language/Framework |
-| ---------------- | ------------- | -------------------------- |
-| GraphQL API      | GraphQL API   | CV-GraphQL                 |
-| Middleware       | Middleware    | Ruby on Rails              |
-| UI               | UI            | Flutter                    |
-| Mobile App       | Mobile App    | Flutter                    |
-| Desktop App      | Desktop App   | Flutter                    |
-| CLI              | CLI           | Ruby, Dart, Flutter        |
-| DevOps           | DevOps        | Terraform, AWS             |
-| Security         | Security      | Terraform, AWS             |
-| Documentation    | Documentation | Markdown                   |
+| Module/Component | Description                                            | Related Language/Framework |
+| ---------------- | ------------------------------------------------------ | -------------------------- |
+| mat_views        | Rails Materialized Views Engine                        | Ruby on Rails              |
+| mat_views_demo   | Demo Application for mat_views Engine                  | Ruby on Rails              |
 
 ## Improve Documentation
 
@@ -125,3 +118,11 @@ Specs expect the gems to be present and assert calls to:
 ## Enhance Security
 
 Contributions to the security aspects of the project are highly appreciated. To report a security vulnerability, please follow the instructions outlined in the [SECURITY.md](SECURITY.md) file.
+
+## CLAs
+
+We require all contributors to sign a Contributor License Agreement (CLA) before accepting any contributions. This ensures that we can legally incorporate your contributions into the project.
+
+You will be prompted to sign a CLA when you open your first pull request. Please follow the instructions provided in the prompt to complete the process. Without a signed CLA, we will not be able to accept your contributions.
+
+There is no expiration date for CLAs. Once signed, your CLA will remain valid for all future contributions to this project.
