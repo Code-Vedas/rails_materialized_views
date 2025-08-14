@@ -63,7 +63,7 @@ On a \~50k-row dataset, reading from pre-aggregated materialized views turns hea
 * Multi-table aggregates shine: **\~70×** (accounts+events), **\~161×** (full activity).
 * Single-table scans: little/no benefit; use normal indexes or caching.
 * Materialize **expensive joins/aggregations** you read often.
-* As always postgreSQL is **fast**; MVs make it **faster** for complex queries. MVs are **not** a silver bullet for all queries, you should know when to use them, but they are a great tool for the right use cases. Read more about [PostgreSQL materialized views](https://www.postgresql.org/docs/current/rules-materializedviews.html). If you have a slow query with poor performance, MVs might help you speed it up significantly, but they are not a replacement for proper indexing and query optimization.
+* As always PostgreSQL is **fast**; MVs make it **faster** for complex queries. MVs are **not** a silver bullet for all queries, you should know when to use them, but they are a great tool for the right use cases. Read more about [PostgreSQL materialized views](https://www.postgresql.org/docs/current/rules-materializedviews.html). If you have a slow query with poor performance, MVs might help you speed it up significantly, but they are not a replacement for proper indexing and query optimization.
 
 ---
 
