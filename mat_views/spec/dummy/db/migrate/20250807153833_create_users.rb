@@ -5,7 +5,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-class CreateUsers < ActiveRecord::Migration[8.0]
+class CreateUsers < ActiveRecord::Migration[7.2]
   def change
     create_table :users do |t|
       t.string :name
