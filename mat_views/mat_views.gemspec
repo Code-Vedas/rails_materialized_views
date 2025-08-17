@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/Code-Vedas/rails_materialized_views'
   spec.license       = 'MIT'
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://github.com/Code-Vedas/rails_materialized_views'
+  spec.metadata['source_code_uri'] = 'https://github.com/Code-Vedas/rails_materialized_views.git'
   spec.metadata['changelog_uri'] = 'https://github.com/Code-Vedas/rails_materialized_views/blob/main/CHANGELOG.md'
   spec.metadata['rubygems_mfa_required'] = 'true'
 
@@ -25,6 +25,6 @@ Gem::Specification.new do |spec|
     Dir['{app,config,db,lib}/**/*', 'LICENSE', 'Rakefile', 'README.md']
   end
 
-  spec.add_dependency 'rails', '>= 7.1'
+  spec.add_dependency 'rails', '~> 7.1'
   spec.required_ruby_version = '>= 3.2'
 end

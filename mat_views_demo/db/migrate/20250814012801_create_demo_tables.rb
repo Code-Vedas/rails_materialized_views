@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateDemoTables < ActiveRecord::Migration[8.0]
+class CreateDemoTables < ActiveRecord::Migration[7.2]
   def change
     create_table :users do |t|
       t.string :name
