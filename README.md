@@ -30,6 +30,16 @@ flowchart LR
 
 On a \~50k-row dataset, reading from pre-aggregated materialized views turns heavy joins into **double-digit to triple-digit speedups** compared to running the raw SQL each time.
 
+#### All features are designed to be **production-ready** with following principles:
+- **High availability**: MVs are created and refreshed in the background, ensuring minimal downtime.
+- **Repeatable operations**: Clear APIs and CLI tasks for consistent behavior.
+- **Observability**: Track runs, errors, and performance metrics.
+- **Rails-native**: Integrates seamlessly with Active Job, Rails logger, and error handling.
+- **Extensible**: Supports multiple job adapters (ActiveJob, Sidekiq, Resque) and can be customized for specific needs.
+- **Security**: Contributions to security are encouraged, with a dedicated policy for reporting vulnerabilities.
+- **Community-driven**: Contributions are welcome, with a CLA to ensure legal clarity.
+- **All features are free and open source** under the MIT license. There is no other version or paid tier.
+
 #### Sample run (5 iterations)
 
 | view                       | iterations | baseline\_avg\_ms | baseline\_min\_ms | baseline\_max\_ms | mv\_avg\_ms | mv\_min\_ms | mv\_max\_ms | speedup\_avg | rows\_baseline | rows\_mv |
@@ -53,6 +63,12 @@ On a \~50k-row dataset, reading from pre-aggregated materialized views turns hea
 * Multi-table aggregates shine: **\~70×** (accounts+events), **\~161×** (full activity).
 * Single-table scans: little/no benefit; use normal indexes or caching.
 * Materialize **expensive joins/aggregations** you read often.
+* PostgreSQL
+  * Materialized views (MVs) make it **faster** for complex queries, especially those involving expensive joins or aggregations.
+  * MVs are **not** a silver bullet for all queries; use them when they fit the use case.
+  * If you have a slow query with poor performance, MVs might help you speed it up significantly.
+  * MVs are not a replacement for proper indexing and query optimization.
+  * Read more about [PostgreSQL materialized views](https://www.postgresql.org/docs/current/rules-materializedviews.html).
 
 ---
 
@@ -145,6 +161,9 @@ See [`mat_views_demo/`](./mat_views_demo) for seeds, MV definitions, and reprodu
 * **Code of Conduct:** see [CODE\_OF\_CONDUCT.md](./CODE_OF_CONDUCT.md)
 
 ---
+
+## Professional support
+Need help with Rails Materialized Views? We offer professional support and custom development services. Contact us at [sales@codevedas.com](mailto:sales@codevedas.com) for inquiries.
 
 ## License
 
