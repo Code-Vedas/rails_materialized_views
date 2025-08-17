@@ -127,8 +127,6 @@ You will be prompted to sign a CLA when you open your first pull request. Please
 
 There is no expiration date for CLAs. Once signed, your CLA will remain valid for all future contributions to this project.
 
-got it — here’s a cleaned-up, copy-pasteable **Release Process** that preserves your exact step order and intent, with a few precision tweaks (commands, wording) that won’t disrupt your existing CI.
-
 ## Release Process
 
 To release a new version of the `mat_views` engine, follow these steps.
