@@ -6,12 +6,6 @@
 # LICENSE file in the root directory of this source tree.
 
 MatViews.configure do |config|
-  # Set the retry behavior for MatViews, globally
-  # This determines whether MatViews will retry failed refreshes.
-  # Defaults to true.
-  # Uncomment the line below to set retry behavior.
-  # config.retry_on_failure = true
-
   ### Job Adapter Configuration
   # Set job adapter for MatViews
   # This can be set to :active_job, :sidekiq, and :resque,

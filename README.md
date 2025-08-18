@@ -12,20 +12,6 @@
 
 ---
 
-## Quickstart (diagram)
-
-```mermaid
-flowchart LR
-  A[Define MatViewDefinition name, sql, refresh_strategy] --> B[Create]
-  B --> C[Unique Index?required for CONCURRENT]
-  C --> D[Refresh regular : concurrent : swap]
-  D --> E[Read MV in app]
-  D --> G[Runs tracked Create/Refresh/Delete]
-  A -->|Delete| H[Drop MV]
-```
-
----
-
 ## ⚡ Why materialized views? Real numbers
 
 On a \~50k-row dataset, reading from pre-aggregated materialized views turns heavy joins into **double-digit to triple-digit speedups** compared to running the raw SQL each time.
@@ -40,23 +26,27 @@ On a \~50k-row dataset, reading from pre-aggregated materialized views turns hea
 - **Community-driven**: Contributions are welcome, with a CLA to ensure legal clarity.
 - **All features are free and open source** under the MIT license. There is no other version or paid tier.
 
-#### Sample run (5 iterations)
+#### Sample run (5 iterations) 
 
-| view                       | iterations | baseline\_avg\_ms | baseline\_min\_ms | baseline\_max\_ms | mv\_avg\_ms | mv\_min\_ms | mv\_max\_ms | speedup\_avg | rows\_baseline | rows\_mv |
-| -------------------------- | ---------: | ----------------: | ----------------: | ----------------: | ----------: | ----------: | ----------: | -----------: | -------------: | -------: |
-| mv\_user\_accounts         |          5 |                31 |                16 |                74 |           2 |           1 |           5 |         15.5 |          50000 |    50000 |
-| mv\_user\_accounts\_events |          5 |                78 |                70 |               108 |           1 |           1 |           2 |         78.0 |          50000 |    50000 |
-| mv\_user\_activity         |          5 |               161 |               159 |               165 |           1 |           1 |           2 |        161.0 |          50000 |    50000 |
-| mv\_users                  |          5 |                 1 |                 1 |                 2 |           2 |           1 |           7 |          0.5 |          50000 |    50000 |
+With 50,000 rows
+
+| view                       | iterations | baseline(ms) min\|avg\|max | mv(ms) min\|avg\|max  | speedup\_avg |
+| -------------------------- | ---------: | -------------------------: | --------------------: | -----------: |
+| mv\_user\_accounts         |          5 |             16 \| 31 \| 74 |           1 \| 2 \| 5 |         15.5 |
+| mv\_user\_accounts\_events |          5 |            70 \| 78 \| 108 |           1 \| 1 \| 2 |         78.0 |
+| mv\_user\_activity         |          5 |          159 \| 161 \| 165 |           1 \| 1 \| 2 |        161.0 |
+| mv\_user                   |          5 |                1 \| 1 \| 2 |           1 \| 2 \| 7 |          0.5 |
 
 #### Stability check (100 iterations)
 
-| view                       | iterations | baseline\_avg\_ms | baseline\_min\_ms | baseline\_max\_ms | mv\_avg\_ms | mv\_min\_ms | mv\_max\_ms | speedup\_avg | rows\_baseline | rows\_mv |
-| -------------------------- | ---------: | ----------------: | ----------------: | ----------------: | ----------: | ----------: | ----------: | -----------: | -------------: | -------: |
-| mv\_user\_accounts         |        100 |                17 |                15 |                69 |           1 |           1 |          20 |         17.0 |          50000 |    50000 |
-| mv\_user\_accounts\_events |        100 |                70 |                70 |                73 |           1 |           1 |           3 |         70.0 |          50000 |    50000 |
-| mv\_user\_activity         |        100 |               161 |               158 |               242 |           1 |           1 |           2 |        161.0 |          50000 |    50000 |
-| mv\_users                  |        100 |                 1 |                 1 |                 1 |           1 |           1 |           2 |          1.0 |          50000 |    50000 |
+With 50,000 rows
+
+| view                       | iterations | baseline(ms) min\|avg\|max | mv(ms) min\|avg\|max  | speedup\_avg |
+| -------------------------- | ---------: | -------------------------: | --------------------: | -----------: |
+| mv\_user\_accounts         |        100 |             15 \| 17 \| 69 |          1 \| 1 \| 20 |         17.0 |
+| mv\_user\_accounts\_events |        100 |             70 \| 70 \| 73 |           1 \| 1 \| 3 |         70.0 |
+| mv\_user\_activity         |        100 |          158 \| 161 \| 242 |           1 \| 1 \| 2 |        161.0 |
+| mv\_user                   |        100 |                1 \| 1 \| 1 |           1 \| 1 \| 2 |          0.5 |
 
 **Takeaways**
 
@@ -103,8 +93,6 @@ Init:
 MatViews.configure do |c|
   c.job_queue = :default # default queue for background jobs
   c.job_adapter = :active_job # (default), :sidekiq, :resque
-
-  # c.retry_on_failure = true  # retry refresh if it fails, currently it has no effect, it will be implemented in future
 end
 ```
 

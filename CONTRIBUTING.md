@@ -178,10 +178,10 @@ Pick the version number from draft release notes on the
    git push -u origin release/<version>
    ```
 
-8. **Open a PR to `main`**
+8.  **Open a PR to `main`**
    Create a pull request to merge `release/<version>` into `main`.
 
-9. **Label the PR**
+9.  **Label the PR**
    Tag the PR with `release`, `release/<version>`, and `skip-changelog`.
 
 10. **Create a GitHub Release**

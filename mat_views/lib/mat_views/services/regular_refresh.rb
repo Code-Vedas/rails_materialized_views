@@ -7,17 +7,49 @@
 
 module MatViews
   module Services
-    # RegularRefresh executes a standard (locking) REFRESH MATERIALIZED VIEW.
-    # It is the safest option for simple / low-frequency updates.
+    ##
+    # Service that executes a standard (locking) `REFRESH MATERIALIZED VIEW`.
+    #
+    # This is the safest option for simple or low-frequency updates where
+    # blocking reads during refresh is acceptable.
+    #
+    # Supports optional row counting strategies:
+    # - `:estimated` → uses `pg_class.reltuples` (fast, approximate)
+    # - `:exact`     → runs `COUNT(*)` (accurate, but potentially slow)
+    # - `nil`        → no row count included in payload
+    #
+    # @return [MatViews::ServiceResponse]
+    #
+    # @example
+    #   svc = MatViews::Services::RegularRefresh.new(defn)
+    #   svc.run
+    #
     class RegularRefresh < BaseService
+      ##
+      # The row count strategy requested.
+      # One of `:estimated`, `:exact`, `nil`, or unrecognized symbol.
+      #
+      # @return [Symbol, nil]
       attr_reader :row_count_strategy
 
-      # row_count_strategy: :estimated | :exact | nil
+      ##
+      # @param definition [MatViews::MatViewDefinition]
+      # @param row_count_strategy [Symbol, nil] row counting mode
       def initialize(definition, row_count_strategy: :estimated)
         super(definition)
         @row_count_strategy = row_count_strategy
       end
 
+      ##
+      # Perform the refresh.
+      #
+      # Steps:
+      # - Validate name & existence.
+      # - Run `REFRESH MATERIALIZED VIEW`.
+      # - Optionally compute row count.
+      #
+      # @return [MatViews::ServiceResponse]
+      #
       def run
         prep = prepare!
         return prep if prep
@@ -33,17 +65,29 @@ module MatViews
            payload: payload,
            meta: { sql: sql, row_count_strategy: row_count_strategy })
       rescue StandardError => e
-        error_response(e, meta: {
-                         sql: sql,
-                         backtrace: Array(e.backtrace),
-                         row_count_strategy: row_count_strategy
-                       }, payload: { view: "#{schema}.#{rel}" })
+        error_response(
+          e,
+          meta: {
+            sql: sql,
+            backtrace: Array(e.backtrace),
+            row_count_strategy: row_count_strategy
+          },
+          payload: { view: "#{schema}.#{rel}" }
+        )
       end
+
+      private
 
       # ────────────────────────────────────────────────────────────────
       # internal
       # ────────────────────────────────────────────────────────────────
 
+      ##
+      # Validate name and existence of the materialized view.
+      #
+      # @api private
+      # @return [MatViews::ServiceResponse, nil]
+      #
       def prepare!
         return err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
         return err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
@@ -51,10 +95,12 @@ module MatViews
         nil
       end
 
-      # ────────────────────────────────────────────────────────────────
-      # helpers: validation / schema / pg introspection
-      # ────────────────────────────────────────────────────────────────
-
+      ##
+      # Ensure name is a valid identifier (no schema-qualified or dangerous tokens).
+      #
+      # @api private
+      # @return [Boolean]
+      #
       def valid_name?
         /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
       end
@@ -63,6 +109,12 @@ module MatViews
       # rows counting
       # ────────────────────────────────────────────────────────────────
 
+      ##
+      # Pick the appropriate row count method.
+      #
+      # @api private
+      # @return [Integer, nil]
+      #
       def fetch_rows_count
         case row_count_strategy
         when :estimated then estimated_rows_count
@@ -70,7 +122,13 @@ module MatViews
         end
       end
 
-      # Fast/approx via pg_class.reltuples (updated by ANALYZE/maintenance).
+      ##
+      # Fast/approx via `pg_class.reltuples`.
+      # Updated by `ANALYZE` and autovacuum.
+      #
+      # @api private
+      # @return [Integer]
+      #
       def estimated_rows_count
         conn.select_value(<<~SQL).to_i
           SELECT COALESCE(c.reltuples::bigint, 0)
@@ -83,7 +141,13 @@ module MatViews
         SQL
       end
 
-      # Accurate but potentially heavy for big views.
+      ##
+      # Accurate count via `COUNT(*)`.
+      # Potentially slow on large materialized views.
+      #
+      # @api private
+      # @return [Integer]
+      #
       def exact_rows_count
         conn.select_value("SELECT COUNT(*) FROM #{qualified_rel}").to_i
       end

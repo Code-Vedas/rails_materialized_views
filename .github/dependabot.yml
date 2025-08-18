@@ -9,6 +9,10 @@ updates:
     directory: "/mat_views_demo"
     schedule:
       interval: daily
+  - package-ecosystem: bundler
+    directory: "/scripts"
+    schedule:
+      interval: daily
     open-pull-requests-limit: 10
   - package-ecosystem: github-actions
     directory: "/"

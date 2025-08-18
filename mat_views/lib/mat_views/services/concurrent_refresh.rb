@@ -7,18 +7,59 @@
 
 module MatViews
   module Services
-    # ConcurrentRefresh performs:
-    #   REFRESH MATERIALIZED VIEW CONCURRENTLY <schema>.<rel>
-    # It keeps the view readable during refresh, but requires a UNIQUE index.
+    ##
+    # Refresh service that runs:
+    #
+    #   `REFRESH MATERIALIZED VIEW CONCURRENTLY <schema>.<rel>`
+    #
+    # It keeps the view readable during refresh, but **requires at least one
+    # UNIQUE index** on the materialized view (a PostgreSQL constraint).
+    # Returns a {MatViews::ServiceResponse}.
+    #
+    # Row-count reporting is optional and controlled by `row_count_strategy`:
+    # - `:estimated` — fast/approx via `pg_class.reltuples`
+    # - `:exact` — accurate `COUNT(*)`
+    # - `nil` (or any unrecognized value) — skip counting
+    #
+    # @see MatViews::Services::RegularRefresh
+    # @see MatViews::Services::SwapRefresh
+    #
+    # @example Direct usage
+    #   svc = MatViews::Services::ConcurrentRefresh.new(definition, row_count_strategy: :exact)
+    #   response = svc.run
+    #   response.success? # => true/false
+    #
+    # @example Via job selection (within RefreshViewJob)
+    #   # When definition.refresh_strategy == "concurrent"
+    #   MatViews::RefreshViewJob.perform_later(definition.id, :estimated)
+    #
     class ConcurrentRefresh < BaseService
+      ##
+      # Strategy for computing rows count after refresh.
+      #
+      # @return [Symbol, nil] one of `:estimated`, `:exact`, or `nil`
       attr_reader :row_count_strategy
 
-      # row_count_strategy: :estimated | :exact | nil | other
+      ##
+      # @param definition [MatViews::MatViewDefinition]
+      # @param row_count_strategy [Symbol, nil] `:estimated` (default), `:exact`, or `nil`
       def initialize(definition, row_count_strategy: :estimated)
         super(definition)
         @row_count_strategy = row_count_strategy
       end
 
+      ##
+      # Execute the concurrent refresh.
+      #
+      # Validates name format, existence of the matview, and presence of a UNIQUE index.
+      # If validation fails, returns an error {MatViews::ServiceResponse}.
+      #
+      # @return [MatViews::ServiceResponse]
+      #   - `status: :updated` with payload `{ view:, rows_count? }` on success
+      #   - `status: :error` with `error` on failure
+      #
+      # @raise [StandardError] bubbled after being wrapped into {#error_response}
+      #
       def run
         prep = prepare!
         return prep if prep
@@ -44,10 +85,18 @@ module MatViews
                        payload: { view: "#{schema}.#{rel}" })
       end
 
+      private
+
       # ────────────────────────────────────────────────────────────────
       # internal
       # ────────────────────────────────────────────────────────────────
 
+      ##
+      # Perform pre-flight checks.
+      #
+      # @api private
+      # @return [MatViews::ServiceResponse, nil] error response or `nil` if OK
+      #
       def prepare!
         return err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
         return err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
@@ -61,11 +110,22 @@ module MatViews
       # (mirrors RegularRefresh for consistency)
       # ────────────────────────────────────────────────────────────────
 
+      ##
+      # Validate that the view name is a sane PostgreSQL identifier.
+      #
+      # @api private
+      # @return [Boolean]
+      #
       def valid_name?
         /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
       end
 
-      # Any UNIQUE index on the matview satisfies the CONCURRENTLY requirement.
+      ##
+      # Check for any UNIQUE index on the materialized view, required by CONCURRENTLY.
+      #
+      # @api private
+      # @return [Boolean]
+      #
       def unique_index_exists?
         conn.select_value(<<~SQL).to_i.positive?
           SELECT COUNT(*)
@@ -82,6 +142,12 @@ module MatViews
       # rows counting (same as RegularRefresh)
       # ────────────────────────────────────────────────────────────────
 
+      ##
+      # Compute rows count based on the configured strategy.
+      #
+      # @api private
+      # @return [Integer, nil]
+      #
       def fetch_rows_count
         case row_count_strategy
         when :estimated then estimated_rows_count
@@ -89,7 +155,12 @@ module MatViews
         end
       end
 
-      # Fast/approx via pg_class.reltuples.
+      ##
+      # Fast, approximate row count via `pg_class.reltuples`.
+      #
+      # @api private
+      # @return [Integer]
+      #
       def estimated_rows_count
         conn.select_value(<<~SQL).to_i
           SELECT COALESCE(c.reltuples::bigint, 0)
@@ -102,7 +173,12 @@ module MatViews
         SQL
       end
 
-      # Accurate but heavier.
+      ##
+      # Accurate row count using `COUNT(*)` on the materialized view.
+      #
+      # @api private
+      # @return [Integer]
+      #
       def exact_rows_count
         conn.select_value("SELECT COUNT(*) FROM #{qualified_rel}").to_i
       end

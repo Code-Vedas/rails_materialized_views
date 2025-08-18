@@ -6,17 +6,44 @@
 # LICENSE file in the root directory of this source tree.
 
 module MatViews
-  # Configuration class for MatViews
+  ##
+  # Configuration for the MatViews engine.
   #
-  # This class allows customization of the MatViews engine's behavior,
-  # such as setting the default refresh strategy, retry behavior, and cron schedule.
+  # This class provides customization points for how MatViews integrates
+  # with background job systems and controls default behavior across
+  # the engine.
+  #
+  # @example Configure in an initializer
+  #   MatViews.configure do |config|
+  #     config.job_adapter = :sidekiq
+  #     config.job_queue   = :low_priority
+  #   end
+  #
+  # Supported job adapters:
+  # - `:active_job` (default)
+  # - `:sidekiq`
+  # - `:resque`
+  #
   class Configuration
-    attr_accessor :retry_on_failure, :job_adapter, :job_queue
+    ##
+    # The job adapter to use for enqueuing jobs.
+    #
+    # @return [Symbol] :active_job, :sidekiq, or :resque
+    attr_accessor :job_adapter
 
+    ##
+    # The default queue name to use for jobs.
+    #
+    # @return [Symbol, String]
+    attr_accessor :job_queue
+
+    ##
+    # Initialize with defaults.
+    #
+    # @return [void]
     def initialize
-      @retry_on_failure = true
       @job_adapter = :active_job
-      @job_queue = :default
+      @job_queue   = :default
     end
   end
 end
