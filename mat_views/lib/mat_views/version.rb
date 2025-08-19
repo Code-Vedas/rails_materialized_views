@@ -6,5 +6,16 @@
 # LICENSE file in the root directory of this source tree.
 
 module MatViews
+  ##
+  # Defines the version of the MatViews gem.
+  #
+  # This constant is used to track and publish gem releases.
+  # It follows [Semantic Versioning](https://semver.org/):
+  #
+  # - MAJOR: Incompatible API changes
+  # - MINOR: Backwards-compatible functionality
+  # - PATCH: Backwards-compatible bug fixes
+  #
+  # @return [String] the current gem version
   VERSION = '0.1.0'
 end

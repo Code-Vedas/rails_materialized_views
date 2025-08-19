@@ -2,7 +2,7 @@ PATH
   remote: ../mat_views
   specs:
     mat_views (0.1.0)
-      rails (>= 7.1)
+      rails (>= 7.1, < 9.0)
 
 GEM
   remote: https://rubygems.org/

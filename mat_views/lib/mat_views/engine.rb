@@ -6,11 +6,24 @@
 # LICENSE file in the root directory of this source tree.
 
 module MatViews
-  # MatViews is a Rails engine that provides support for materialized views.
+  ##
+  # Rails Engine for MatViews.
   #
-  # It includes functionality for defining, refreshing, and managing materialized views
-  # within a Rails application. This engine can be mounted in a Rails application to
-  # leverage its features.
+  # This engine encapsulates all functionality related to
+  # materialized views, including:
+  # - Defining materialized view definitions
+  # - Creating and refreshing views
+  # - Managing background jobs for refresh/create/delete
+  #
+  # By isolating the namespace, it ensures that routes, models,
+  # and helpers do not conflict with the host application.
+  #
+  # @example Mounting the engine in a Rails application
+  #   # config/routes.rb
+  #   Rails.application.routes.draw do
+  #     mount MatViews::Engine => "/mat_views"
+  #   end
+  #
   class Engine < ::Rails::Engine
     isolate_namespace MatViews
 

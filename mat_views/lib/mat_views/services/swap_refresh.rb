@@ -9,19 +9,48 @@ require 'securerandom'
 
 module MatViews
   module Services
-    # SwapRefresh rebuilds into a temporary MV and atomically swaps it in.
+    ##
+    # Service that performs a **swap-style refresh** of a materialized view.
+    #
+    # Instead of locking the existing view, this strategy builds a new
+    # temporary materialized view and atomically swaps it in. This approach
+    # minimizes downtime and allows for safer rebuilds of large views.
+    #
     # Steps:
-    # 1) CREATE MATERIALIZED VIEW <tmp> AS <definition.sql> WITH DATA
-    # 2) (txn) RENAME original -> <old>, RENAME tmp -> original, DROP <old>
-    # 3) Recreate declared indexes/privileges as needed
+    # 1. Create a temporary MV from the provided SQL.
+    # 2. In a transaction: rename original → old, tmp → original, drop old.
+    # 3. Recreate declared unique indexes (if any).
+    #
+    # Supports optional row count strategies:
+    # - `:estimated` → approximate, using `pg_class.reltuples`
+    # - `:exact` → accurate, using `COUNT(*)`
+    # - `nil` → skip row count
+    #
+    # @return [MatViews::ServiceResponse]
+    #
+    # @example
+    #   svc = MatViews::Services::SwapRefresh.new(defn, row_count_strategy: :exact)
+    #   svc.run
+    #
     class SwapRefresh < BaseService
+      ##
+      # Row count strategy (`:estimated`, `:exact`, `nil`).
+      #
+      # @return [Symbol, nil]
       attr_reader :row_count_strategy
 
+      ##
+      # @param definition [MatViews::MatViewDefinition]
+      # @param row_count_strategy [Symbol, nil]
       def initialize(definition, row_count_strategy: :estimated)
         super(definition)
         @row_count_strategy = row_count_strategy
       end
 
+      ##
+      # Execute the swap refresh.
+      #
+      # @return [MatViews::ServiceResponse]
       def run
         prep = prepare!
         return prep if prep
@@ -35,19 +64,29 @@ module MatViews
         payload = { view: "#{schema}.#{rel}" }
         payload[:rows_count] = fetch_rows_count if row_count_strategy.present?
 
-        ok(:updated,
-           payload: payload,
-           meta: { steps: steps, row_count_strategy: row_count_strategy, swap: true })
+        ok(:updated, payload: payload, meta: { steps: steps, row_count_strategy: row_count_strategy, swap: true })
       rescue StandardError => e
         error_response(e,
-                       meta: { steps: steps, backtrace: Array(e.backtrace), row_count_strategy: row_count_strategy, swap: true },
+                       meta: {
+                         steps: steps,
+                         backtrace: Array(e.backtrace),
+                         row_count_strategy: row_count_strategy,
+                         swap: true
+                       },
                        payload: { view: "#{schema}.#{rel}" })
       end
+
+      private
 
       # ────────────────────────────────────────────────────────────────
       # internal
       # ────────────────────────────────────────────────────────────────
 
+      ##
+      # Ensure name validity and existence of original view.
+      #
+      # @api private
+      # @return [MatViews::ServiceResponse, nil]
       def prepare!
         return err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
         return err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
@@ -55,6 +94,11 @@ module MatViews
         nil
       end
 
+      ##
+      # Perform rename/drop/index recreation in a transaction.
+      #
+      # @api private
+      # @return [Array<String>] SQL steps executed
       def swap_index
         steps = []
         conn.transaction do
@@ -75,29 +119,58 @@ module MatViews
         steps
       end
 
+      ##
+      # Quote the temporary materialized view name.
+      #
+      # @api private
+      # @return [String] quoted temporary view name
       def q_tmp
         @q_tmp ||= conn.quote_table_name("#{schema}.#{tmp_rel}")
       end
 
+      ##
+      # Quote the original materialized view name.
+      #
+      # @api private
+      # @return [String] quoted original view name
       def q_old
         @q_old ||= conn.quote_table_name("#{schema}.#{old_rel}")
       end
 
+      ##
+      # Fully-qualified, safely-quoted temporary relation name.
+      #
+      # @api private
+      # @return [String]
       def tmp_rel
         @tmp_rel ||= "#{rel}__tmp_#{SecureRandom.hex(4)}"
       end
 
+      ##
+      # Fully-qualified, safely-quoted old relation name.
+      #
+      # @api private
+      # @return [String]
       def old_rel
         @old_rel ||= "#{rel}__old_#{SecureRandom.hex(4)}"
       end
 
-      # Keep consistency with Regular/Concurrent services
+      ##
+      # Validate that the view name is a sane PostgreSQL identifier.
+      #
+      # @api private
+      # @return [Boolean]
       def valid_name?
         /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
       end
 
-      # Create unique index(es) described by definition.unique_index_columns
-      # Accepts single or multiple columns (array of strings).
+      ##
+      # Recreate declared unique indexes on the swapped-in view.
+      #
+      # @api private
+      # @param schema [String]
+      # @param rel [String]
+      # @param steps [Array<String>] collected SQL
       def recreate_declared_unique_indexes!(schema:, rel:, steps:)
         cols = Array(definition.unique_index_columns).map(&:to_s).reject(&:empty?)
         return if cols.empty?
@@ -112,9 +185,14 @@ module MatViews
       end
 
       # ────────────────────────────────────────────────────────────────
-      # rows counting (same as your other services)
+      # rows counting
       # ────────────────────────────────────────────────────────────────
 
+      ##
+      # Fetch the row count based on the configured strategy.
+      #
+      # @api private
+      # @return [Integer, nil]
       def fetch_rows_count
         case row_count_strategy
         when :estimated then estimated_rows_count
@@ -122,6 +200,11 @@ module MatViews
         end
       end
 
+      ##
+      # Approximate row count via `pg_class.reltuples`.
+      #
+      # @api private
+      # @return [Integer]
       def estimated_rows_count
         conn.select_value(<<~SQL).to_i
           SELECT COALESCE(c.reltuples::bigint, 0)
@@ -134,6 +217,11 @@ module MatViews
         SQL
       end
 
+      ##
+      # Accurate row count via `COUNT(*)`.
+      #
+      # @api private
+      # @return [Integer]
       def exact_rows_count
         conn.select_value("SELECT COUNT(*) FROM #{qualified_rel}").to_i
       end

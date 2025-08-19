@@ -5,12 +5,30 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+##
+# Top-level namespace for the mat_views engine.
 module MatViews
-  # ApplicationRecord is the base class for all models in the MatViews application.
-  # It inherits from ActiveRecord::Base and sets the abstract class flag.
+  ##
+  # Base model class for all ActiveRecord models in the mat_views engine.
   #
-  # This class can be extended to define common behavior for all models in the application.
+  # Inherits from {ActiveRecord::Base} and marks itself as an abstract class.
+  # Other engine models should subclass this rather than inheriting directly
+  # from {ActiveRecord::Base}, so that shared behavior or configuration can be
+  # applied in one place.
+  #
+  # @abstract
+  #
+  # @example Define a new model under mat_views
+  #   class MatViews::MatViewDefinition < MatViews::ApplicationRecord
+  #     self.table_name = "mat_view_definitions"
+  #   end
+  #
   class ApplicationRecord < ActiveRecord::Base
+    ##
+    # Marks this record class as abstract, so it won’t be persisted to a table.
+    #
+    # @return [void]
+    #
     self.abstract_class = true
   end
 end

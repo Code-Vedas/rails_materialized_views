@@ -1,0 +1,32 @@
+title: Rails Materialized Views
+description: >-
+  MatViews is a mountable Ruby on Rails engine that makes PostgreSQL materialized views first-class citizens in your app.
+  From declaration to concurrent refresh, automated scheduling, metrics tracking, and 
+  large-dataset validation — MatViews helps you tame big queries and keep your reports lightning-fast.
+baseurl: ""
+domain: mat-views.codevedas.com
+# Build settings
+theme: just-the-docs
+plugins:
+  - jekyll-feed
+  - kramdown
+mermaid:
+  version: "10.1.0"
+callouts:
+  note:
+    title: Note
+    color: blue
+toc:
+  depth: 2
+  min_heading_level: 2
+  max_heading_level: 3
+aux_links:
+  - title: " 🌙 / ☀️ "
+    url: "javascript:toggleTheme();"
+    new_tab: false
+  - title: Repository
+    url: "https://github.com/Code-Vedas/rails_materialized_views"
+    new_tab: true
+aux_links_new_tab: true
+nav_enabled: true
+heading_anchors: true
