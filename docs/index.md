@@ -8,6 +8,8 @@ nav_order: 1
 
 [![Gem](https://img.shields.io/gem/v/mat_views.svg?style=flat-square)](https://rubygems.org/gems/mat_views)
 [![CI](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml/badge.svg)](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml)
+[![Maintainability](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views/maintainability.svg)](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views)
+[![Code Coverage](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views/coverage.svg)](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12%2B-336791?style=flat-square&logo=postgresql&logoColor=white)
 
