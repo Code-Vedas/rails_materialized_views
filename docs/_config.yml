@@ -5,6 +5,7 @@ description: >-
   large-dataset validation — MatViews helps you tame big queries and keep your reports lightning-fast.
 baseurl: ""
 domain: mat-views.codevedas.com
+repository: "Code-Vedas/rails_materialized_views"
 # Build settings
 theme: just-the-docs
 plugins:
