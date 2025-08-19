@@ -3,7 +3,6 @@ plugins:
   - rubocop-capybara
 AllCops:
   NewCops: enable
-  EnabledByDefault: true
   TargetRubyVersion: 3.2
   SuggestExtensions: true
 
