@@ -24,12 +24,9 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 3.4.3
           bundler-cache: true
-          working-directory: docs
-
-      - name: Install gems
-        working-directory: docs
-        run: bundle install --path vendor/bundle
+          working-directory: ${{ github.workspace }}/docs
 
       - name: Build site
         run: bundle exec jekyll build --source docs --destination _site
