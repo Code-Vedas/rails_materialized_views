@@ -4,7 +4,6 @@
 
 [Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/080a0c5f8f42eb55e971677f0468ed626e2b3b44...v0.1.0)
 
-
 ## 🚀 Features
 
 - feat: Adds rake task to validate MV performance @niteshpurohit (#82)

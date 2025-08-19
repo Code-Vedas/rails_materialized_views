@@ -1,8 +1,8 @@
+permissions:
+  contents: read
 name: Danger
-
 on:
   pull_request:
-
 jobs:
   danger:
     permissions:
@@ -13,17 +13,14 @@ jobs:
     defaults:
       run:
         working-directory: mat_views
-
     steps:
       - uses: actions/checkout@v5
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.4.3
           bundler-cache: true
           working-directory: ${{ github.workspace }}/mat_views
-
       - name: Run Danger
         run: bundle exec danger
         env:

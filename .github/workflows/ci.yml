@@ -1,5 +1,6 @@
+permissions:
+  contents: read
 name: CI
-
 on:
   pull_request:
   push:

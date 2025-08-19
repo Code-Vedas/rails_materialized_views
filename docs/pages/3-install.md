@@ -34,7 +34,7 @@ MatViews.configure do |c|
   # you can set different name, make sure job queue is set to the same as in your job adapter
   # otherwise no views will be created/updated/deleted
   c.job_queue = :default # default queue for background jobs
-  
+
   # must match your job adapter setup
   c.job_adapter = :active_job # (default), :sidekiq, :resque
 end

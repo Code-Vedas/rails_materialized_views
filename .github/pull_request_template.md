@@ -15,21 +15,21 @@ For example:
 A CLA is required for this pull request. Please read and sign the CLA at https://cla.developers.codevedas.com
 -->
 
-## Pull Request
+# Pull Request
 
-### Description:
+## Description
 
 [Provide a clear and concise description of the changes introduced by this pull request.]
 
-### Related Issue:
+## Related Issue
 
 [If your pull request addresses a specific issue, reference it here by linking to the issue using the pound sign (#). For example, #123]
 
-### Proposed Changes:
+## Proposed Changes
 
 [Outline the changes made in this pull request. Include any new features, bug fixes, or enhancements.]
 
-### Checklist:
+## Checklist
 
 - [ ] I have tested these changes locally.
 - [ ] I have ensured that my code follows the project's coding standards.
@@ -39,11 +39,11 @@ A CLA is required for this pull request. Please read and sign the CLA at https:/
 - [ ] I have confirmed that the changes work with the latest version of dependencies.
 - [ ] I have added appropriate labels to the pull request.
 
-### Screenshots or Additional Information:
+## Screenshots or Additional Information
 
 [If applicable, provide screenshots or any additional information that helps reviewers understand the changes.]
 
-### Environment:
+## Environment
 
 - Operating System: [e.g., Windows, macOS, Linux]
 - Browser (if applicable): [e.g., Chrome, Firefox, Safari]

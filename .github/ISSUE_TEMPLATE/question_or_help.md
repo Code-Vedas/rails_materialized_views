@@ -8,15 +8,15 @@ assignees: ""
 
 ## Question/Help
 
-### Description:
+### Description
 
 [Briefly describe the question or issue you need help with.]
 
-### Context:
+### Context
 
 [Provide any relevant context or details that might help others understand your question or issue better.]
 
-### Checklist:
+### Checklist
 
 - [ ] I have searched for similar questions or issues and found none.
 - [ ] I have included all the required information.
