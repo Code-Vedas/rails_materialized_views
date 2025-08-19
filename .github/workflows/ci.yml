@@ -76,6 +76,11 @@ jobs:
           path: ${{ github.workspace }}/mat_views/coverage
           if-no-files-found: ignore
 
+      - uses: qltysh/qlty-action/coverage@v2
+        with:
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: ${{ github.workspace }}/mat_views/coverage/.resultset.json
+
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
         if: failure()
