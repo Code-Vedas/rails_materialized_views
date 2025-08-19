@@ -11,7 +11,7 @@ gem "jekyll", "~> 3.10.0"
 gem "minima", "~> 2.5"
 # If you have any plugins, put them here!
 group :jekyll_plugins do
-  gem "just-the-docs", git: "https://github.com/niteshpurohit/just-the-docs.git", branch: "main"
+  gem "just-the-docs"
   gem "github-pages", "~> 232"
   gem "kramdown"
 end
