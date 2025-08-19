@@ -87,8 +87,8 @@ MatViews::DeleteViewJob.perform_later(defn.id, cascade: true)
 MatViews::Jobs::Adapter.enqueue(job_class, queue: :default, args: [...])
 ```
 
-* Uses your configured backend; **no guessing**.
-* Supports **ActiveJob**, **Sidekiq**, **Resque**.
+- Uses your configured backend; **no guessing**.
+- Supports **ActiveJob**, **Sidekiq**, **Resque**.
 
 ---
 
@@ -115,7 +115,7 @@ bundle exec rake mat_views:delete_all\[cascade,--yes]
 
 ## Docs & policies
 
-* Root README: [../README.md](../README.md)
-* **Contributing:** [../CONTRIBUTING.md](../CONTRIBUTING.md)
-* **Security policy:** [../SECURITY.md](../SECURITY.md)
-* **Code of Conduct:** [../CODE\_OF\_CONDUCT.md](../CODE_OF_CONDUCT.md)
+- Root README: [../README.md](../README.md)
+- **Contributing:** [../CONTRIBUTING.md](../CONTRIBUTING.md)
+- **Security policy:** [../SECURITY.md](../SECURITY.md)
+- **Code of Conduct:** [../CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md)

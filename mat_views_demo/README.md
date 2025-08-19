@@ -73,15 +73,15 @@ bundle exec rake mat_views:delete_all\[false,--yes]
 MatViews::Jobs::Adapter.enqueue(job_class, queue: MatViews.configuration.job_queue, args: [...])
 ```
 
-* The adapter **does not guess**; configure **ActiveJob**, **Sidekiq**, or **Resque** in the demo app.
-* Ensure your queue is running (unless using `:inline`).
+- The adapter **does not guess**; configure **ActiveJob**, **Sidekiq**, or **Resque** in the demo app.
+- Ensure your queue is running (unless using `:inline`).
 
 ---
 
 ## Docs & policies
 
-* Engine README: [../mat\_views/README.md](../mat_views/README.md)
-* Root README: [../README.md](../README.md)
-* **Contributing:** [../CONTRIBUTING.md](../CONTRIBUTING.md)
-* **Security policy:** [../SECURITY.md](../SECURITY.md)
-* **Code of Conduct:** [../CODE\_OF\_CONDUCT.md](../CODE_OF_CONDUCT.md)
+- Engine README: [../mat_views/README.md](../mat_views/README.md)
+- Root README: [../README.md](../README.md)
+- **Contributing:** [../CONTRIBUTING.md](../CONTRIBUTING.md)
+- **Security policy:** [../SECURITY.md](../SECURITY.md)
+- **Code of Conduct:** [../CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md)

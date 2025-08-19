@@ -8,19 +8,19 @@ assignees: ""
 
 ## Documentation Issue
 
-### Description:
+### Description
 
 [Provide a clear and concise description of the documentation issue.]
 
-### Affected Documentation:
+### Affected Documentation
 
 [Specify the affected section(s) or page(s) of the documentation.]
 
-### Suggested Improvement:
+### Suggested Improvement
 
 [If you have a suggestion for improving the documentation, please describe it here.]
 
-### Checklist:
+### Checklist
 
 - [ ] I have searched for similar documentation issues and found none.
 - [ ] I have included all the required information.

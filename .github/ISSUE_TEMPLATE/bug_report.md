@@ -8,36 +8,36 @@ assignees: ""
 
 ## Bug Report
 
-### Description:
+### Description
 
 [Provide a clear and concise description of the bug.]
 
-### Steps to Reproduce:
+### Steps to Reproduce
 
 1. [First step]
 2. [Second step]
 3. [Third step]
    - [If applicable]
 
-### Expected Behavior:
+### Expected Behavior
 
 [Describe what you expected to happen.]
 
-### Actual Behavior:
+### Actual Behavior
 
 [Describe what actually happened.]
 
-### Screenshots or Additional Information:
+### Screenshots or Additional Information
 
 [If applicable, add screenshots or other information to help illustrate the issue.]
 
-### Environment:
+### Environment
 
 - Operating System: [e.g., Windows, macOS, Linux]
 - Browser (if applicable): [e.g., Chrome, Firefox, Safari]
 - Version: [e.g., 1.0.0]
 
-### Checklist:
+### Checklist
 
 - [ ] I have searched for a similar issue and didn't find any duplicates.
 - [ ] I have included all the required information.

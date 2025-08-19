@@ -22,10 +22,10 @@ This project comprises various modules/components, each housed in its dedicated 
 
 The table below provides an overview of all possible modules/components:
 
-| Module/Component | Description                                            | Related Language/Framework |
-| ---------------- | ------------------------------------------------------ | -------------------------- |
-| mat_views        | Rails Materialized Views Engine                        | Ruby on Rails              |
-| mat_views_demo   | Demo Application for mat_views Engine                  | Ruby on Rails              |
+| Module/Component | Description                           | Related Language/Framework |
+| ---------------- | ------------------------------------- | -------------------------- |
+| mat_views        | Rails Materialized Views Engine       | Ruby on Rails              |
+| mat_views_demo   | Demo Application for mat_views Engine | Ruby on Rails              |
 
 ## Improve Documentation
 
@@ -89,7 +89,7 @@ Our engine supports multiple background processors via `MatViews.config.job_adap
 
 The smoke specs verify that `MatViews::Jobs::Adapter.enqueue` dispatches correctly to each adapter.
 
-**How to switch adapters when running specs**
+#### How to switch adapters when running specs
 
 Specs set the adapter explicitly, but you can override locally in a console:
 
@@ -100,7 +100,7 @@ MatViews.configure do |c|
 end
 ```
 
-**ActiveJob tests**
+#### ActiveJob tests
 
 We use the ActiveJob test adapter. RSpec tag `:active_job` sets:
 
@@ -108,12 +108,12 @@ We use the ActiveJob test adapter. RSpec tag `:active_job` sets:
 ActiveJob::Base.queue_adapter = :test
 ```
 
-**Sidekiq + Resque**
+#### Sidekiq + Resque
 
 Specs expect the gems to be present and assert calls to:
 
-* `Sidekiq::Client.push(...)`
-* `Resque.enqueue_to(queue, klass, *args)`
+- `Sidekiq::Client.push(...)`
+- `Resque.enqueue_to(queue, klass, *args)`
 
 ## Enhance Security
 
@@ -136,11 +136,12 @@ Pick the version number from draft release notes on the
 
 1. **Create a release branch**  
    Branch off `main` to a new branch named `release/<version>`.
-```bash
-   git checkout main
-   git pull
-   git checkout -b release/<version>
-```
+
+   ```bash
+      git checkout main
+      git pull
+      git checkout -b release/<version>
+   ```
 
 2. **Update the version**
    Update the version in `mat_views.gemspec` to `<version>`.
@@ -152,10 +153,9 @@ Pick the version number from draft release notes on the
 
 4. **Docs sweep**
    Update all relevant docs to reflect this version (version number, features, fixes, usage):
-
-   * Root `README.md` and `mat_views/README.md`
-   * `mat_views_demo/README.md` (new commands/configs if any)
-   * `CONTRIBUTING.md` (if contributor process changed)
+   - Root `README.md` and `mat_views/README.md`
+   - `mat_views_demo/README.md` (new commands/configs if any)
+   - `CONTRIBUTING.md` (if contributor process changed)
 
 5. **Verify release notes**
    Ensure the notes accurately reflect all user-visible changes in this version.
@@ -178,10 +178,10 @@ Pick the version number from draft release notes on the
    git push -u origin release/<version>
    ```
 
-8.  **Open a PR to `main`**
+8. **Open a PR to `main`**
    Create a pull request to merge `release/<version>` into `main`.
 
-9.  **Label the PR**
+9. **Label the PR**
    Tag the PR with `release`, `release/<version>`, and `skip-changelog`.
 
 10. **Create a GitHub Release**

@@ -1,28 +1,29 @@
 <script>
   (function () {
-    var STORAGE_KEY = 'jtd-theme';
-    var mediaQuery = '(prefers-color-scheme: dark)';
+    var STORAGE_KEY = "jtd-theme";
+    var mediaQuery = "(prefers-color-scheme: dark)";
 
     function apply(theme) {
-      if (theme === 'dark' || theme === 'light') {
+      if (theme === "dark" || theme === "light") {
         jtd.setTheme(theme);
       }
     }
     var saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'dark' || saved === 'light') {
+    if (saved === "dark" || saved === "light") {
       apply(saved);
     } else if (window.matchMedia && window.matchMedia(mediaQuery).matches) {
-      apply('dark');
+      apply("dark");
     }
     if (window.matchMedia) {
       var mq = window.matchMedia(mediaQuery);
-      mq.addEventListener('change', function (e) {
+      mq.addEventListener("change", function (e) {
         var locked = localStorage.getItem(STORAGE_KEY);
-        if (!locked) apply(e.matches ? 'dark' : 'light');
+        if (!locked) apply(e.matches ? "dark" : "light");
       });
     }
     window.toggleTheme = function () {
-      var next = (localStorage.getItem(STORAGE_KEY) === 'dark') ? 'light' : 'dark';
+      var next =
+        localStorage.getItem(STORAGE_KEY) === "dark" ? "light" : "dark";
       localStorage.setItem(STORAGE_KEY, next);
       apply(next);
     };

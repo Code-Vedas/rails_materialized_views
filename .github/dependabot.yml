@@ -1,21 +1,21 @@
 version: 2
 updates:
   - package-ecosystem: bundler
-    directory: "/mat_views"
+    directory: /mat_views
     schedule:
       interval: daily
     open-pull-requests-limit: 10
   - package-ecosystem: bundler
-    directory: "/mat_views_demo"
+    directory: /mat_views_demo
     schedule:
       interval: daily
   - package-ecosystem: bundler
-    directory: "/scripts"
+    directory: /scripts
     schedule:
       interval: daily
     open-pull-requests-limit: 10
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: /
     schedule:
       interval: daily
     open-pull-requests-limit: 10

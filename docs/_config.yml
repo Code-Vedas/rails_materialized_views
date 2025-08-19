@@ -5,14 +5,14 @@ description: >-
   large-dataset validation — MatViews helps you tame big queries and keep your reports lightning-fast.
 baseurl: ""
 domain: mat-views.codevedas.com
-repository: "Code-Vedas/rails_materialized_views"
+repository: Code-Vedas/rails_materialized_views
 # Build settings
 theme: just-the-docs
 plugins:
   - jekyll-feed
   - kramdown
 mermaid:
-  version: "10.1.0"
+  version: 10.1.0
 callouts:
   note:
     title: Note
@@ -23,10 +23,10 @@ toc:
   max_heading_level: 3
 aux_links:
   - title: " 🌙 / ☀️ "
-    url: "javascript:toggleTheme();"
+    url: javascript:toggleTheme();
     new_tab: false
   - title: Repository
-    url: "https://github.com/Code-Vedas/rails_materialized_views"
+    url: https://github.com/Code-Vedas/rails_materialized_views
     new_tab: true
 aux_links_new_tab: true
 nav_enabled: true

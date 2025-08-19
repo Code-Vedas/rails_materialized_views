@@ -8,27 +8,27 @@ assignees: ""
 
 ## Feature Request
 
-### Description:
+### Description
 
 [Provide a clear and concise description of the feature you're requesting.]
 
-### Use Case:
+### Use Case
 
 [Explain the use case or scenario where this feature would be beneficial.]
 
-### Proposed Solution:
+### Proposed Solution
 
 [If you have a specific solution in mind, describe it here.]
 
-### Alternatives Considered:
+### Alternatives Considered
 
 [Have you considered any alternative solutions or workarounds?]
 
-### Additional Context:
+### Additional Context
 
 [Add any additional context or information that might be relevant to the feature request.]
 
-### Checklist:
+### Checklist
 
 - [ ] I have searched for a similar feature request and didn't find any duplicates.
 - [ ] I have included all the required information.

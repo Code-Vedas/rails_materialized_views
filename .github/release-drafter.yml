@@ -1,121 +1,101 @@
-name-template: "v$RESOLVED_VERSION"
-tag-template: "v$RESOLVED_VERSION"
+name-template: v$RESOLVED_VERSION
+tag-template: v$RESOLVED_VERSION
 
 autolabeler:
-  - label: "dependencies"
+  - label: dependencies
     branch:
       - /^dependabot\//
     title:
       - /^chore\(deps\):/
       - /^chore\(dependencies\):/
-  - label: "feature"
+  - label: feature
     branch:
       - /^feat\//
     title:
       - /^feat:/
-
-  - label: "bug"
+  - label: bug
     branch:
       - /^bugfix\//
     title:
       - /^bugfix:/
-
-  - label: "docs"
+  - label: docs
     branch:
       - /^docs\//
     title:
       - /^docs:/
-
-  - label: "release"
+  - label: release
     branch:
       - /^release\//
     title:
       - /^release:/
-
-  - label: "chore"
+  - label: chore
     branch:
       - /^chore\//
     title:
       - /^chore:/
-
-  - label: "refactor"
+  - label: refactor
     branch:
       - /^refactor\//
     title:
       - /^refactor:/
-
-  - label: "test"
+  - label: test
     branch:
       - /^test\//
     title:
       - /^test:/
-
-  - label: "style"
+  - label: style
     branch:
       - /^style\//
     title:
       - /^style:/
-
-  - label: "ci"
+  - label: ci
     branch:
       - /^ci\//
     title:
       - /^ci:/
-
-  - label: "perf"
+  - label: perf
     branch:
       - /^perf\//
     title:
       - /^perf:/
-
-  - label: "build"
+  - label: build
     branch:
       - /^build\//
     title:
       - /^build:/
-
 categories:
-  - title: "🚀 Features"
+  - title: 🚀 Features
     labels:
-      - "feature"
-
-  - title: "🐛 Bug Fixes"
+      - feature
+  - title: 🐛 Bug Fixes
     labels:
-      - "bug"
-
-  - title: "📝 Documentation"
+      - bug
+  - title: 📝 Documentation
     labels:
-      - "docs"
-
-  - title: "🔖 Releases"
+      - docs
+  - title: 🔖 Releases
     labels:
-      - "release"
-
-  - title: "🧰 Maintenance"
+      - release
+  - title: 🧰 Maintenance
     labels:
-      - "chore"
-      - "refactor"
-      - "dependencies"
-
-  - title: "🧪 Tests"
+      - chore
+      - refactor
+      - dependencies
+  - title: 🧪 Tests
     labels:
-      - "test"
-
-  - title: "💅 Styling"
+      - test
+  - title: 💅 Styling
     labels:
-      - "style"
-
-  - title: "⚙️ CI"
+      - style
+  - title: ⚙️ CI
     labels:
-      - "ci"
-
-  - title: "🚀 Performance"
+      - ci
+  - title: 🚀 Performance
     labels:
-      - "perf"
-
-  - title: "📦 Build"
+      - perf
+  - title: 📦 Build
     labels:
-      - "build"
+      - build
 
 change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
 no-changes-template: "- No user-facing changes."
@@ -123,24 +103,24 @@ no-changes-template: "- No user-facing changes."
 version-resolver:
   major:
     labels:
-      - "breaking"
+      - breaking
   minor:
     labels:
-      - "feature"
+      - feature
   patch:
     labels:
-      - "bug"
-      - "chore"
-      - "refactor"
-      - "test"
-      - "style"
-      - "ci"
-      - "perf"
-      - "build"
-      - "dependencies"
+      - bug
+      - chore
+      - refactor
+      - test
+      - style
+      - ci
+      - perf
+      - build
+      - dependencies
 
 exclude-labels:
-  - "skip-changelog"
+  - skip-changelog
 
 template: |
   ## Changes
