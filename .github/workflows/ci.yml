@@ -7,6 +7,8 @@ on:
 
 jobs:
   lint:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,8 +28,9 @@ jobs:
         run: bin/rubocop -f github
 
   test:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres
