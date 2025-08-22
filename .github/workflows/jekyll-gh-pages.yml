@@ -17,7 +17,7 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}/docs
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/configure-pages@v5
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
