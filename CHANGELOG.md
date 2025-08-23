@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## [0.1.1](https://github.com/code-vedas/rails_materialized_views/tree/v0.1.1) (2025-08-22)
+
+[Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.1.0...v0.1.1)
+
+## 🧰 Maintenance
+
+- refactor: Unify run tracking into a single `mat_view_runs` table @niteshpurohit (#97)
+- chore(deps): Bump actions/checkout from 4 to 5 @[dependabot[bot]](https://github.com/apps/dependabot) (#95)
+- refactor: qlty fixes @niteshpurohit (#94)
+
+## ⚙️ CI
+
+- ci: Integrate Qlty coverage reporting @niteshpurohit (#93)
+
 ## [0.1.0](https://github.com/code-vedas/rails_materialized_views/tree/v0.1.0) (2025-08-18)
 
 [Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/080a0c5f8f42eb55e971677f0468ed626e2b3b44...v0.1.0)
