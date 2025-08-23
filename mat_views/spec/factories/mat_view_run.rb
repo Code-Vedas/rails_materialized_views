@@ -6,7 +6,7 @@
 # LICENSE file in the root directory of this source tree.
 
 FactoryBot.define do
-  factory :mat_view_create_run, class: 'MatViews::MatViewCreateRun' do
+  factory :mat_view_run, class: 'MatViews::MatViewRun' do
     mat_view_definition factory: :mat_view_definition
     status      { :pending }
     started_at  { Time.current }

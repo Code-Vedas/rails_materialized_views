@@ -168,7 +168,7 @@ DROP MATERIALIZED VIEW IF EXISTS "public"."mv_x__old_20250817";
 - Use the **run tables** to drive dashboards:
   - `duration_ms` over time; percentiles
   - last `status` per MV
-  - `rows_count` (if tracked) to catch anomalies
+  - `row_count` (if tracked) to catch anomalies
 
 - Alert on:
   - consecutive **failures**

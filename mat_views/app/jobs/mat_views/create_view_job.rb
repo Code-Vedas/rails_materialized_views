@@ -15,13 +15,13 @@ module MatViews
   # The job:
   # 1. Normalizes the `force` argument.
   # 2. Looks up the target {MatViews::MatViewDefinition}.
-  # 3. Starts a {MatViews::MatViewCreateRun} row to track lifecycle/timing.
+  # 3. Starts a {MatViews::MatViewRun} row to track lifecycle/timing, with `operation: :create`.
   # 4. Executes {MatViews::Services::CreateView}.
   # 5. Finalizes the run with success/failure, duration, and payload meta.
   #
   # @see MatViews::Services::CreateView
   # @see MatViews::MatViewDefinition
-  # @see MatViews::MatViewCreateRun
+  # @see MatViews::MatViewRun
   #
   # @example Enqueue a create job
   #   MatViews::CreateViewJob.perform_later(definition.id, force: true)
@@ -110,18 +110,19 @@ module MatViews
     end
 
     ##
-    # Begin a {MatViews::MatViewCreateRun} row for lifecycle tracking.
+    # Begin a {MatViews::MatViewRun} row for lifecycle tracking.
     #
     # @api private
     #
     # @param definition [MatViews::MatViewDefinition]
-    # @return [MatViews::MatViewCreateRun] newly created run with `status: :running`
+    # @return [MatViews::MatViewRun] newly created run with `status: :running`
     #
     def start_run(definition)
-      MatViews::MatViewCreateRun.create!(
+      MatViews::MatViewRun.create!(
         mat_view_definition: definition,
         status: :running,
-        started_at: Time.current
+        started_at: Time.current,
+        operation: :create
       )
     end
 
@@ -130,7 +131,7 @@ module MatViews
     #
     # @api private
     #
-    # @param run [MatViews::MatViewCreateRun]
+    # @param run [MatViews::MatViewRun]
     # @param response [MatViews::ServiceResponse]
     # @param duration_ms [Integer]
     # @return [void]
@@ -154,7 +155,7 @@ module MatViews
     #
     # @api private
     #
-    # @param run [MatViews::MatViewCreateRun]
+    # @param run [MatViews::MatViewRun]
     # @param exception [Exception]
     # @return [void]
     #

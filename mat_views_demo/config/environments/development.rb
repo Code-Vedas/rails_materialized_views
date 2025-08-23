@@ -75,6 +75,6 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
 
   config.logger = ActiveSupport::Logger.new($stdout)
-  config.log_level = :info
+  config.log_level = :debug
   config.active_job.queue_adapter = :inline
 end

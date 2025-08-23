@@ -13,7 +13,7 @@ module MatViews
   # {MatViews::MatViewDefinition}.
   #
   # The job mirrors {MatViews::CreateViewJob}'s lifecycle:
-  # it measures duration and persists state in {MatViews::MatViewRefreshRun}.
+  # it measures duration and persists state in {MatViews::MatViewRun}.
   #
   # The actual refresh implementation is delegated based on
   # `definition.refresh_strategy`:
@@ -28,7 +28,7 @@ module MatViews
   # - `nil` — skip counting
   #
   # @see MatViews::MatViewDefinition
-  # @see MatViews::MatViewRefreshRun
+  # @see MatViews::MatViewRun
   # @see MatViews::Services::RegularRefresh
   # @see MatViews::Services::ConcurrentRefresh
   # @see MatViews::Services::SwapRefresh
@@ -137,18 +137,19 @@ module MatViews
     end
 
     ##
-    # Begin a {MatViews::MatViewRefreshRun} row for lifecycle tracking.
+    # Begin a {MatViews::MatViewRun} row for lifecycle tracking.
     #
     # @api private
     #
     # @param definition [MatViews::MatViewDefinition]
-    # @return [MatViews::MatViewRefreshRun]
+    # @return [MatViews::MatViewRun]
     #
     def start_run(definition)
-      MatViews::MatViewRefreshRun.create!(
+      MatViews::MatViewRun.create!(
         mat_view_definition: definition,
         status: :running,
-        started_at: Time.current
+        started_at: Time.current,
+        operation: :refresh
       )
     end
 
@@ -157,7 +158,7 @@ module MatViews
     #
     # @api private
     #
-    # @param run [MatViews::MatViewRefreshRun]
+    # @param run [MatViews::MatViewRun]
     # @param response [MatViews::ServiceResponse]
     # @param duration_ms [Integer]
     # @return [void]
@@ -181,7 +182,7 @@ module MatViews
     #
     # @api private
     #
-    # @param run [MatViews::MatViewRefreshRun]
+    # @param run [MatViews::MatViewRun]
     # @param exception [Exception]
     # @return [void]
     #

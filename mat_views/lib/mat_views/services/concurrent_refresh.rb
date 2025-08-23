@@ -35,7 +35,7 @@ module MatViews
     #
     class ConcurrentRefresh < BaseService
       ##
-      # Strategy for computing rows count after refresh.
+      # Strategy for computing row count after refresh.
       #
       # @return [Symbol, nil] one of `:estimated`, `:exact`, or `nil`
       attr_reader :row_count_strategy
@@ -55,7 +55,7 @@ module MatViews
       # If validation fails, returns an error {MatViews::ServiceResponse}.
       #
       # @return [MatViews::ServiceResponse]
-      #   - `status: :updated` with payload `{ view:, rows_count? }` on success
+      #   - `status: :updated` with payload `{ view:, row_count? }` on success
       #   - `status: :error` with `error` on failure
       #
       # @raise [StandardError] bubbled after being wrapped into {#error_response}
@@ -69,7 +69,7 @@ module MatViews
         conn.execute(sql)
 
         payload = { view: "#{schema}.#{rel}" }
-        payload[:rows_count] = fetch_rows_count if row_count_strategy.present?
+        payload[:row_count] = fetch_rows_count if row_count_strategy.present?
 
         ok(:updated,
            payload: payload,
@@ -111,16 +111,6 @@ module MatViews
       # ────────────────────────────────────────────────────────────────
 
       ##
-      # Validate that the view name is a sane PostgreSQL identifier.
-      #
-      # @api private
-      # @return [Boolean]
-      #
-      def valid_name?
-        /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
-      end
-
-      ##
       # Check for any UNIQUE index on the materialized view, required by CONCURRENTLY.
       #
       # @api private
@@ -143,7 +133,7 @@ module MatViews
       # ────────────────────────────────────────────────────────────────
 
       ##
-      # Compute rows count based on the configured strategy.
+      # Compute row count based on the configured strategy.
       #
       # @api private
       # @return [Integer, nil]

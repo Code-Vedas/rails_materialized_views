@@ -7,7 +7,7 @@
 
 RSpec.describe 'Factory sanity' do # rubocop:disable RSpec/DescribeClass
   let(:defn) { create(:mat_view_definition) }
-  let(:run) { create(:mat_view_refresh_run, status: :pending) }
+  let(:run) { create(:mat_view_run, status: :pending, operation: :refresh) }
 
   it 'builds and creates mat_view_definition' do
     expect(defn).to be_persisted
@@ -15,9 +15,10 @@ RSpec.describe 'Factory sanity' do # rubocop:disable RSpec/DescribeClass
     expect(defn.sql).to start_with('SELECT')
   end
 
-  it 'builds and creates mat_view_refresh_run' do
+  it 'builds and creates mat_view_run' do
     expect(run).to be_persisted
     expect(run.status).to eq('pending')
+    expect(run.operation).to eq('refresh')
     expect(run.mat_view_definition_id).not_to be_nil
   end
 end

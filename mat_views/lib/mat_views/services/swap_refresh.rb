@@ -62,7 +62,7 @@ module MatViews
         steps.concat(swap_index)
 
         payload = { view: "#{schema}.#{rel}" }
-        payload[:rows_count] = fetch_rows_count if row_count_strategy.present?
+        payload[:row_count] = fetch_rows_count if row_count_strategy.present?
 
         ok(:updated, payload: payload, meta: { steps: steps, row_count_strategy: row_count_strategy, swap: true })
       rescue StandardError => e
@@ -153,15 +153,6 @@ module MatViews
       # @return [String]
       def old_rel
         @old_rel ||= "#{rel}__old_#{SecureRandom.hex(4)}"
-      end
-
-      ##
-      # Validate that the view name is a sane PostgreSQL identifier.
-      #
-      # @api private
-      # @return [Boolean]
-      def valid_name?
-        /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
       end
 
       ##

@@ -75,7 +75,7 @@ We use `factory_bot_rails` for concise test data:
 - Factories live in `spec/factories/`.
 - Engine models:
   - `create(:mat_view_definition, name: "public.mv_users", sql: "SELECT ...", refresh_strategy: :regular)`
-  - `create(:mat_view_refresh_run, mat_view_definition: defn, status: :pending)`
+  - `create(:mat_view_run, mat_view_definition: defn, status: :pending, operation: :refresh)`
 
 Seed data for dummy app tables (`users`, `accounts`, `events`, `sessions`) is provided via `mat_views/spec/dummy/db/seeds.rb` file. Run `rails db:seed` to populate the database with this data when you are in `mat_views` directory.
 

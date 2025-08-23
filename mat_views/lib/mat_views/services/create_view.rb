@@ -151,30 +151,6 @@ module MatViews
         SQL
         { created_indexes: [idx_name] }
       end
-
-      # ────────────────────────────────────────────────────────────────
-      # helpers: validation
-      # ────────────────────────────────────────────────────────────────
-
-      ##
-      # Validate matview name format.
-      #
-      # @api private
-      # @return [Boolean]
-      #
-      def valid_name?
-        /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
-      end
-
-      ##
-      # Validate SQL starts with SELECT.
-      #
-      # @api private
-      # @return [Boolean]
-      #
-      def valid_sql?
-        definition.sql.to_s.strip.upcase.start_with?('SELECT')
-      end
     end
   end
 end

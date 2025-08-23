@@ -9,10 +9,10 @@
 # Top-level namespace for the mat_views engine.
 module MatViews
   ##
-  # ActiveRecord model that tracks the lifecycle of *creation runs* for
+  # ActiveRecord model that tracks the lifecycle of *runs* for
   # materialized views.
   #
-  # Each record corresponds to a single attempt to create a materialized view
+  # Each record corresponds to a single attempt to mutate a materialized view
   # from a {MatViews::MatViewDefinition}, storing its status, timing, and
   # any associated error or metadata.
   #
@@ -23,15 +23,15 @@ module MatViews
   # @see MatViews::CreateViewJob
   #
   # @example Query recent successful runs
-  #   MatViews::MatViewCreateRun.status_success.order(created_at: :desc).limit(10)
+  #   MatViews::MatViewRun.status_success.order(created_at: :desc).limit(10)
   #
   # @example Check if a definition has any failed runs
-  #   definition.mat_view_create_runs.status_failed.any?
+  #   definition.mat_view_runs.status_failed.any?
   #
-  class MatViewCreateRun < ApplicationRecord
+  class MatViewRun < ApplicationRecord
     ##
     # Underlying database table name.
-    self.table_name = 'mat_view_create_runs'
+    self.table_name = 'mat_view_runs'
 
     ##
     # The definition this run belongs to.
@@ -57,10 +57,33 @@ module MatViews
       failed: 3
     }, prefix: :status
 
+    # Operation type of the run.
+    #
+    # @!attribute [r] operation
+    #   @return [Symbol] One of:
+    #     - `:create` — initial creation of the materialized view
+    #     - `:refresh` — refreshing an existing view
+    #     - `:drop` — dropping the materialized view
+    enum :operation, {
+      create: 0,
+      refresh: 1,
+      drop: 2
+    }, prefix: :operation
+
     ##
     # Validations
     #
     # Ensures that a status is always present.
     validates :status, presence: true
+
+    ##
+    # Scopes
+    scope :create_runs, -> { where(operation: :create) }
+    scope :refresh_runs, -> { where(operation: :refresh) }
+    scope :drop_runs,    -> { where(operation: :drop) }
+
+    def row_count
+      meta['row_count']
+    end
   end
 end

@@ -68,7 +68,7 @@ RSpec.describe MatViews::Services::RegularRefresh do
 
         expect(res.status).to eq(:updated)
         expect(res.payload[:view]).to eq("public.#{relname}")
-        expect(res.payload[:rows_count]).to be_a(Integer) # reltuples may be 0+
+        expect(res.payload[:row_count]).to be_a(Integer) # reltuples may be 0+
         expect(res.meta[:row_count_strategy]).to eq(:estimated)
         # quoted relation in SQL meta
         expect(res.meta[:sql]).to eq(%(REFRESH MATERIALIZED VIEW "public"."#{relname}"))
@@ -85,7 +85,7 @@ RSpec.describe MatViews::Services::RegularRefresh do
         res = execute_service
 
         expect(res).to be_success
-        expect(res.payload[:rows_count]).to be_a(Integer)
+        expect(res.payload[:row_count]).to be_a(Integer)
         expect(res.meta[:row_count_strategy]).to eq(:exact)
       end
     end
@@ -93,14 +93,14 @@ RSpec.describe MatViews::Services::RegularRefresh do
     describe 'unknown row_count_strategy symbol' do
       let(:row_count_strategy) { :bogus }
 
-      it 'includes rows_count: nil (strategy truthy but unrecognized)' do
+      it 'includes row_count: nil (strategy truthy but unrecognized)' do
         create_mv!(relname, schema: 'public')
         allow(conn).to receive(:schema_search_path).and_return('public')
 
         res = execute_service
 
         expect(res).to be_success
-        expect(res.payload).to include(rows_count: nil)
+        expect(res.payload).to include(row_count: nil)
         expect(res.meta[:row_count_strategy]).to eq(:bogus)
       end
     end
@@ -108,14 +108,14 @@ RSpec.describe MatViews::Services::RegularRefresh do
     describe 'no row count requested (nil)' do
       let(:row_count_strategy) { nil }
 
-      it 'does not compute or include rows_count' do
+      it 'does not compute or include row_count' do
         create_mv!(relname, schema: 'public')
         allow(conn).to receive(:schema_search_path).and_return('public')
 
         res = execute_service
 
         expect(res).to be_success
-        expect(res.payload).not_to have_key(:rows_count)
+        expect(res.payload).not_to have_key(:row_count)
         expect(res.meta[:row_count_strategy]).to be_nil
       end
     end

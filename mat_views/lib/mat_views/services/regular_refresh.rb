@@ -59,7 +59,7 @@ module MatViews
         conn.execute(sql)
 
         payload = { view: "#{schema}.#{rel}" }
-        payload[:rows_count] = fetch_rows_count if row_count_strategy.present?
+        payload[:row_count] = fetch_rows_count if row_count_strategy.present?
 
         ok(:updated,
            payload: payload,
@@ -93,16 +93,6 @@ module MatViews
         return err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
 
         nil
-      end
-
-      ##
-      # Ensure name is a valid identifier (no schema-qualified or dangerous tokens).
-      #
-      # @api private
-      # @return [Boolean]
-      #
-      def valid_name?
-        /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
       end
 
       # ────────────────────────────────────────────────────────────────
