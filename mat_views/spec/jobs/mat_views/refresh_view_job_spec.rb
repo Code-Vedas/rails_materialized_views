@@ -95,7 +95,7 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
 
           perform_now_and_return(definition.id)
 
-          run    = MatViews::MatViewRefreshRun.order(created_at: :desc).first
+          run    = MatViews::MatViewRun.refresh_runs.order(created_at: :desc).first
           fields = run.attributes.slice('mat_view_definition_id', 'status', 'error')
           expect(fields).to eq(
             'mat_view_definition_id' => definition.id,
@@ -105,14 +105,14 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
         end
 
         it 'persists timing and meta' do
-          resp = service_response_double(status: :updated, payload: { view: 'public.mv', rows_count: 1 })
+          resp = service_response_double(status: :updated, payload: { view: 'public.mv', row_count: 1 })
           svc  = instance_spy(svc_class, run: resp)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :estimated).and_return(svc)
 
           perform_now_and_return(definition.id)
 
-          run = MatViews::MatViewRefreshRun.order(created_at: :desc).first
-          expect(run.meta).to include('view' => 'public.mv', 'rows_count' => 1)
+          run = MatViews::MatViewRun.refresh_runs.order(created_at: :desc).first
+          expect(run.meta).to include('view' => 'public.mv', 'row_count' => 1)
           expect([run.started_at.present?, run.finished_at.present?, run.duration_ms.is_a?(Integer)]).to eq([true, true, true])
         end
       end
@@ -126,7 +126,7 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
           result = perform_now_and_return(definition.id)
           expect(result).to eq(resp.to_h)
 
-          run    = MatViews::MatViewRefreshRun.order(created_at: :desc).first
+          run    = MatViews::MatViewRun.refresh_runs.order(created_at: :desc).first
           fields = run.attributes.slice('status', 'error')
           expect(fields['status']).to eq('failed')
           expect(fields['error']).to match(/View missing/)
@@ -143,7 +143,7 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
             perform_now_and_return(definition.id)
           end.to raise_error(Minitest::UnexpectedError, /kaboom/)
 
-          run    = MatViews::MatViewRefreshRun.order(created_at: :desc).first
+          run    = MatViews::MatViewRun.refresh_runs.order(created_at: :desc).first
           fields = run.attributes.slice('status', 'error')
           expect(fields['status']).to eq('failed')
           expect(fields['error']).to match(/StandardError: kaboom/)
@@ -156,13 +156,13 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
           svc  = instance_spy(svc_class, run: resp)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :estimated).and_return(svc)
 
-          allow(MatViews::MatViewRefreshRun).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
+          allow(MatViews::MatViewRun).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
 
           expect do
             perform_now_and_return(definition.id)
           end.to raise_error(Minitest::UnexpectedError)
 
-          expect(MatViews::MatViewRefreshRun).to have_received(:create!).once
+          expect(MatViews::MatViewRun).to have_received(:create!).once
         end
       end
 

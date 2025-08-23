@@ -23,7 +23,6 @@ class CreateMatViewDefinitions < ActiveRecord::Migration[7.1]
       t.jsonb :unique_index_columns, default: [], comment: 'Columns used for unique indexing, if any'
       t.jsonb :dependencies, default: [],
                              comment: 'Dependencies of the materialized view, such as other views or tables'
-      t.datetime :last_refreshed_at, comment: 'Timestamp of the last refresh operation'
       t.timestamps
     end
   end

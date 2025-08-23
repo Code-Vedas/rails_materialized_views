@@ -20,7 +20,7 @@ module MatViews
     # - `err("...")` or `error_response(...)` on validation or execution error
     #
     # @see MatViews::DeleteViewJob
-    # @see MatViews::MatViewDeleteRun
+    # @see MatViews::MatViewRun
     #
     # @example Drop a view if it exists
     #   svc = MatViews::Services::DeleteView.new(defn)
@@ -154,16 +154,6 @@ module MatViews
       def build_sql
         drop_mode = cascade ? ' CASCADE' : ' RESTRICT'
         %(DROP MATERIALIZED VIEW IF EXISTS #{qualified_rel}#{drop_mode})
-      end
-
-      ##
-      # Ensure the matview name is a simple identifier.
-      #
-      # @api private
-      # @return [Boolean]
-      #
-      def valid_name?
-        /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
       end
     end
   end

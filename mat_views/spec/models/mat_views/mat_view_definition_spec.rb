@@ -27,8 +27,8 @@ RSpec.describe MatViews::MatViewDefinition do
     expect(model).not_to be_valid
   end
 
-  it 'has many refresh runs' do
-    assoc = described_class.reflect_on_association(:mat_view_refresh_runs)
+  it 'has many runs' do
+    assoc = described_class.reflect_on_association(:mat_view_runs)
     expect(assoc.macro).to eq(:has_many)
     expect(assoc.options[:dependent]).to eq(:destroy)
   end
@@ -49,6 +49,20 @@ RSpec.describe MatViews::MatViewDefinition do
 
     it 'has correct enum values' do
       expect(described_class.refresh_strategies).to eq({ 'regular' => 0, 'concurrent' => 1, 'swap' => 2 })
+    end
+  end
+
+  describe 'last run' do
+    let(:model) { described_class.create!(name: 'user_activity', sql: 'SELECT * FROM users') }
+
+    it 'returns nil if there are no runs' do
+      expect(model.last_run).to be_nil
+    end
+
+    it 'returns the most recent run' do
+      model.mat_view_runs.create!(operation: 'create', status: 'success', started_at: 1.day.ago)
+      recent_run = model.mat_view_runs.create!(operation: 'refresh', status: 'success', started_at: Time.current)
+      expect(model.last_run).to eq(recent_run)
     end
   end
 end

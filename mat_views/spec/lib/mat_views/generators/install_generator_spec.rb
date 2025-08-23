@@ -30,13 +30,8 @@ RSpec.describe MatViews::Generators::InstallGenerator, type: :generator do
     expect(File.read(migration)).to include('create_table :mat_view_definitions')
   end
 
-  it 'creates migration for mat_view_refresh_runs' do
-    migration = Dir.glob(File.join(destination_root, 'db/migrate/*_create_mat_view_refresh_runs.rb')).first
-    expect(File.read(migration)).to include('create_table :mat_view_refresh_runs')
-  end
-
-  it 'creates migration for mat_view_create_runs' do
-    migration = Dir.glob(File.join(destination_root, 'db/migrate/*_create_mat_view_create_runs.rb')).first
-    expect(File.read(migration)).to include('create_table :mat_view_create_runs')
+  it 'creates migration for mat_view_runs' do
+    migration = Dir.glob(File.join(destination_root, 'db/migrate/*_create_mat_view_runs.rb')).first
+    expect(File.read(migration)).to include('create_table :mat_view_runs')
   end
 end

@@ -13,11 +13,11 @@ module MatViews
   # {MatViews::Services::DeleteView}.
   #
   # This job mirrors {MatViews::CreateViewJob} and {MatViews::RefreshViewJob}:
-  # it times the run and persists lifecycle state in {MatViews::MatViewDeleteRun}.
+  # it times the run and persists lifecycle state in {MatViews::MatViewRun}.
   #
   # @see MatViews::Services::DeleteView
   # @see MatViews::MatViewDefinition
-  # @see MatViews::MatViewDeleteRun
+  # @see MatViews::MatViewRun
   #
   # @example Enqueue a delete job
   #   MatViews::DeleteViewJob.perform_later(definition.id, cascade: true)
@@ -121,17 +121,18 @@ module MatViews
     end
 
     ##
-    # Begin a {MatViews::MatViewDeleteRun} row for lifecycle tracking.
+    # Begin a {MatViews::MatViewRun} row for lifecycle tracking.
     #
     # @api private
     # @param definition [MatViews::MatViewDefinition]
-    # @return [MatViews::MatViewDeleteRun]
+    # @return [MatViews::MatViewRun]
     #
     def start_run(definition)
-      MatViews::MatViewDeleteRun.create!(
+      MatViews::MatViewRun.create!(
         mat_view_definition: definition,
         status: :running,
-        started_at: Time.current
+        started_at: Time.current,
+        operation: :drop
       )
     end
 
@@ -139,7 +140,7 @@ module MatViews
     # Finalize the run with success/failure, timing, and meta from the response.
     #
     # @api private
-    # @param run [MatViews::MatViewDeleteRun]
+    # @param run [MatViews::MatViewRun]
     # @param response [MatViews::ServiceResponse]
     # @param duration_ms [Integer]
     # @return [void]
@@ -162,7 +163,7 @@ module MatViews
     # Mark the run failed due to an exception.
     #
     # @api private
-    # @param run [MatViews::MatViewDeleteRun]
+    # @param run [MatViews::MatViewRun]
     # @param exception [Exception]
     # @return [void]
     #

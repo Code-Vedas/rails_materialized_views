@@ -284,6 +284,25 @@ module MatViews
       rescue StandardError
         false
       end
+
+      ##
+      # Validate SQL starts with SELECT.
+      #
+      # @api private
+      # @return [Boolean]
+      #
+      def valid_sql?
+        definition.sql.to_s.strip.upcase.start_with?('SELECT')
+      end
+
+      ##
+      # Validate that the view name is a sane PostgreSQL identifier.
+      #
+      # @api private
+      # @return [Boolean]
+      def valid_name?
+        /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
+      end
     end
   end
 end

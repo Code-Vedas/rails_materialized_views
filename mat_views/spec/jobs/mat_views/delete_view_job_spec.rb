@@ -66,7 +66,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
 
         perform_now_and_return(definition.id) # default cascade=false
 
-        run    = MatViews::MatViewDeleteRun.order(created_at: :desc).first
+        run    = MatViews::MatViewRun.drop_runs.order(created_at: :desc).first
         fields = run.attributes.slice('mat_view_definition_id', 'status', 'error')
         expect(fields).to eq(
           'mat_view_definition_id' => definition.id,
@@ -83,7 +83,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
 
         perform_now_and_return(definition.id)
 
-        run = MatViews::MatViewDeleteRun.order(created_at: :desc).first
+        run = MatViews::MatViewRun.drop_runs.order(created_at: :desc).first
         expect(run.meta).to include('view' => 'public.mv')
         expect([run.started_at.present?, run.finished_at.present?, run.duration_ms.is_a?(Integer)]).to eq([true, true, true])
       end
@@ -99,7 +99,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
         result = perform_now_and_return(definition.id)
         expect(result).to eq(resp.to_h)
 
-        run    = MatViews::MatViewDeleteRun.order(created_at: :desc).first
+        run    = MatViews::MatViewRun.drop_runs.order(created_at: :desc).first
         fields = run.attributes.slice('status', 'error')
         expect(fields['status']).to eq('failed')
         expect(fields['error']).to match(/Dependent objects exist/)
@@ -117,7 +117,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
           perform_now_and_return(definition.id)
         end.to raise_error(Minitest::UnexpectedError, /kaboom/)
 
-        run    = MatViews::MatViewDeleteRun.order(created_at: :desc).first
+        run    = MatViews::MatViewRun.drop_runs.order(created_at: :desc).first
         fields = run.attributes.slice('status', 'error')
         expect(fields['status']).to eq('failed')
         expect(fields['error']).to match(/StandardError: kaboom/)
@@ -131,13 +131,13 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
         allow(MatViews::Services::DeleteView)
           .to receive(:new).with(definition, cascade: false, if_exists: true).and_return(svc)
 
-        allow(MatViews::MatViewDeleteRun).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
+        allow(MatViews::MatViewRun).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
 
         expect do
           perform_now_and_return(definition.id)
         end.to raise_error(Minitest::UnexpectedError)
 
-        expect(MatViews::MatViewDeleteRun).to have_received(:create!).once
+        expect(MatViews::MatViewRun).to have_received(:create!).once
       end
     end
 

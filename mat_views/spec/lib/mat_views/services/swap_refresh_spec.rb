@@ -80,7 +80,7 @@ RSpec.describe MatViews::Services::SwapRefresh do
       expect(res).to be_success
       expect(res.status).to eq(:updated)
       expect(res.payload[:view]).to eq("public.#{relname}")
-      expect(res.payload[:rows_count]).to be_a(Integer) # estimated by default
+      expect(res.payload[:row_count]).to be_a(Integer) # estimated by default
       expect(res.meta[:swap]).to be(true)
       expect(res.meta[:steps]).to be_an(Array)
       expect(res.meta[:steps].count).to eq(4)
@@ -96,7 +96,7 @@ RSpec.describe MatViews::Services::SwapRefresh do
       it 'returns an exact COUNT(*)' do
         res = execute_service
         expect(res).to be_success
-        expect(res.payload[:rows_count]).to be_a(Integer)
+        expect(res.payload[:row_count]).to be_a(Integer)
         expect(res.meta[:row_count_strategy]).to eq(:exact)
       end
     end
@@ -104,10 +104,10 @@ RSpec.describe MatViews::Services::SwapRefresh do
     describe 'unknown row_count_strategy symbol' do
       let(:row_count_strategy) { :bogus }
 
-      it 'still succeeds and includes rows_count: nil' do
+      it 'still succeeds and includes row_count: nil' do
         res = execute_service
         expect(res).to be_success
-        expect(res.payload).to include(rows_count: nil)
+        expect(res.payload).to include(row_count: nil)
         expect(res.meta[:row_count_strategy]).to eq(:bogus)
       end
     end
@@ -115,10 +115,10 @@ RSpec.describe MatViews::Services::SwapRefresh do
     describe 'no row count requested (nil)' do
       let(:row_count_strategy) { nil }
 
-      it 'omits rows_count' do
+      it 'omits row_count' do
         res = execute_service
         expect(res).to be_success
-        expect(res.payload).not_to have_key(:rows_count)
+        expect(res.payload).not_to have_key(:row_count)
         expect(res.meta[:row_count_strategy]).to be_nil
       end
     end

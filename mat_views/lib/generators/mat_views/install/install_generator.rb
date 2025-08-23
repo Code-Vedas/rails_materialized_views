@@ -26,9 +26,7 @@ module MatViews
     #   bin/rails g mat_views:install
     #
     # @see MatViews::MatViewDefinition
-    # @see MatViews::MatViewRefreshRun
-    # @see MatViews::MatViewCreateRun
-    # @see MatViews::MatViewDeleteRun
+    # @see MatViews::MatViewRun
     #
     class InstallGenerator < Rails::Generators::Base
       include Rails::Generators::Migration
@@ -50,10 +48,8 @@ module MatViews
       # @return [void]
       #
       def copy_migrations
-        migration_template 'create_mat_view_definitions.rb',  'db/migrate/create_mat_view_definitions.rb'
-        migration_template 'create_mat_view_refresh_runs.rb', 'db/migrate/create_mat_view_refresh_runs.rb'
-        migration_template 'create_mat_view_create_runs.rb',  'db/migrate/create_mat_view_create_runs.rb'
-        migration_template 'create_mat_view_delete_runs.rb',  'db/migrate/create_mat_view_delete_runs.rb'
+        migration_template 'create_mat_view_definitions.rb', 'db/migrate/create_mat_view_definitions.rb'
+        migration_template 'create_mat_view_runs.rb', 'db/migrate/create_mat_view_runs.rb'
       end
 
       ##

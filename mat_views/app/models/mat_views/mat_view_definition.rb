@@ -46,31 +46,13 @@ module MatViews
     # ────────────────────────────────────────────────────────────────
 
     ##
-    # Historical refresh runs linked to this definition.
-    #
-    # @return [ActiveRecord::Relation<MatViews::MatViewRefreshRun>]
-    #
-    has_many :mat_view_refresh_runs,
-             dependent: :destroy,
-             class_name: 'MatViews::MatViewRefreshRun'
-
-    ##
     # Historical create runs linked to this definition.
     #
-    # @return [ActiveRecord::Relation<MatViews::MatViewCreateRun>]
+    # @return [ActiveRecord::Relation<MatViews::MatViewRun>]
     #
-    has_many :mat_view_create_runs,
+    has_many :mat_view_runs,
              dependent: :destroy,
-             class_name: 'MatViews::MatViewCreateRun'
-
-    ##
-    # Historical delete runs linked to this definition.
-    #
-    # @return [ActiveRecord::Relation<MatViews::MatViewDeleteRun>]
-    #
-    has_many :mat_view_delete_runs,
-             dependent: :destroy,
-             class_name: 'MatViews::MatViewDeleteRun'
+             class_name: 'MatViews::MatViewRun'
 
     # ────────────────────────────────────────────────────────────────
     # Validations
@@ -108,5 +90,9 @@ module MatViews
     #   @return [String] one of `"regular"`, `"concurrent"`, `"swap"`
     #
     enum :refresh_strategy, { regular: 0, concurrent: 1, swap: 2 }
+
+    def last_run
+      mat_view_runs.order(created_at: :desc).first
+    end
   end
 end

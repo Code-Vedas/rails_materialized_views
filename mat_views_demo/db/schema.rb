@@ -33,19 +33,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_14_012801) do
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
-  create_table "mat_view_create_runs", force: :cascade do |t|
-    t.bigint "mat_view_definition_id", null: false, comment: "Reference to the materialized view definition being created"
-    t.integer "status", default: 0, null: false, comment: "0=pending,1=running,2=success,3=failed"
-    t.datetime "started_at", comment: "Timestamp when the creation operation started"
-    t.datetime "finished_at", comment: "Timestamp when the creation operation finished"
-    t.integer "duration_ms", comment: "Duration of the creation operation in milliseconds"
-    t.text "error", comment: "Error message if the creation operation failed"
-    t.jsonb "meta", default: {}, null: false, comment: "Additional metadata about the creation run, such as job ID or parameters"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["mat_view_definition_id"], name: "index_mat_view_create_runs_on_mat_view_definition_id"
-  end
-
   create_table "mat_view_definitions", force: :cascade do |t|
     t.string "name", null: false, comment: "The name of the materialized view"
     t.text "sql", null: false, comment: "The SQL query defining the materialized view"
@@ -53,36 +40,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_14_012801) do
     t.string "schedule_cron", comment: "Cron schedule for automatic refresh of the materialized view"
     t.jsonb "unique_index_columns", default: [], comment: "Columns used for unique indexing, if any"
     t.jsonb "dependencies", default: [], comment: "Dependencies of the materialized view, such as other views or tables"
-    t.datetime "last_refreshed_at", comment: "Timestamp of the last refresh operation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "mat_view_delete_runs", force: :cascade do |t|
-    t.bigint "mat_view_definition_id", null: false, comment: "Reference to the materialized view definition being deleted from"
+  create_table "mat_view_runs", force: :cascade do |t|
+    t.bigint "mat_view_definition_id", null: false, comment: "Reference to the materialized view definition"
     t.integer "status", default: 0, null: false, comment: "0=pending,1=running,2=success,3=failed"
-    t.datetime "started_at", comment: "Timestamp when the delete operation started"
-    t.datetime "finished_at", comment: "Timestamp when the delete operation finished"
-    t.integer "duration_ms", comment: "Duration of the delete operation in milliseconds"
-    t.text "error", comment: "Error message if the delete operation failed"
-    t.jsonb "meta", default: {}, comment: "Additional metadata about the delete run, such as job ID or parameters"
+    t.integer "operation", default: 0, null: false, comment: "0=create,1=refresh,2=drop"
+    t.datetime "started_at", comment: "Timestamp when the operation started"
+    t.datetime "finished_at", comment: "Timestamp when the operation finished"
+    t.integer "duration_ms", comment: "Duration of the operation in milliseconds"
+    t.text "error", comment: "Error message if the operation failed"
+    t.jsonb "meta", default: {}, null: false, comment: "Additional metadata about the run, such as job ID row count or parameters"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["mat_view_definition_id"], name: "index_mat_view_delete_runs_on_mat_view_definition_id"
-  end
-
-  create_table "mat_view_refresh_runs", force: :cascade do |t|
-    t.bigint "mat_view_definition_id", null: false, comment: "Reference to the materialized view definition being refreshed"
-    t.integer "status", default: 0, null: false, comment: "0=pending,1=running,2=success,3=failed"
-    t.datetime "started_at", comment: "Timestamp when the refresh operation started"
-    t.datetime "finished_at", comment: "Timestamp when the refresh operation finished"
-    t.integer "duration_ms", comment: "Duration of the refresh operation in milliseconds"
-    t.integer "rows_count", comment: "Number of rows in the materialized view after refresh"
-    t.text "error", comment: "Error message if the refresh operation failed"
-    t.jsonb "meta", default: {}, comment: "Additional metadata about the refresh run, such as job ID or parameters"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["mat_view_definition_id"], name: "index_mat_view_refresh_runs_on_mat_view_definition_id"
+    t.index ["mat_view_definition_id"], name: "index_mat_view_runs_on_mat_view_definition_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -105,8 +78,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_14_012801) do
 
   add_foreign_key "accounts", "users"
   add_foreign_key "events", "users"
-  add_foreign_key "mat_view_create_runs", "mat_view_definitions"
-  add_foreign_key "mat_view_delete_runs", "mat_view_definitions"
-  add_foreign_key "mat_view_refresh_runs", "mat_view_definitions"
+  add_foreign_key "mat_view_runs", "mat_view_definitions"
   add_foreign_key "sessions", "users"
 end
