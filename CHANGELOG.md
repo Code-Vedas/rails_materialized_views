@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## [0.1.1](https://github.com/code-vedas/rails_materialized_views/tree/v0.1.1) (2025-08-22)
+## [0.1.2](https://github.com/code-vedas/rails_materialized_views/tree/v0.1.1) (2025-08-22)
 
-[Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.1.0...v0.1.1)
+[Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.1.0...v0.1.2)
 
 ## 🧰 Maintenance
 
@@ -13,6 +13,10 @@
 ## ⚙️ CI
 
 - ci: Integrate Qlty coverage reporting @niteshpurohit (#93)
+
+## [0.1.1]() Skiped
+
+Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 
 ## [0.1.0](https://github.com/code-vedas/rails_materialized_views/tree/v0.1.0) (2025-08-18)
 
