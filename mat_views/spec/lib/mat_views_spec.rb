@@ -13,4 +13,8 @@ RSpec.describe MatViews do
   it 'has a version number' do
     expect(MatViews::VERSION).not_to be_nil
   end
+
+  it 'has the correct version number' do
+    expect(MatViews::VERSION).to eq('0.1.1')
+  end
 end
