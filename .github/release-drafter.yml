@@ -2,6 +2,15 @@ name-template: v$RESOLVED_VERSION
 tag-template: v$RESOLVED_VERSION
 
 autolabeler:
+  - label: lang
+    branch:
+      - /^lang\//
+      - /^i18n\//
+      - /^l10n\//
+    title:
+      - /^lang:/
+      - /^i18n:/
+      - /^l10n:/
   - label: dependencies
     branch:
       - /^dependabot\//
@@ -64,6 +73,9 @@ autolabeler:
     title:
       - /^build:/
 categories:
+  - title: 🌐 Localization
+    labels:
+      - lang
   - title: 🚀 Features
     labels:
       - feature
@@ -107,6 +119,8 @@ version-resolver:
   minor:
     labels:
       - feature
+      - lang
+      - perf
   patch:
     labels:
       - bug
@@ -115,7 +129,6 @@ version-resolver:
       - test
       - style
       - ci
-      - perf
       - build
       - dependencies
 

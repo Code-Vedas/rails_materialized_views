@@ -1,0 +1,80 @@
+{
+  "folders": [
+    {
+      "name": "mat_views",
+      "path": "./mat_views"
+    },
+    {
+      "name": "mat_views_demo",
+      "path": "./mat_views_demo"
+    },
+    {
+      "name": "root",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "explorer.compactFolders": false,
+    "files.associations": {
+      "Gemfile": "ruby",
+      "Gemfile.lock": "ruby",
+      "*.rake": "ruby",
+      "*.ru": "ruby",
+      "*.erb": "erb",
+      "*.arb": "json",
+      "*.rb": "ruby"
+    },
+    "emmet.includeLanguages": {
+      "erb": "html"
+    },
+    "rubyLsp": {
+      "enabledFeatures": {
+        "codeActions": true,
+        "diagnostics": true,
+        "documentHighlights": true,
+        "documentLink": true,
+        "documentSymbols": true,
+        "foldingRanges": true,
+        "formatting": true,
+        "hover": true,
+        "inlayHint": true,
+        "onTypeFormatting": true,
+        "selectionRanges": true,
+        "semanticHighlighting": true,
+        "completion": true,
+        "codeLens": true,
+        "definition": true,
+        "workspaceSymbol": true,
+        "signatureHelp": true,
+        "typeHierarchy": true
+      },
+      "erbSupport": true,
+      "featureFlags": {},
+      "sigOpacityLevel": "1",
+      "formatter": "auto"
+    },
+    "[ruby]": {
+      "editor.formatOnSave": true,
+      "editor.defaultFormatter": "Shopify.ruby-lsp",
+      "editor.formatOnType": true,
+      "editor.tabSize": 2,
+      "editor.insertSpaces": true,
+      "files.trimTrailingWhitespace": true,
+      "files.insertFinalNewline": true,
+      "files.trimFinalNewlines": true,
+      "editor.rulers": [120],
+      "editor.semanticHighlighting.enabled": true
+    },
+    "[erb]": {
+      "editor.formatOnSave": true,
+      "editor.defaultFormatter": "elia.erb-formatter",
+      "editor.formatOnType": true
+    },
+    "[gemfile]": {
+      "editor.formatOnSave": true
+    },
+    "erb-formatter.commandPath": "wrapped-erb-formatter",
+    "erb-formatter.lineLength": 160
+  }
+}
