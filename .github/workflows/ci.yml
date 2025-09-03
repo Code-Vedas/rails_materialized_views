@@ -52,6 +52,7 @@ jobs:
     permissions:
       contents: read
     runs-on: ubuntu-latest
+    needs: [lint, reek]
     services:
       postgres:
         image: postgres
@@ -88,7 +89,7 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare && bin/rails db:seed && bin/rspec --format documentation --color --profile
+        run: bin/rails db:test:prepare && bin/rails db:seed && bin/rspec
 
       - name: Upload simplecov report
         uses: actions/upload-artifact@v4

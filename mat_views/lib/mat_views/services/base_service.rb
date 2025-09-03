@@ -13,7 +13,7 @@ module MatViews
     # response helpers).
     #
     # Concrete services (e.g., {MatViews::Services::CreateView},
-    # {MatViews::Services::Services::RegularRefresh}) should inherit from this class.
+    # {MatViews::Services::RegularRefresh}) should inherit from this class.
     #
     # @abstract
     #

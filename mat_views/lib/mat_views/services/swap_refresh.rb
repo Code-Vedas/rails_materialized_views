@@ -30,7 +30,7 @@ module MatViews
     # @see MatViews::Services::RegularRefresh
     #
     # @example Direct usage
-    #   svc = MMatViews::Services::SwapRefresh.new(definition, **options)
+    #   svc = MatViews::Services::SwapRefresh.new(definition, **options)
     #   response = svc.run
     #   response.success? # => true/false
     #
