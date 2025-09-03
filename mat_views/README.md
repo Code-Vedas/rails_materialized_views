@@ -96,9 +96,9 @@ MatViews::Jobs::Adapter.enqueue(job_class, queue: :default, args: [...])
 
 ```bash
 # Create
-bundle exec rake mat_views:create_by_name\[VIEW_NAME,force,--yes]
-bundle exec rake mat_views:create_by_id\[ID,force,--yes]
-bundle exec rake mat_views:create_all\[force,--yes]
+bundle exec rake mat_views:create_by_name\[VIEW_NAME,force,row_count_strategy,--yes]
+bundle exec rake mat_views:create_by_id\[ID,force,row_count_strategy,--yes]
+bundle exec rake mat_views:create_all\[force,row_count_strategy,--yes]
 
 # Refresh
 bundle exec rake mat_views:refresh_by_name\[VIEW_NAME,row_count_strategy,--yes]
@@ -106,9 +106,9 @@ bundle exec rake mat_views:refresh_by_id\[ID,row_count_strategy,--yes]
 bundle exec rake mat_views:refresh_all\[row_count_strategy,--yes]
 
 # Delete
-bundle exec rake mat_views:delete_by_name\[VIEW_NAME,cascade,--yes]
-bundle exec rake mat_views:delete_by_id\[ID,cascade,--yes]
-bundle exec rake mat_views:delete_all\[cascade,--yes]
+bundle exec rake mat_views:delete_by_name\[VIEW_NAME,cascade,row_count_strategy,--yes]
+bundle exec rake mat_views:delete_by_id\[ID,cascade,row_count_strategy,--yes]
+bundle exec rake mat_views:delete_all\[cascade,row_count_strategy,--yes]
 ```
 
 ---

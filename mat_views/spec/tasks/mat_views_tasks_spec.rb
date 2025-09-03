@@ -45,32 +45,32 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
     let!(:defn) { create(:mat_view_definition, name: 'sales_daily') }
 
     it 'enqueues CreateViewJob (default force=false) and skips confirm with --yes' do
-      invoke('mat_views:create_by_name', defn.name, nil, '--yes')
+      invoke('mat_views:create_by_name', defn.name, nil, 'none', '--yes')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, false])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, false, :none])
     end
 
     it 'passes force=true' do
-      invoke('mat_views:create_by_name', defn.name, 'true', '--yes')
+      invoke('mat_views:create_by_name', defn.name, 'true', 'none', '--yes')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, true])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, true, :none])
     end
 
     it 'accepts YES=1 via env to skip confirm' do
-      with_env('YES' => '1') { invoke('mat_views:create_by_name', defn.name, nil, nil) }
+      with_env('YES' => '1') { invoke('mat_views:create_by_name', defn.name, nil, 'none', nil) }
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, false])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, false, :none])
     end
 
     it 'accepts FORCE=true via env when arg is nil' do
-      with_env('YES' => '1', 'FORCE' => 'true') { invoke('mat_views:create_by_name', defn.name, nil, nil) }
+      with_env('YES' => '1', 'FORCE' => 'true') { invoke('mat_views:create_by_name', defn.name, nil, 'none', nil) }
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, true])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, true, :none])
     end
 
     it 'prompts and aborts when confirm is declined' do
       expect do
-        with_stdin("\n") { invoke('mat_views:create_by_name', defn.name, nil, nil) }
+        with_stdin("\n") { invoke('mat_views:create_by_name', defn.name, nil, 'none', nil) }
       end.to raise_error(/Aborted/i)
       expect(MatViews::Jobs::Adapter).not_to have_received(:enqueue)
     end
@@ -79,14 +79,14 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
     it 'aborts when STDIN returns nil (EOF)' do
       allow($stdin).to receive(:gets).and_return(nil)
       expect do
-        invoke('mat_views:create_by_name', defn.name, nil, nil)
+        invoke('mat_views:create_by_name', defn.name, nil, 'none', nil)
       end.to raise_error(/Aborted/i)
       expect(MatViews::Jobs::Adapter).not_to have_received(:enqueue)
     end
 
     it 'raises when name unknown' do
       expect do
-        invoke('mat_views:create_by_name', 'does_not_exist', nil, '--yes')
+        invoke('mat_views:create_by_name', 'does_not_exist', nil, 'none', '--yes')
       end.to raise_error(/No MatViews::MatViewDefinition/)
     end
 
@@ -100,13 +100,13 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
       end
 
       expect do
-        invoke('mat_views:create_by_name', 'public.unknown_mv', nil, '--yes')
+        invoke('mat_views:create_by_name', 'public.unknown_mv', nil, 'none', '--yes')
       end.to raise_error(/exists, but no MatViews::MatViewDefinition/)
     end
 
     it 'errors when view_name is blank' do
       expect do
-        invoke('mat_views:create_by_name', '', nil, '--yes')
+        invoke('mat_views:create_by_name', '', nil, 'none', '--yes')
       end.to raise_error(/view_name is required/)
     end
 
@@ -121,32 +121,32 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
     let!(:defn) { create(:mat_view_definition) }
 
     it 'enqueues CreateViewJob (default force=false) and skips confirm with --yes' do
-      invoke('mat_views:create_by_id', defn.id.to_s, nil, '--yes')
+      invoke('mat_views:create_by_id', defn.id.to_s, nil, 'none', '--yes')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, false])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, false, :none])
     end
 
     it 'passes force=true' do
-      invoke('mat_views:create_by_id', defn.id.to_s, 'true', '--yes')
+      invoke('mat_views:create_by_id', defn.id.to_s, 'true', 'none', '--yes')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, true])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, true, :none])
     end
 
     it "prompts and proceeds when user types 'y'" do
       with_stdin("y\n") { invoke('mat_views:create_by_id', defn.id.to_s, nil, nil) }
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, false])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defn.id, false, :none])
     end
 
     it 'raises for unknown id' do
       expect do
-        invoke('mat_views:create_by_id', '999999', nil, '--yes')
+        invoke('mat_views:create_by_id', '999999', nil, 'none', '--yes')
       end.to raise_error(/No MatViews::MatViewDefinition/)
     end
 
     it 'errors when definition_id is missing/blank' do
       expect do
-        invoke('mat_views:create_by_id', '', nil, '--yes')
+        invoke('mat_views:create_by_id', '', nil, 'none', '--yes')
       end.to raise_error(/mat_views:create_by_id requires a definition_id parameter/)
     end
   end
@@ -154,34 +154,34 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
   describe 'mat_views:create_all', type: :rake do
     it 'enqueues for each definition and skips confirm with --yes' do
       defs = create_list(:mat_view_definition, 2)
-      invoke('mat_views:create_all', nil, '--yes')
+      invoke('mat_views:create_all', nil, 'none', '--yes')
 
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defs[0].id, false])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defs[0].id, false, :none])
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defs[1].id, false])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defs[1].id, false, :none])
     end
 
     it 'passes force=true for all' do
       defs = create_list(:mat_view_definition, 2)
-      invoke('mat_views:create_all', 'true', '--yes')
+      invoke('mat_views:create_all', 'true', 'none', '--yes')
 
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defs[0].id, true])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defs[0].id, true, :none])
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defs[1].id, true])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defs[1].id, true, :none])
     end
 
     it 'honors YES=1 env to skip confirm' do
       defs = create_list(:mat_view_definition, 1)
-      with_env('YES' => '1') { invoke('mat_views:create_all', nil, nil) }
+      with_env('YES' => '1') { invoke('mat_views:create_all', nil, 'none', nil) }
 
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::CreateViewJob, queue: anything, args: [defs.first.id, false])
+        .with(MatViews::CreateViewJob, queue: anything, args: [defs.first.id, false, :none])
     end
 
     it 'logs a message when there are no definitions' do
-      expect { invoke('mat_views:create_all', nil, '--yes') }.not_to raise_error
+      expect { invoke('mat_views:create_all', nil, 'none', '--yes') }.not_to raise_error
       expect(fake_logger).to have_received(:info).with(/\[mat_views\] No mat view definitions found\./)
     end
   end
@@ -191,10 +191,10 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
   describe 'mat_views:refresh_by_name', type: :rake do
     let!(:defn) { create(:mat_view_definition, name: 'sales_daily') }
 
-    it 'enqueues RefreshViewJob (default estimated) and skips confirm with --yes' do
+    it 'enqueues RefreshViewJob (default none) and skips confirm with --yes' do
       invoke('mat_views:refresh_by_name', defn.name, nil, '--yes')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::RefreshViewJob, queue: anything, args: [defn.id, :estimated])
+        .with(MatViews::RefreshViewJob, queue: anything, args: [defn.id, :none])
     end
 
     it 'passes explicit row_count_strategy arg' do
@@ -214,7 +214,7 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
     it "accepts 'y' to skip confirm" do
       invoke('mat_views:refresh_by_name', defn.name, nil, 'y')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::RefreshViewJob, queue: anything, args: [defn.id, :estimated])
+        .with(MatViews::RefreshViewJob, queue: anything, args: [defn.id, :none])
     end
 
     it 'raises when name unknown' do
@@ -227,10 +227,10 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
   describe 'mat_views:refresh_by_id', type: :rake do
     let!(:defn) { create(:mat_view_definition) }
 
-    it 'enqueues RefreshViewJob (default estimated) and skips confirm with --yes' do
+    it 'enqueues RefreshViewJob (default none) and skips confirm with --yes' do
       invoke('mat_views:refresh_by_id', defn.id.to_s, nil, '--yes')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::RefreshViewJob, queue: anything, args: [defn.id, :estimated])
+        .with(MatViews::RefreshViewJob, queue: anything, args: [defn.id, :none])
     end
 
     it 'passes explicit row_count_strategy' do
@@ -242,7 +242,7 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
     it "prompts and proceeds when user types 'y'" do
       with_stdin("y\n") { invoke('mat_views:refresh_by_id', defn.id.to_s, nil, nil) }
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::RefreshViewJob, queue: anything, args: [defn.id, :estimated])
+        .with(MatViews::RefreshViewJob, queue: anything, args: [defn.id, :none])
     end
 
     it 'raises for unknown id' do
@@ -264,11 +264,11 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
       invoke('mat_views:refresh_all', nil, '--yes')
 
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::RefreshViewJob, queue: anything, args: [defs[0].id, :estimated])
+        .with(MatViews::RefreshViewJob, queue: anything, args: [defs[0].id, :none])
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::RefreshViewJob, queue: anything, args: [defs[1].id, :estimated])
+        .with(MatViews::RefreshViewJob, queue: anything, args: [defs[1].id, :none])
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::RefreshViewJob, queue: anything, args: [defs[2].id, :estimated])
+        .with(MatViews::RefreshViewJob, queue: anything, args: [defs[2].id, :none])
     end
 
     it 'passes explicit row_count_strategy for all' do
@@ -293,39 +293,39 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
     let!(:defn) { create(:mat_view_definition, name: 'sales_daily') }
 
     it 'enqueues DeleteViewJob (default cascade=false) and skips confirm with --yes' do
-      invoke('mat_views:delete_by_name', defn.name, nil, '--yes')
+      invoke('mat_views:delete_by_name', defn.name, nil, 'none', '--yes')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false, :none])
     end
 
     it 'passes cascade=true' do
-      invoke('mat_views:delete_by_name', defn.name, 'true', '--yes')
+      invoke('mat_views:delete_by_name', defn.name, 'true', 'none', '--yes')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, true])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, true, :none])
     end
 
     it 'accepts YES=1 via env to skip confirm' do
-      with_env('YES' => '1') { invoke('mat_views:delete_by_name', defn.name, nil, nil) }
+      with_env('YES' => '1') { invoke('mat_views:delete_by_name', defn.name, nil, 'none', nil) }
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false, :none])
     end
 
     it 'prompts and aborts when confirm is declined' do
       expect do
-        with_stdin("\n") { invoke('mat_views:delete_by_name', defn.name, nil, nil) }
+        with_stdin("\n") { invoke('mat_views:delete_by_name', defn.name, nil, 'none', nil) }
       end.to raise_error(/Aborted/i)
       expect(MatViews::Jobs::Adapter).not_to have_received(:enqueue)
     end
 
     it 'aborts when STDIN returns nil (EOF)' do
       allow($stdin).to receive(:gets).and_return(nil)
-      expect { invoke('mat_views:delete_by_name', defn.name, nil, nil) }.to raise_error(/Aborted/i)
+      expect { invoke('mat_views:delete_by_name', defn.name, nil, 'none', nil) }.to raise_error(/Aborted/i)
       expect(MatViews::Jobs::Adapter).not_to have_received(:enqueue)
     end
 
     it 'raises when name unknown' do
       expect do
-        invoke('mat_views:delete_by_name', 'does_not_exist', nil, '--yes')
+        invoke('mat_views:delete_by_name', 'does_not_exist', nil, 'none', '--yes')
       end.to raise_error(/No MatViews::MatViewDefinition/)
     end
   end
@@ -334,32 +334,32 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
     let!(:defn) { create(:mat_view_definition) }
 
     it 'enqueues DeleteViewJob (default cascade=false) and skips confirm with --yes' do
-      invoke('mat_views:delete_by_id', defn.id.to_s, nil, '--yes')
+      invoke('mat_views:delete_by_id', defn.id.to_s, nil, 'none', '--yes')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false, :none])
     end
 
     it 'passes cascade=true' do
-      invoke('mat_views:delete_by_id', defn.id.to_s, 'true', '--yes')
+      invoke('mat_views:delete_by_id', defn.id.to_s, 'true', 'none', '--yes')
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, true])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, true, :none])
     end
 
     it "prompts and proceeds when user types 'y'" do
-      with_stdin("y\n") { invoke('mat_views:delete_by_id', defn.id.to_s, nil, nil) }
+      with_stdin("y\n") { invoke('mat_views:delete_by_id', defn.id.to_s, nil, 'none', nil) }
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defn.id, false, :none])
     end
 
     it 'raises for unknown id' do
       expect do
-        invoke('mat_views:delete_by_id', '999999', nil, '--yes')
+        invoke('mat_views:delete_by_id', '999999', nil, 'none', '--yes')
       end.to raise_error(/No MatViews::MatViewDefinition/)
     end
 
     it 'errors when definition_id is missing/blank' do
       expect do
-        invoke('mat_views:delete_by_id', '', nil, '--yes')
+        invoke('mat_views:delete_by_id', '', nil, 'none', '--yes')
       end.to raise_error(/mat_views:delete_by_id requires a definition_id parameter/)
     end
   end
@@ -367,36 +367,36 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
   describe 'mat_views:delete_all', type: :rake do
     it 'enqueues for each definition and skips confirm with --yes' do
       defs = create_list(:mat_view_definition, 3)
-      invoke('mat_views:delete_all', nil, '--yes')
+      invoke('mat_views:delete_all', nil, 'none', '--yes')
 
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[0].id, false])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[0].id, false, :none])
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[1].id, false])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[1].id, false, :none])
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[2].id, false])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[2].id, false, :none])
     end
 
     it 'passes cascade=true for all' do
       defs = create_list(:mat_view_definition, 2)
-      invoke('mat_views:delete_all', 'true', '--yes')
+      invoke('mat_views:delete_all', 'true', 'none', '--yes')
 
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[0].id, true])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[0].id, true, :none])
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[1].id, true])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs[1].id, true, :none])
     end
 
     it 'honors YES=1 env to skip confirm' do
       defs = create_list(:mat_view_definition, 1)
-      with_env('YES' => '1') { invoke('mat_views:delete_all', nil, nil) }
+      with_env('YES' => '1') { invoke('mat_views:delete_all', nil, 'none', nil) }
 
       expect(MatViews::Jobs::Adapter).to have_received(:enqueue)
-        .with(MatViews::DeleteViewJob, queue: anything, args: [defs.first.id, false])
+        .with(MatViews::DeleteViewJob, queue: anything, args: [defs.first.id, false, :none])
     end
 
     it 'logs a message when there are no definitions' do
-      expect { invoke('mat_views:delete_all', nil, '--yes') }.not_to raise_error
+      expect { invoke('mat_views:delete_all', nil, 'none', '--yes') }.not_to raise_error
       expect(fake_logger).to have_received(:info).with(/\[mat_views\] No mat view definitions found\./)
     end
   end

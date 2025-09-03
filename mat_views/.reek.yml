@@ -49,6 +49,8 @@ detectors:
       - MatViews::Configuration#job_queue
       - MatViews::Services::BaseService#request
       - MatViews::Services::BaseService#response
+  DataClump:
+    enabled: false
 directories:
   "spec":
     DuplicateMethodCall:

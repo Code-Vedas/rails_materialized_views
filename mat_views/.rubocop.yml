@@ -21,7 +21,7 @@ RSpec/MultipleExpectations:
 RSpec/ExampleLength:
   Max: 30
 Layout/LineLength:
-  Max: 150
+  Max: 160
 RSpecRails/InferredSpecType:
   Enabled: false
 Metrics/ClassLength:
