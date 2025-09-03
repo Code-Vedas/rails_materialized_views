@@ -30,6 +30,9 @@ group :development, :test do
 end
 
 group :development do
+  gem 'ruby-lsp', require: false
+  gem 'ruby-lsp-rails', require: false
+  gem 'ruby-lsp-rspec', require: false
   gem 'web-console'
 end
 

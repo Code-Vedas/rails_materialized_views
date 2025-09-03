@@ -53,10 +53,10 @@ module MatViews
       # Parse row count strategy from arg or ROW_COUNT_STRATEGY env.
       # Defaults to :estimated if blank.
       def parse_row_count_strategy(arg)
-        s = (arg || ENV.fetch('ROW_COUNT_STRATEGY', nil)).to_s.strip
-        return :estimated if s.empty?
+        str = (arg || ENV.fetch('ROW_COUNT_STRATEGY', nil)).to_s.strip
+        return :estimated if str.empty?
 
-        s.to_sym
+        str.to_sym
       end
 
       # Check if a materialized view exists in schema.
@@ -78,14 +78,15 @@ module MatViews
       # @return [MatViews::MatViewDefinition]
       # @raise [RuntimeError] if no definition found or mismatch with DB
       def find_definition_by_name!(raw_name)
-        raise 'view_name is required' if raw_name.nil? || raw_name.to_s.strip.empty?
+        raw_name_string = raw_name&.to_s&.strip
+        raise 'view_name is required' unless raw_name_string && !raw_name_string.empty?
 
         schema, rel =
-          if raw_name.to_s.include?('.')
-            parts = raw_name.to_s.split('.', 2)
+          if raw_name_string.include?('.')
+            parts = raw_name_string.split('.', 2)
             [parts[0], parts[1]]
           else
-            [nil, raw_name.to_s]
+            [nil, raw_name_string]
           end
 
         defn = MatViews::MatViewDefinition.find_by(name: rel)
@@ -127,11 +128,10 @@ module MatViews
       # @param definition_id [Integer] MatViewDefinition ID
       # @param force [Boolean] whether to force creation
       # @return [void]
-      def enqueue_create!(definition_id, force)
-        q = MatViews.configuration.job_queue || :default
+      def enqueue_create(definition_id, force)
         MatViews::Jobs::Adapter.enqueue(
           MatViews::CreateViewJob,
-          queue: q,
+          queue: MatViews.configuration.job_queue || :default,
           args: [definition_id, force]
         )
       end
@@ -144,11 +144,10 @@ module MatViews
       #
       # This method allows scheduling a refresh operation with the specified row count strategy.
       # It uses the configured job adapter to enqueue the job.
-      def enqueue_refresh!(definition_id, row_count_strategy)
-        q = MatViews.configuration.job_queue || :default
+      def enqueue_refresh(definition_id, row_count_strategy)
         MatViews::Jobs::Adapter.enqueue(
           MatViews::RefreshViewJob,
-          queue: q,
+          queue: MatViews.configuration.job_queue || :default,
           args: [definition_id, row_count_strategy]
         )
       end
@@ -172,11 +171,10 @@ module MatViews
       #
       # This method schedules a job to delete the materialized view, optionally with CASCADE.
       # It uses the configured job adapter to enqueue the job.
-      def enqueue_delete!(definition_id, cascade)
-        q = MatViews.configuration.job_queue || :default
+      def enqueue_delete(definition_id, cascade)
         MatViews::Jobs::Adapter.enqueue(
           MatViews::DeleteViewJob,
-          queue: q,
+          queue: MatViews.configuration.job_queue || :default,
           args: [definition_id, cascade]
         )
       end

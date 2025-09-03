@@ -13,32 +13,25 @@ module MatViews
     # This is the safest option for simple or low-frequency updates where
     # blocking reads during refresh is acceptable.
     #
-    # Supports optional row counting strategies:
-    # - `:estimated` → uses `pg_class.reltuples` (fast, approximate)
-    # - `:exact`     → runs `COUNT(*)` (accurate, but potentially slow)
-    # - `nil`        → no row count included in payload
+    # Options:
+    # - `row_count_strategy:` (Symbol, default: :estimated) → one of `:estimated`, `:exact`, or `:none or nil` to control row count reporting
     #
-    # @return [MatViews::ServiceResponse]
+    # Returns a {MatViews::ServiceResponse}
     #
-    # @example
-    #   svc = MatViews::Services::RegularRefresh.new(defn)
-    #   svc.run
+    # @see MatViews::Services::ConcurrentRefresh
+    # @see MatViews::Services::SwapRefresh
+    #
+    # @example Direct usage
+    #   svc = MatViews::Services::RegularRefresh.new(definition, **options)
+    #   response = svc.run
+    #   response.success? # => true/false
+    #
+    # @example via job, this is the typical usage and will create a run record in the DB
+    #   When definition.refresh_strategy == "concurrent"
+    #   MatViews::Jobs::Adapter.enqueue(MatViews::Services::RegularRefresh, definition.id, **options)
     #
     class RegularRefresh < BaseService
-      ##
-      # The row count strategy requested.
-      # One of `:estimated`, `:exact`, `nil`, or unrecognized symbol.
-      #
-      # @return [Symbol, nil]
-      attr_reader :row_count_strategy
-
-      ##
-      # @param definition [MatViews::MatViewDefinition]
-      # @param row_count_strategy [Symbol, nil] row counting mode
-      def initialize(definition, row_count_strategy: :estimated)
-        super(definition)
-        @row_count_strategy = row_count_strategy
-      end
+      private
 
       ##
       # Perform the refresh.
@@ -49,38 +42,24 @@ module MatViews
       # - Optionally compute row count.
       #
       # @return [MatViews::ServiceResponse]
+      #   - `status: :updated` on success, with `response` containing:
+      #     - `view` - the qualified view name
+      #     - `row_count_before` - if requested and available
+      #     - `row_count_after` - if requested and available
+      #   - `status: :error` with `error` on failure, with `error` containing:
+      #     - serlialized exception class, message, and backtrace in a hash
       #
-      def run
-        prep = prepare!
-        return prep if prep
-
+      def _run
         sql = "REFRESH MATERIALIZED VIEW #{qualified_rel}"
 
+        self.response = { view: "#{schema}.#{rel}", sql: [sql] }
+
+        response[:row_count_before] = fetch_rows_count
         conn.execute(sql)
+        response[:row_count_after] = fetch_rows_count
 
-        payload = { view: "#{schema}.#{rel}" }
-        payload[:row_count] = fetch_rows_count if row_count_strategy.present?
-
-        ok(:updated,
-           payload: payload,
-           meta: { sql: sql, row_count_strategy: row_count_strategy })
-      rescue StandardError => e
-        error_response(
-          e,
-          meta: {
-            sql: sql,
-            backtrace: Array(e.backtrace),
-            row_count_strategy: row_count_strategy
-          },
-          payload: { view: "#{schema}.#{rel}" }
-        )
+        ok(:updated)
       end
-
-      private
-
-      # ────────────────────────────────────────────────────────────────
-      # internal
-      # ────────────────────────────────────────────────────────────────
 
       ##
       # Validate name and existence of the materialized view.
@@ -88,58 +67,22 @@ module MatViews
       # @api private
       # @return [MatViews::ServiceResponse, nil]
       #
-      def prepare!
-        return err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
-        return err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
+      def prepare
+        raise_err "Invalid view name format: #{definition.name.inspect}" unless valid_name?
+        raise_err "Materialized view #{schema}.#{rel} does not exist" unless view_exists?
 
         nil
       end
 
-      # ────────────────────────────────────────────────────────────────
-      # rows counting
-      # ────────────────────────────────────────────────────────────────
-
       ##
-      # Pick the appropriate row count method.
+      # Assign the request parameters.
+      # Called by {#run} before {#prepare}.
       #
       # @api private
-      # @return [Integer, nil]
+      # @return [void]
       #
-      def fetch_rows_count
-        case row_count_strategy
-        when :estimated then estimated_rows_count
-        when :exact     then exact_rows_count
-        end
-      end
-
-      ##
-      # Fast/approx via `pg_class.reltuples`.
-      # Updated by `ANALYZE` and autovacuum.
-      #
-      # @api private
-      # @return [Integer]
-      #
-      def estimated_rows_count
-        conn.select_value(<<~SQL).to_i
-          SELECT COALESCE(c.reltuples::bigint, 0)
-          FROM pg_class c
-          JOIN pg_namespace n ON n.oid = c.relnamespace
-          WHERE c.relkind IN ('m','r','p')
-            AND n.nspname = #{conn.quote(schema)}
-            AND c.relname = #{conn.quote(rel)}
-          LIMIT 1
-        SQL
-      end
-
-      ##
-      # Accurate count via `COUNT(*)`.
-      # Potentially slow on large materialized views.
-      #
-      # @api private
-      # @return [Integer]
-      #
-      def exact_rows_count
-        conn.select_value("SELECT COUNT(*) FROM #{qualified_rel}").to_i
+      def assign_request
+        self.request = { row_count_strategy: row_count_strategy }
       end
     end
   end

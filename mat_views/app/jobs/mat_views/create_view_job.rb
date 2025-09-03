@@ -29,7 +29,7 @@ module MatViews
   # @example Inline run (test/dev)
   #   MatViews::CreateViewJob.new.perform(definition.id, false)
   #
-  class CreateViewJob < ::ActiveJob::Base
+  class CreateViewJob < ApplicationJob
     ##
     # Queue name for the job.
     #
@@ -40,37 +40,29 @@ module MatViews
     queue_as { MatViews.configuration.job_queue || :default }
 
     ##
-    # Perform the job for the given materialized view definition.
+    # Perform the create job for the given materialized view definition.
     #
     # @api public
     #
     # @param definition_id [Integer, String] ID of {MatViews::MatViewDefinition}.
     # @param force_arg [Boolean, Hash, nil] Optional flag or hash (`{ force: true }`)
-    #   to force creation (drop/recreate) when supported by the service.
+    # @param row_count_strategy_arg [:Symbol, String] One of: `:estimated`, `:exact`, `:none` or `nil`.
     #
-    # @return [Hash] A serialized {MatViews::ServiceResponse#to_h}:
-    #   - `:status` [Symbol] one of `:ok, :created, :updated, :noop, :error`
-    #   - `:payload` [Hash] service-specific payload (also stored in run.meta)
-    #   - `:error` [String, nil] error message if any
-    #   - `:duration_ms` [Integer, nil]
+    # @return [Hash] Serialized {MatViews::ServiceResponse#to_h}:
+    #   - `:status` [Symbol]
+    #   - `:payload` [Hash]
+    #   - `:error` [String, nil]
+    #   - `:duration_ms` [Integer]
     #   - `:meta` [Hash]
     #
     # @raise [StandardError] Re-raised on unexpected failure after marking the run failed.
     #
-    # @see MatViews::Services::CreateView
-    #
-    def perform(definition_id, force_arg = nil)
-      force = normalize_force(force_arg)
-
+    def perform(definition_id, force_arg = nil, row_count_strategy_arg = nil)
       definition = MatViews::MatViewDefinition.find(definition_id)
-      run        = start_run(definition)
 
-      response, duration_ms = execute(definition, force: force)
-      finalize_run!(run, response, duration_ms)
-      response.to_h
-    rescue StandardError => e
-      fail_run!(run, e) if run
-      raise e
+      record_run(definition, :create) do
+        MatViews::Services::CreateView.new(definition, force: force?(force_arg), row_count_strategy: normalize_strategy(row_count_strategy_arg)).run
+      end
     end
 
     private
@@ -82,107 +74,13 @@ module MatViews
     #
     # @api private
     #
-    # @param arg [Object] Raw argument; commonly `true/false`, `nil`, or `Hash`.
+    # @param arg [Object] Raw argument; commonly `true/false`, `nil`
     # @return [Boolean] Coerced force flag.
     #
-    def normalize_force(arg)
-      case arg
-      when Hash
-        arg[:force] || arg['force'] || false
-      else
-        !!arg
-      end
+    def force?(arg)
+      return false if arg.nil?
+
+      !!arg
     end
-
-    ##
-    # Execute the create service and measure duration.
-    #
-    # @api private
-    #
-    # @param definition [MatViews::MatViewDefinition]
-    # @param force [Boolean]
-    # @return [Array(MatViews::ServiceResponse, Integer)] response and elapsed ms.
-    #
-    def execute(definition, force:)
-      started  = monotime
-      response = MatViews::Services::CreateView.new(definition, force: force).run
-      [response, elapsed_ms(started)]
-    end
-
-    ##
-    # Begin a {MatViews::MatViewRun} row for lifecycle tracking.
-    #
-    # @api private
-    #
-    # @param definition [MatViews::MatViewDefinition]
-    # @return [MatViews::MatViewRun] newly created run with `status: :running`
-    #
-    def start_run(definition)
-      MatViews::MatViewRun.create!(
-        mat_view_definition: definition,
-        status: :running,
-        started_at: Time.current,
-        operation: :create
-      )
-    end
-
-    ##
-    # Finalize the run with success/failure, timing, and meta from the response payload.
-    #
-    # @api private
-    #
-    # @param run [MatViews::MatViewRun]
-    # @param response [MatViews::ServiceResponse]
-    # @param duration_ms [Integer]
-    # @return [void]
-    #
-    def finalize_run!(run, response, duration_ms)
-      base_attrs = {
-        finished_at: Time.current,
-        duration_ms: duration_ms,
-        meta: response.payload || {}
-      }
-
-      if response.success?
-        run.update!(base_attrs.merge(status: :success, error: nil))
-      else
-        run.update!(base_attrs.merge(status: :failed, error: response.error.to_s.presence))
-      end
-    end
-
-    ##
-    # Mark the run failed due to an exception.
-    #
-    # @api private
-    #
-    # @param run [MatViews::MatViewRun]
-    # @param exception [Exception]
-    # @return [void]
-    #
-    def fail_run!(run, exception)
-      run.update!(
-        finished_at: Time.current,
-        duration_ms: run.duration_ms || 0,
-        error: "#{exception.class}: #{exception.message}",
-        status: :failed
-      )
-    end
-
-    ##
-    # Monotonic clock getter (for elapsed-time measurement).
-    #
-    # @api private
-    # @return [Float] seconds from a monotonic source.
-    #
-    def monotime = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-
-    ##
-    # Convert a monotonic start time to elapsed milliseconds.
-    #
-    # @api private
-    # @param start [Float] monotonic seconds.
-    # @return [Integer] elapsed milliseconds.
-    #
-    def elapsed_ms(start) = ((monotime - start) * 1000).round
   end
 end

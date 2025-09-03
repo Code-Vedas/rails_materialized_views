@@ -14,39 +14,26 @@ module MatViews
     #
     # It keeps the view readable during refresh, but **requires at least one
     # UNIQUE index** on the materialized view (a PostgreSQL constraint).
-    # Returns a {MatViews::ServiceResponse}.
     #
-    # Row-count reporting is optional and controlled by `row_count_strategy`:
-    # - `:estimated` — fast/approx via `pg_class.reltuples`
-    # - `:exact` — accurate `COUNT(*)`
-    # - `nil` (or any unrecognized value) — skip counting
+    # Options:
+    # - `row_count_strategy:` (Symbol, default: :estimated) → one of `:estimated`, `:exact`, or `:none or nil` to control row count reporting
+    #
+    # Returns a {MatViews::ServiceResponse}
     #
     # @see MatViews::Services::RegularRefresh
     # @see MatViews::Services::SwapRefresh
     #
     # @example Direct usage
-    #   svc = MatViews::Services::ConcurrentRefresh.new(definition, row_count_strategy: :exact)
+    #   svc = MatViews::Services::ConcurrentRefresh.new(definition, **options)
     #   response = svc.run
     #   response.success? # => true/false
     #
-    # @example Via job selection (within RefreshViewJob)
-    #   # When definition.refresh_strategy == "concurrent"
-    #   MatViews::RefreshViewJob.perform_later(definition.id, :estimated)
+    # @example via job, this is the typical usage and will create a run record in the DB
+    #   When definition.refresh_strategy == "concurrent"
+    #   MatViews::Jobs::Adapter.enqueue(MatViews::Services::RefreshViewJob, definition.id, **options)
     #
     class ConcurrentRefresh < BaseService
-      ##
-      # Strategy for computing row count after refresh.
-      #
-      # @return [Symbol, nil] one of `:estimated`, `:exact`, or `nil`
-      attr_reader :row_count_strategy
-
-      ##
-      # @param definition [MatViews::MatViewDefinition]
-      # @param row_count_strategy [Symbol, nil] `:estimated` (default), `:exact`, or `nil`
-      def initialize(definition, row_count_strategy: :estimated)
-        super(definition)
-        @row_count_strategy = row_count_strategy
-      end
+      private
 
       ##
       # Execute the concurrent refresh.
@@ -55,122 +42,49 @@ module MatViews
       # If validation fails, returns an error {MatViews::ServiceResponse}.
       #
       # @return [MatViews::ServiceResponse]
-      #   - `status: :updated` with payload `{ view:, row_count? }` on success
-      #   - `status: :error` with `error` on failure
-      #
-      # @raise [StandardError] bubbled after being wrapped into {#error_response}
-      #
-      def run
-        prep = prepare!
-        return prep if prep
-
+      #   - `status: :updated` on success, with `response` containing:
+      #     - `view` - the qualified view name
+      #     - `row_count_before` - if requested and available
+      #     - `row_count_after` - if requested and available
+      #   - `status: :error` with `error` on failure, with `error` containing:
+      #     - serlialized exception class, message, and backtrace in a hash
+      def _run
         sql = "REFRESH MATERIALIZED VIEW CONCURRENTLY #{qualified_rel}"
+        self.response = { view: "#{schema}.#{rel}", sql: [sql] }
 
+        response[:row_count_before] = fetch_rows_count
         conn.execute(sql)
+        response[:row_count_after] = fetch_rows_count
 
-        payload = { view: "#{schema}.#{rel}" }
-        payload[:row_count] = fetch_rows_count if row_count_strategy.present?
-
-        ok(:updated,
-           payload: payload,
-           meta: { sql: sql, row_count_strategy: row_count_strategy, concurrent: true })
-      rescue PG::ObjectInUse => e
-        # Common lock/contention error during concurrent refreshes.
-        error_response(e,
-                       meta: { sql: sql, row_count_strategy: row_count_strategy, concurrent: true },
-                       payload: { view: "#{schema}.#{rel}" })
-      rescue StandardError => e
-        error_response(e,
-                       meta: { sql: sql, backtrace: Array(e.backtrace), row_count_strategy: row_count_strategy, concurrent: true },
-                       payload: { view: "#{schema}.#{rel}" })
+        ok(:updated)
       end
 
-      private
-
-      # ────────────────────────────────────────────────────────────────
-      # internal
-      # ────────────────────────────────────────────────────────────────
+      ##
+      # Assign the request parameters.
+      # Called by {#run} before {#prepare}.
+      # Sets `concurrent: true` in the request hash.
+      #
+      # @api private
+      # @return [void]
+      #
+      def assign_request
+        self.request = { row_count_strategy: row_count_strategy, concurrent: true }
+      end
 
       ##
       # Perform pre-flight checks.
+      # Called by {#run} after {#assign_request}.
       #
       # @api private
-      # @return [MatViews::ServiceResponse, nil] error response or `nil` if OK
+      # @return [nil] on success
+      # @raise [StandardError] on failure
       #
-      def prepare!
-        return err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
-        return err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
-        return err("Materialized view #{schema}.#{rel} must have a unique index for concurrent refresh") unless unique_index_exists?
+      def prepare
+        raise raise_err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
+        raise raise_err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
+        raise raise_err("Materialized view #{schema}.#{rel} must have a unique index for concurrent refresh") unless unique_index_exists?
 
         nil
-      end
-
-      # ────────────────────────────────────────────────────────────────
-      # helpers: validation / schema / pg introspection
-      # (mirrors RegularRefresh for consistency)
-      # ────────────────────────────────────────────────────────────────
-
-      ##
-      # Check for any UNIQUE index on the materialized view, required by CONCURRENTLY.
-      #
-      # @api private
-      # @return [Boolean]
-      #
-      def unique_index_exists?
-        conn.select_value(<<~SQL).to_i.positive?
-          SELECT COUNT(*)
-          FROM pg_index i
-          JOIN pg_class c ON c.oid = i.indrelid
-          JOIN pg_namespace n ON n.oid = c.relnamespace
-          WHERE n.nspname = #{conn.quote(schema)}
-            AND c.relname = #{conn.quote(rel)}
-            AND i.indisunique = TRUE
-        SQL
-      end
-
-      # ────────────────────────────────────────────────────────────────
-      # rows counting (same as RegularRefresh)
-      # ────────────────────────────────────────────────────────────────
-
-      ##
-      # Compute row count based on the configured strategy.
-      #
-      # @api private
-      # @return [Integer, nil]
-      #
-      def fetch_rows_count
-        case row_count_strategy
-        when :estimated then estimated_rows_count
-        when :exact     then exact_rows_count
-        end
-      end
-
-      ##
-      # Fast, approximate row count via `pg_class.reltuples`.
-      #
-      # @api private
-      # @return [Integer]
-      #
-      def estimated_rows_count
-        conn.select_value(<<~SQL).to_i
-          SELECT COALESCE(c.reltuples::bigint, 0)
-          FROM pg_class c
-          JOIN pg_namespace n ON n.oid = c.relnamespace
-          WHERE c.relkind IN ('m','r','p')
-            AND n.nspname = #{conn.quote(schema)}
-            AND c.relname = #{conn.quote(rel)}
-          LIMIT 1
-        SQL
-      end
-
-      ##
-      # Accurate row count using `COUNT(*)` on the materialized view.
-      #
-      # @api private
-      # @return [Integer]
-      #
-      def exact_rows_count
-        conn.select_value("SELECT COUNT(*) FROM #{qualified_rel}").to_i
       end
     end
   end

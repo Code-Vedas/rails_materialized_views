@@ -5,6 +5,8 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2
   SuggestExtensions: true
+  Exclude:
+    - .vscode/**/*
 
 Style/Documentation:
   Enabled: false

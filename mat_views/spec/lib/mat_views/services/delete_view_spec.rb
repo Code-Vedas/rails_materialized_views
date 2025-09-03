@@ -17,6 +17,10 @@ RSpec.describe MatViews::Services::DeleteView do
           refresh_strategy: :regular,
           unique_index_columns: [])
   end
+  let(:row_count_strategy) { :estimated }
+  let(:cascade) { false }
+  let(:runner) { described_class.new(definition, cascade: cascade, row_count_strategy: row_count_strategy) }
+  let(:execute_service) { runner.run }
 
   def mv_exists?(rel, schema: 'public')
     conn.select_value(<<~SQL).to_i.positive?
@@ -29,9 +33,12 @@ RSpec.describe MatViews::Services::DeleteView do
   def create_mv!(rel, schema: 'public')
     quoted_table = conn.quote_table_name("#{schema}.#{rel}")
     conn.execute("CREATE MATERIALIZED VIEW #{quoted_table} AS SELECT id FROM users WITH DATA")
+    conn.execute("ANALYZE #{quoted_table}")
   end
 
   before do
+    User.destroy_all
+    5.times { |i| User.create!(name: "User #{i}", email: "email#{i}@exmaple.com") }
     conn.execute(%(DROP MATERIALIZED VIEW IF EXISTS public."#{relname}" CASCADE))
     conn.execute(%(DROP VIEW IF EXISTS public."#{relname}_dep" CASCADE))
   end
@@ -40,75 +47,130 @@ RSpec.describe MatViews::Services::DeleteView do
     create_mv!(relname)
     expect(mv_exists?(relname)).to be(true)
 
-    res = described_class.new(definition).run
+    res = execute_service
 
     expect(res).to be_success
     expect(res.status).to eq(:deleted)
-    expect(res.payload[:view]).to eq(qualified)
-    expect(res.meta[:sql]).to eq(%(DROP MATERIALIZED VIEW IF EXISTS "public"."#{relname}" RESTRICT))
+    expect(res.response[:view]).to eq(qualified)
+    expect(res.response[:sql]).to eq([%(DROP MATERIALIZED VIEW IF EXISTS "public"."#{relname}" RESTRICT)])
     expect(mv_exists?(relname)).to be(false)
   end
 
-  it 'skips when not present and if_exists=true' do
+  it 'skips when not present' do
     expect(mv_exists?(relname)).to be(false)
 
-    res = described_class.new(definition, if_exists: true).run
+    res = execute_service
 
     expect(res).to be_success
     expect(res.status).to eq(:skipped)
-    expect(res.payload[:view]).to eq(qualified)
-    expect(res.meta[:sql]).to be_nil
+    expect(res.response[:view]).to eq(qualified)
+    expect(res.response[:sql]).to eq([%(DROP MATERIALIZED VIEW IF EXISTS "public"."#{relname}" RESTRICT)])
   end
 
-  it 'deletes when exists and if_exists=false' do
-    create_mv!(relname)
-    expect(mv_exists?(relname)).to be(true)
+  describe 'row count strategy handling' do
+    before do
+      create_mv!(relname)
+    end
 
-    res = described_class.new(definition, if_exists: false).run
+    context 'when row_count_strategy is nil' do
+      let(:row_count_strategy) { nil }
 
-    expect(res).to be_success
-    expect(res.status).to eq(:deleted)
-    expect(res.payload[:view]).to eq(qualified)
-    expect(res.meta[:sql]).to eq(%(DROP MATERIALIZED VIEW IF EXISTS "public"."#{relname}" RESTRICT))
-    expect(mv_exists?(relname)).to be(false)
+      it 'defaults to :none' do
+        res = execute_service
+
+        expect(res).to be_success
+        expect(res.request[:row_count_strategy]).to eq(:none)
+        expect(res.response[:row_count_before]).to eq(-1)
+        expect(res.response[:row_count_after]).to eq(-1) # view is gone
+        expect(mv_exists?(relname)).to be(false)
+      end
+    end
+
+    context 'when row_count_strategy is :none' do
+      let(:row_count_strategy) { :none }
+
+      it 'skips row count fetching' do
+        res = execute_service
+
+        expect(res).to be_success
+        expect(res.request[:row_count_strategy]).to eq(:none)
+        expect(res.response[:row_count_before]).to eq(-1)
+        expect(res.response[:row_count_after]).to eq(-1) # view is gone
+        expect(mv_exists?(relname)).to be(false)
+      end
+    end
+
+    context 'when row_count_strategy is :estimated' do
+      let(:row_count_strategy) { :estimated }
+
+      it 'fetches estimated row counts' do
+        res = execute_service
+
+        expect(res).to be_success
+        expect(res.request[:row_count_strategy]).to eq(:estimated)
+        expect(res.response[:row_count_before]).to be >= 0
+        expect(res.response[:row_count_after]).to eq(-1) # view is gone
+        expect(mv_exists?(relname)).to be(false)
+      end
+    end
+
+    context 'when row_count_strategy is :exact' do
+      let(:row_count_strategy) { :exact }
+
+      it 'fetches exact row counts' do
+        res = execute_service
+
+        expect(res).to be_success
+        expect(res.request[:row_count_strategy]).to eq(:exact)
+        expect(res.response[:row_count_before]).to be >= 0
+        expect(res.response[:row_count_after]).to eq(-1) # view is gone
+        expect(mv_exists?(relname)).to be(false)
+      end
+    end
   end
 
-  it 'errors when not present and if_exists=false' do
-    res = described_class.new(definition, if_exists: false).run
+  describe 'cascade option' do
+    before do
+      create_mv!(relname)
+      conn.execute(%(CREATE VIEW public."#{relname}_dep" AS SELECT * FROM public."#{relname}"))
+    end
 
-    expect(res.error?).to be(true)
-    expect(res.error).to match(/does not exist/i)
-  end
+    context 'when dependencies exist, and cascade is false' do
+      let(:cascade) { false }
 
-  it 'errors with helpful message when dependencies exist and cascade=false', :no_txn do
-    create_mv!(relname)
-    # Create a dependent plain view
-    conn.execute(%(CREATE VIEW public."#{relname}_dep" AS SELECT * FROM public."#{relname}"))
+      it 'errors with helpful message when dependencies exist and cascade=false', :no_txn do
+        res = execute_service
 
-    res = described_class.new(definition, cascade: false).run
+        expect(res.error?).to be(true)
+        expect(res.error[:message]).to match(/PG::DependentObjectsStillExist: ERROR:  cannot drop materialized view/i)
+        expect(res.error[:class]).to eq('ActiveRecord::StatementInvalid')
+        expect(res.error[:backtrace]).to be_an(Array)
+        expect(mv_exists?(relname)).to be(true) # still there
+      end
+    end
 
-    expect(res.error?).to be(true)
-    expect(res.error).to match(/dependencies exist/i)
-    expect(mv_exists?(relname)).to be(true) # still there
-  end
+    context 'when dependencies exist, and cascade is true' do
+      let(:cascade) { true }
 
-  it 'drops with cascade=true even if dependencies exist' do
-    create_mv!(relname)
-    conn.execute(%(CREATE VIEW public."#{relname}_dep" AS SELECT * FROM public."#{relname}"))
+      it 'drops with cascade=true even if dependencies exist' do
+        res = execute_service
 
-    res = described_class.new(definition, cascade: true).run
-
-    expect(res).to be_success
-    expect(res.status).to eq(:deleted)
-    expect(mv_exists?(relname)).to be(false)
+        expect(res).to be_success
+        expect(res.status).to eq(:deleted)
+        expect(mv_exists?(relname)).to be(false)
+      end
+    end
   end
 
   it 'fails fast on invalid name format' do
     definition.name = 'public.bad' # contains a dot
-    res = described_class.new(definition).run
+    res = execute_service
 
+    expect(res).not_to be_success
     expect(res.error?).to be(true)
-    expect(res.error).to match(/Invalid view name format/i)
+    expect(res.error[:message]).to match(/Invalid view name format/i)
+    expect(res.error[:class]).to eq('StandardError')
+    expect(res.error[:backtrace]).to be_an(Array)
   end
 
   context 'when standard error is raised' do
@@ -123,12 +185,14 @@ RSpec.describe MatViews::Services::DeleteView do
 
     it 'returns an error response with backtrace' do
       create_mv!(relname)
-      res = described_class.new(definition).run
+      res = execute_service
 
+      expect(res).not_to be_success
       expect(res.error?).to be(true)
-      expect(res.error).to eq('StandardError: boom')
-      expect(res.meta[:backtrace]).to be_present
-      expect(res.payload[:view]).to eq(qualified)
+      expect(res.error[:message]).to eq('boom')
+      expect(res.error[:class]).to eq('StandardError')
+      expect(res.error[:backtrace]).to be_an(Array)
+      expect(res.response[:view]).to eq(qualified)
     end
   end
 end

@@ -11,9 +11,9 @@ RSpec.describe MatViews::ServiceResponse do
       res = described_class.new(status: :ok)
 
       expect(res.status).to eq(:ok)
-      expect(res.payload).to eq({})
+      expect(res.request).to eq({})
+      expect(res.response).to eq({})
       expect(res.error).to be_nil
-      expect(res.meta).to eq({})
     end
 
     it 'symbolizes status when given a string' do
@@ -25,48 +25,46 @@ RSpec.describe MatViews::ServiceResponse do
       err = StandardError.new('boom')
       res = described_class.new(
         status: :updated,
-        payload: { rows: 10 },
+        request: { rows: 10 },
         error: err,
-        meta: { attempt: 2 }
+        response: { attempt: 2 }
       )
 
-      expect(res.payload).to eq(rows: 10)
-      expect(res.error).to eq(err)
-      expect(res.meta).to eq(attempt: 2)
+      expect(res.request).to eq(rows: 10)
+      expect(res.error[:message]).to eq('boom')
+      expect(res.error[:class]).to eq('StandardError')
+      expect(res.error[:backtrace]).to be_an(Array)
+      expect(res.status).to eq(:updated)
+      expect(res.response).to eq(attempt: 2)
+    end
+
+    it 'raise ArgumentError if status is nil' do
+      expect { described_class.new(status: nil) }.to raise_error(ArgumentError, /status is required/)
+    end
+
+    it 'raise ArgumentError if error is not an Exception' do
+      expect { described_class.new(status: :error, error: 'nope') }
+        .to raise_error(ArgumentError, /error must be Exception object/)
     end
   end
 
   describe '#success?' do
-    %i[ok created updated noop].each do |ok_status|
+    %i[ok created updated skipped deleted].each do |ok_status|
       it "is true for #{ok_status} when there is no error" do
         res = described_class.new(status: ok_status)
-        expect(res.success?).to be true
+        expect(res).to be_success
       end
     end
 
-    it 'is false when error is present even if status is ok-ish' do
-      res = described_class.new(status: :ok, error: StandardError.new('x'))
-      expect(res.success?).to be false
-    end
-
     it 'is false for non-ok statuses' do
-      res = described_class.new(status: :pending)
-      expect(res.success?).to be false
+      res = described_class.new(status: :error)
+
+      expect(res).not_to be_success
     end
   end
 
   describe '#error?' do
-    it 'is true when error object is present' do
-      res = described_class.new(status: :ok, error: RuntimeError.new('nope'))
-      expect(res.error?).to be true
-    end
-
-    it 'is true when status is :error even without error object' do
-      res = described_class.new(status: :error)
-      expect(res.error?).to be true
-    end
-
-    it 'is false when no error and status is not :error' do
+    it 'is false when status is not :error' do
       res = described_class.new(status: :ok)
       expect(res.error?).to be false
     end
@@ -76,17 +74,21 @@ RSpec.describe MatViews::ServiceResponse do
     it 'returns a full hash representation' do
       err = RuntimeError.new('kaput')
       res = described_class.new(
-        status: :noop,
-        payload: { count: 1 },
+        status: :skipped,
+        request: { count: 1 },
         error: err,
-        meta: { source: 'spec' }
+        response: { source: 'spec' }
       )
 
       expect(res.to_h).to eq(
-        status: :noop,
-        payload: { count: 1 },
-        error: err,
-        meta: { source: 'spec' }
+        status: :skipped,
+        request: { count: 1 },
+        error: {
+          message: 'kaput',
+          class: 'RuntimeError',
+          backtrace: []
+        },
+        response: { source: 'spec' }
       )
     end
   end

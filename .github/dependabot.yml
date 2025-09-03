@@ -4,18 +4,23 @@ updates:
     directory: /mat_views
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
+  - package-ecosystem: bundler
+    directory: /mat_views/ruby-lsp/.vscode
+    schedule:
+      interval: daily
   - package-ecosystem: bundler
     directory: /mat_views_demo
+    schedule:
+      interval: daily
+  - package-ecosystem: bundler
+    directory: /mat_views_demo/ruby-lsp/.vscode
     schedule:
       interval: daily
   - package-ecosystem: bundler
     directory: /scripts
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: daily
-    open-pull-requests-limit: 10

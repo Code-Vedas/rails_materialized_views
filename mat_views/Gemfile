@@ -21,6 +21,7 @@ group :development, :test do
   gem 'faker'
   gem 'faraday-retry'
   gem 'generator_spec'
+  gem 'reek'
   gem 'rspec-rails'
   gem 'rubocop-factory_bot'
   gem 'rubocop-performance'
@@ -35,4 +36,10 @@ group :test do
   gem 'sidekiq'
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
+end
+
+group :development do
+  gem 'ruby-lsp', require: false
+  gem 'ruby-lsp-rails', require: false
+  gem 'ruby-lsp-rspec', require: false
 end

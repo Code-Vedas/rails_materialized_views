@@ -13,7 +13,7 @@ module MatViews
     # response helpers).
     #
     # Concrete services (e.g., {MatViews::Services::CreateView},
-    # {MatViews::Services::RegularRefresh}) should inherit from this class.
+    # {MatViews::Services::Services::RegularRefresh}) should inherit from this class.
     #
     # @abstract
     #
@@ -29,17 +29,106 @@ module MatViews
     #   end
     #
     class BaseService
+      ALLOWED_ROW_STRATEGIES = %i[none estimated exact].freeze
+      DEFAULT_ROW_STRATEGY = :estimated
+      DEFAULT_NIL_STRATEGY = :none
+
       ##
       # @return [MatViews::MatViewDefinition] The target materialized view definition.
       attr_reader :definition
 
       ##
+      # Row count strategy (`:estimated`, `:exact`, `nil`).
+      #
+      # @return [Symbol, nil]
+      attr_reader :row_count_strategy
+
+      ##
+      # request hash to be returned in service response
+      # @return [Hash]
+      attr_accessor :request
+
+      ##
+      # response hash to be returned in service response
+      # @return [Hash]
+      attr_accessor :response
+
+      ##
       # @param definition [MatViews::MatViewDefinition]
-      def initialize(definition)
+      # @param row_count_strategy [Symbol, nil] one of `:estimated`, `:exact`, or `nil` (default: `:estimated`)
+      #
+      def initialize(definition, row_count_strategy: DEFAULT_ROW_STRATEGY)
         @definition = definition
+        @row_count_strategy = extract_row_strategy(row_count_strategy)
+        @request = {}
+        @response = {}
+      end
+
+      ##
+      # Execute the service operation.
+      #
+      # Calls {#assign_request}, {#prepare} and {#_run} in order.
+      #
+      # Concrete subclasses must implement these methods.
+      #
+      # @return [MatViews::ServiceResponse]
+      # @raise [NotImplementedError] if not implemented in subclass
+      def run
+        assign_request
+        prepare
+        _run
+      rescue StandardError => e
+        error_response(e)
       end
 
       private
+
+      ##
+      # Assign the request parameters.
+      # Called by {#run} before {#prepare}.
+      #
+      # Must be implemented in concrete subclasses.
+      #
+      # @api private
+      # @return [void]
+      # @raise [NotImplementedError] if not implemented in subclass
+      #
+      def assign_request
+        raise NotImplementedError, "Must implement #{self.class}##{__method__}"
+      end
+
+      ##
+      # Perform pre-flight checks.
+      # Called by {#run} after {#assign_request}.
+      #
+      # Must be implemented in concrete subclasses.
+      #
+      # @api private
+      # @return [nil] on success
+      # @raise [StandardError] on failure
+      # @raise [NotImplementedError] if not implemented in subclass
+      #
+      def prepare
+        raise NotImplementedError, "Must implement #{self.class}##{__method__}"
+      end
+
+      ##
+      # Execute the service operation.
+      # Called by {#run} after {#prepare}.
+      #
+      # Must be implemented in concrete subclasses.
+      #
+      # @api private
+      # @return [MatViews::ServiceResponse]
+      # @raise [NotImplementedError] if not implemented in subclass
+      #
+      def _run
+        raise NotImplementedError, "Must implement #{self.class}##{__method__}"
+      end
+
+      def extract_row_strategy(value)
+        ALLOWED_ROW_STRATEGIES.find { |strategy| strategy == value } || DEFAULT_NIL_STRATEGY
+      end
 
       # ────────────────────────────────────────────────────────────────
       # Schema / resolution helpers
@@ -56,9 +145,9 @@ module MatViews
       #
       def first_existing_schema
         raw_path   = conn.schema_search_path.presence || 'public'
-        candidates = raw_path.split(',').filter_map { |t| resolve_schema_token(t.strip) }
+        candidates = raw_path.split(',').filter_map { |token| resolve_schema_token(token.strip) }
         candidates << 'public' unless candidates.include?('public')
-        candidates.find { |s| schema_exists?(s) } || 'public'
+        candidates.find { |schema_str| schema_exists?(schema_str) } || 'public'
       end
 
       ##
@@ -204,42 +293,34 @@ module MatViews
       # Build a success response.
       #
       # @api private
-      # @param status [Symbol] e.g., `:ok`, `:created`, `:updated`, `:noop`
-      # @param payload [Hash] optional payload
-      # @param meta [Hash] optional metadata
+      # @param status [Symbol] e.g., `:ok`, `:created`, `:updated`, `:skipped`, `:deleted`
       # @return [MatViews::ServiceResponse]
       #
-      def ok(status, payload: {}, meta: {})
-        MatViews::ServiceResponse.new(status: status, payload: payload, meta: meta)
+      def ok(status)
+        MatViews::ServiceResponse.new(status:, request:, response:)
       end
 
       ##
-      # Build an error response with a message.
+      # Raise a StandardError with the given message.
       #
       # @api private
       # @param msg [String]
-      # @return [MatViews::ServiceResponse]
+      # @return [void]
+      # @raise [StandardError] with `msg`
       #
-      def err(msg)
-        MatViews::ServiceResponse.new(status: :error, error: msg)
+      def raise_err(msg)
+        raise StandardError, msg
       end
 
       ##
       # Build an error response from an exception, including backtrace.
       #
       # @api private
-      # @param exception [Exception]
-      # @param payload [Hash]
-      # @param meta [Hash]
+      # @param error [Exception]
       # @return [MatViews::ServiceResponse]
       #
-      def error_response(exception, payload: {}, meta: {})
-        MatViews::ServiceResponse.new(
-          status: :error,
-          error: "#{exception.class}: #{exception.message}",
-          payload: payload,
-          meta: { backtrace: Array(exception.backtrace), **meta }
-        )
+      def error_response(error)
+        MatViews::ServiceResponse.new(status: :error, error:, request:, response:)
       end
 
       # ────────────────────────────────────────────────────────────────
@@ -278,9 +359,10 @@ module MatViews
       #
       def pg_idle?
         rc = conn.raw_connection
-        status = rc.respond_to?(:transaction_status) ? rc.transaction_status : nil
+        return true unless rc.respond_to?(:transaction_status)
+
         # Only use CONCURRENTLY outside any tx/savepoint.
-        status.nil? || status == PG::PQTRANS_IDLE
+        rc.transaction_status == PG::PQTRANS_IDLE
       rescue StandardError
         false
       end
@@ -302,6 +384,71 @@ module MatViews
       # @return [Boolean]
       def valid_name?
         /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
+      end
+
+      ##
+      # Check for any UNIQUE index on the materialized view, required by CONCURRENTLY.
+      #
+      # @api private
+      # @return [Boolean]
+      #
+      def unique_index_exists?
+        conn.select_value(<<~SQL).to_i.positive?
+          SELECT COUNT(*)
+          FROM pg_index i
+          JOIN pg_class c ON c.oid = i.indrelid
+          JOIN pg_namespace n ON n.oid = c.relnamespace
+          WHERE n.nspname = #{conn.quote(schema)}
+            AND c.relname = #{conn.quote(rel)}
+            AND i.indisunique = TRUE
+        SQL
+      end
+
+      # ────────────────────────────────────────────────────────────────
+      # rows counting
+      # ────────────────────────────────────────────────────────────────
+
+      ##
+      # Compute row count based on the configured strategy.
+      #
+      # @api private
+      # @return [Integer, nil]
+      #
+      def fetch_rows_count
+        case row_count_strategy
+        when :estimated then estimated_rows_count
+        when :exact     then exact_rows_count
+        else
+          -1
+        end
+      end
+
+      ##
+      # Fast, approximate row count via `pg_class.reltuples`.
+      #
+      # @api private
+      # @return [Integer]
+      #
+      def estimated_rows_count
+        conn.select_value(<<~SQL).to_i
+          SELECT COALESCE(c.reltuples::bigint, 0)
+          FROM pg_class c
+          JOIN pg_namespace n ON n.oid = c.relnamespace
+          WHERE c.relkind IN ('m','r','p')
+            AND n.nspname = #{conn.quote(schema)}
+            AND c.relname = #{conn.quote(rel)}
+          LIMIT 1
+        SQL
+      end
+
+      ##
+      # Accurate row count using `COUNT(*)` on the materialized view.
+      #
+      # @api private
+      # @return [Integer]
+      #
+      def exact_rows_count
+        conn.select_value("SELECT COUNT(*) FROM #{qualified_rel}").to_i
       end
     end
   end

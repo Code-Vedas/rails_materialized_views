@@ -72,7 +72,7 @@ module MatViewsDemo
     private
 
     # Count rows from baseline SQL (definition.sql wrapped in COUNT(*)).
-    # 
+    #
     # @private
     # @return [Integer] row count from the baseline query
     #
@@ -84,7 +84,7 @@ module MatViewsDemo
     end
 
     # Count rows directly from the materialized view.
-    # 
+    #
     # @private
     # @return [Integer] row count from the materialized view
     #
@@ -96,7 +96,7 @@ module MatViewsDemo
     end
 
     # Measure execution time in milliseconds for a block.
-    # 
+    #
     # @private
     # @yield [Block] the code block to measure
     # @return [Integer] elapsed time in milliseconds
@@ -110,7 +110,7 @@ module MatViewsDemo
     end
 
     # Compute average of an array of integers, rounded.
-    # 
+    #
     # @private
     # @param arr [Array<Integer>] array of integers to average
     # @return [Integer] rounded average value
@@ -124,7 +124,7 @@ module MatViewsDemo
     end
 
     # Compute speedup ratio baseline/mv.
-    # 
+    #
     # @private
     # @param baseline_avg [Integer] average time of the baseline query in ms
     # @param mv_avg [Integer] average time of the materialized view query in ms

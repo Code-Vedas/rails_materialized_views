@@ -11,23 +11,23 @@ module MatViews
     # Service that safely drops a PostgreSQL materialized view.
     #
     # Options:
-    # - `if_exists:` (Boolean, default: true) → idempotent drop (skip if absent)
-    # - `cascade:`   (Boolean, default: false) → use CASCADE instead of RESTRICT
+    # - `cascade:` (Boolean, default: false) → drop with CASCADE instead of RESTRICT
+    # - `row_count_strategy:` (Symbol, default: :estimated) → one of `:estimated`, `:exact`, or `:none or nil` to control row count reporting
     #
-    # Returns a {MatViews::ServiceResponse} from {MatViews::Services::BaseService}:
-    # - `ok(:deleted, ...)` when dropped successfully
-    # - `ok(:skipped, ...)` when absent and `if_exists: true`
-    # - `err("...")` or `error_response(...)` on validation or execution error
+    # Returns a {MatViews::ServiceResponse}
     #
     # @see MatViews::DeleteViewJob
     # @see MatViews::MatViewRun
     #
     # @example Drop a view if it exists
-    #   svc = MatViews::Services::DeleteView.new(defn)
+    #   svc = MatViews::Services::DeleteView.new(defn, **options)
     #   svc.run
     #
     # @example Force drop with CASCADE
     #   MatViews::Services::DeleteView.new(defn, cascade: true).run
+    #
+    # @example via job, this is the typical usage and will create a run record in the DB
+    #   MatViews::Jobs::Adapter.enqueue(MatViews::Services::DeleteViewJob, definition.id, **options)
     #
     class DeleteView < BaseService
       ##
@@ -37,97 +37,54 @@ module MatViews
       attr_reader :cascade
 
       ##
-      # Whether to allow idempotent skipping if view is absent (default: true).
-      #
-      # @return [Boolean]
-      attr_reader :if_exists
-
-      ##
       # @param definition [MatViews::MatViewDefinition]
       # @param cascade [Boolean] drop with CASCADE instead of RESTRICT
-      # @param if_exists [Boolean] skip if view not present
-      def initialize(definition, cascade: false, if_exists: true)
-        super(definition)
-        @cascade   = cascade ? true : false
-        @if_exists = if_exists ? true : false
+      # @param row_count_strategy [Symbol, nil] one of `:estimated`, `:exact`, or `nil` (default: `:estimated`)
+      def initialize(definition, cascade: false, row_count_strategy: :estimated)
+        super(definition, row_count_strategy: row_count_strategy)
+        @cascade = cascade ? true : false
       end
+
+      private
 
       ##
       # Run the drop operation.
       #
       # Steps:
-      # - Validate name format and (optionally) existence.
-      # - Return `:skipped` if absent and `if_exists` true.
+      # - Validate name format
+      # - return :skipped if absent
       # - Execute DROP MATERIALIZED VIEW.
       #
+      # @api private
+      #
       # @return [MatViews::ServiceResponse]
-      #
-      def run
-        prep = prepare!
-        return prep if prep
+      #   - `status: :deleted or :skipped` on success, with `response` containing:
+      #     - `view` - the qualified view name
+      #     - `row_count_before` - if requested and available
+      #     - `row_count_after` - if requested and available
+      #   - `status: :error` with `error` on failure, with `error` containing:
+      #     - serlialized exception class, message, and backtrace in a hash
+      def _run
+        self.response = { view: "#{schema}.#{rel}", sql: [drop_sql] }
 
-        res = skip_early_if_absent
-        return res if res
+        return ok(:skipped) unless view_exists?
 
-        perform_drop
-      end
-
-      private
-
-      # ────────────────────────────────────────────────────────────────
-      # internal
-      # ────────────────────────────────────────────────────────────────
-
-      ##
-      # Execute the DROP MATERIALIZED VIEW statement.
-      #
-      # @api private
-      # @return [MatViews::ServiceResponse]
-      #
-      def perform_drop
-        conn.execute(sql)
-
-        ok(:deleted,
-           payload: { view: "#{schema}.#{rel}" },
-           meta: { sql: sql, cascade: cascade, if_exists: if_exists })
-      rescue ActiveRecord::StatementInvalid => e
-        msg = "#{e.message} — dependencies exist. Use cascade: true to force drop."
-        error_response(
-          e.class.new(msg),
-          meta: { sql: sql, cascade: cascade, if_exists: if_exists },
-          payload: { view: "#{schema}.#{rel}" }
-        )
-      rescue StandardError => e
-        error_response(
-          e,
-          meta: { sql: sql, cascade: cascade, if_exists: if_exists },
-          payload: { view: "#{schema}.#{rel}" }
-        )
+        response[:row_count_before] = fetch_rows_count
+        conn.execute(drop_sql)
+        response[:row_count_after] = -1 # view is gone
+        ok(:deleted)
       end
 
       ##
-      # Skip early if view is absent and `if_exists` is true.
+      # Assign the request parameters.
+      # Called by {#run} before {#prepare}.
+      # Sets `concurrent: true` in the request hash.
       #
       # @api private
-      # @return [MatViews::ServiceResponse, nil]
+      # @return [void]
       #
-      def skip_early_if_absent
-        return nil unless if_exists
-        return nil if view_exists?
-
-        ok(:skipped,
-           payload: { view: "#{schema}.#{rel}" },
-           meta: { sql: nil, cascade: cascade, if_exists: if_exists })
-      end
-
-      ##
-      # Build the SQL DROP statement.
-      #
-      # @api private
-      # @return [String]
-      #
-      def sql
-        @sql ||= build_sql
+      def assign_request
+        self.request = { row_count_strategy: row_count_strategy, cascade: cascade }
       end
 
       ##
@@ -136,22 +93,19 @@ module MatViews
       # @api private
       # @return [MatViews::ServiceResponse, nil]
       #
-      def prepare!
-        return err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
-        return nil if if_exists # skip hard existence check
-
-        return err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
+      def prepare
+        raise_err "Invalid view name format: #{definition.name.inspect}" unless valid_name?
 
         nil
       end
 
       ##
-      # Construct DROP SQL with cascade/restrict options.
+      # Build the SQL DROP statement.
       #
       # @api private
       # @return [String]
       #
-      def build_sql
+      def drop_sql
         drop_mode = cascade ? ' CASCADE' : ' RESTRICT'
         %(DROP MATERIALIZED VIEW IF EXISTS #{qualified_rel}#{drop_mode})
       end

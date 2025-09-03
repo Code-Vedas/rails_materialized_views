@@ -55,15 +55,19 @@ RSpec.describe MatViews::Services::SwapRefresh do
     it 'fails when name is invalid format' do
       definition.name = 'public.mv.bad'
       res = execute_service
-      expect(res.error?).to be(true)
-      expect(res.error).to match(/Invalid view name format/i)
+
+      expect(res).not_to be_success
+      expect(res.error).not_to be_nil
+      expect(res.error[:message]).to match(/Invalid view name format/i)
       expect(mv_exists?(relname)).to be(false)
     end
 
     it 'fails when the view does not exist' do
       res = execute_service
-      expect(res.error?).to be(true)
-      expect(res.error).to match(/does not exist/i)
+
+      expect(res).not_to be_success
+      expect(res.error).not_to be_nil
+      expect(res.error[:message]).to match(/does not exist/i)
       expect(mv_exists?(relname)).to be(false)
     end
   end
@@ -79,48 +83,13 @@ RSpec.describe MatViews::Services::SwapRefresh do
 
       expect(res).to be_success
       expect(res.status).to eq(:updated)
-      expect(res.payload[:view]).to eq("public.#{relname}")
-      expect(res.payload[:row_count]).to be_a(Integer) # estimated by default
-      expect(res.meta[:swap]).to be(true)
-      expect(res.meta[:steps]).to be_an(Array)
-      expect(res.meta[:steps].count).to eq(4)
-      # should include a CREATE MATERIALIZED VIEW ... WITH DATA and two RENAMEs
-      expect(res.meta[:steps].join(' ')).to include('CREATE MATERIALIZED VIEW')
-      expect(res.meta[:steps].join(' ')).to include('ALTER MATERIALIZED VIEW')
-      expect(res.meta[:steps].join(' ')).to include('WITH DATA')
-    end
-
-    describe 'exact row count' do
-      let(:row_count_strategy) { :exact }
-
-      it 'returns an exact COUNT(*)' do
-        res = execute_service
-        expect(res).to be_success
-        expect(res.payload[:row_count]).to be_a(Integer)
-        expect(res.meta[:row_count_strategy]).to eq(:exact)
-      end
-    end
-
-    describe 'unknown row_count_strategy symbol' do
-      let(:row_count_strategy) { :bogus }
-
-      it 'still succeeds and includes row_count: nil' do
-        res = execute_service
-        expect(res).to be_success
-        expect(res.payload).to include(row_count: nil)
-        expect(res.meta[:row_count_strategy]).to eq(:bogus)
-      end
-    end
-
-    describe 'no row count requested (nil)' do
-      let(:row_count_strategy) { nil }
-
-      it 'omits row_count' do
-        res = execute_service
-        expect(res).to be_success
-        expect(res.payload).not_to have_key(:row_count)
-        expect(res.meta[:row_count_strategy]).to be_nil
-      end
+      expect(res.request[:swap]).to be(true)
+      expect(res.request[:row_count_strategy]).to eq(:estimated)
+      expect(res.response[:sql].count).to eq(4)
+      expect(res.response[:view]).to eq("public.#{relname}")
+      expect(res.response[:sql].join(' ')).to include('CREATE MATERIALIZED VIEW')
+      expect(res.response[:sql].join(' ')).to include('ALTER MATERIALIZED VIEW')
+      expect(res.response[:sql].join(' ')).to include('WITH DATA')
     end
   end
 
@@ -149,40 +118,6 @@ RSpec.describe MatViews::Services::SwapRefresh do
     end
   end
 
-  describe 'schema_search_path resolution' do
-    before do
-      create_mv!(relname, schema: 'public')
-    end
-
-    it 'falls back to public when search_path is empty' do
-      allow(conn).to receive(:schema_search_path).and_return('')
-      res = execute_service
-      expect(res).to be_success
-      expect(res.payload[:view]).to eq("public.#{relname}")
-    end
-
-    it 'ignores non-existent schemas and falls back to public' do
-      allow(conn).to receive(:schema_search_path).and_return('other_schema')
-      res = execute_service
-      expect(res).to be_success
-      expect(res.payload[:view]).to eq("public.#{relname}")
-    end
-
-    it 'handles quoted tokens' do
-      allow(conn).to receive(:schema_search_path).and_return('"public"')
-      res = execute_service
-      expect(res).to be_success
-      expect(res.payload[:view]).to eq("public.#{relname}")
-    end
-
-    it 'handles $user token; uses public when user schema is absent' do
-      allow(conn).to receive(:schema_search_path).and_return('$user,public')
-      res = execute_service
-      expect(res).to be_success
-      expect(res.payload[:view]).to eq("public.#{relname}")
-    end
-  end
-
   describe 'unexpected DB error' do
     it 'wraps exception into error response with meta.steps and payload.view' do
       create_mv!(relname, schema: 'public')
@@ -198,11 +133,14 @@ RSpec.describe MatViews::Services::SwapRefresh do
       end
 
       res = execute_service
-      expect(res.error?).to be(true)
-      expect(res.error).to match(/StandardError: boom/)
-      expect(res.payload[:view]).to eq("public.#{relname}")
-      expect(res.meta[:steps]).to be_an(Array)
-      expect(res.meta[:swap]).to be(true)
+
+      expect(res).not_to be_success
+      expect(res.error).not_to be_nil
+      expect(res.error[:message]).to match(/boom/)
+      expect(res.error[:class]).to eq('StandardError')
+      expect(res.error[:backtrace]).to be_an(Array)
+      expect(res.response[:view]).to eq("public.#{relname}")
+      expect(res.request[:swap]).to be(true)
     end
   end
 end

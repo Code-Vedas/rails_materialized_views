@@ -27,6 +27,26 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
+  reek:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/mat_views
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.3
+          bundler-cache: true
+          working-directory: ${{ github.workspace }}/mat_views
+
+      - name: Check code smells with reek
+        run: bin/reek
 
   test:
     permissions:

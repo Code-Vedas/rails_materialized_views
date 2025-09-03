@@ -5,6 +5,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+require 'ext/exception'
 require 'mat_views/version'
 require 'mat_views/engine'
 require 'mat_views/configuration'
@@ -40,7 +41,7 @@ module MatViews
   class << self
     # Global configuration for MatViews
     # @return [MatViews::Configuration]
-    attr_accessor :configuration
+    attr_reader :configuration
 
     # Configure MatViews via block.
     #
@@ -50,7 +51,7 @@ module MatViews
     #     config.job_queue   = :materialized
     #   end
     def configure
-      self.configuration ||= Configuration.new
+      @configuration ||= Configuration.new
       yield(configuration)
     end
   end
