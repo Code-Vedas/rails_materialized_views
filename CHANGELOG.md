@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## [0.2.0](https://github.com/code-vedas/rails_materialized_views/tree/v0.2.0) (2025-08-22)
+
+[Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.1.2...v0.2.0)
+
+## 🚀 Features
+
+- feat: Add row count strategy to create and delete tasks @niteshpurohit (#168)
+
+## 🧰 Maintenance
+
+- refactor: Improve job and service architecture @niteshpurohit (#167)
+- chore: add workspace @niteshpurohit (#166)
+- chore(deps): Bump actions/upload-pages-artifact from 3 to 4 @[dependabot[bot]](https://github.com/apps/dependabot) (#99)
+
 ## [0.1.2](https://github.com/code-vedas/rails_materialized_views/tree/v0.1.1) (2025-08-22)
 
 [Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.1.0...v0.1.2)
