@@ -51,10 +51,10 @@ module MatViews
       end
 
       # Parse row count strategy from arg or ROW_COUNT_STRATEGY env.
-      # Defaults to :estimated if blank.
+      # Defaults to :none if blank.
       def parse_row_count_strategy(arg)
         str = (arg || ENV.fetch('ROW_COUNT_STRATEGY', nil)).to_s.strip
-        return :estimated if str.empty?
+        return :none if str.empty?
 
         str.to_sym
       end
@@ -127,12 +127,13 @@ module MatViews
       #
       # @param definition_id [Integer] MatViewDefinition ID
       # @param force [Boolean] whether to force creation
+      # @param row_count_strategy [Symbol] :estimated or :exact or :none
       # @return [void]
-      def enqueue_create(definition_id, force)
+      def enqueue_create(definition_id, force, row_count_strategy)
         MatViews::Jobs::Adapter.enqueue(
           MatViews::CreateViewJob,
           queue: MatViews.configuration.job_queue || :default,
-          args: [definition_id, force]
+          args: [definition_id, force, row_count_strategy]
         )
       end
 
@@ -167,15 +168,16 @@ module MatViews
       #
       # @param definition_id [Integer] MatViewDefinition ID
       # @param cascade [Boolean] whether to drop with CASCADE
+      # @param row_count_strategy [Symbol] :estimated or :exact or :none
       # @return [void]
       #
       # This method schedules a job to delete the materialized view, optionally with CASCADE.
       # It uses the configured job adapter to enqueue the job.
-      def enqueue_delete(definition_id, cascade)
+      def enqueue_delete(definition_id, cascade, row_count_strategy)
         MatViews::Jobs::Adapter.enqueue(
           MatViews::DeleteViewJob,
           queue: MatViews.configuration.job_queue || :default,
-          args: [definition_id, cascade]
+          args: [definition_id, cascade, row_count_strategy]
         )
       end
     end

@@ -16,7 +16,7 @@ module MatViews
     # UNIQUE index** on the materialized view (a PostgreSQL constraint).
     #
     # Options:
-    # - `row_count_strategy:` (Symbol, default: :estimated) → one of `:estimated`, `:exact`, or `:none or nil` to control row count reporting
+    # - `row_count_strategy:` (Symbol, default: :none) → one of `:estimated`, `:exact`, or `:none or nil` to control row count reporting
     #
     # Returns a {MatViews::ServiceResponse}
     #
