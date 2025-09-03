@@ -80,8 +80,8 @@ RSpec.describe MatViews::Services::DeleteView do
 
         expect(res).to be_success
         expect(res.request[:row_count_strategy]).to eq(:none)
-        expect(res.response[:row_count_before]).to eq(-1)
-        expect(res.response[:row_count_after]).to eq(-1) # view is gone
+        expect(res.response[:row_count_before]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT)
+        expect(res.response[:row_count_after]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # view is gone
         expect(mv_exists?(relname)).to be(false)
       end
     end
@@ -94,8 +94,8 @@ RSpec.describe MatViews::Services::DeleteView do
 
         expect(res).to be_success
         expect(res.request[:row_count_strategy]).to eq(:none)
-        expect(res.response[:row_count_before]).to eq(-1)
-        expect(res.response[:row_count_after]).to eq(-1) # view is gone
+        expect(res.response[:row_count_before]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT)
+        expect(res.response[:row_count_after]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # view is gone
         expect(mv_exists?(relname)).to be(false)
       end
     end
@@ -109,7 +109,7 @@ RSpec.describe MatViews::Services::DeleteView do
         expect(res).to be_success
         expect(res.request[:row_count_strategy]).to eq(:estimated)
         expect(res.response[:row_count_before]).to be >= 0
-        expect(res.response[:row_count_after]).to eq(-1) # view is gone
+        expect(res.response[:row_count_after]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # view is gone
         expect(mv_exists?(relname)).to be(false)
       end
     end
@@ -123,7 +123,7 @@ RSpec.describe MatViews::Services::DeleteView do
         expect(res).to be_success
         expect(res.request[:row_count_strategy]).to eq(:exact)
         expect(res.response[:row_count_before]).to be >= 0
-        expect(res.response[:row_count_after]).to eq(-1) # view is gone
+        expect(res.response[:row_count_after]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # view is gone
         expect(mv_exists?(relname)).to be(false)
       end
     end

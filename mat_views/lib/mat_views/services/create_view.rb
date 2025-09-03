@@ -82,7 +82,7 @@ module MatViews
         existed = handle_existing
         return existed if existed.is_a?(MatViews::ServiceResponse)
 
-        response[:row_count_before] = -1
+        response[:row_count_before] = UNKNOWN_ROW_COUNT
         conn.execute(sql)
         response[:row_count_after] = fetch_rows_count
 
@@ -166,7 +166,7 @@ module MatViews
           CREATE UNIQUE INDEX #{'CONCURRENTLY ' if concurrently}#{quote_table_name(idx_name)}
           ON #{qualified_rel} (#{cols.map { |col| quote_column_name(col) }.join(', ')})
         SQL
-        { created_indexes: [idx_name], row_count_before: -1, row_count_after: fetch_rows_count }
+        { created_indexes: [idx_name], row_count_before: UNKNOWN_ROW_COUNT, row_count_after: fetch_rows_count }
       end
     end
   end

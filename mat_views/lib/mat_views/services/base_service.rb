@@ -29,8 +29,16 @@ module MatViews
     #   end
     #
     class BaseService
+      # Constant indicating unknown row count
+      UNKNOWN_ROW_COUNT = -1
+
+      # Allowed row count strategies
       ALLOWED_ROW_STRATEGIES = %i[none estimated exact].freeze
+
+      # Default row count strategy
       DEFAULT_ROW_STRATEGY = :estimated
+
+      # Default strategy when nil or unrecognized value is given
       DEFAULT_NIL_STRATEGY = :none
 
       ##
@@ -419,7 +427,7 @@ module MatViews
         when :estimated then estimated_rows_count
         when :exact     then exact_rows_count
         else
-          -1
+          UNKNOWN_ROW_COUNT
         end
       end
 

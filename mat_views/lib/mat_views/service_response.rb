@@ -34,8 +34,13 @@ module MatViews
   class ServiceResponse
     attr_reader :status, :request, :error, :response
 
+    # acceptable status values
     ACCEPTABLE_STATES = %i[ok created updated skipped deleted error].freeze
-    OK_STATES         = %i[ok created updated skipped deleted].freeze
+
+    # statuses indicating success
+    OK_STATES = %i[ok created updated skipped deleted].freeze
+
+    # statuses indicating error
     ERROR_STATES = %i[error].freeze
 
     # @param status [Symbol] the outcome status

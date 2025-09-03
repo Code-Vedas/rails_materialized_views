@@ -71,7 +71,7 @@ module MatViews
 
         response[:row_count_before] = fetch_rows_count
         conn.execute(drop_sql)
-        response[:row_count_after] = -1 # view is gone
+        response[:row_count_after] = UNKNOWN_ROW_COUNT # view is gone
         ok(:deleted)
       end
 

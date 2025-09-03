@@ -80,9 +80,9 @@ module MatViews
       # @raise [StandardError] on failure
       #
       def prepare
-        raise raise_err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
-        raise raise_err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
-        raise raise_err("Materialized view #{schema}.#{rel} must have a unique index for concurrent refresh") unless unique_index_exists?
+        raise_err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
+        raise_err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
+        raise_err("Materialized view #{schema}.#{rel} must have a unique index for concurrent refresh") unless unique_index_exists?
 
         nil
       end

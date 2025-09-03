@@ -79,8 +79,8 @@ RSpec.describe MatViews::Services::RegularRefresh do
         res = execute_service
         expect(res).to be_success
         expect(res.request[:row_count_strategy]).to eq(:none)
-        expect(res.response[:row_count_before]).to eq(-1) # unknown before creation
-        expect(res.response[:row_count_after]).to eq(-1) # skiped because :none
+        expect(res.response[:row_count_before]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # unknown before creation
+        expect(res.response[:row_count_after]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # skiped because :none
         expect(mv_exists?(relname)).to be(true)
       end
     end
@@ -92,8 +92,8 @@ RSpec.describe MatViews::Services::RegularRefresh do
         res = execute_service
         expect(res).to be_success
         expect(res.request[:row_count_strategy]).to eq(:none)
-        expect(res.response[:row_count_before]).to eq(-1) # unknown before creation
-        expect(res.response[:row_count_after]).to eq(-1) # skiped because :none
+        expect(res.response[:row_count_before]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # unknown before creation
+        expect(res.response[:row_count_after]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # skiped because :none
         expect(mv_exists?(relname)).to be(true)
       end
     end
@@ -105,8 +105,8 @@ RSpec.describe MatViews::Services::RegularRefresh do
         res = execute_service
         expect(res).to be_success
         expect(res.request[:row_count_strategy]).to eq(:estimated)
-        expect(res.response[:row_count_before]).to eq(-1)
-        expect(res.response[:row_count_after]).to eq(-1)
+        expect(res.response[:row_count_before]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT)
+        expect(res.response[:row_count_after]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT)
         expect(mv_exists?(relname)).to be(true)
       end
     end
