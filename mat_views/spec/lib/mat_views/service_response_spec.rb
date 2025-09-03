@@ -44,7 +44,7 @@ RSpec.describe MatViews::ServiceResponse do
 
     it 'raise ArgumentError if error is not an Exception' do
       expect { described_class.new(status: :error, error: 'nope') }
-        .to raise_error(ArgumentError, /error must be Exception object/)
+        .to raise_error(ArgumentError, /error must be an Exception object/)
     end
   end
 

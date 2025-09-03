@@ -91,19 +91,36 @@ module MatViews
       # @api private
       # @return [Array<String>] SQL steps executed
       def swap_view
-        create_sql = %(CREATE MATERIALIZED VIEW #{q_tmp} AS #{definition.sql} WITH DATA)
-        conn.execute(create_sql)
+        conn.execute(create_temp_view_sql)
         steps = [
-          %(ALTER MATERIALIZED VIEW #{qualified_rel} RENAME TO #{conn.quote_column_name(old_rel)}),
-          %(ALTER MATERIALIZED VIEW #{q_tmp} RENAME TO #{conn.quote_column_name(rel)}),
-          %(DROP MATERIALIZED VIEW #{q_old}),
+          move_curent_to_old_sql,
+          move_temp_to_current_sql,
+          drop_old_view_sql,
           recreate_declared_unique_indexes_sql
         ].compact
         conn.transaction do
           steps.each { |step| conn.execute(step) }
         end
-        steps.unshift(create_sql)
+
+        # prepend the create step
+        steps.unshift(create_temp_view_sql)
         steps
+      end
+
+      def create_temp_view_sql
+        @create_temp_view_sql ||= %(CREATE MATERIALIZED VIEW #{q_tmp} AS #{definition.sql} WITH DATA)
+      end
+
+      def move_curent_to_old_sql
+        %(ALTER MATERIALIZED VIEW #{qualified_rel} RENAME TO #{conn.quote_column_name(old_rel)})
+      end
+
+      def move_temp_to_current_sql
+        %(ALTER MATERIALIZED VIEW #{q_tmp} RENAME TO #{conn.quote_column_name(rel)})
+      end
+
+      def drop_old_view_sql
+        %(DROP MATERIALIZED VIEW #{q_old})
       end
 
       ##

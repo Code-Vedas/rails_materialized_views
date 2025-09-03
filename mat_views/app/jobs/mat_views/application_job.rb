@@ -41,12 +41,11 @@ module MatViews
       start = monotime
       run = start_run(definition, operation)
       response = yield
+      finalize_run(run, response, elapsed_ms(start))
       response.to_h
     rescue StandardError => e
-      fail_run(run, e)
+      fail_run(run, e, elapsed_ms(start))
       raise e
-    ensure
-      finalize_run(run, response, elapsed_ms(start))
     end
 
     ##
@@ -79,13 +78,8 @@ module MatViews
       base_attrs = {
         finished_at: Time.current,
         duration_ms: duration_ms,
-        meta: { request: response&.request, response: response&.response }.compact
+        meta: { request: response.request, response: response.response }.compact
       }
-
-      if run.status == 'failed'
-        run.update!(base_attrs)
-        return
-      end
 
       if response.success?
         run.update!(base_attrs.merge(status: :success, error: nil))
@@ -101,11 +95,14 @@ module MatViews
     #
     # @param run [MatViews::MatViewRun]
     # @param exception [Exception]
+    # @param duration_ms [Integer]
     # @return [void]
     #
-    def fail_run(run, exception)
-      run.update!(
+    def fail_run(run, exception, duration_ms)
+      run&.update!(
         error: exception.mv_serialize_error,
+        finished_at: Time.current,
+        duration_ms: duration_ms,
         status: :failed
       )
     end

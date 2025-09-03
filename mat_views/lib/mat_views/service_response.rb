@@ -49,7 +49,7 @@ module MatViews
     # @param error [Exception, String, nil] error details if applicable
     def initialize(status:, request: {}, response: {}, error: nil)
       raise ArgumentError, 'status is required' unless ACCEPTABLE_STATES.include?(status&.to_sym)
-      raise ArgumentError, 'error must be Exception object' if error && !error.is_a?(Exception)
+      raise ArgumentError, 'error must be an Exception object' if error && !error.is_a?(Exception)
 
       @status = status.to_sym
       @request = request

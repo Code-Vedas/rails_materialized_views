@@ -34,6 +34,10 @@ detectors:
     enabled: true
     exclude:
       - MatViews::Services::BaseService
+  DuplicateMethodCall:
+    enabled: true
+    exclude:
+      - MatViews::ApplicationJob#record_run
   ManualDispatch:
     enabled: true
     exclude:
