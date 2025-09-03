@@ -123,7 +123,7 @@ MatViews::Jobs::Adapter.enqueue(
 ```bash
 # Create
 bundle exec rake mat_views:create_by_name\[VIEW_NAME,force,row_count_strategy,--yes]
-bundle exec rake mat_views:create_by_id\[ID,force,row_count_strategy,,--yes]
+bundle exec rake mat_views:create_by_id\[ID,force,row_count_strategy,--yes]
 bundle exec rake mat_views:create_all\[force,row_count_strategy,--yes]
 
 # Refresh
