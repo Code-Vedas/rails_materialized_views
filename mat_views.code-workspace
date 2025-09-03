@@ -1,6 +1,10 @@
 {
   "folders": [
     {
+      "name": "docs",
+      "path": "./docs"
+    },
+    {
       "name": "mat_views",
       "path": "./mat_views"
     },
@@ -50,10 +54,19 @@
         "typeHierarchy": true
       },
       "erbSupport": true,
-      "featureFlags": {},
+      "featureFlags": {
+        "all": true
+      },
       "sigOpacityLevel": "1",
-      "formatter": "auto"
+      "formatter": "auto",
+      "addonSettings": {
+        "Ruby LSP RSpec": {
+          "enabled": true,
+          "debug": true
+        }
+      }
     },
+
     "[ruby]": {
       "editor.formatOnSave": true,
       "editor.defaultFormatter": "Shopify.ruby-lsp",

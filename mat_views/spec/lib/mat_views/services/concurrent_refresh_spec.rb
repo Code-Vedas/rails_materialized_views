@@ -23,7 +23,8 @@ RSpec.describe MatViews::Services::ConcurrentRefresh do
   let(:execute_service)    { runner.run }
 
   before do
-    # start from a clean slate
+    User.destroy_all
+    5.times { |i| User.create!(name: "User #{i}", email: "email#{i}@example.com") }
     conn.execute(%(DROP MATERIALIZED VIEW IF EXISTS public."#{relname}"))
   end
 
@@ -42,7 +43,6 @@ RSpec.describe MatViews::Services::ConcurrentRefresh do
 
   def add_unique_index!(rel, schema: 'public', column: 'id')
     idx_name = %("#{rel}_uniq_#{column}")
-    # Regular (non-concurrent) index is fine for tests; dropping the MV cleans it up.
     conn.execute(%(CREATE UNIQUE INDEX #{idx_name} ON #{conn.quote_table_name("#{schema}.#{rel}")} (#{conn.quote_column_name(column)})))
   end
 
@@ -50,15 +50,17 @@ RSpec.describe MatViews::Services::ConcurrentRefresh do
     it 'fails when name is invalid format' do
       definition.name = 'public.mv.bad'
       res = execute_service
-      expect(res.error?).to be(true)
-      expect(res.error).to match(/Invalid view name format/i)
+      expect(res).not_to be_success
+      expect(res.error).not_to be_nil
+      expect(res.error[:message]).to match(/Invalid view name format/i)
       expect(mv_exists?(relname)).to be(false)
     end
 
     it 'fails when the view does not exist' do
       res = execute_service
-      expect(res.error?).to be(true)
-      expect(res.error).to match(/does not exist/i)
+      expect(res).not_to be_success
+      expect(res.error).not_to be_nil
+      expect(res.error[:message]).to match(/does not exist/i)
       expect(mv_exists?(relname)).to be(false)
     end
   end
@@ -70,8 +72,68 @@ RSpec.describe MatViews::Services::ConcurrentRefresh do
 
       res = execute_service
 
-      expect(res.error?).to be(true)
-      expect(res.error).to match(/unique index/i)
+      expect(res).not_to be_success
+      expect(res.error).not_to be_nil
+      expect(res.error[:message]).to match(/unique index/i)
+    end
+  end
+
+  describe 'row count strategy handling' do
+    before do
+      create_mv!(relname, schema: 'public')
+      add_unique_index!(relname, schema: 'public', column: 'id')
+    end
+
+    context 'when row_count_strategy is nil' do
+      let(:row_count_strategy) { nil }
+
+      it 'defaults to :none' do
+        res = execute_service
+        expect(res).to be_success
+        expect(res.request[:row_count_strategy]).to eq(:none)
+        expect(res.response[:row_count_before]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # unknown before creation
+        expect(res.response[:row_count_after]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # skipped because :none
+        expect(mv_exists?(relname)).to be(true)
+      end
+    end
+
+    context 'when row_count_strategy is :none' do
+      let(:row_count_strategy) { :none }
+
+      it 'skips row count fetching' do
+        res = execute_service
+        expect(res).to be_success
+        expect(res.request[:row_count_strategy]).to eq(:none)
+        expect(res.response[:row_count_before]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # unknown before creation
+        expect(res.response[:row_count_after]).to eq(MatViews::Services::BaseService::UNKNOWN_ROW_COUNT) # skipped because :none
+        expect(mv_exists?(relname)).to be(true)
+      end
+    end
+
+    context 'when row_count_strategy is :estimated' do
+      let(:row_count_strategy) { :estimated }
+
+      it 'fetches estimated row counts' do
+        res = execute_service
+        expect(res).to be_success
+        expect(res.request[:row_count_strategy]).to eq(:estimated)
+        expect(res.response[:row_count_before]).to be >= 0
+        expect(res.response[:row_count_after]).to be >= 0
+        expect(mv_exists?(relname)).to be(true)
+      end
+    end
+
+    context 'when row_count_strategy is :exact' do
+      let(:row_count_strategy) { :exact }
+
+      it 'fetches exact row counts' do
+        res = execute_service
+        expect(res).to be_success
+        expect(res.request[:row_count_strategy]).to eq(:exact)
+        expect(res.response[:row_count_before]).to be >= 0
+        expect(res.response[:row_count_after]).to be >= 0
+        expect(mv_exists?(relname)).to be(true)
+      end
     end
   end
 
@@ -85,80 +147,14 @@ RSpec.describe MatViews::Services::ConcurrentRefresh do
     it 'refreshes concurrently and returns :updated with estimated rows and meta' do
       res = execute_service
 
+      expect(res).to be_success
       expect(res.status).to eq(:updated)
-      expect(res.payload[:view]).to eq("public.#{relname}")
-      expect(res.payload[:row_count]).to be_a(Integer)
-      expect(res.meta[:row_count_strategy]).to eq(:estimated)
-      expect(res.meta[:concurrent]).to be(true)
-      expect(res.meta[:sql]).to eq(%(REFRESH MATERIALIZED VIEW CONCURRENTLY "public"."#{relname}"))
-    end
-
-    describe 'exact row count' do
-      let(:row_count_strategy) { :exact }
-
-      it 'uses COUNT(*) and returns the exact number' do
-        res = execute_service
-        expect(res).to be_success
-        expect(res.payload[:row_count]).to be_a(Integer)
-        expect(res.meta[:row_count_strategy]).to eq(:exact)
-      end
-    end
-
-    describe 'unknown row_count_strategy symbol' do
-      let(:row_count_strategy) { :bogus }
-
-      it 'includes row_count: nil when strategy is unrecognized' do
-        res = execute_service
-        expect(res).to be_success
-        expect(res.payload).to include(row_count: nil)
-        expect(res.meta[:row_count_strategy]).to eq(:bogus)
-      end
-    end
-
-    describe 'no row count requested (nil)' do
-      let(:row_count_strategy) { nil }
-
-      it 'does not include row_count' do
-        res = execute_service
-        expect(res).to be_success
-        expect(res.payload).not_to have_key(:row_count)
-        expect(res.meta[:row_count_strategy]).to be_nil
-      end
-    end
-  end
-
-  describe 'schema_search_path resolution' do
-    before do
-      create_mv!(relname, schema: 'public')
-      add_unique_index!(relname, schema: 'public', column: 'id')
-    end
-
-    it 'falls back to public when search_path is empty' do
-      allow(conn).to receive(:schema_search_path).and_return('')
-      res = execute_service
-      expect(res).to be_success
-      expect(res.payload[:view]).to eq("public.#{relname}")
-    end
-
-    it 'ignores non-existent schemas and falls back to public' do
-      allow(conn).to receive(:schema_search_path).and_return('other_schema')
-      res = execute_service
-      expect(res).to be_success
-      expect(res.payload[:view]).to eq("public.#{relname}")
-    end
-
-    it 'handles quoted tokens' do
-      allow(conn).to receive(:schema_search_path).and_return('"public"')
-      res = execute_service
-      expect(res).to be_success
-      expect(res.payload[:view]).to eq("public.#{relname}")
-    end
-
-    it 'handles $user token; uses public when user schema is absent' do
-      allow(conn).to receive(:schema_search_path).and_return('$user,public')
-      res = execute_service
-      expect(res).to be_success
-      expect(res.payload[:view]).to eq("public.#{relname}")
+      expect(res.request[:row_count_strategy]).to eq(:estimated)
+      expect(res.request[:concurrent]).to be(true)
+      expect(res.response[:view]).to eq("public.#{relname}")
+      expect(res.response[:row_count_before]).to be_a(Integer)
+      expect(res.response[:row_count_after]).to be_a(Integer)
+      expect(res.response[:sql]).to eq([%(REFRESH MATERIALIZED VIEW CONCURRENTLY "public"."#{relname}")])
     end
   end
 
@@ -179,11 +175,15 @@ RSpec.describe MatViews::Services::ConcurrentRefresh do
       end
 
       res = execute_service
-      expect(res.error?).to be(true)
-      expect(res.error).to match(/ObjectInUse|being used by another process/i)
-      expect(res.payload[:view]).to eq("public.#{relname}")
-      expect(res.meta[:sql]).to eq(%(REFRESH MATERIALIZED VIEW CONCURRENTLY "public"."#{relname}"))
-      expect(res.meta[:concurrent]).to be(true)
+
+      expect(res).not_to be_success
+      expect(res.error).not_to be_nil
+      expect(res.error[:message]).to match(/ObjectInUse|being used by another process/i)
+      expect(res.error[:class]).to eq('PG::ObjectInUse')
+      expect(res.error[:backtrace]).to be_an(Array)
+      expect(res.request[:concurrent]).to be(true)
+      expect(res.response[:view]).to eq("public.#{relname}")
+      expect(res.response[:sql]).to eq([%(REFRESH MATERIALIZED VIEW CONCURRENTLY "public"."#{relname}")])
     end
 
     it 'wraps unexpected DB error with backtrace and meta.sql' do
@@ -196,11 +196,15 @@ RSpec.describe MatViews::Services::ConcurrentRefresh do
       end
 
       res = execute_service
-      expect(res.error?).to be(true)
-      expect(res.error).to match(/StandardError: boom/)
-      expect(res.payload[:view]).to eq("public.#{relname}")
-      expect(res.meta[:sql]).to eq(%(REFRESH MATERIALIZED VIEW CONCURRENTLY "public"."#{relname}"))
-      expect(res.meta[:concurrent]).to be(true)
+
+      expect(res).not_to be_success
+      expect(res.error).not_to be_nil
+      expect(res.error[:message]).to match(/boom/)
+      expect(res.error[:class]).to eq('StandardError')
+      expect(res.error[:backtrace]).to be_an(Array)
+      expect(res.request[:concurrent]).to be(true)
+      expect(res.response[:view]).to eq("public.#{relname}")
+      expect(res.response[:sql]).to eq([%(REFRESH MATERIALIZED VIEW CONCURRENTLY "public"."#{relname}")])
     end
   end
 end

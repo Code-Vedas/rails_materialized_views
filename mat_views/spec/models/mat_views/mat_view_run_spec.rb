@@ -85,15 +85,27 @@ RSpec.describe MatViews::MatViewRun do
     end
   end
 
-  describe 'row count' do
+  describe '#row_count_before' do
     it 'allows setting and getting row count' do
-      run = described_class.create!(mat_view_definition: definition, meta: { row_count: 100 })
-      expect(run.row_count).to eq(100)
+      run = described_class.create!(mat_view_definition: definition, meta: { response: { row_count_before: 100 } })
+      expect(run.row_count_before).to eq(100)
     end
 
     it 'returns nil if row count is not set' do
       run = described_class.create!(mat_view_definition: definition)
-      expect(run.row_count).to be_nil
+      expect(run.row_count_before).to be_nil
+    end
+  end
+
+  describe '#row_count_after' do
+    it 'allows setting and getting row count' do
+      run = described_class.create!(mat_view_definition: definition, meta: { response: { row_count_after: 200 } })
+      expect(run.row_count_after).to eq(200)
+    end
+
+    it 'returns nil if row count is not set' do
+      run = described_class.create!(mat_view_definition: definition)
+      expect(run.row_count_after).to be_nil
     end
   end
 end

@@ -21,77 +21,68 @@ module MatViews
     # 2. In a transaction: rename original → old, tmp → original, drop old.
     # 3. Recreate declared unique indexes (if any).
     #
-    # Supports optional row count strategies:
-    # - `:estimated` → approximate, using `pg_class.reltuples`
-    # - `:exact` → accurate, using `COUNT(*)`
-    # - `nil` → skip row count
+    # Options:
+    # - `row_count_strategy:` (Symbol, default: :estimated) → one of `:estimated`, `:exact`, or `:none or nil` to control row count reporting
     #
-    # @return [MatViews::ServiceResponse]
+    # Returns a {MatViews::ServiceResponse}
     #
-    # @example
-    #   svc = MatViews::Services::SwapRefresh.new(defn, row_count_strategy: :exact)
-    #   svc.run
+    # @see MatViews::Services::ConcurrentRefresh
+    # @see MatViews::Services::RegularRefresh
+    #
+    # @example Direct usage
+    #   svc = MatViews::Services::SwapRefresh.new(definition, **options)
+    #   response = svc.run
+    #   response.success? # => true/false
+    #
+    # @example via job, this is the typical usage and will create a run record in the DB
+    #   When definition.refresh_strategy == "concurrent"
+    #   MatViews::Jobs::Adapter.enqueue(MatViews::Services::SwapRefresh, definition.id, **options)
     #
     class SwapRefresh < BaseService
-      ##
-      # Row count strategy (`:estimated`, `:exact`, `nil`).
-      #
-      # @return [Symbol, nil]
-      attr_reader :row_count_strategy
-
-      ##
-      # @param definition [MatViews::MatViewDefinition]
-      # @param row_count_strategy [Symbol, nil]
-      def initialize(definition, row_count_strategy: :estimated)
-        super(definition)
-        @row_count_strategy = row_count_strategy
-      end
+      private
 
       ##
       # Execute the swap refresh.
       #
       # @return [MatViews::ServiceResponse]
-      def run
-        prep = prepare!
-        return prep if prep
+      #   - `status: :updated` on success, with `response` containing:
+      #     - `view` - the qualified view name
+      #     - `row_count_before` - if requested and available
+      #     - `row_count_after` - if requested and available
+      #   - `status: :error` with `error` on failure, with `error` containing:
+      #     - serlialized exception class, message, and backtrace in a hash
+      #
+      def _run
+        self.response = { view: "#{schema}.#{rel}" }
 
-        create_sql = %(CREATE MATERIALIZED VIEW #{q_tmp} AS #{definition.sql} WITH DATA)
-        steps = [create_sql]
-        conn.execute(create_sql)
+        response[:row_count_before] = fetch_rows_count
+        response[:sql] = swap_view
+        response[:row_count_after] = fetch_rows_count
 
-        steps.concat(swap_index)
-
-        payload = { view: "#{schema}.#{rel}" }
-        payload[:row_count] = fetch_rows_count if row_count_strategy.present?
-
-        ok(:updated, payload: payload, meta: { steps: steps, row_count_strategy: row_count_strategy, swap: true })
-      rescue StandardError => e
-        error_response(e,
-                       meta: {
-                         steps: steps,
-                         backtrace: Array(e.backtrace),
-                         row_count_strategy: row_count_strategy,
-                         swap: true
-                       },
-                       payload: { view: "#{schema}.#{rel}" })
+        ok(:updated)
       end
-
-      private
-
-      # ────────────────────────────────────────────────────────────────
-      # internal
-      # ────────────────────────────────────────────────────────────────
 
       ##
       # Ensure name validity and existence of original view.
       #
       # @api private
       # @return [MatViews::ServiceResponse, nil]
-      def prepare!
-        return err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
-        return err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
+      def prepare
+        raise_err "Invalid view name format: #{definition.name.inspect}" unless valid_name?
+        raise_err "Materialized view #{schema}.#{rel} does not exist" unless view_exists?
 
         nil
+      end
+
+      ##
+      # Assign the request parameters.
+      # Called by {#run} before {#prepare}.
+      #
+      # @api private
+      # @return [void]
+      #
+      def assign_request
+        self.request = { row_count_strategy: row_count_strategy, swap: true }
       end
 
       ##
@@ -99,24 +90,37 @@ module MatViews
       #
       # @api private
       # @return [Array<String>] SQL steps executed
-      def swap_index
-        steps = []
+      def swap_view
+        conn.execute(create_temp_view_sql)
+        steps = [
+          move_current_to_old_sql,
+          move_temp_to_current_sql,
+          drop_old_view_sql,
+          recreate_declared_unique_indexes_sql
+        ].compact
         conn.transaction do
-          rename_orig_sql = %(ALTER MATERIALIZED VIEW #{qualified_rel} RENAME TO #{conn.quote_column_name(old_rel)})
-          steps << rename_orig_sql
-          conn.execute(rename_orig_sql)
-
-          rename_tmp_sql = %(ALTER MATERIALIZED VIEW #{q_tmp} RENAME TO #{conn.quote_column_name(rel)})
-          steps << rename_tmp_sql
-          conn.execute(rename_tmp_sql)
-
-          drop_old_sql = %(DROP MATERIALIZED VIEW #{q_old})
-          steps << drop_old_sql
-          conn.execute(drop_old_sql)
-
-          recreate_declared_unique_indexes!(schema:, rel:, steps:)
+          steps.each { |step| conn.execute(step) }
         end
+
+        # prepend the create step
+        steps.unshift(create_temp_view_sql)
         steps
+      end
+
+      def create_temp_view_sql
+        @create_temp_view_sql ||= %(CREATE MATERIALIZED VIEW #{q_tmp} AS #{definition.sql} WITH DATA)
+      end
+
+      def move_current_to_old_sql
+        %(ALTER MATERIALIZED VIEW #{qualified_rel} RENAME TO #{conn.quote_column_name(old_rel)})
+      end
+
+      def move_temp_to_current_sql
+        %(ALTER MATERIALIZED VIEW #{q_tmp} RENAME TO #{conn.quote_column_name(rel)})
+      end
+
+      def drop_old_view_sql
+        %(DROP MATERIALIZED VIEW #{q_old})
       end
 
       ##
@@ -159,62 +163,16 @@ module MatViews
       # Recreate declared unique indexes on the swapped-in view.
       #
       # @api private
-      # @param schema [String]
-      # @param rel [String]
-      # @param steps [Array<String>] collected SQL
-      def recreate_declared_unique_indexes!(schema:, rel:, steps:)
+      # @return [String] SQL statements to execute
+      def recreate_declared_unique_indexes_sql
         cols = Array(definition.unique_index_columns).map(&:to_s).reject(&:empty?)
-        return if cols.empty?
+        return nil if cols.empty?
 
-        quoted_cols = cols.map { |c| conn.quote_column_name(c) }.join(', ')
+        quoted_cols = cols.map { |col| conn.quote_column_name(col) }.join(', ')
         idx_name    = conn.quote_column_name("#{rel}_uniq_#{cols.join('_')}")
         q_rel       = conn.quote_table_name("#{schema}.#{rel}")
 
-        sql = %(CREATE UNIQUE INDEX #{idx_name} ON #{q_rel} (#{quoted_cols}))
-        steps << sql
-        conn.execute(sql)
-      end
-
-      # ────────────────────────────────────────────────────────────────
-      # rows counting
-      # ────────────────────────────────────────────────────────────────
-
-      ##
-      # Fetch the row count based on the configured strategy.
-      #
-      # @api private
-      # @return [Integer, nil]
-      def fetch_rows_count
-        case row_count_strategy
-        when :estimated then estimated_rows_count
-        when :exact     then exact_rows_count
-        end
-      end
-
-      ##
-      # Approximate row count via `pg_class.reltuples`.
-      #
-      # @api private
-      # @return [Integer]
-      def estimated_rows_count
-        conn.select_value(<<~SQL).to_i
-          SELECT COALESCE(c.reltuples::bigint, 0)
-          FROM pg_class c
-          JOIN pg_namespace n ON n.oid = c.relnamespace
-          WHERE c.relkind IN ('m','r','p')
-            AND n.nspname = #{conn.quote(schema)}
-            AND c.relname = #{conn.quote(rel)}
-          LIMIT 1
-        SQL
-      end
-
-      ##
-      # Accurate row count via `COUNT(*)`.
-      #
-      # @api private
-      # @return [Integer]
-      def exact_rows_count
-        conn.select_value("SELECT COUNT(*) FROM #{qualified_rel}").to_i
+        %(CREATE UNIQUE INDEX #{idx_name} ON #{q_rel} (#{quoted_cols}))
       end
     end
   end

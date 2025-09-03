@@ -58,19 +58,22 @@ module MatViews
       # @raise [ArgumentError] if the configured adapter is not recognized.
       #
       def self.enqueue(job_class, queue:, args: [])
-        case MatViews.configuration.job_adapter
+        queue_str = queue.to_s
+        job_adapter = MatViews.configuration.job_adapter
+
+        case job_adapter
         when :active_job
-          job_class.set(queue: queue.to_s).perform_later(*args)
+          job_class.set(queue: queue_str).perform_later(*args)
         when :sidekiq
           Sidekiq::Client.push(
             'class' => job_class.name,
-            'queue' => queue.to_s,
+            'queue' => queue_str,
             'args' => args
           )
         when :resque
-          Resque.enqueue_to(queue.to_s, job_class, *args)
+          Resque.enqueue_to(queue_str, job_class, *args)
         else
-          raise ArgumentError, "Unknown job adapter: #{MatViews.configuration.job_adapter.inspect}"
+          raise ArgumentError, "Unknown job adapter: #{job_adapter.inspect}"
         end
       end
     end

@@ -14,7 +14,7 @@
 
 - ci: Integrate Qlty coverage reporting @niteshpurohit (#93)
 
-## [0.1.1]() Skiped
+## [0.1.1](https://github.com/code-vedas/rails_materialized_views/compare/v0.1.0...v0.1.1) Skiped
 
 Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 

@@ -54,8 +54,8 @@ ActiveRecord::Schema[8.0].define(version: 20_250_807_153_908) do
     t.datetime 'started_at', comment: 'Timestamp when the operation started'
     t.datetime 'finished_at', comment: 'Timestamp when the operation finished'
     t.integer 'duration_ms', comment: 'Duration of the operation in milliseconds'
-    t.text 'error', comment: 'Error message if the operation failed'
-    t.jsonb 'meta', default: {}, null: false, comment: 'Additional metadata about the run, such as job ID row count or parameters'
+    t.jsonb 'error', comment: 'Error details if the operation failed. :message, :class, :backtrace'
+    t.jsonb 'meta', default: {}, null: false, comment: 'Additional metadata about the run, such as job ID, row count or parameters'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.index ['mat_view_definition_id'], name: 'index_mat_view_runs_on_mat_view_definition_id'

@@ -14,19 +14,26 @@ module MatViews
     # executes `CREATE MATERIALIZED VIEW ... WITH DATA`, and, when the
     # refresh strategy is `:concurrent`, ensures a supporting UNIQUE index.
     #
-    # Returns a {MatViews::ServiceResponse}.
+    # Options:
+    # - `force:` (Boolean, default: false) → drop and recreate if the view already exists
+    # - `row_count_strategy:` (Symbol, default: :estimated) → one of `:estimated`, `:exact`, or `:none or nil` to control row count reporting
+    #
+    # Returns a {MatViews::ServiceResponse}
     #
     # @see MatViews::Services::RegularRefresh
     # @see MatViews::Services::ConcurrentRefresh
     #
     # @example Create a new matview (no force)
-    #   svc = MatViews::Services::CreateView.new(defn)
+    #   svc = MatViews::Services::CreateView.new(defn, **options)
     #   response = svc.run
-    #   response.status # => :created or :noop
+    #   response.status # => :created or :skipped
     #
     # @example Force recreate an existing matview
     #   svc = MatViews::Services::CreateView.new(defn, force: true)
     #   svc.run
+    #
+    # @example via job, this is the typical usage and will create a run record in the DB
+    #   MatViews::Jobs::Adapter.enqueue(MatViews::Services::CreateViewJob, definition.id, **options)
     #
     class CreateView < BaseService
       ##
@@ -38,53 +45,53 @@ module MatViews
       ##
       # @param definition [MatViews::MatViewDefinition]
       # @param force [Boolean] Whether to drop+recreate an existing matview.
-      def initialize(definition, force: false)
-        super(definition)
+      # @param row_count_strategy [Symbol, nil] one of `:estimated`, `:exact`, or `nil` (default: `:estimated`)
+      #
+      # Supports optional row count strategies:
+      # - `:estimated` → approximate, using `pg_class.reltuples`
+      # - `:exact` → accurate, using `COUNT(*)`
+      # - `nil` → skip row count
+      def initialize(definition, force: false, row_count_strategy: :estimated)
+        super(definition, row_count_strategy: row_count_strategy)
         @force = !!force
       end
+
+      private
 
       ##
       # Execute the create operation.
       #
       # - Validates name, SQL, and concurrent-index requirements.
-      # - Handles existing view: noop (default) or drop+recreate (`force: true`).
+      # - Handles existing view: skipped (default) or drop+recreate (`force: true`).
       # - Creates the materialized view WITH DATA.
       # - Creates a UNIQUE index if refresh strategy is concurrent.
       #
-      # @return [MatViews::ServiceResponse]
-      #   - `:created` on success (payload includes `view` and `created_indexes`)
-      #   - `:noop` if the view already exists and `force: false`
-      #   - `:error` if validation or execution fails
+      # @api private
       #
-      def run
-        prep = prepare!
-        return prep if prep # error response
-
-        # If exists, either noop or drop+recreate
-        existed = handle_existing!
+      # @return [MatViews::ServiceResponse]
+      #   - `status: :created or :skipped` on success, with `response` containing:
+      #     - `view` - the qualified view name
+      #     - `row_count_before` - if requested and available
+      #     - `row_count_after` - if requested and available
+      #   - `status: :error` with `error` on failure, with `error` containing:
+      #     - serlialized exception class, message, and backtrace in a hash
+      def _run
+        sql = create_with_data_sql
+        self.response = { view: "#{schema}.#{rel}", sql: [sql] }
+        # If exists, either skipped or drop+recreate
+        existed = handle_existing
         return existed if existed.is_a?(MatViews::ServiceResponse)
 
-        # Always create WITH DATA for a fresh view
-        create_with_data
+        response[:row_count_before] = UNKNOWN_ROW_COUNT
+        conn.execute(sql)
+        response[:row_count_after] = fetch_rows_count
 
         # For concurrent strategy, ensure the unique index so future
         # REFRESH MATERIALIZED VIEW CONCURRENTLY is allowed.
-        index_info = ensure_unique_index_if_needed
+        response.merge!(ensure_unique_index_if_needed)
 
-        ok(:created, payload: { view: qualified_rel, **index_info })
-      rescue StandardError => e
-        error_response(
-          e,
-          payload: { view: qualified_rel },
-          meta: { sql: sql, force: force }
-        )
+        ok(:created)
       end
-
-      private
-
-      # ────────────────────────────────────────────────────────────────
-      # internal
-      # ────────────────────────────────────────────────────────────────
 
       ##
       # Validate name, SQL, and concurrent strategy requirements.
@@ -92,37 +99,47 @@ module MatViews
       # @api private
       # @return [MatViews::ServiceResponse, nil] error response or nil if OK
       #
-      def prepare!
-        return err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
-        return err('SQL must start with SELECT') unless valid_sql?
-        return err('refresh_strategy=concurrent requires unique_index_columns (non-empty)') if strategy == 'concurrent' && cols.empty?
+      def prepare
+        raise_err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
+        raise_err('SQL must start with SELECT') unless valid_sql?
+        raise_err('refresh_strategy=concurrent requires unique_index_columns (non-empty)') if strategy == 'concurrent' && cols.empty?
 
         nil
       end
 
       ##
-      # Handle existing matview: return noop if not forcing, or drop if forcing.
+      # Assign the request parameters.
+      # Called by {#run} before {#prepare}.
+      #
+      # @api private
+      # @return [void]
+      #
+      def assign_request
+        self.request = { row_count_strategy: row_count_strategy, force: }
+      end
+
+      ##
+      # Handle existing matview: return skipped if not forcing, or drop if forcing.
       #
       # @api private
       # @return [MatViews::ServiceResponse, nil]
       #
-      def handle_existing!
+      def handle_existing
         return nil unless view_exists?
 
-        return MatViews::ServiceResponse.new(status: :noop) unless force
+        return ok(:skipped) unless force
 
         drop_view
         nil
       end
 
       ##
-      # Execute the CREATE MATERIALIZED VIEW WITH DATA statement.
-      #
+      # SQL for `CREATE MATERIALIZED VIEW ... WITH DATA`.
       # @api private
-      # @return [void]
+      # @return [String]
       #
-      def create_with_data
-        conn.execute(<<~SQL)
+      def create_with_data_sql
+        <<~SQL
           CREATE MATERIALIZED VIEW #{qualified_rel} AS
           #{sql}
           WITH DATA
@@ -147,9 +164,9 @@ module MatViews
         concurrently = pg_idle?
         conn.execute(<<~SQL)
           CREATE UNIQUE INDEX #{'CONCURRENTLY ' if concurrently}#{quote_table_name(idx_name)}
-          ON #{qualified_rel} (#{cols.map { |c| quote_column_name(c) }.join(', ')})
+          ON #{qualified_rel} (#{cols.map { |col| quote_column_name(col) }.join(', ')})
         SQL
-        { created_indexes: [idx_name] }
+        { created_indexes: [idx_name], row_count_before: UNKNOWN_ROW_COUNT, row_count_after: fetch_rows_count }
       end
     end
   end

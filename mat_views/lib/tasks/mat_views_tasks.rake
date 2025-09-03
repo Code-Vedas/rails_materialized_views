@@ -16,7 +16,7 @@ namespace :mat_views do
     defn  = helpers.find_definition_by_name!(args[:view_name])
 
     helpers.confirm!("Enqueue CREATE for view=#{defn.name} (id=#{defn.id}), force=#{force}", skip: skip)
-    helpers.enqueue_create!(defn.id, force)
+    helpers.enqueue_create(defn.id, force)
     helpers.logger.info("[mat_views] Enqueued CreateViewJob for definition ##{defn.id} (#{defn.name}), force=#{force}")
   end
 
@@ -31,7 +31,7 @@ namespace :mat_views do
     raise "No MatViews::MatViewDefinition found for id=#{args[:definition_id]}" unless defn
 
     helpers.confirm!("Enqueue CREATE for id=#{defn.id} (#{defn.name}), force=#{force}", skip: skip)
-    helpers.enqueue_create!(defn.id, force)
+    helpers.enqueue_create(defn.id, force)
     helpers.logger.info("[mat_views] Enqueued CreateViewJob for definition ##{defn.id} (#{defn.name}), force=#{force}")
   end
 
@@ -48,7 +48,7 @@ namespace :mat_views do
     end
 
     helpers.confirm!("Enqueue CREATE for ALL (#{count}) views, force=#{force}", skip: skip)
-    scope.find_each { |defn| helpers.enqueue_create!(defn.id, force) }
+    scope.find_each { |defn| helpers.enqueue_create(defn.id, force) }
     helpers.logger.info("[mat_views] Enqueued #{count} CreateViewJob(s), force=#{force}.")
   end
 
@@ -61,7 +61,7 @@ namespace :mat_views do
     defn = helpers.find_definition_by_name!(args[:view_name])
 
     helpers.confirm!("Enqueue REFRESH for view=#{defn.name} (id=#{defn.id}), row_count_strategy=#{rcs}", skip: skip)
-    helpers.enqueue_refresh!(defn.id, rcs)
+    helpers.enqueue_refresh(defn.id, rcs)
     helpers.logger.info("[mat_views] Enqueued RefreshViewJob for definition ##{defn.id} (#{defn.name}), row_count_strategy=#{rcs}")
   end
 
@@ -76,7 +76,7 @@ namespace :mat_views do
     raise "No MatViews::MatViewDefinition found for id=#{args[:definition_id]}" unless defn
 
     helpers.confirm!("Enqueue REFRESH for id=#{defn.id} (#{defn.name}), row_count_strategy=#{rcs}", skip: skip)
-    helpers.enqueue_refresh!(defn.id, rcs)
+    helpers.enqueue_refresh(defn.id, rcs)
     helpers.logger.info("[mat_views] Enqueued RefreshViewJob for definition ##{defn.id} (#{defn.name}), row_count_strategy=#{rcs}")
   end
 
@@ -93,7 +93,7 @@ namespace :mat_views do
     end
 
     helpers.confirm!("Enqueue REFRESH for ALL (#{count}) views, row_count_strategy=#{rcs}", skip: skip)
-    scope.find_each { |defn| helpers.enqueue_refresh!(defn.id, rcs) }
+    scope.find_each { |defn| helpers.enqueue_refresh(defn.id, rcs) }
     helpers.logger.info("[mat_views] Enqueued #{count} RefreshViewJob(s), row_count_strategy=#{rcs}.")
   end
 
@@ -106,7 +106,7 @@ namespace :mat_views do
     defn    = helpers.find_definition_by_name!(args[:view_name])
 
     helpers.confirm!("Enqueue DELETE for view=#{defn.name} (id=#{defn.id}), cascade=#{cascade}", skip: skip)
-    helpers.enqueue_delete!(defn.id, cascade)
+    helpers.enqueue_delete(defn.id, cascade)
     helpers.logger.info("[mat_views] Enqueued DeleteViewJob for definition ##{defn.id} (#{defn.name}), cascade=#{cascade}")
   end
 
@@ -121,7 +121,7 @@ namespace :mat_views do
     raise "No MatViews::MatViewDefinition found for id=#{args[:definition_id]}" unless defn
 
     helpers.confirm!("Enqueue DELETE for id=#{defn.id} (#{defn.name}), cascade=#{cascade}", skip: skip)
-    helpers.enqueue_delete!(defn.id, cascade)
+    helpers.enqueue_delete(defn.id, cascade)
     helpers.logger.info("[mat_views] Enqueued DeleteViewJob for definition ##{defn.id} (#{defn.name}), cascade=#{cascade}")
   end
 
@@ -138,7 +138,7 @@ namespace :mat_views do
     end
 
     helpers.confirm!("Enqueue DELETE for ALL (#{count}) views, cascade=#{cascade}", skip: skip)
-    scope.find_each { |defn| helpers.enqueue_delete!(defn.id, cascade) }
+    scope.find_each { |defn| helpers.enqueue_delete(defn.id, cascade) }
     helpers.logger.info("[mat_views] Enqueued #{count} DeleteViewJob(s), cascade=#{cascade}.")
   end
 end

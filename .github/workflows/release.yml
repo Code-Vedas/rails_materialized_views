@@ -1,12 +1,13 @@
 permissions:
   contents: read
 name: Release
-
 on:
   push:
     tags:
       - v*
-
+concurrency:
+  group: release
+  cancel-in-progress: true
 jobs:
   test:
     permissions:

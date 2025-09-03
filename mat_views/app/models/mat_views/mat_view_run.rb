@@ -77,13 +77,33 @@ module MatViews
     validates :status, presence: true
 
     ##
-    # Scopes
+    # Scope create runs
+    # All runs with `operation: :create`.
+    # @return [ActiveRecord::Relation<MatViews::MatViewRun>]
     scope :create_runs, -> { where(operation: :create) }
+
+    ##
+    # Scope refresh runs
+    # All runs with `operation: :refresh`.
+    # @return [ActiveRecord::Relation<MatViews::MatViewRun>]
     scope :refresh_runs, -> { where(operation: :refresh) }
+
+    ##
+    # Scope drop runs
+    # All runs with `operation: :drop`.
+    # @return [ActiveRecord::Relation<MatViews::MatViewRun>]
     scope :drop_runs,    -> { where(operation: :drop) }
 
-    def row_count
-      meta['row_count']
+    # row count before the operation, if applicable
+    # @return [Integer, nil]
+    def row_count_before
+      meta.dig('response', 'row_count_before')
+    end
+
+    # row count after the operation, if applicable
+    # @return [Integer, nil]
+    def row_count_after
+      meta.dig('response', 'row_count_after')
     end
   end
 end

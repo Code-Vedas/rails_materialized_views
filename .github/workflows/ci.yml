@@ -5,7 +5,9 @@ on:
   pull_request:
   push:
     branches: [main]
-
+concurrency:
+  group: ci
+  cancel-in-progress: true
 jobs:
   lint:
     permissions:
@@ -27,11 +29,32 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
+  reek:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/mat_views
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.3
+          bundler-cache: true
+          working-directory: ${{ github.workspace }}/mat_views
+
+      - name: Check code smells with reek
+        run: bin/reek
 
   test:
     permissions:
       contents: read
     runs-on: ubuntu-latest
+    needs: [lint, reek]
     services:
       postgres:
         image: postgres
@@ -61,14 +84,27 @@ jobs:
           ruby-version: 3.4.3
           bundler-cache: true
           working-directory: ${{ github.workspace }}/mat_views
-
+      - name: Prepare database
+        working-directory: ${{ github.workspace }}/mat_views
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          # REDIS_URL: redis://localhost:6379/0
+        run: bin/rails db:drop && bin/rails db:create && bin/rails db:schema:load
+      - name: Seed database
+        working-directory: ${{ github.workspace }}/mat_views
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          # REDIS_URL: redis://localhost:6379/0
+        run: bin/rails db:seed
       - name: Run tests
         working-directory: ${{ github.workspace }}/mat_views
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare && bin/rails db:seed && bin/rspec --format documentation --color --profile
+        run: bin/rspec
 
       - name: Upload simplecov report
         uses: actions/upload-artifact@v4

@@ -10,16 +10,19 @@ module MatViews
   # Encapsulates the result of a service operation within MatViews.
   #
   # Provides a consistent contract for all services by standardizing:
-  # - `status`: Symbol representing outcome (`:ok`, `:created`, `:updated`, `:noop`,
+  # - `status`: Symbol representing outcome (`:ok`, `:created`, `:updated`,
   #   `:skipped`, `:deleted`, `:error`)
-  # - `payload`: Arbitrary structured data returned by the service
-  # - `error`: Exception object or message if an error occurred
-  # - `meta`: Additional metadata such as SQL statements, timing, or strategies
+  # - `request`: Request detailed that service was invoked with
+  # - `response`: Response detailed that service returned, nil with :error status
+  # - `error`: Exception or error message, with :error status
+  #    - `message`: String description of the error
+  #    - `class`: Exception class name
+  #    - `backtrace`: Array of strings
   #
   # @example Successful response
   #   MatViews::ServiceResponse.new(
   #     status: :updated,
-  #     payload: { view: "public.users_mv" }
+  #     response: { ... }
   #   )
   #
   # @example Error response
@@ -29,32 +32,44 @@ module MatViews
   #   )
   #
   class ServiceResponse
-    attr_reader :status, :payload, :error, :meta
+    attr_reader :status, :request, :error, :response
+
+    # acceptable status values
+    ACCEPTABLE_STATES = %i[ok created updated skipped deleted error].freeze
+
+    # statuses indicating success
+    OK_STATES = %i[ok created updated skipped deleted].freeze
+
+    # statuses indicating error
+    ERROR_STATES = %i[error].freeze
 
     # @param status [Symbol] the outcome status
-    # @param payload [Hash] optional data payload
+    # @param request [Hash] request details
+    # @param response [Hash] response details
     # @param error [Exception, String, nil] error details if applicable
-    # @param meta [Hash] additional metadata
-    def initialize(status:, payload: {}, error: nil, meta: {})
+    def initialize(status:, request: {}, response: {}, error: nil)
+      raise ArgumentError, 'status is required' unless ACCEPTABLE_STATES.include?(status&.to_sym)
+      raise ArgumentError, 'error must be an Exception object' if error && !error.is_a?(Exception)
+
       @status = status.to_sym
-      @payload = payload
-      @error = error
-      @meta = meta
+      @request = request
+      @response = response
+      @error = error&.mv_serialize_error
     end
 
     # @return [Boolean] whether the response represents a success
     def success?
-      !error? && %i[ok created updated noop skipped deleted].include?(status)
+      OK_STATES.include?(status)
     end
 
     # @return [Boolean] whether the response represents an error
     def error?
-      !error.nil? || status == :error
+      ERROR_STATES.include?(status)
     end
 
     # @return [Hash] hash representation of the response
     def to_h
-      { status:, payload:, error:, meta: }
+      { status:, request:, response:, error: }.compact
     end
   end
 end

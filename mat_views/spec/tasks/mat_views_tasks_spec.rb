@@ -15,19 +15,20 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
   end
 
   def invoke(task_name, *args)
-    Rake::Task[task_name].reenable
-    Rake::Task[task_name].invoke(*args)
+    task = Rake::Task[task_name]
+    task.reenable
+    task.invoke(*args)
   end
 
   def with_env(vars)
     old = {}
-    vars.each do |k, v|
-      old[k] = ENV.key?(k) ? ENV[k] : :__absent__
-      ENV[k] = v
+    vars.each do |key, value|
+      old[key] = ENV.key?(key) ? ENV[key] : :__absent__
+      ENV[key] = value
     end
     yield
   ensure
-    old.each { |k, v| v == :__absent__ ? ENV.delete(k) : ENV[k] = v }
+    old.each { |key, value| value == :__absent__ ? ENV.delete(key) : ENV[key] = value }
   end
 
   def with_stdin(input)
@@ -106,6 +107,12 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
     it 'errors when view_name is blank' do
       expect do
         invoke('mat_views:create_by_name', '', nil, '--yes')
+      end.to raise_error(/view_name is required/)
+    end
+
+    it 'errors when view_name is nil' do
+      expect do
+        invoke('mat_views:create_by_name')
       end.to raise_error(/view_name is required/)
     end
   end

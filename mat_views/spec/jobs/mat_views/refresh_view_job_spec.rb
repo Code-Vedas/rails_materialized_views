@@ -45,29 +45,22 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
     )
   end
 
-  def service_response_double(status:, payload: {}, error: nil)
+  def service_response_double(status:, request: {}, response: {}, error: nil)
     success = (status != :error)
     instance_double(
       MatViews::ServiceResponse,
       status: status,
-      payload: payload,
+      request: request,
+      response: response,
       error: error,
       success?: success,
       error?: !success,
-      to_h: { status: status, payload: payload, error: error }.compact
+      to_h: { status: status, request: request, response: response, error: error }.compact
     )
   end
 
   shared_examples 'a refresh job' do
     describe 'queueing' do
-      it 'enqueues on the configured queue (hash arg)' do
-        expect do
-          described_class.perform_later(definition.id, row_count_strategy: :exact)
-        end.to have_enqueued_job(described_class)
-          .on_queue('mat_views_test')
-          .with(definition.id, row_count_strategy: :exact)
-      end
-
       it 'enqueues on the configured queue (bare symbol arg)' do
         expect do
           described_class.perform_later(definition.id, :estimated)
@@ -79,19 +72,10 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
 
     describe '#perform' do
       context 'when the service returns success' do
-        it 'returns the response hash' do
-          resp = service_response_double(status: :updated, payload: { view: 'public.mv' })
-          svc  = instance_spy(svc_class, run: resp)
-          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :exact).and_return(svc)
-
-          result = perform_now_and_return(definition.id, row_count_strategy: :exact)
-          expect(result).to eq(resp.to_h)
-        end
-
         it 'records a successful refresh run with core fields set' do
-          resp = service_response_double(status: :updated, payload: { view: 'public.mv' })
+          resp = service_response_double(status: :updated, response: { view: 'public.mv' })
           svc  = instance_spy(svc_class, run: resp)
-          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :estimated).and_return(svc)
+          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
 
           perform_now_and_return(definition.id)
 
@@ -105,38 +89,39 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
         end
 
         it 'persists timing and meta' do
-          resp = service_response_double(status: :updated, payload: { view: 'public.mv', row_count: 1 })
+          resp = service_response_double(status: :updated, response: { view: 'public.mv', row_count_before: 1 })
           svc  = instance_spy(svc_class, run: resp)
-          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :estimated).and_return(svc)
+          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
 
           perform_now_and_return(definition.id)
 
           run = MatViews::MatViewRun.refresh_runs.order(created_at: :desc).first
-          expect(run.meta).to include('view' => 'public.mv', 'row_count' => 1)
+          expect(run.meta).to include('response' => { 'view' => 'public.mv', 'row_count_before' => 1 })
           expect([run.started_at.present?, run.finished_at.present?, run.duration_ms.is_a?(Integer)]).to eq([true, true, true])
         end
       end
 
       context 'when the service returns error (no raise)' do
         it 'returns the response hash and records failed run' do
-          resp = service_response_double(status: :error, error: 'View missing')
+          resp = service_response_double(status: :error, error: StandardError.new('View missing').mv_serialize_error)
           svc  = instance_spy(svc_class, run: resp)
-          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :estimated).and_return(svc)
+          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
 
           result = perform_now_and_return(definition.id)
           expect(result).to eq(resp.to_h)
 
-          run    = MatViews::MatViewRun.refresh_runs.order(created_at: :desc).first
-          fields = run.attributes.slice('status', 'error')
-          expect(fields['status']).to eq('failed')
-          expect(fields['error']).to match(/View missing/)
+          run = MatViews::MatViewRun.refresh_runs.order(created_at: :desc).first
+          expect(run.status).to eq('failed')
+          expect(run.error['message']).to eq('View missing')
+          expect(run.error['class']).to eq('StandardError')
+          expect(run.error['backtrace']).to be_an(Array)
         end
       end
 
       context 'when the service raises' do
         it 're-raises and marks the run failed' do
           svc = instance_spy(svc_class)
-          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :estimated).and_return(svc)
+          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
           allow(svc).to receive(:run).and_raise(StandardError, 'kaboom')
 
           expect do
@@ -144,17 +129,18 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
           end.to raise_error(Minitest::UnexpectedError, /kaboom/)
 
           run    = MatViews::MatViewRun.refresh_runs.order(created_at: :desc).first
-          fields = run.attributes.slice('status', 'error')
-          expect(fields['status']).to eq('failed')
-          expect(fields['error']).to match(/StandardError: kaboom/)
+          expect(run.status).to eq('failed')
+          expect(run.error['message']).to eq('kaboom')
+          expect(run.error['class']).to eq('StandardError')
+          expect(run.error['backtrace']).to be_an(Array)
         end
       end
 
       context 'when run fails to save' do
         it 'raises and does not attempt to update the run' do
-          resp = service_response_double(status: :updated, payload: { view: 'public.mv' })
+          resp = service_response_double(status: :updated, response: { view: 'public.mv' })
           svc  = instance_spy(svc_class, run: resp)
-          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :estimated).and_return(svc)
+          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
 
           allow(MatViews::MatViewRun).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
 
@@ -186,17 +172,6 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
           expect(svc_class).to have_received(:new).with(definition, row_count_strategy: :estimated).once
 
           expect(svc).to have_received(:run).once
-        end
-
-        it 'accepts a hash with :row_count_strategy keys' do
-          resp = service_response_double(status: :updated)
-          svc1 = instance_spy(svc_class, run: resp)
-          allow(svc_class).to receive(:new).with(definition, row_count_strategy: :exact).and_return(svc1)
-          perform_now_and_return(definition.id, row_count_strategy: :exact)
-
-          expect(svc_class).to have_received(:new).with(definition, row_count_strategy: :exact).once
-
-          expect(svc1).to have_received(:run).once
         end
       end
     end

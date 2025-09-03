@@ -23,8 +23,8 @@ class CreateMatViewRuns < ActiveRecord::Migration[7.1]
       t.datetime :started_at, comment: 'Timestamp when the operation started'
       t.datetime :finished_at, comment: 'Timestamp when the operation finished'
       t.integer  :duration_ms, comment: 'Duration of the operation in milliseconds'
-      t.text     :error, comment: 'Error message if the operation failed'
-      t.jsonb    :meta, null: false, default: {}, comment: 'Additional metadata about the run, such as job ID, row count or parameters'
+      t.jsonb :error, comment: 'Error details if the operation failed. :message, :class, :backtrace'
+      t.jsonb :meta, null: false, default: {}, comment: 'Additional metadata about the run, such as job ID, row count or parameters'
 
       t.timestamps
     end
