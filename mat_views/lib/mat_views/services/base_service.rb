@@ -135,7 +135,7 @@ module MatViews
       end
 
       def extract_row_strategy(value)
-        ALLOWED_ROW_STRATEGIES.find { |strategy| strategy == value } || DEFAULT_NIL_STRATEGY
+        ALLOWED_ROW_STRATEGIES.include?(value) ? value : DEFAULT_NIL_STRATEGY
       end
 
       # ────────────────────────────────────────────────────────────────
