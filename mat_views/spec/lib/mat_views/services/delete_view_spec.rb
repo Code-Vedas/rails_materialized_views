@@ -38,7 +38,7 @@ RSpec.describe MatViews::Services::DeleteView do
 
   before do
     User.destroy_all
-    5.times { |i| User.create!(name: "User #{i}", email: "email#{i}@exmaple.com") }
+    5.times { |i| User.create!(name: "User #{i}", email: "email#{i}@example.com") }
     conn.execute(%(DROP MATERIALIZED VIEW IF EXISTS public."#{relname}" CASCADE))
     conn.execute(%(DROP VIEW IF EXISTS public."#{relname}_dep" CASCADE))
   end

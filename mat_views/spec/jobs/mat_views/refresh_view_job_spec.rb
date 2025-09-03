@@ -103,7 +103,7 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
 
       context 'when the service returns error (no raise)' do
         it 'returns the response hash and records failed run' do
-          resp = service_response_double(status: :error, error: StandardError.new('View missing').serialize_error)
+          resp = service_response_double(status: :error, error: StandardError.new('View missing').mv_serialize_error)
           svc  = instance_spy(svc_class, run: resp)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
 

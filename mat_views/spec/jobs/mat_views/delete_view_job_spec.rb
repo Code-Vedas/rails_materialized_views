@@ -92,7 +92,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
 
     context 'when the service returns error (no raise)' do
       it 'returns the response hash and records failed run' do
-        resp = service_response_double(status: :error, error: StandardError.new('Dependent objects exist').serialize_error)
+        resp = service_response_double(status: :error, error: StandardError.new('Dependent objects exist').mv_serialize_error)
         svc  = instance_spy(MatViews::Services::DeleteView, run: resp)
         allow(MatViews::Services::DeleteView)
           .to receive(:new).with(definition, cascade: false, row_count_strategy: :none).and_return(svc)

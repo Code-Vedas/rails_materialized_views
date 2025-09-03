@@ -10,7 +10,7 @@ class Exception
   # Serialize the exception into a hash with message, class, and backtrace.
   #
   # @return [Hash] serialized error details
-  def serialize_error
+  def mv_serialize_error
     {
       message: message,
       class: self.class.name,

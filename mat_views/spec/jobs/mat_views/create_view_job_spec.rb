@@ -94,7 +94,7 @@ RSpec.describe MatViews::CreateViewJob, type: :job do
 
     context 'when the service returns error (no raise)' do
       it 'returns the response hash and records failed run' do
-        resp = service_response_double(status: :error, error: StandardError.new('Invalid SQL').serialize_error)
+        resp = service_response_double(status: :error, error: StandardError.new('Invalid SQL').mv_serialize_error)
         svc  = instance_spy(MatViews::Services::CreateView, run: resp)
         allow(MatViews::Services::CreateView)
           .to receive(:new).with(definition, force: false, row_count_strategy: :none).and_return(svc)

@@ -49,7 +49,7 @@ module MatViews
       @status = status.to_sym
       @request = request
       @response = response
-      @error = error&.serialize_error
+      @error = error&.mv_serialize_error
     end
 
     # @return [Boolean] whether the response represents a success

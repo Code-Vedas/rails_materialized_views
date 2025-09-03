@@ -105,7 +105,7 @@ module MatViews
     #
     def fail_run(run, exception)
       run.update!(
-        error: exception.serialize_error,
+        error: exception.mv_serialize_error,
         status: :failed
       )
     end

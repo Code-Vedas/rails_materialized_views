@@ -11,6 +11,8 @@ AllCops:
   SuggestExtensions: true
   Exclude:
     - .vscode/**/*
+    - vendor/**/* # ignore vendored gems
+    - vendor/bundle/**/* # (explicitly, for Bundler’s path)
 
 Metrics/MethodLength:
   Max: 20
