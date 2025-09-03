@@ -3,6 +3,9 @@ permissions:
 name: Danger
 on:
   pull_request:
+concurrency:
+  group: danger
+  cancel-in-progress: true
 jobs:
   danger:
     permissions:

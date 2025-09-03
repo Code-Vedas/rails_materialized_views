@@ -8,6 +8,9 @@ on:
       - main
   pull_request:
     types: [opened, reopened, synchronize]
+concurrency:
+  group: release-drafter
+  cancel-in-progress: true
 jobs:
   release_drafter:
     permissions:

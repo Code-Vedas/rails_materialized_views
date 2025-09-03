@@ -93,7 +93,7 @@ module MatViews
       def swap_view
         conn.execute(create_temp_view_sql)
         steps = [
-          move_curent_to_old_sql,
+          move_current_to_old_sql,
           move_temp_to_current_sql,
           drop_old_view_sql,
           recreate_declared_unique_indexes_sql
@@ -111,7 +111,7 @@ module MatViews
         @create_temp_view_sql ||= %(CREATE MATERIALIZED VIEW #{q_tmp} AS #{definition.sql} WITH DATA)
       end
 
-      def move_curent_to_old_sql
+      def move_current_to_old_sql
         %(ALTER MATERIALIZED VIEW #{qualified_rel} RENAME TO #{conn.quote_column_name(old_rel)})
       end
 

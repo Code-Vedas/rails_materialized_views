@@ -5,7 +5,9 @@ on:
   pull_request:
   push:
     branches: [main]
-
+concurrency:
+  group: ci
+  cancel-in-progress: true
 jobs:
   lint:
     permissions:
