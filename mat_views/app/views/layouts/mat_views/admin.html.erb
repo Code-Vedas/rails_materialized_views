@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" dir="<%= %i(ar he fa ur).include?(I18n.locale.to_sym) ? 'rtl' : 'ltr' %>" data-theme="<%= mat_views_data_theme || 'auto' %>">
+<head>
+  <title><%= t("mat_views.title") %><%= content_for?(:page_title) ? " | #{content_for(:page_title)}" : "" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <meta charset="utf-8">
+  <meta name="description" content="<%= mv_t('project_description') %>">
+  <meta name="author" content="<%= mv_t('project_author') %>">
+  <meta name="keywords" content="<%= mv_t('project_tags') %>">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="<%= mat_views_data_theme || 'auto' %>">
+  <meta http-equiv="Content-Language" content="<%= I18n.locale %>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Space+Grotesk:wght@300..700&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet"
+  >
+  <%= favicon_link_tag "mat_views/favicon.svg", type: "image/svg+xml" %>
+  <%= favicon_link_tag "mat_views/favicon.ico", rel: "icon", sizes: "16x16 32x32 48x48" %>
+  <%= favicon_link_tag "mat_views/favicon-16x16.png", rel: "icon", type: "image/png", sizes: "16x16" %>
+  <%= favicon_link_tag "mat_views/favicon-32x32.png", rel: "icon", type: "image/png", sizes: "32x32" %>
+  <%= favicon_link_tag "mat_views/favicon-48x48.png", rel: "icon", type: "image/png", sizes: "48x48" %>
+  <%= favicon_link_tag "mat_views/apple-touch-icon.png", rel: "apple-touch-icon" %>
+  <%= favicon_link_tag "mat_views/mask-icon.svg", rel: "mask-icon", color: "#0F172A" %>
+  <%= favicon_link_tag "mat_views/android-chrome-192x192.png", rel: "icon", type: "image/png", sizes: "192x192" %>
+  <%= favicon_link_tag "mat_views/android-chrome-512x512.png", rel: "icon", type: "image/png", sizes: "512x512" %>
+  <%= tag.meta name: "theme-color", content: "#0F172A" %>
+  <%= stylesheet_link_tag "mat_views/application.css", media: "all", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags "mat_views/application", importmap: MatViews.importmap %>
+</head>
+<body class="mv-shell" data-controller="drawer timezone mv-confirm">
+<%= render "layouts/mat_views/header" %>
+<main class="mv-main">
+  <div class="mv-container">
+    <%= render "mat_views/admin/ui/flash" %>
+    <%= yield %>
+  </div>
+</main>
+<%= render "layouts/mat_views/footer" %>
+</body>
+</html>

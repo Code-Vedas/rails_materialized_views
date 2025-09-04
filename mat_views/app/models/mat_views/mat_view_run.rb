@@ -45,25 +45,23 @@ module MatViews
     #
     # @!attribute [r] status
     #   @return [Symbol] One of:
-    #     - `:pending` — queued but not yet started
-    #     - `:running` — currently executing
-    #     - `:success` — completed successfully
-    #     - `:failed` — encountered an error
+    #     - `:running` - currently executing
+    #     - `:success` - completed successfully
+    #     - `:failed` - encountered an error
     #
     enum :status, {
-      pending: 0,
-      running: 1,
-      success: 2,
-      failed: 3
+      running: 0,
+      success: 1,
+      failed: 2
     }, prefix: :status
 
     # Operation type of the run.
     #
     # @!attribute [r] operation
     #   @return [Symbol] One of:
-    #     - `:create` — initial creation of the materialized view
-    #     - `:refresh` — refreshing an existing view
-    #     - `:drop` — dropping the materialized view
+    #     - `:create` - initial creation of the materialized view
+    #     - `:refresh` - refreshing an existing view
+    #     - `:drop` - dropping the materialized view
     enum :operation, {
       create: 0,
       refresh: 1,

@@ -49,7 +49,7 @@ ActiveRecord::Schema[8.0].define(version: 20_250_807_153_908) do
 
   create_table 'mat_view_runs', force: :cascade do |t|
     t.bigint 'mat_view_definition_id', null: false, comment: 'Reference to the materialized view definition'
-    t.integer 'status', default: 0, null: false, comment: '0=pending,1=running,2=success,3=failed'
+    t.integer 'status', default: 0, null: false, comment: '0=running,1=success,2=failed'
     t.integer 'operation', default: 0, null: false, comment: '0=create,1=refresh,2=drop'
     t.datetime 'started_at', comment: 'Timestamp when the operation started'
     t.datetime 'finished_at', comment: 'Timestamp when the operation finished'

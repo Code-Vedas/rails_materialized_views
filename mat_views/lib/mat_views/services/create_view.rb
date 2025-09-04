@@ -25,12 +25,12 @@ module MatViews
     #
     # @example Create a new matview (no force)
     #   svc = MatViews::Services::CreateView.new(defn, **options)
-    #   response = svc.run
+    #   response = svc.call
     #   response.status # => :created or :skipped
     #
     # @example Force recreate an existing matview
     #   svc = MatViews::Services::CreateView.new(defn, force: true)
-    #   svc.run
+    #   svc.call
     #
     # @example via job, this is the typical usage and will create a run record in the DB
     #   MatViews::Jobs::Adapter.enqueue(MatViews::Services::CreateViewJob, definition.id, **options)
@@ -54,6 +54,7 @@ module MatViews
       def initialize(definition, force: false, row_count_strategy: :estimated)
         super(definition, row_count_strategy: row_count_strategy)
         @force = !!force
+        @use_transaction = definition.unique_index_columns.none?
       end
 
       private
@@ -94,18 +95,14 @@ module MatViews
       end
 
       ##
-      # Validate name, SQL, and concurrent strategy requirements.
+      # Validation step (invoked by BaseService#run before execution).
+      # Empty for this service as no other preparation is needed.
       #
       # @api private
-      # @return [MatViews::ServiceResponse, nil] error response or nil if OK
       #
-      def prepare
-        raise_err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
-        raise_err('SQL must start with SELECT') unless valid_sql?
-        raise_err('refresh_strategy=concurrent requires unique_index_columns (non-empty)') if strategy == 'concurrent' && cols.empty?
-
-        nil
-      end
+      # @return [void]
+      #
+      def prepare; end
 
       ##
       # Assign the request parameters.

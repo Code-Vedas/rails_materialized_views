@@ -1,0 +1,130 @@
+name: Ruby Tests (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      ruby_version:
+        required: true
+        type: string
+        default: "3.4.3"
+      app_dir:
+        required: true
+        type: string
+        default: ${{ github.workspace }}/mat_views
+      rspec_task:
+        required: true
+        type: string
+        description: "Command to run tests (e.g., bin/rspec-unit or bin/rspec-e2e)"
+      need_seed:
+        required: false
+        type: boolean
+        default: true
+      need_chrome:
+        required: false
+        type: boolean
+        default: true
+      upload_coverage:
+        required: false
+        type: boolean
+        default: true
+      qlty_coverage:
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      QLTY_COVERAGE_TOKEN:
+        required: false
+
+jobs:
+  test:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    env:
+      RUBY_VERSION: ${{ inputs.ruby_version }}
+      APP_DIR: ${{ inputs.app_dir }}
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Install apt packages
+        if: ${{ inputs.need_chrome }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            build-essential git libpq-dev libyaml-dev pkg-config google-chrome-stable
+
+      - name: Install minimal apt packages (no Chrome)
+        if: ${{ !inputs.need_chrome }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            build-essential git libpq-dev libyaml-dev pkg-config
+
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+          working-directory: ${{ env.APP_DIR }}
+
+      - name: Prepare database
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: |
+          bin/rails db:drop || true
+          bin/rails db:create
+          bin/rails db:schema:load
+
+      - name: Seed database
+        if: ${{ inputs.need_seed }}
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: bin/rails db:seed
+
+      - name: Run tests
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: ${{ inputs.rspec_task }}
+
+      - name: Upload SimpleCov report
+        if: ${{ inputs.upload_coverage }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: simplecov-report
+          path: ${{ env.APP_DIR }}/coverage
+          if-no-files-found: ignore
+
+      - name: Publish coverage to Qlty
+        if: ${{ inputs.qlty_coverage }}
+        uses: qltysh/qlty-action/coverage@v2
+        with:
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: ${{ env.APP_DIR }}/coverage/.resultset.json
+
+      - name: Keep screenshots from failed system tests
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: ${{ env.APP_DIR }}/tmp/screenshots
+          if-no-files-found: ignore

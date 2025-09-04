@@ -216,9 +216,9 @@ You can also drop the CSV into `/docs/validation/` and link it from the docs sit
 
 We ship 4 definitions to represent increasing complexity:
 
-1. **`mv_users`** — single table projection
-2. **`mv_user_accounts`** — two-table aggregate join
-3. **`mv_user_accounts_events`** — three-table aggregate join
-4. **`mv_user_activity`** — four-table aggregate join
+1. **`mv_users`** - single table projection
+2. **`mv_user_accounts`** - two-table aggregate join
+3. **`mv_user_accounts_events`** - three-table aggregate join
+4. **`mv_user_activity`** - four-table aggregate join
 
 All are configured for **concurrent** refresh with appropriate **unique indexes** on the result key (`id` or `user_id`).

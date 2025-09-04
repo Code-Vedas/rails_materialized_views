@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 256 256" fill="none"
+  xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">MatViews Monogram</title>
+  <desc id="desc">Stylized M and V mark for Materialized Views. Transparent background.</desc>
+
+  <!-- subtle outer ring -->
+  <circle cx="128" cy="128" r="110" stroke="#0F172A" stroke-opacity="0.18" stroke-width="10" fill="none"/>
+
+  <!-- V (accent) -->
+  <path d="M64 64 L128 192 L192 64" stroke="#10B981" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- M (primary) -->
+  <path d="M48 176 L92 80 L128 144 L164 80 L208 176" stroke="#0F172A" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- optional tiny dot to balance negative space -->
+  <circle cx="128" cy="208" r="4" fill="#10B981" fill-opacity="0.9"/>
+</svg>

@@ -21,10 +21,10 @@ module MatViews
     #
     # @example Drop a view if it exists
     #   svc = MatViews::Services::DeleteView.new(defn, **options)
-    #   svc.run
+    #   svc.call
     #
     # @example Force drop with CASCADE
-    #   MatViews::Services::DeleteView.new(defn, cascade: true).run
+    #   MatViews::Services::DeleteView.new(defn, cascade: true).call
     #
     # @example via job, this is the typical usage and will create a run record in the DB
     #   MatViews::Jobs::Adapter.enqueue(MatViews::Services::DeleteViewJob, definition.id, **options)
@@ -88,16 +88,13 @@ module MatViews
       end
 
       ##
-      # Validate name and existence depending on options.
+      # Validation step (invoked by BaseService#run before execution).
+      # Empty for this service as no other preparation is needed.
       #
       # @api private
-      # @return [MatViews::ServiceResponse, nil]
       #
-      def prepare
-        raise_err "Invalid view name format: #{definition.name.inspect}" unless valid_name?
-
-        nil
-      end
+      # @return [void]
+      def prepare; end
 
       ##
       # Build the SQL DROP statement.

@@ -144,10 +144,10 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
       end.to raise_error(/No MatViews::MatViewDefinition/)
     end
 
-    it 'errors when definition_id is missing/blank' do
+    it 'errors when mat_view_definition_id is missing/blank' do
       expect do
         invoke('mat_views:create_by_id', '', nil, 'none', '--yes')
-      end.to raise_error(/mat_views:create_by_id requires a definition_id parameter/)
+      end.to raise_error(/mat_views:create_by_id requires a mat_view_definition_id parameter/)
     end
   end
 
@@ -251,10 +251,10 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
       end.to raise_error(/No MatViews::MatViewDefinition/)
     end
 
-    it 'errors when definition_id is missing/blank' do
+    it 'errors when mat_view_definition_id is missing/blank' do
       expect do
         invoke('mat_views:refresh_by_id', '', nil, '--yes')
-      end.to raise_error(/mat_views:refresh_by_id requires a definition_id parameter/)
+      end.to raise_error(/mat_views:refresh_by_id requires a mat_view_definition_id parameter/)
     end
   end
 
@@ -357,10 +357,10 @@ RSpec.describe 'mat_views rake tasks', type: :rake do # rubocop:disable RSpec/De
       end.to raise_error(/No MatViews::MatViewDefinition/)
     end
 
-    it 'errors when definition_id is missing/blank' do
+    it 'errors when mat_view_definition_id is missing/blank' do
       expect do
         invoke('mat_views:delete_by_id', '', nil, 'none', '--yes')
-      end.to raise_error(/mat_views:delete_by_id requires a definition_id parameter/)
+      end.to raise_error(/mat_views:delete_by_id requires a mat_view_definition_id parameter/)
     end
   end
 

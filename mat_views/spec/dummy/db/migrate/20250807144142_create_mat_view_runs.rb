@@ -16,8 +16,8 @@ class CreateMatViewRuns < ActiveRecord::Migration[7.1]
                    foreign_key: true,
                    comment: 'Reference to the materialized view definition'
 
-      # 0=pending, 1=running, 2=success, 3=failed
-      t.integer  :status, null: false, default: 0, comment: '0=pending,1=running,2=success,3=failed'
+      # 0=running, 1=success, 2=failed
+      t.integer  :status, null: false, default: 0, comment: '0=running,1=success,2=failed'
       # 0=create, 1=refresh, 2=drop
       t.integer  :operation, null: false, default: 0, comment: '0=create,1=refresh,2=drop'
       t.datetime :started_at, comment: 'Timestamp when the operation started'

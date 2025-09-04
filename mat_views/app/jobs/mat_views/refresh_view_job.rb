@@ -23,9 +23,9 @@ module MatViews
   # - otherwise      → {MatViews::Services::RegularRefresh}
   #
   # Row count reporting can be controlled via `row_count_strategy`:
-  # - `:estimated` (default) — fast, approximate via reltuples
-  # - `:exact` — accurate `COUNT(*)`
-  # - `nil` — skip counting
+  # - `:estimated` (default) - fast, approximate via reltuples
+  # - `:exact` - accurate `COUNT(*)`
+  # - `nil` - skip counting
   #
   # @see MatViews::MatViewDefinition
   # @see MatViews::MatViewRun
@@ -52,22 +52,21 @@ module MatViews
     #
     # @api public
     #
-    # @param definition_id [Integer, String] ID of {MatViews::MatViewDefinition}.
+    # @param mat_view_definition_id [Integer, String] ID of {MatViews::MatViewDefinition}.
     # @param row_count_strategy_arg [:Symbol, String] One of: `:estimated`, `:exact`, `:none` or `nil`.
     #
     # @return [Hash] Serialized {MatViews::ServiceResponse#to_h}:
     #   - `:status` [Symbol]
-    #   - `:payload` [Hash]
     #   - `:error` [String, nil]
     #   - `:duration_ms` [Integer]
     #   - `:meta` [Hash]
     #
     # @raise [StandardError] Re-raised on unexpected failure after marking the run failed.
     #
-    def perform(definition_id, row_count_strategy_arg = nil)
-      definition = MatViews::MatViewDefinition.find(definition_id)
+    def perform(mat_view_definition_id, row_count_strategy_arg = nil)
+      definition = MatViews::MatViewDefinition.find(mat_view_definition_id)
       record_run(definition, :refresh) do
-        service(definition).new(definition, row_count_strategy: normalize_strategy(row_count_strategy_arg)).run
+        service(definition).new(definition, row_count_strategy: normalize_strategy(row_count_strategy_arg)).call
       end
     end
 

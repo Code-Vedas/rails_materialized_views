@@ -25,7 +25,7 @@ module MatViews
     #
     # @example Direct usage
     #   svc = MatViews::Services::ConcurrentRefresh.new(definition, **options)
-    #   response = svc.run
+    #   response = svc.call
     #   response.success? # => true/false
     #
     # @example via job, this is the typical usage and will create a run record in the DB
@@ -33,6 +33,11 @@ module MatViews
     #   MatViews::Jobs::Adapter.enqueue(MatViews::Services::RefreshViewJob, definition.id, **options)
     #
     class ConcurrentRefresh < BaseService
+      def initialize(definition, row_count_strategy: :estimated)
+        super
+        @use_transaction = false
+      end
+
       private
 
       ##
@@ -72,15 +77,13 @@ module MatViews
       end
 
       ##
-      # Perform pre-flight checks.
-      # Called by {#run} after {#assign_request}.
+      # Validation step (invoked by BaseService#run before execution).
       #
       # @api private
       # @return [nil] on success
       # @raise [StandardError] on failure
       #
       def prepare
-        raise_err("Invalid view name format: #{definition.name.inspect}") unless valid_name?
         raise_err("Materialized view #{schema}.#{rel} does not exist") unless view_exists?
         raise_err("Materialized view #{schema}.#{rel} must have a unique index for concurrent refresh") unless unique_index_exists?
 

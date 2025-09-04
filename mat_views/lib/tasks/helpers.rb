@@ -110,7 +110,7 @@ module MatViews
       # Otherwise, prompts user for confirmation and raises if declined.
       def confirm!(message, skip: false)
         if skip
-          logger.info("[mat_views] #{message} — confirmation skipped.")
+          logger.info("[mat_views] #{message} - confirmation skipped.")
           return
         end
 
@@ -125,31 +125,31 @@ module MatViews
 
       # Enqueue a CreateView job for given definition.
       #
-      # @param definition_id [Integer] MatViewDefinition ID
+      # @param mat_view_definition_id [Integer] MatViewDefinition ID
       # @param force [Boolean] whether to force creation
       # @param row_count_strategy [Symbol] :estimated or :exact or :none
       # @return [void]
-      def enqueue_create(definition_id, force, row_count_strategy)
+      def enqueue_create(mat_view_definition_id, force, row_count_strategy)
         MatViews::Jobs::Adapter.enqueue(
           MatViews::CreateViewJob,
           queue: MatViews.configuration.job_queue || :default,
-          args: [definition_id, force, row_count_strategy]
+          args: [mat_view_definition_id, force, row_count_strategy]
         )
       end
 
       # Enqueue a RefreshView job for given definition.
       #
-      # @param definition_id [Integer] MatViewDefinition ID
+      # @param mat_view_definition_id [Integer] MatViewDefinition ID
       # @param row_count_strategy [Symbol] :estimated or :exact
       # @return [void]
       #
       # This method allows scheduling a refresh operation with the specified row count strategy.
       # It uses the configured job adapter to enqueue the job.
-      def enqueue_refresh(definition_id, row_count_strategy)
+      def enqueue_refresh(mat_view_definition_id, row_count_strategy)
         MatViews::Jobs::Adapter.enqueue(
           MatViews::RefreshViewJob,
           queue: MatViews.configuration.job_queue || :default,
-          args: [definition_id, row_count_strategy]
+          args: [mat_view_definition_id, row_count_strategy]
         )
       end
 
@@ -166,18 +166,18 @@ module MatViews
 
       # Enqueue a DeleteView job for given definition.
       #
-      # @param definition_id [Integer] MatViewDefinition ID
+      # @param mat_view_definition_id [Integer] MatViewDefinition ID
       # @param cascade [Boolean] whether to drop with CASCADE
       # @param row_count_strategy [Symbol] :estimated or :exact or :none
       # @return [void]
       #
       # This method schedules a job to delete the materialized view, optionally with CASCADE.
       # It uses the configured job adapter to enqueue the job.
-      def enqueue_delete(definition_id, cascade, row_count_strategy)
+      def enqueue_delete(mat_view_definition_id, cascade, row_count_strategy)
         MatViews::Jobs::Adapter.enqueue(
           MatViews::DeleteViewJob,
           queue: MatViews.configuration.job_queue || :default,
-          args: [definition_id, cascade, row_count_strategy]
+          args: [mat_view_definition_id, cascade, row_count_strategy]
         )
       end
     end

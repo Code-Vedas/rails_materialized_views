@@ -1,0 +1,8 @@
+<table class="mv-table">
+  <% if local_assigns[:head].present? %>
+    <thead>
+    <tr class="mv-tr"><%= head %></tr>
+    </thead>
+  <% end %>
+  <tbody><%= yield %></tbody>
+</table>

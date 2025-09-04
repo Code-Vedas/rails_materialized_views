@@ -13,6 +13,11 @@ detectors:
     enabled: false
   UtilityFunction:
     public_methods_only: true
+    exclude:
+      - MatViews::Admin::DefaultAuth#mat_views_current_user
+      - MatViews::Admin::AuthBridge#host_auth_module
+      - MatViews::Admin::UiHelper#mv_t
+      - MatViews::Admin::UiHelper#mv_button_classes
   LongParameterList:
     enabled: true
     max_params: 5
@@ -20,6 +25,7 @@ detectors:
     enabled: true
     exclude:
       - MatViews::CreateViewJob#force?
+      - MatViews::Admin::MatViewDefinitionsController#normalize_array_field
   FeatureEnvy:
     enabled: true
     exclude:
@@ -30,10 +36,15 @@ detectors:
       - CreateAccounts#change
       - CreateEvents#change
       - CreateSessions#change
+      - MatViews::Admin::MatViewDefinitionsController#normalize_array_field
+      - MatViews::Admin::UiHelper#link_options
+      - MatViews::Admin::UiHelper#mv_badge
+      - MatViews::Admin::UiHelper#mv_drawer_action_button
   TooManyMethods:
     enabled: true
     exclude:
       - MatViews::Services::BaseService
+      - MatViews::Admin::MatViewDefinitionsController
   DuplicateMethodCall:
     enabled: true
     exclude:
@@ -42,6 +53,7 @@ detectors:
     enabled: true
     exclude:
       - MatViews::Services::BaseService#pg_idle?
+      - MatViews::Admin::UiHelper#mv_icon
   Attribute:
     enabled: true
     exclude:
@@ -49,6 +61,23 @@ detectors:
       - MatViews::Configuration#job_queue
       - MatViews::Services::BaseService#request
       - MatViews::Services::BaseService#response
+      - MatViews#importmap
+      - MatViews::Configuration#admin_ui
+      - MatViews::Admin::DefaultAuth::SampleUser#email
+  InstanceVariableAssumption:
+    enabled: true
+    exclude:
+      - MatViews::Admin::ApplicationController
+      - MatViews::Admin::MatViewDefinitionsController
+      - MatViews::Admin::RunsController
+      - MatViews::Admin::PreferencesController
+  MissingSafeMethod:
+    enabled: true
+    exclude:
+      - MatViews::Admin::PreferencesController
+  TooManyInstanceVariables:
+    enabled: true
+    max_instance_variables: 10
   DataClump:
     enabled: false
 directories:

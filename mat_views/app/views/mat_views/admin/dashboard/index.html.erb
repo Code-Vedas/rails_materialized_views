@@ -1,0 +1,33 @@
+<h1><%= t("mat_views.dashboard.title") %></h1>
+<div class="mv-card" style="margin-bottom:12px;">
+  <div class="mv-card-h"><%= t("mat_views.dashboard.metrics.title") %></div>
+  <div class="mv-card-b">
+    <div class="mv-flash mv-flash--ok">
+      <%= @metrics_note %>
+    </div>
+  </div>
+</div>
+<div data-controller="tabs">
+  <nav class="mv-tabs" style="margin-bottom:1rem;">
+    <%= mv_tab_link 'definitions', selected: true, testid: 'DEFINITIONS_TAB_LINK' do %>
+      <%= t("mat_views.definitions") %>
+    <% end %>
+    <%= mv_tab_link 'runs', selected: false, testid: 'RUNS_TAB_LINK' do %>
+      <%= t("mat_views.runs") %>
+    <% end %>
+  </nav>
+  <div data-tabs-target="panel" data-name="definitions">
+    <turbo-frame id="dash-definitions" data-src="<%= admin_mat_view_definitions_path(frame_id: 'dash-definitions') %>" data-turbo-temporary>
+      <div class="mv-card">
+        <div class="mv-card-b"><%= t("mat_views.loading_definitions") %></div>
+      </div>
+    </turbo-frame>
+  </div>
+  <div data-tabs-target="panel" data-name="runs" hidden>
+    <turbo-frame id="dash-runs" data-src="<%= admin_runs_path(frame_id: 'dash-runs') %>" data-turbo-temporary>
+      <div class="mv-card">
+        <div class="mv-card-b"><%= t("mat_views.loading_runs") %></div>
+      </div>
+    </turbo-frame>
+  </div>
+</div>

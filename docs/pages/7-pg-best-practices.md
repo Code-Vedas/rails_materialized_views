@@ -13,7 +13,7 @@ This guide distills practical, production-oriented advice tuned to how this proj
 
 ## 1) Model the definition well
 
-- **Simple identifier names.** Keep `MatViews::MatViewDefinition.name` free of dots — e.g., `mv_user_activity`. Schema is resolved from `search_path` and safely quoted by services.
+- **Simple identifier names.** Keep `MatViews::MatViewDefinition.name` free of dots - e.g., `mv_user_activity`. Schema is resolved from `search_path` and safely quoted by services.
 - **Explicit columns.** Avoid `SELECT *`. List the output columns; it stabilizes consumers and indexes.
 - **Deterministic SQL.** Prefer immutable/stable functions. Avoid volatile ones (`random()`, `clock_timestamp()`), which break refresh determinism and diffability.
 - **Shape for uniqueness.** If you want **concurrent** refresh, design a natural unique key in the result (e.g., `user_id` or a composite). You’ll create a **unique index** on that key.
@@ -66,7 +66,7 @@ This guide distills practical, production-oriented advice tuned to how this proj
 
 - `REFRESH MATERIALIZED VIEW CONCURRENTLY` **cannot run inside a transaction block** (same rule as `CREATE INDEX CONCURRENTLY`). Ensure your orchestration runs it outside a wrapping `BEGIN`.
 - Regular refresh holds locks that **block readers**; schedule during off-peak or prefer concurrent/swap.
-- Beware of **long transactions** or open cursors on the MV — they can stall refresh or index builds. Monitor `pg_stat_activity`.
+- Beware of **long transactions** or open cursors on the MV - they can stall refresh or index builds. Monitor `pg_stat_activity`.
 
 ---
 

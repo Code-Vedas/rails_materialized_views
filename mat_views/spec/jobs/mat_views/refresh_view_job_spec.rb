@@ -74,7 +74,7 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
       context 'when the service returns success' do
         it 'records a successful refresh run with core fields set' do
           resp = service_response_double(status: :updated, response: { view: 'public.mv' })
-          svc  = instance_spy(svc_class, run: resp)
+          svc  = instance_spy(svc_class, call: resp)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
 
           perform_now_and_return(definition.id)
@@ -90,7 +90,7 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
 
         it 'persists timing and meta' do
           resp = service_response_double(status: :updated, response: { view: 'public.mv', row_count_before: 1 })
-          svc  = instance_spy(svc_class, run: resp)
+          svc  = instance_spy(svc_class, call: resp)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
 
           perform_now_and_return(definition.id)
@@ -104,7 +104,7 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
       context 'when the service returns error (no raise)' do
         it 'returns the response hash and records failed run' do
           resp = service_response_double(status: :error, error: StandardError.new('View missing').mv_serialize_error)
-          svc  = instance_spy(svc_class, run: resp)
+          svc  = instance_spy(svc_class, call: resp)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
 
           result = perform_now_and_return(definition.id)
@@ -122,7 +122,7 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
         it 're-raises and marks the run failed' do
           svc = instance_spy(svc_class)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
-          allow(svc).to receive(:run).and_raise(StandardError, 'kaboom')
+          allow(svc).to receive(:call).and_raise(StandardError, 'kaboom')
 
           expect do
             perform_now_and_return(definition.id)
@@ -139,7 +139,7 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
       context 'when run fails to save' do
         it 'raises and does not attempt to update the run' do
           resp = service_response_double(status: :updated, response: { view: 'public.mv' })
-          svc  = instance_spy(svc_class, run: resp)
+          svc  = instance_spy(svc_class, call: resp)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :none).and_return(svc)
 
           allow(MatViews::MatViewRun).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
@@ -155,23 +155,23 @@ RSpec.describe MatViews::RefreshViewJob, type: :job do
       describe 'strategy normalization' do
         it 'accepts a bare symbol' do
           resp = service_response_double(status: :updated)
-          svc  = instance_spy(svc_class, run: resp)
+          svc  = instance_spy(svc_class, call: resp)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :exact).and_return(svc)
           perform_now_and_return(definition.id, :exact)
 
           expect(svc_class).to have_received(:new).with(definition, row_count_strategy: :exact).once
-          expect(svc).to have_received(:run).once
+          expect(svc).to have_received(:call).once
         end
 
         it 'accepts a string' do
           resp = service_response_double(status: :updated)
-          svc  = instance_spy(svc_class, run: resp)
+          svc  = instance_spy(svc_class, call: resp)
           allow(svc_class).to receive(:new).with(definition, row_count_strategy: :estimated).and_return(svc)
           perform_now_and_return(definition.id, 'estimated')
 
           expect(svc_class).to have_received(:new).with(definition, row_count_strategy: :estimated).once
 
-          expect(svc).to have_received(:run).once
+          expect(svc).to have_received(:call).once
         end
       end
     end

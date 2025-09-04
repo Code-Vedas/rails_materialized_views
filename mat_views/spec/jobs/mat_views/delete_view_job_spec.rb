@@ -51,7 +51,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
     context 'when the service returns success' do
       it 'returns the response hash' do
         resp = service_response_double(status: :deleted, response: { view: 'public.mv' })
-        svc  = instance_spy(MatViews::Services::DeleteView, run: resp)
+        svc  = instance_spy(MatViews::Services::DeleteView, call: resp)
         allow(MatViews::Services::DeleteView)
           .to receive(:new).with(definition, cascade: true, row_count_strategy: :none).and_return(svc)
 
@@ -61,7 +61,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
 
       it 'records a successful delete run with core fields set' do
         resp = service_response_double(status: :deleted, response: { view: 'public.mv' })
-        svc  = instance_spy(MatViews::Services::DeleteView, run: resp)
+        svc  = instance_spy(MatViews::Services::DeleteView, call: resp)
         allow(MatViews::Services::DeleteView)
           .to receive(:new).with(definition, cascade: false, row_count_strategy: :none).and_return(svc)
 
@@ -78,7 +78,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
 
       it 'persists timing and meta' do
         resp = service_response_double(status: :deleted, response: { view: 'public.mv' })
-        svc  = instance_spy(MatViews::Services::DeleteView, run: resp)
+        svc  = instance_spy(MatViews::Services::DeleteView, call: resp)
         allow(MatViews::Services::DeleteView)
           .to receive(:new).with(definition, cascade: false, row_count_strategy: :none).and_return(svc)
 
@@ -93,7 +93,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
     context 'when the service returns error (no raise)' do
       it 'returns the response hash and records failed run' do
         resp = service_response_double(status: :error, error: StandardError.new('Dependent objects exist').mv_serialize_error)
-        svc  = instance_spy(MatViews::Services::DeleteView, run: resp)
+        svc  = instance_spy(MatViews::Services::DeleteView, call: resp)
         allow(MatViews::Services::DeleteView)
           .to receive(:new).with(definition, cascade: false, row_count_strategy: :none).and_return(svc)
 
@@ -113,7 +113,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
         svc = instance_spy(MatViews::Services::DeleteView)
         allow(MatViews::Services::DeleteView)
           .to receive(:new).with(definition, cascade: false, row_count_strategy: :none).and_return(svc)
-        allow(svc).to receive(:run).and_raise(StandardError, 'kaboom')
+        allow(svc).to receive(:call).and_raise(StandardError, 'kaboom')
 
         expect do
           perform_now_and_return(definition.id)
@@ -130,7 +130,7 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
     context 'when run fails to save' do
       it 'raises and does not attempt to update the run' do
         resp = service_response_double(status: :deleted, response: { view: 'public.mv' })
-        svc  = instance_spy(MatViews::Services::DeleteView, run: resp)
+        svc  = instance_spy(MatViews::Services::DeleteView, call: resp)
         allow(MatViews::Services::DeleteView)
           .to receive(:new).with(definition, cascade: false, row_count_strategy: :none).and_return(svc)
 
@@ -165,13 +165,13 @@ RSpec.describe MatViews::DeleteViewJob, type: :job do
       it 'normalizes various truthy and falsy values' do
         values_vs_result.each do |input, expected|
           resp = service_response_double(status: :deleted, response: { view: 'public.mv' })
-          svc  = instance_spy(MatViews::Services::DeleteView, run: resp)
+          svc  = instance_spy(MatViews::Services::DeleteView, call: resp)
           allow(MatViews::Services::DeleteView)
             .to receive(:new).with(definition, cascade: expected, row_count_strategy: :none).and_return(svc)
 
           perform_now_and_return(definition.id, input)
 
-          expect(svc).to have_received(:run).once
+          expect(svc).to have_received(:call).once
         end
       end
     end

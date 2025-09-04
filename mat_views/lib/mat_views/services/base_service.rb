@@ -19,12 +19,17 @@ module MatViews
     #
     # @example Subclassing BaseService
     #   class MyService < MatViews::Services::BaseService
-    #     def run
-    #       return err("missing view") unless view_exists?
-    #       # perform work...
-    #       ok(:updated, payload: { view: "#{schema}.#{rel}" })
-    #     rescue => e
-    #       error_response(e, meta: { op: "my_service" })
+    #     private
+    #     def assign_request
+    #     # assign @request hash keys
+    #     end
+    #
+    #     def prepare
+    #     # perform pre-flight checks, raise StandardError on failure
+    #     end
+    #
+    #     def _run
+    #     # perform the operation, return a MatViews::ServiceResponse
     #     end
     #   end
     #
@@ -62,6 +67,11 @@ module MatViews
       attr_accessor :response
 
       ##
+      # wrap in transaction
+      # @return [Boolean]
+      attr_accessor :use_transaction
+
+      ##
       # @param definition [MatViews::MatViewDefinition]
       # @param row_count_strategy [Symbol, nil] one of `:estimated`, `:exact`, or `nil` (default: `:estimated`)
       #
@@ -70,6 +80,7 @@ module MatViews
         @row_count_strategy = extract_row_strategy(row_count_strategy)
         @request = {}
         @response = {}
+        @use_transaction = true
       end
 
       ##
@@ -81,15 +92,31 @@ module MatViews
       #
       # @return [MatViews::ServiceResponse]
       # @raise [NotImplementedError] if not implemented in subclass
-      def run
-        assign_request
-        prepare
-        _run
+      def call
+        if use_transaction
+          ActiveRecord::Base.transaction { run_core }
+        else
+          run_core
+        end
       rescue StandardError => e
+        # finish pending transaction if any
+        # eg: current transaction is aborted, commands ignored until end of transaction block
         error_response(e)
       end
 
       private
+
+      ##
+      # Core run logic without transaction wrapper.
+      # Called by {#call}.
+      #
+      # @api private
+      # @return [MatViews::ServiceResponse]
+      def run_core
+        assign_request
+        prepare
+        _run
+      end
 
       ##
       # Assign the request parameters.
@@ -373,25 +400,6 @@ module MatViews
         rc.transaction_status == PG::PQTRANS_IDLE
       rescue StandardError
         false
-      end
-
-      ##
-      # Validate SQL starts with SELECT.
-      #
-      # @api private
-      # @return [Boolean]
-      #
-      def valid_sql?
-        definition.sql.to_s.strip.upcase.start_with?('SELECT')
-      end
-
-      ##
-      # Validate that the view name is a sane PostgreSQL identifier.
-      #
-      # @api private
-      # @return [Boolean]
-      def valid_name?
-        /\A[a-zA-Z_][a-zA-Z0-9_]*\z/.match?(definition.name.to_s)
       end
 
       ##

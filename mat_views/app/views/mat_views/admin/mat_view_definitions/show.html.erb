@@ -1,0 +1,40 @@
+<% humanize_attr = ->(attr) { MatViews::MatViewDefinition.human_attribute_name(attr) } %>
+<% humanize_enum_attr = ->(col, val) { MatViews::MatViewDefinition.human_enum_name(col, val) } %>
+
+<input type="hidden" id="mv-drawer-title-text" value="<%= mv_t("view_var", name: @definition.name) %>">
+
+<%= render "mat_views/admin/ui/card" do %>
+  <div class="mv-field">
+    <div class="mv-label"><%= humanize_attr.call(:refresh_strategy) %></div>
+    <div><%= humanize_enum_attr.call(:refresh_strategy, @definition.refresh_strategy) %></div>
+  </div>
+  <div class="mv-field">
+    <div class="mv-label"><%= humanize_attr.call(:schedule_cron) %></div>
+    <div><%= @definition.schedule_cron.presence || "-" %></div>
+  </div>
+  <div class="mv-field">
+    <div class="mv-label"><%= humanize_attr.call(:unique_index_columns) %></div>
+    <div><%= Array(@definition.unique_index_columns).join(", ").presence || "-" %></div>
+  </div>
+  <div class="mv-field">
+    <div class="mv-label"><%= humanize_attr.call(:dependencies) %></div>
+    <div><%= Array(@definition.dependencies).join(", ").presence || "-" %></div>
+  </div>
+  <div class="mv-field">
+    <div class="mv-label"><%= humanize_attr.call(:last_run) %></div>
+    <div><%= @definition.last_run ? l(@definition.last_run.started_at.in_time_zone, format: :datetime12hour) : "-" %></div>
+  </div>
+  <div class="mv-field">
+    <%= render "mat_views/admin/ui/details",
+               tooltip_text: mv_t("mat_view_definition.sql_summary_tooltip"),
+               title: content_tag(:div, humanize_attr.call(:sql), class: "mv-label") do %>
+      <pre><%= @definition.sql -%></pre>
+    <% end %>
+  </div>
+
+  <% content_for :footer do %>
+    <div class="mv-header-row even">
+      <%= render "definition_actions", defn: @definition, mv_exists: @mv_exists, frame_id: "mv-drawer" %>
+    </div>
+  <% end %>
+<% end %>

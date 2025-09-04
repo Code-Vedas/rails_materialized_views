@@ -6,6 +6,9 @@ on:
 concurrency:
   group: danger
   cancel-in-progress: true
+env:
+  RUBY_VERSION: 3.4.3
+  APP_DIR: ${{ github.workspace }}/mat_views
 jobs:
   danger:
     permissions:
@@ -21,9 +24,9 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.4.3
+          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
-          working-directory: ${{ github.workspace }}/mat_views
+          working-directory: ${{ env.APP_DIR }}
       - name: Run Danger
         run: bundle exec danger
         env:

@@ -1,0 +1,77 @@
+<% action = @definition.new_record? ? admin_mat_view_definitions_path(frame_id: "mv-drawer") : admin_mat_view_definition_path(@definition, frame_id: "mv-drawer") %>
+<% method = @definition.new_record? ? :post : :patch %>
+
+<input
+  type="hidden"
+  id="mv-drawer-title-text"
+  value="<%= @definition.new_record? ? mv_t('mat_view_definition.new_definition') : mv_t("edit_var", name: @definition.name) %>"
+>
+
+<%= form_with model: @definition, url: action, method: method, class: "mv-form" do |f| %>
+  <% if @definition.errors.any? %>
+    <div class="mv-flash mv-flash--err">
+      <strong><%= t("mat_views.errors.prevented_saving", count: @definition.errors.count) %></strong>
+      <ul style="margin:.25rem 1rem;">
+        <% @definition.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mv-field">
+    <%= f.label :name, class: "mv-label" %>
+    <%= f.text_field :name, class: "mv-input", required: true, placeholder: MatViews::MatViewDefinition.placeholder_for(:name) %>
+    <%= content_tag :small, MatViews::MatViewDefinition.hint_for(:name), class: "mv-hint" %>
+
+  </div>
+
+  <div class="mv-field">
+    <%= f.label :sql, class: "mv-label" %>
+    <%= f.text_area :sql, class: "mv-textarea", placeholder: MatViews::MatViewDefinition.placeholder_for(:sql), required: true %>
+    <%= content_tag :small, MatViews::MatViewDefinition.hint_for(:sql), class: "mv-hint" %>
+  </div>
+
+  <div class="mv-field">
+    <%= f.label :refresh_strategy, class: "mv-label" %>
+    <%= f.select :refresh_strategy,
+             options_for_select(MatViews::MatViewDefinition.human_enum_options(:refresh_strategy), @definition.refresh_strategy),
+             {},
+             class: "mv-select" %>
+    <%= content_tag :small, MatViews::MatViewDefinition.hint_for(:refresh_strategy), class: "mv-hint" %>
+  </div>
+
+  <div class="mv-field">
+    <%= f.label :schedule_cron, class: "mv-label" %>
+    <%= f.text_field :schedule_cron, class: "mv-input", placeholder: MatViews::MatViewDefinition.placeholder_for(:schedule_cron) %>
+    <%= content_tag :small, MatViews::MatViewDefinition.hint_for(:schedule_cron), class: "mv-hint" %>
+  </div>
+
+  <div class="mv-field">
+    <%= f.label :unique_index_columns, class: "mv-label" %>
+    <% current_uic = Array(@definition.unique_index_columns).join(", ") %>
+    <%= f.text_field :unique_index_columns, value: current_uic, class: "mv-input", placeholder: MatViews::MatViewDefinition.placeholder_for(:unique_index_columns) %>
+    <%= content_tag :small, MatViews::MatViewDefinition.hint_for(:unique_index_columns), class: "mv-hint" %>
+  </div>
+
+  <div class="mv-field">
+    <%= f.label :dependencies, class: "mv-label" %>
+    <% current_dep = Array(@definition.dependencies).join(", ") %>
+    <%= f.text_field :dependencies, value: current_dep, class: "mv-input", placeholder: MatViews::MatViewDefinition.placeholder_for(:dependencies) %>
+    <%= content_tag :small, MatViews::MatViewDefinition.hint_for(:dependencies), class: "mv-hint" %>
+  </div>
+
+  <div style="display:flex;gap:.5rem;margin-top:.75rem;">
+    <%= mv_submit_button class: "mv-btn mv-btn--pri",
+                             testid: 'SUBMIT_BUTTON',
+                             testid_identifier: "defn-#{@definition.id || 'new'}" do %>
+      <%= @definition.new_record? ? t("mat_views.create") : t("mat_views.save_changes") %>
+    <% end %>
+
+    <%= mv_cancel_button variant: :ghost, data: { action: "click->drawer#close" },
+                             testid: 'CANCEL_BUTTON',
+                             testid_identifier: "defn-#{@definition.id || 'new'}"  do %>
+      <%= t("mat_views.cancel") %>
+    <% end %>
+  </div>
+<% end %>

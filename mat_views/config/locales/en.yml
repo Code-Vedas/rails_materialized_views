@@ -1,0 +1,193 @@
+en:
+  i18n:
+    languages:
+      en: English (United States)
+      en-CA: English (Canada)
+  mat_views:
+    title: "MatViews Admin"
+    actions: "Actions"
+    project_description: "Admin interface for managing PostgreSQL materialized views in Rails applications."
+    project_tags: "rails, ruby, materialized views, admin, dashboard, ui, interface, management"
+    project_author: "Codevedas Inc."
+    loading: "Loading..."
+    details: "Details"
+    no_data: "No data available"
+    definition: "Definition" # as in Materialized View
+    definitions: "Definitions" # as in Materialized Views
+    run: "Run" # as in "refresh run, or create run, or delete run"
+    runs: "Runs" # as in "refresh runs, or create runs, or delete runs"
+    loading_definitions: "Loading definitions..."
+    loading_runs: "Loading runs..."
+    close: "Close"
+    refresh: "Refresh"
+    create: "Create"
+    save_changes: "Save changes"
+    cancel: "Cancel"
+    history: "History"
+    edit: "Edit"
+    delete: "Delete"
+    edit_var: "Edit %{name}"
+    view_var: "View %{name}"
+    refresh_contents: "Refresh contents"
+    close_window: "Close window"
+    reset: "Reset"
+    filter_by: "Filter by:"
+    all_definitions: "All definitions"
+    all_operations: "All operations"
+    all_statuses: "All statuses"
+    reloading: "Reloading..."
+    errors:
+      frame_only: "This action can only be performed in a frame, redirected to dashboard."
+      prevented_saving:
+        one: "1 error prevented saving:"
+        other: "%{count} errors prevented saving:"
+    header:
+      signed_in_as: "Signed in as %{email}"
+    footer:
+      tagline: "Built with ❤️ by developers, for developers."
+      project_homepage: "Project Homepage"
+      open_issue: "Open an Issue"
+      documentation: "Documentation"
+      need_help: "Need guaranteed uptime & expert help?"
+      support: "Get Professional Support →"
+      version: "v%{version}"
+      copyright: "© %{year} %{company} All rights reserved."
+      tooltip:
+        gem_version: "Click to visit the RubyGems page"
+        project_homepage: "Github repository"
+        open_issue: "Report a bug or request a feature"
+        documentation: "Read the documentation"
+        support: "Professional support plans"
+    settings:
+      title: "Preferences"
+      auto: "Auto"
+      light: "Light"
+      dark: "Dark"
+      theme: "Theme"
+      theme_hint: "Auto follows your system preference, light and dark overrides it."
+      language_hint: "Choose your interface language."
+      language: "Language"
+    dashboard:
+      title: "Dashboard"
+      metrics:
+        title: "Metrics"
+    mat_view_run:
+      meta_tooltip: "Additional metadata in JSON format."
+      error_tooltip: "Error message if the run failed."
+      view_details: "View details"
+      view_tooltip: "View run details."
+      no_runs: "No runs found."
+      no_runs_if_filtered: "No runs found for the selected filters."
+    mat_view_definition:
+      materialized_view: "Materialized View"
+      materialized_view_exists: "Materialized view exists"
+      materialized_view_not_exists: "Materialized view not created yet!"
+      new_definition: "New definition"
+      drop_mv: "Drop MV"
+      drop_mv_cascade: "Drop MV(Cascade)"
+      create_mv: "Create MV"
+      edit_tooltip: "Edit materialized view definition."
+      view_tooltip: "View materialized view definition."
+      drop_mv_confirm: "Drop materialized view for %{name}?"
+      drop_mv_cascade_confirm: "Drop materialized view and all dependent objects for %{name}?"
+      delete_confirm: "Delete definition %{name}? (Does NOT drop MV)"
+      delete_tooltip: "Deletes the definition but does NOT drop the materialized view in the database."
+      drop_mv_tooltip: "Drops the materialized view in the database. Definition remains."
+      drop_mv_cascade_tooltip: "Drops the materialized view and all dependent objects in the database. Definition remains."
+      create_mv_tooltip: "Creates the materialized view in the database."
+      new_definition: "New definition"
+      new_definition_tooltip: "Create a new materialized view definition."
+      refresh_tooltip: "Refreshes the materialized view in the database."
+      sql_summary_tooltip: "Click to expand/collapse SQL"
+      no_definitions: "No materialized view definitions found. Create one to get started."
+  time:
+    pm: "PM"
+    am: "AM"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+  activerecord:
+    models:
+      mat_views/mat_view_definition: "Materialized View Definition"
+      mat_views/mat_view_run: "Materialized View Run"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "must be provided"
+              taken: "must be unique"
+              invalid: "is not a valid PostgreSQL identifier"
+            sql:
+              blank: "must be provided"
+              invalid: "must start with SELECT"
+            unique_index_columns:
+              at_least_one: "must have at least one column when using concurrent refresh strategy"
+    attributes:
+      mat_views/mat_view_definition:
+        name: "Name"
+        sql: "SQL (SELECT ...)"
+        refresh_strategy: "Refresh strategy"
+        schedule_cron: "Schedule (cron)"
+        unique_index_columns: "Unique index columns"
+        dependencies: "Dependencies"
+        created_at: "Created at"
+        updated_at: "Updated at"
+
+      mat_views/mat_view_run:
+        mat_view_definition: "Definition"
+        status: "Status"
+        operation: "Operation"
+        started_at: "Started at"
+        finished_at: "Finished at"
+        duration_ms: "Duration (ms)"
+        error: "Error"
+        meta: "Metadata"
+        created_at: "Created at"
+        updated_at: "Updated at"
+        details: "Details"
+        row_count_before: "Row count before"
+        row_count_after: "Row count after"
+        rows_before_after: "Rows(before/after)"
+    placeholders:
+      mat_views/mat_view_definition:
+        name: "Enter name"
+        sql: "Enter SQL (SELECT ...)"
+        schedule_cron: "0 0 * * * for daily at midnight, leave empty for no scheduling"
+        refresh_strategy: "Select refresh strategy"
+        unique_index_columns: "Enter unique index columns (comma separated, optional)"
+        dependencies: "Enter dependencies (comma separated, optional)"
+      mat_views/mat_view_run:
+        mat_view_definition: "Select materialized view"
+        status: "Select status"
+        operation: "Select operation"
+        error: "Error message"
+        meta: "Metadata (JSON)"
+    hints:
+      mat_views/mat_view_definition:
+        name: "Name of the materialized view in the database."
+        sql: "The SQL query must be a valid SELECT statement."
+        schedule_cron: "Use standard cron format. Leave empty for no scheduling."
+        refresh_strategy: "Determines how the materialized view is refreshed."
+        unique_index_columns: "Columns to create a unique index on. Required for concurrent refresh."
+        dependencies: "Comma-separated list of tables or views this materialized view depends on."
+      mat_views/mat_view_run:
+        status: "Current status of the run."
+        operation: "Type of operation performed."
+        error: "Error message if the run failed."
+        meta: "Additional metadata in JSON format."
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          regular: "Regular"
+          concurrent: "Concurrent"
+          swap: "Swap"
+
+      mat_views/mat_view_run:
+        status:
+          running: "Running"
+          success: "Success"
+          failed: "Failed"
+        operation:
+          create: "Create"
+          refresh: "Refresh"
+          drop: "Drop"

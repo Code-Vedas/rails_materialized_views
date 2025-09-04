@@ -31,7 +31,7 @@ module MatViews
     #
     # @example Direct usage
     #   svc = MatViews::Services::SwapRefresh.new(definition, **options)
-    #   response = svc.run
+    #   response = svc.call
     #   response.success? # => true/false
     #
     # @example via job, this is the typical usage and will create a run record in the DB
@@ -63,12 +63,14 @@ module MatViews
       end
 
       ##
-      # Ensure name validity and existence of original view.
+      # Validation step (invoked by BaseService#run before execution).
+      # Ensures view exists.
       #
       # @api private
-      # @return [MatViews::ServiceResponse, nil]
+      #
+      # @return [void]
+      #
       def prepare
-        raise_err "Invalid view name format: #{definition.name.inspect}" unless valid_name?
         raise_err "Materialized view #{schema}.#{rel} does not exist" unless view_exists?
 
         nil
