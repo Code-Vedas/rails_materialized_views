@@ -20,7 +20,7 @@ RSpec.describe MatViews::Services::ConcurrentRefresh do
 
   let(:row_count_strategy) { :estimated }
   let(:runner)             { described_class.new(definition, row_count_strategy:) }
-  let(:execute_service)    { runner.run }
+  let(:execute_service)    { runner.call }
 
   before do
     User.destroy_all
@@ -47,15 +47,6 @@ RSpec.describe MatViews::Services::ConcurrentRefresh do
   end
 
   describe 'validations' do
-    it 'fails when name is invalid format' do
-      definition.name = 'public.mv.bad'
-      res = execute_service
-      expect(res).not_to be_success
-      expect(res.error).not_to be_nil
-      expect(res.error[:message]).to match(/Invalid view name format/i)
-      expect(mv_exists?(relname)).to be(false)
-    end
-
     it 'fails when the view does not exist' do
       res = execute_service
       expect(res).not_to be_success
@@ -165,7 +156,7 @@ RSpec.describe MatViews::Services::ConcurrentRefresh do
       allow(conn).to receive(:schema_search_path).and_return('public')
     end
 
-    it 'wraps PG::ObjectInUse into error response with meta.sql and payload.view' do
+    it 'wraps PG::ObjectInUse into error response with meta[:response][:sql] and meta[:response][:view]' do
       allow(ActiveRecord::Base).to receive(:connection).and_wrap_original do |orig, *args|
         c = orig.call(*args)
         allow(c).to receive(:execute)

@@ -1,0 +1,38 @@
+<% data = { controller: "filter", query_params: %w[mat_view_definition_id operation status].join(","), turbo_frame: @frame_id } %>
+<% humanize_attr = ->(attr) { MatViews::MatViewRun.human_attribute_name(attr) } %>
+<% operation_options = [[mv_t("all_operations"), ""]].concat(MatViews::MatViewRun.human_enum_options(:operation)) %>
+<% status_options = [[mv_t("all_statuses"), ""]].concat(MatViews::MatViewRun.human_enum_options(:status)) %>
+<% definition_options = [[mv_t("all_definitions"), ""]] + @definitions.map { |d| [d.name, d.id] } %>
+<%= form_with url: admin_runs_path, method: :get, data: data, class: "mv-form mv-form--no-pad" do %>
+  <div class="mv-field-inline-row">
+    <div class="mv-field-inline">
+      <%= mv_t("filter_by") %>
+    </div>
+    <div class="mv-field-inline">
+      <%= label_tag :mat_view_definition_id, humanize_attr.call(:mat_view_definition), class: "mv-label" %>
+      <%= select_tag :mat_view_definition_id,
+      options_for_select(definition_options, params[:mat_view_definition_id]),
+      class: "mv-select",
+      data: {
+        action: "change->filter#autoSubmit",
+      } %>
+    </div>
+    <div class="mv-field-inline">
+      <%= label_tag :operation, humanize_attr.call(:operation), class: "mv-label" %>
+      <%= select_tag :operation, options_for_select(operation_options, params[:operation]), class: "mv-select", data: { action: "change->filter#autoSubmit" } %>
+    </div>
+    <div class="mv-field-inline">
+      <%= label_tag :status, humanize_attr.call(:status), class: "mv-label" %>
+      <%= select_tag :status, options_for_select(status_options, params[:status]), class: "mv-select", data: { action: "change->filter#autoSubmit" } %>
+    </div>
+    <div class="mv-field-inline">
+      <%= hidden_field_tag :frame_id, @frame_id %>
+      <%= hidden_field_tag :frame_action, @frame_action %>
+      <%= mv_button_link "#", variant: :ghost, data: { action: "click->filter#reset" }, testid: 'RESET_FILTERS_LINK' do %>
+        <%= mv_icon(:x_circle) %>
+        <%= mv_t("reset") %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<%= render "mat_views/admin/runs/table", runs: @runs %>

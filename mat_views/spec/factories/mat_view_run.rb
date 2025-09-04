@@ -8,7 +8,7 @@
 FactoryBot.define do
   factory :mat_view_run, class: 'MatViews::MatViewRun' do
     mat_view_definition factory: :mat_view_definition
-    status      { :pending }
+    status      { :running }
     started_at  { Time.current }
     finished_at { nil }
     duration_ms { nil }

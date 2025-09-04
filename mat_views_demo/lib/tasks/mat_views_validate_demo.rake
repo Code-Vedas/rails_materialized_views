@@ -59,7 +59,7 @@ namespace :mat_views do
 
       definitions.each do |defn|
         unless mv_names.include?(defn.name)
-          Rails.logger.warn(%([validate_demo] Skipping "#{defn.name}" — not present in pg_matviews))
+          Rails.logger.warn(%([validate_demo] Skipping "#{defn.name}" - not present in pg_matviews))
           next
         end
 

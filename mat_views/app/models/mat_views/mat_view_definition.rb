@@ -60,8 +60,7 @@ module MatViews
 
     ##
     # @!attribute name
-    #   @return [String] PostgreSQL identifier for the materialized view.
-    #
+    # validates :name that must be present, unique, and a valid identifier.
     validates :name,
               presence: true,
               uniqueness: true,
@@ -69,11 +68,17 @@ module MatViews
 
     ##
     # @!attribute sql
-    #   @return [String] SELECT statement used to materialize the view.
-    #
+    # validates :sql that must be present and begin with SELECT.
     validates :sql,
               presence: true,
-              format: { with: /\A\s*SELECT/i, message: 'must begin with a SELECT' }
+              format: { with: /\A\s*SELECT/i, message: :invalid }
+
+    ##
+    # @!attribute unique_index_columns
+    # validates :unique_index_columns to be non-empty when using `refresh_strategy=concurrent`.
+    validates :unique_index_columns,
+              length: { minimum: 1, message: :at_least_one },
+              if: -> { refresh_strategy == 'concurrent' }
 
     # ────────────────────────────────────────────────────────────────
     # Enums / configuration

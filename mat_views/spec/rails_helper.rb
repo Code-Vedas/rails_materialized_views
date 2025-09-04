@@ -5,21 +5,23 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-require 'simplecov'
+unless ENV['NO_COVERAGE'] == '1'
+  require 'simplecov'
 
-SimpleCov.start do
-  track_files '{app,lib,spec}/**/*.rb'
-  add_filter '/spec/'
-  add_filter '/config/'
-  add_filter '/generators/'
-  add_filter 'application_controller.rb'
-  add_filter 'application_helper.rb'
-  add_filter 'application_job.rb'
-  add_filter 'application_mailer.rb'
-  add_filter %r{^/lib/.*/version\.rb$}
+  SimpleCov.start do
+    track_files '{app,lib,spec}/**/*.rb'
+    add_filter '/spec/'
+    add_filter '/config/'
+    add_filter '/generators/'
+    add_filter 'application_controller.rb'
+    add_filter 'application_helper.rb'
+    add_filter 'application_job.rb'
+    add_filter 'application_mailer.rb'
+    add_filter %r{^/lib/.*/version\.rb$}
 
-  enable_coverage :branch
-  minimum_coverage 100
+    enable_coverage :branch
+    minimum_coverage 100
+  end
 end
 
 require 'rails'
@@ -41,24 +43,36 @@ RSpec.configure do |config|
   config.include ActiveJob::TestHelper
   config.include FactoryBot::Syntax::Methods
 
-  # Use AJ test adapter for specs that hit ActiveJob
+  config.use_transactional_fixtures = ENV['E2E'] == '1'
+  config.fixture_paths = [Rails.root.join('spec/fixtures')]
+  config.filter_rails_from_backtrace!
+
   config.before(:each, :active_job) do
     ActiveJob::Base.queue_adapter = :test
     clear_enqueued_jobs
     clear_performed_jobs
   end
 
-  config.fixture_paths = [
-    Rails.root.join('spec/fixtures')
-  ]
-  config.use_transactional_fixtures = false
-  config.filter_rails_from_backtrace!
+  config.before(:each, :js) do
+    ActiveJob::Base.queue_adapter = :inline
+    clear_enqueued_jobs
+    clear_performed_jobs
+  end
 
   config.before(:suite) do
+    ENV['TZ'] = Time.zone.tzinfo.name
     FactoryBot.definition_file_paths = [File.expand_path('factories', __dir__)]
     FactoryBot.find_definitions
 
     Rails.application.load_tasks
+    FileUtils.rm_rf(Dir[Rails.root.join('tmp/screenshots')])
+  end
+
+  config.after(:suite) do
+    FileUtils.rm_rf(Dir[Rails.root.join('tmp/capybara*')])
+    MatViews::MatViewDefinition.destroy_all
+    ActiveRecord::Base.connection.execute('ALTER SEQUENCE mat_view_definitions_id_seq RESTART WITH 1')
+    ActiveRecord::Base.connection.execute('ALTER SEQUENCE mat_view_runs_id_seq RESTART WITH 1')
   end
 
   config.after do

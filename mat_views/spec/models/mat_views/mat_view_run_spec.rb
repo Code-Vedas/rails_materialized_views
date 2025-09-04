@@ -13,13 +13,13 @@ RSpec.describe MatViews::MatViewRun do
     expect(assoc.macro).to eq(:belongs_to)
   end
 
-  it "defaults to 'pending' status" do
+  it "defaults to 'running' status" do
     run = described_class.create!(mat_view_definition: definition)
-    expect(run.status).to eq('pending')
+    expect(run.status).to eq('running')
   end
 
   it 'has the correct statuses' do
-    expect(described_class.statuses.keys).to contain_exactly('pending', 'running', 'success', 'failed')
+    expect(described_class.statuses.keys).to contain_exactly('running', 'success', 'failed')
   end
 
   it 'has the correct operations' do
@@ -29,10 +29,9 @@ RSpec.describe MatViews::MatViewRun do
   describe 'matrix of statuses [method]' do
     let(:matrix) do
       {
-        pending: %w[running success failed],
-        running: %w[pending success failed],
-        success: %w[pending running failed],
-        failed: %w[pending running success]
+        running: %w[success failed],
+        success: %w[running failed],
+        failed: %w[running success]
       }
     end
 
@@ -50,10 +49,9 @@ RSpec.describe MatViews::MatViewRun do
   describe 'matrix of statuses [by integer]' do
     let(:matrix) do
       {
-        0 => [1, 2, 3], # pending
-        1 => [0, 2, 3], # running
-        2 => [0, 1, 3], # success
-        3 => [0, 1, 2]  # failed
+        0 => [1, 2], # running
+        1 => [0, 2], # success
+        2 => [0, 1]  # failed
       }
     end
 

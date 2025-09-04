@@ -65,19 +65,19 @@ defn = MatViews::MatViewDefinition.create!(
 
 ```ruby
 # Create
-MatViews::Services::CreateView.new(defn, force: true).run
+MatViews::Services::CreateView.new(defn, force: true).call
 MatViews::CreateViewJob.perform_later(defn.id, force: true)
 
 # Refresh
-MatViews::Services::RegularRefresh.new(defn, row_count_strategy: :estimated).run
+MatViews::Services::RegularRefresh.new(defn, row_count_strategy: :estimated).call
 MatViews::RefreshViewJob.perform_later(defn.id, row_count_strategy: :exact)
 
 # Delete
-MatViews::Services::DeleteView.new(defn, cascade: false, if_exists: true).run
+MatViews::Services::DeleteView.new(defn, cascade: false, if_exists: true).call
 MatViews::DeleteViewJob.perform_later(defn.id, cascade: true)
 ```
 
-**Uniform response**: `status`, `payload`, `meta`, `success?` / `error?`.
+**Uniform response**: `status`, `meta`, `success?` / `error?`.
 
 ---
 

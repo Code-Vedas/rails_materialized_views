@@ -29,7 +29,7 @@ module MatViews
   #
   # @example Defining a custom job
   #   class MyCustomJob < MatViews::ApplicationJob
-  #     def perform(definition_id)
+  #     def perform(mat_view_definition_id)
   #       # custom logic here
   #     end
   #   end

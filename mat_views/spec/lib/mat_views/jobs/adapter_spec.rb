@@ -43,7 +43,7 @@ RSpec.describe MatViews::Jobs::Adapter do
       end
     end
 
-    it 'pushes to Sidekiq client with the correct payload' do
+    it 'pushes to Sidekiq client with the correct meta' do
       # spy preferred over direct expectation
       allow(Sidekiq::Client).to receive(:push)
 

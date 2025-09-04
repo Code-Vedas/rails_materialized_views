@@ -32,7 +32,7 @@ RSpec.describe MatViews::Services::BaseService do
     end
   end
   let(:runner) { runner_class.new(definition, row_count_strategy:) }
-  let(:execute_service) { runner.run }
+  let(:execute_service) { runner.call }
 
   describe 'abstract methods' do
     context 'when _run is not implemented' do
@@ -47,7 +47,7 @@ RSpec.describe MatViews::Services::BaseService do
       end
 
       it 'raises NotImplementedError' do
-        expect { bad_runner_class.new(definition).run }.to raise_error(NotImplementedError, /Must implement.*_run/)
+        expect { bad_runner_class.new(definition).call }.to raise_error(NotImplementedError, /Must implement.*_run/)
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe MatViews::Services::BaseService do
       end
 
       it 'raises NotImplementedError' do
-        expect { bad_runner_class.new(definition).run }.to raise_error(NotImplementedError, /Must implement.*assign_request/)
+        expect { bad_runner_class.new(definition).call }.to raise_error(NotImplementedError, /Must implement.*assign_request/)
       end
     end
 
@@ -79,7 +79,7 @@ RSpec.describe MatViews::Services::BaseService do
       end
 
       it 'raises NotImplementedError' do
-        expect { bad_runner_class.new(definition).run }.to raise_error(NotImplementedError, /Must implement.*prepare/)
+        expect { bad_runner_class.new(definition).call }.to raise_error(NotImplementedError, /Must implement.*prepare/)
       end
     end
   end

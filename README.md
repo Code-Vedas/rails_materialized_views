@@ -103,13 +103,13 @@ end
 
 ## Job adapter (enqueue)
 
-All enqueues go through the adapter — it **does not guess** backends; it uses what **you** configured:
+All enqueues go through the adapter - it **does not guess** backends; it uses what **you** configured:
 
 ```ruby
 MatViews::Jobs::Adapter.enqueue(
   MatViews::RefreshViewJob,
   queue: MatViews.configuration.job_queue,
-  args:  [definition_id, :estimated]
+  args:  [mat_view_definition_id, :estimated]
 )
 ```
 

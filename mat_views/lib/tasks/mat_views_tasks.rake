@@ -22,15 +22,15 @@ namespace :mat_views do
   end
 
   desc 'Enqueue a CREATE for a specific view by its definition ID'
-  task :create_by_id, %i[definition_id force row_count_strategy yes] => :environment do |_t, args|
-    raise 'mat_views:create_by_id requires a definition_id parameter' if args[:definition_id].to_s.strip.empty?
+  task :create_by_id, %i[mat_view_definition_id force row_count_strategy yes] => :environment do |_t, args|
+    raise 'mat_views:create_by_id requires a mat_view_definition_id parameter' if args[:mat_view_definition_id].to_s.strip.empty?
 
     rcs   = helpers.parse_row_count_strategy(args[:row_count_strategy])
     force = helpers.parse_force?(args[:force])
     skip  = helpers.skip_confirm?(args[:yes])
 
-    defn = MatViews::MatViewDefinition.find_by(id: args[:definition_id])
-    raise "No MatViews::MatViewDefinition found for id=#{args[:definition_id]}" unless defn
+    defn = MatViews::MatViewDefinition.find_by(id: args[:mat_view_definition_id])
+    raise "No MatViews::MatViewDefinition found for id=#{args[:mat_view_definition_id]}" unless defn
 
     helpers.confirm!("Enqueue CREATE for id=#{defn.id} (#{defn.name}), force=#{force}, row_count_strategy=#{rcs}", skip: skip)
     helpers.enqueue_create(defn.id, force, rcs)
@@ -69,14 +69,14 @@ namespace :mat_views do
   end
 
   desc 'Enqueue a REFRESH for a specific view by its definition ID'
-  task :refresh_by_id, %i[definition_id row_count_strategy yes] => :environment do |_t, args|
-    raise 'mat_views:refresh_by_id requires a definition_id parameter' if args[:definition_id].to_s.strip.empty?
+  task :refresh_by_id, %i[mat_view_definition_id row_count_strategy yes] => :environment do |_t, args|
+    raise 'mat_views:refresh_by_id requires a mat_view_definition_id parameter' if args[:mat_view_definition_id].to_s.strip.empty?
 
     rcs  = helpers.parse_row_count_strategy(args[:row_count_strategy])
     skip = helpers.skip_confirm?(args[:yes])
 
-    defn = MatViews::MatViewDefinition.find_by(id: args[:definition_id])
-    raise "No MatViews::MatViewDefinition found for id=#{args[:definition_id]}" unless defn
+    defn = MatViews::MatViewDefinition.find_by(id: args[:mat_view_definition_id])
+    raise "No MatViews::MatViewDefinition found for id=#{args[:mat_view_definition_id]}" unless defn
 
     helpers.confirm!("Enqueue REFRESH for id=#{defn.id} (#{defn.name}), row_count_strategy=#{rcs}", skip: skip)
     helpers.enqueue_refresh(defn.id, rcs)
@@ -115,15 +115,15 @@ namespace :mat_views do
   end
 
   desc 'Enqueue a DELETE (DROP MATERIALIZED VIEW) for a specific view by its definition ID'
-  task :delete_by_id, %i[definition_id cascade row_count_strategy yes] => :environment do |_t, args|
-    raise 'mat_views:delete_by_id requires a definition_id parameter' if args[:definition_id].to_s.strip.empty?
+  task :delete_by_id, %i[mat_view_definition_id cascade row_count_strategy yes] => :environment do |_t, args|
+    raise 'mat_views:delete_by_id requires a mat_view_definition_id parameter' if args[:mat_view_definition_id].to_s.strip.empty?
 
     rcs     = helpers.parse_row_count_strategy(args[:row_count_strategy])
     cascade = helpers.parse_cascade?(args[:cascade])
     skip    = helpers.skip_confirm?(args[:yes])
 
-    defn = MatViews::MatViewDefinition.find_by(id: args[:definition_id])
-    raise "No MatViews::MatViewDefinition found for id=#{args[:definition_id]}" unless defn
+    defn = MatViews::MatViewDefinition.find_by(id: args[:mat_view_definition_id])
+    raise "No MatViews::MatViewDefinition found for id=#{args[:mat_view_definition_id]}" unless defn
 
     helpers.confirm!("Enqueue DELETE for id=#{defn.id} (#{defn.name}), cascade=#{cascade}, row_count_strategy=#{rcs}", skip: skip)
     helpers.enqueue_delete(defn.id, cascade, rcs)

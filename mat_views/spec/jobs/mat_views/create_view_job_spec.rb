@@ -53,7 +53,7 @@ RSpec.describe MatViews::CreateViewJob, type: :job do
     context 'when the service returns success' do
       it 'returns the response hash' do
         resp = service_response_double(status: :created, request: { view: 'public.mv' }, response: { rows: 100 })
-        svc  = instance_spy(MatViews::Services::CreateView, run: resp)
+        svc  = instance_spy(MatViews::Services::CreateView, call: resp)
         allow(MatViews::Services::CreateView)
           .to receive(:new).with(definition, force: true, row_count_strategy: :none).and_return(svc)
 
@@ -63,7 +63,7 @@ RSpec.describe MatViews::CreateViewJob, type: :job do
 
       it 'records a successful create run with core fields set' do
         resp = service_response_double(status: :created, response: { view: 'public.mv' })
-        svc  = instance_spy(MatViews::Services::CreateView, run: resp)
+        svc  = instance_spy(MatViews::Services::CreateView, call: resp)
         allow(MatViews::Services::CreateView)
           .to receive(:new).with(definition, force: true, row_count_strategy: :none).and_return(svc)
 
@@ -80,7 +80,7 @@ RSpec.describe MatViews::CreateViewJob, type: :job do
 
       it 'persists timing and meta' do
         resp = service_response_double(status: :created, response: { view: 'public.mv' })
-        svc  = instance_spy(MatViews::Services::CreateView, run: resp)
+        svc  = instance_spy(MatViews::Services::CreateView, call: resp)
         allow(MatViews::Services::CreateView)
           .to receive(:new).with(definition, force: true, row_count_strategy: :none).and_return(svc)
 
@@ -95,7 +95,7 @@ RSpec.describe MatViews::CreateViewJob, type: :job do
     context 'when the service returns error (no raise)' do
       it 'returns the response hash and records failed run' do
         resp = service_response_double(status: :error, error: StandardError.new('Invalid SQL').mv_serialize_error)
-        svc  = instance_spy(MatViews::Services::CreateView, run: resp)
+        svc  = instance_spy(MatViews::Services::CreateView, call: resp)
         allow(MatViews::Services::CreateView)
           .to receive(:new).with(definition, force: false, row_count_strategy: :none).and_return(svc)
 
@@ -115,7 +115,7 @@ RSpec.describe MatViews::CreateViewJob, type: :job do
         svc = instance_spy(MatViews::Services::CreateView)
         allow(MatViews::Services::CreateView)
           .to receive(:new).with(definition, force: false, row_count_strategy: :none).and_return(svc)
-        allow(svc).to receive(:run).and_raise(StandardError, 'kaboom')
+        allow(svc).to receive(:call).and_raise(StandardError, 'kaboom')
 
         expect do
           perform_now_and_return(definition.id)
@@ -132,7 +132,7 @@ RSpec.describe MatViews::CreateViewJob, type: :job do
     context 'when run fails to save' do
       it 'raises and does not attempt to update the run' do
         resp = service_response_double(status: :created, response: { view: 'public.mv' })
-        svc  = instance_spy(MatViews::Services::CreateView, run: resp)
+        svc  = instance_spy(MatViews::Services::CreateView, call: resp)
         allow(MatViews::Services::CreateView)
           .to receive(:new).with(definition, force: false, row_count_strategy: :none).and_return(svc)
 
