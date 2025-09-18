@@ -70,6 +70,9 @@ jobs:
   tests:
     needs: [lint, reek]
     uses: ./.github/workflows/ruby-tests.yml
+    env:
+      RUBY_VERSION: ${{ env.RUBY_VERSION }}
+      APP_DIR: ${{ env.APP_DIR }}
     with:
       ruby_version: $RUBY_VERSION
       app_dir: $APP_DIR
@@ -81,6 +84,9 @@ jobs:
   e2e_tests:
     needs: [lint, reek]
     uses: ./.github/workflows/ruby-tests.yml
+    env:
+      RUBY_VERSION: ${{ env.RUBY_VERSION }}
+      APP_DIR: ${{ env.APP_DIR }}
     with:
       ruby_version: $RUBY_VERSION
       app_dir: $APP_DIR

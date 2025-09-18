@@ -7,14 +7,14 @@ on:
         required: true
         type: string
         default: "3.4.3"
-      gecko_driver_version:
-        required: false
-        type: string
-        default: "0.36.0"
       app_dir:
         required: true
         type: string
         default: ${{ github.workspace }}/mat_views
+      gecko_driver_version:
+        required: false
+        type: string
+        default: "0.36.0"
       rspec_task:
         required: true
         type: string
