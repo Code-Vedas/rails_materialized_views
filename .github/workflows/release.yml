@@ -32,7 +32,8 @@ jobs:
       - run: bundle info rake
 
   lint:
-    permissions: { contents: read }
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     needs: setup
     defaults:
@@ -49,7 +50,8 @@ jobs:
         run: bin/rubocop -f github
 
   reek:
-    permissions: { contents: read }
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     needs: setup
     defaults:
