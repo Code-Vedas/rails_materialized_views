@@ -7,6 +7,10 @@ on:
         required: true
         type: string
         default: "3.4.3"
+      gecko_driver_version:
+        required: false
+        type: string
+        default: "0.36.0"
       app_dir:
         required: true
         type: string
@@ -19,7 +23,7 @@ on:
         required: false
         type: boolean
         default: true
-      need_chrome:
+      need_firefox:
         required: false
         type: boolean
         default: true
@@ -57,19 +61,21 @@ jobs:
           --health-retries=3
 
     steps:
-      - name: Install apt packages
-        if: ${{ inputs.need_chrome }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y \
-            build-essential git libpq-dev libyaml-dev pkg-config google-chrome-stable
-
-      - name: Install minimal apt packages (no Chrome)
-        if: ${{ !inputs.need_chrome }}
+      - name: Install minimal apt packages
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y \
             build-essential git libpq-dev libyaml-dev pkg-config
+
+      - name: Install Firefox (latest)
+        if: ${{ inputs.need_firefox }}
+        env:
+          GECKO_VERSION: ${{ inputs.gecko_driver_version }}
+        run: |
+          sudo add-apt-repository -y ppa:mozillateam/ppa
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y firefox
+          curl -sL "https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VERSION}/geckodriver-v${GECKO_VERSION}-linux64.tar.gz" | tar -xz -C /usr/local/bin
 
       - name: Checkout
         uses: actions/checkout@v5

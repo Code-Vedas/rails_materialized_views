@@ -66,7 +66,7 @@ jobs:
       app_dir: ${{ env.APP_DIR }}
       rspec_task: "bin/rspec-unit"
       need_seed: true
-      need_chrome: false
+      need_firefox: false
       upload_coverage: true
       qlty_coverage: true
     secrets:
@@ -80,5 +80,5 @@ jobs:
       app_dir: ${{ env.APP_DIR }}
       rspec_task: "bin/rspec-e2e"
       need_seed: false
-      need_chrome: true
+      need_firefox: true
       upload_coverage: false
