@@ -53,7 +53,7 @@ module MatViews
       # - `nil` → skip row count
       def initialize(definition, force: false, row_count_strategy: :estimated)
         super(definition, row_count_strategy: row_count_strategy)
-        @force = !!force
+        @force = force
         @use_transaction = definition.unique_index_columns.none?
       end
 

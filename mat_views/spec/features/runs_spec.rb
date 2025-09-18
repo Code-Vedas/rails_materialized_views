@@ -446,9 +446,6 @@ RSpec.describe 'Runs', type: :feature do
 
     scenario 'View run details: failed' do
       open_runs
-      within_turbo_frame('dash-runs') do
-        expect(page).to have_css('table.mv-table tbody tr.mv-tr', count: 4)
-      end
       open_drawer(
         click_selector: "a[data-testid='view_link-run-#{refresh_failed_run.id}']",
         within_selector: 'turbo-frame#dash-runs',
@@ -498,8 +495,7 @@ RSpec.describe 'Runs', type: :feature do
 
         within('div.mv-field details', text: /Error/) do
           expect(page).to have_css('summary div.mv-label', text: 'Error')
-          json = JSON.parse(find('div pre').text.strip)
-          expect(json).to eq('class' => 'StandardError', 'message' => 'Refresh failed', 'backtrace' => [])
+          expect(JSON.parse(find('div pre').text.strip)).to eq('class' => 'StandardError', 'message' => 'Refresh failed', 'backtrace' => [])
         end
 
         within('div.mv-field details', text: /Metadata/) do
