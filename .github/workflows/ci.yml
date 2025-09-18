@@ -70,8 +70,8 @@ jobs:
     needs: [lint, reek]
     uses: ./.github/workflows/ruby-tests.yml
     with:
-      ruby_version: ${{ env.RUBY_VERSION }}
-      app_dir: ${{ env.APP_DIR }}
+      ruby_version: $RUBY_VERSION
+      app_dir: $APP_DIR
       rspec_task: "bin/rspec-unit"
       need_seed: true
       need_firefox: false
@@ -84,8 +84,8 @@ jobs:
     needs: [lint, reek]
     uses: ./.github/workflows/ruby-tests.yml
     with:
-      ruby_version: ${{ env.RUBY_VERSION }}
-      app_dir: ${{ env.APP_DIR }}
+      ruby_version: $RUBY_VERSION
+      app_dir: $APP_DIR
       rspec_task: "bin/rspec-e2e"
       need_seed: false
       need_firefox: true
