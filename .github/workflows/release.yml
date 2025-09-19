@@ -72,7 +72,6 @@ jobs:
     uses: ./.github/workflows/ruby-tests.yml
     with:
       rspec_task: "bin/rspec-unit --profile 10"
-      need_seed: true
       need_firefox: false
       upload_coverage: false
 
@@ -81,7 +80,6 @@ jobs:
     uses: ./.github/workflows/ruby-tests.yml
     with:
       rspec_task: "bin/rspec-e2e --profile 10"
-      need_seed: false
       need_firefox: true
       upload_coverage: false
 

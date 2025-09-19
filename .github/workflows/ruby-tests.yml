@@ -11,10 +11,6 @@ on:
         required: true
         type: string
         description: "Command to run tests (e.g., bin/rspec-unit or bin/rspec-e2e)"
-      need_seed:
-        required: false
-        type: boolean
-        default: true
       need_firefox:
         required: false
         type: boolean
@@ -42,7 +38,6 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         ports: ["5432:5432"]
         options: >-
@@ -86,8 +81,8 @@ jobs:
           working-directory: ${{ env.APP_DIR }}
       - name: Cache Bootsnap
         uses: actions/cache@v4
+        working-directory: ${{ env.APP_DIR }}
         with:
-          working-directory: ${{ env.APP_DIR }}
           path: spec/dummy/tmp/cache
           key: bootsnap-${{ runner.os }}-${{ env.RUBY_VERSION }}-${{ hashFiles('**/Gemfile.lock') }}
       - name: Prepare database
@@ -99,14 +94,6 @@ jobs:
           bin/rails db:drop || true
           bin/rails db:create
           bin/rails db:schema:load
-
-      - name: Seed database
-        if: ${{ inputs.need_seed }}
-        working-directory: ${{ env.APP_DIR }}
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
-        run: bin/rails db:seed
 
       - name: Run tests
         working-directory: ${{ env.APP_DIR }}
