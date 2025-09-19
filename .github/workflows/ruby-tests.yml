@@ -11,10 +11,6 @@ on:
         required: true
         type: string
         description: "Command to run tests (e.g., bin/rspec-unit or bin/rspec-e2e)"
-      need_firefox:
-        required: false
-        type: boolean
-        default: true
       upload_coverage:
         required: false
         type: boolean
@@ -48,28 +44,11 @@ jobs:
           --health-retries=3
 
     steps:
-      - name: Install minimal apt packages
+      - name: Install apt packages
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y \
-            build-essential git libpq-dev libyaml-dev pkg-config
-
-      - name: Install Firefox (latest)
-        if: ${{ inputs.need_firefox }}
-        env:
-          GECKO_VERSION: ${{ inputs.gecko_driver_version }}
-        run: |
-          sudo add-apt-repository -y ppa:mozillateam/ppa
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y firefox
-          curl -sL "https://github.com/mozilla/geckodriver/releases/download/v${GECKO_VERSION}/geckodriver-v${GECKO_VERSION}-linux64.tar.gz" | tar -xz -C /usr/local/bin
-      - name: Debug Firefox paths
-        if: ${{ inputs.need_firefox }}
-        run: |
-          which firefox || true
-          which firefox-esr || true
-          ls -l /usr/bin/firefox* || true
-          ls -l /usr/lib/firefox/firefox || true
+            build-essential git libpq-dev libyaml-dev pkg-config firefox
       - name: Checkout
         uses: actions/checkout@v5
 
