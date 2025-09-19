@@ -11,6 +11,10 @@ on:
         required: true
         type: string
         description: "Command to run tests (e.g., bin/rspec-unit or bin/rspec-e2e)"
+      require_browser:
+        required: false
+        type: boolean
+        default: false
       upload_coverage:
         required: false
         type: boolean
@@ -31,6 +35,15 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     services:
+      firefox:
+        if: ${{ inputs.require_browser }}
+        image: selenium/standalone-firefox:latest
+        ports: ["4444:4444"]
+        options: >-
+          --health-cmd="curl -f http://localhost:4444/wd/hub/status || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
       postgres:
         image: postgres
         env:
@@ -72,14 +85,21 @@ jobs:
           bin/rails db:drop || true
           bin/rails db:create
           bin/rails db:schema:load
-
-      - name: Run tests
+      - name: Run unit tests
+        if: ${{ !inputs.require_browser }}
         working-directory: ${{ env.APP_DIR }}
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: ${{ inputs.rspec_task }}
-
+      - name: Run e2e tests
+        if: ${{ inputs.require_browser }}
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
+        run: ${{ inputs.rspec_task }}
       - name: Upload SimpleCov report
         if: ${{ inputs.upload_coverage }}
         uses: actions/upload-artifact@v4

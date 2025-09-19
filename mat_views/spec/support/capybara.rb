@@ -23,8 +23,31 @@ Capybara.register_driver :firefox_headless do |app|
   driver
 end
 
-Capybara.default_driver = :firefox_headless
-Capybara.javascript_driver = :firefox_headless
+Capybara.register_driver :remote_firefox do |app|
+  url = ENV.fetch('SELENIUM_REMOTE_URL', 'http://localhost:4444/wd/hub')
+  opts = Selenium::WebDriver::Firefox::Options.new
+  opts.args << '-headless'
+  opts.add_preference('layout.css.devPixelsPerPx', '1.0')
+  driver = Capybara::Selenium::Driver.new(
+    app,
+    browser: :remote,
+    url: url,
+    options: opts
+  )
+  driver.browser.manage.window.resize_to(1920, 1080)
+  driver
+end
+
+if ENV['SELENIUM_REMOTE_URL'].present?
+  Capybara.default_driver = :remote_firefox
+  Capybara.javascript_driver = :remote_firefox
+  Capybara.server_host = '0.0.0.0'
+  Capybara.server_port = ENV.fetch('CAPYBARA_PORT', '3100').to_i
+  Capybara.app_host = "http://#{ENV.fetch('CAPYBARA_APP_HOST', 'host.docker.internal')}:#{Capybara.server_port}"
+else
+  Capybara.default_driver = :firefox_headless
+  Capybara.javascript_driver = :firefox_headless
+end
 
 RSpec.configure do |config|
   config.after(:each, type: :feature) do |example|

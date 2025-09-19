@@ -72,6 +72,7 @@ jobs:
     uses: ./.github/workflows/ruby-tests.yml
     with:
       rspec_task: "bin/rspec-unit --profile 10"
+      require_browser: false
       upload_coverage: false
 
   e2e_tests:
@@ -79,6 +80,7 @@ jobs:
     uses: ./.github/workflows/ruby-tests.yml
     with:
       rspec_task: "bin/rspec-e2e --profile 10"
+      require_browser: true
       upload_coverage: false
 
   push:
