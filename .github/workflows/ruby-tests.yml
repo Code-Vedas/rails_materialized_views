@@ -36,11 +36,10 @@ jobs:
     runs-on: ubuntu-latest
     services:
       firefox:
-        if: ${{ inputs.require_browser }}
         image: selenium/standalone-firefox:latest
         ports: ["4444:4444"]
         options: >-
-          --health-cmd="curl -f http://localhost:4444/wd/hub/status || exit 1"
+          --health-cmd="/opt/bin/check-grid.sh || exit 1"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
