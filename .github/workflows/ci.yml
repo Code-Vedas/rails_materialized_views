@@ -68,7 +68,7 @@ jobs:
 
   tests:
     needs: [lint, reek]
-    uses: ./.github/workflows/ruby-tests.yml}
+    uses: ./.github/workflows/ruby-tests.yml
     with:
       rspec_task: "bin/rspec-unit"
       need_seed: true
