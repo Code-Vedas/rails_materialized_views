@@ -11,17 +11,10 @@ on:
         required: true
         type: string
         description: "Command to run tests (e.g., bin/rspec-unit or bin/rspec-e2e)"
-      require_browser:
-        required: false
-        type: boolean
-        default: false
       upload_coverage:
         required: false
         type: boolean
         default: true
-      qlty_coverage:
-        required: false
-        type: boolean
         default: false
     secrets:
       QLTY_COVERAGE_TOKEN:
@@ -35,14 +28,6 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     services:
-      firefox:
-        image: selenium/standalone-firefox:latest
-        ports: ["4444:4444"]
-        options: >-
-          --health-cmd="/opt/bin/check-grid.sh || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
       postgres:
         image: postgres
         env:
@@ -54,7 +39,6 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-
     steps:
       - name: Install apt packages
         run: |
@@ -63,7 +47,6 @@ jobs:
             build-essential git libpq-dev libyaml-dev pkg-config
       - name: Checkout
         uses: actions/checkout@v5
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -85,39 +68,14 @@ jobs:
           bin/rails db:create
           bin/rails db:schema:load
       - name: Run unit tests
-        if: ${{ !inputs.require_browser }}
         working-directory: ${{ env.APP_DIR }}
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: ${{ inputs.rspec_task }}
-      - name: Run e2e tests
-        if: ${{ inputs.require_browser }}
-        working-directory: ${{ env.APP_DIR }}
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
-          SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
-        run: ${{ inputs.rspec_task }}
-      - name: Upload SimpleCov report
-        if: ${{ inputs.upload_coverage }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: simplecov-report
-          path: ${{ env.APP_DIR }}/coverage
-          if-no-files-found: ignore
-
       - name: Publish coverage to Qlty
-        if: ${{ inputs.qlty_coverage }}
+        if: ${{ inputs.upload_coverage }}
         uses: qltysh/qlty-action/coverage@v2
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
           files: ${{ env.APP_DIR }}/coverage/.resultset.json
-
-      - name: Keep screenshots from failed system tests
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots
-          path: ${{ env.APP_DIR }}/tmp/screenshots
-          if-no-files-found: ignore
