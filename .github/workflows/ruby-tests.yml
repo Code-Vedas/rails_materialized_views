@@ -84,7 +84,12 @@ jobs:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
           working-directory: ${{ env.APP_DIR }}
-
+      - name: Cache Bootsnap
+        uses: actions/cache@v4
+        with:
+          working-directory: ${{ env.APP_DIR }}
+          path: spec/dummy/tmp/cache
+          key: bootsnap-${{ runner.os }}-${{ env.RUBY_VERSION }}-${{ hashFiles('**/Gemfile.lock') }}
       - name: Prepare database
         working-directory: ${{ env.APP_DIR }}
         env:
