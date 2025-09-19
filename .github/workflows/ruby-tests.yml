@@ -61,7 +61,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y \
-            build-essential git libpq-dev libyaml-dev pkg-config firefox
+            build-essential git libpq-dev libyaml-dev pkg-config
       - name: Checkout
         uses: actions/checkout@v5
 
