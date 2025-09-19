@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: mat_views
+        working-directory: ${{ env.APP_DIR }}
     steps:
       - uses: actions/checkout@v5
       - name: Set up Ruby
