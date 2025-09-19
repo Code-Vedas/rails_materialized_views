@@ -3,14 +3,6 @@ name: Ruby Tests (reusable)
 on:
   workflow_call:
     inputs:
-      ruby_version:
-        required: true
-        type: string
-        default: "3.4.3"
-      app_dir:
-        required: true
-        type: string
-        default: ${{ github.workspace }}/mat_views
       gecko_driver_version:
         required: false
         type: string
@@ -38,15 +30,14 @@ on:
     secrets:
       QLTY_COVERAGE_TOKEN:
         required: false
-
+env:
+  RUBY_VERSION: 3.4.3
+  APP_DIR: ${{ github.workspace }}/mat_views
 jobs:
   test:
     permissions:
       contents: read
     runs-on: ubuntu-latest
-    env:
-      RUBY_VERSION: ${{ inputs.ruby_version }}
-      APP_DIR: ${{ inputs.app_dir }}
     services:
       postgres:
         image: postgres
