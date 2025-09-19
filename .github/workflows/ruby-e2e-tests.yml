@@ -20,6 +20,7 @@ jobs:
         image: selenium/standalone-firefox:latest
         ports: ["4444:4444"]
         options: >-
+          --add-host=host.docker.internal:host-gateway
           --health-cmd="/opt/bin/check-grid.sh || exit 1"
           --health-interval=10s
           --health-timeout=5s
@@ -77,5 +78,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
-          path: ${{ env.APP_DIR }}/tmp/screenshots
+          path: ${{ env.APP_DIR }}/spec/dummy/tmp/screenshots
           if-no-files-found: ignore
