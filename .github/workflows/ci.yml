@@ -98,8 +98,18 @@ jobs:
           header: 📸 MatViews Admin App Screenshots
           message: |
             App screenshots from the latest e2e test run are available.
+            ## Details
+
             | Name | Link |
             | ---- | ---- |
             | Commit | ${{ github.event.pull_request.head.sha }} |
             | Workflow | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
-            | Screenshots | ${{ needs.e2e_tests.outputs.app_screenshots_url }} |
+
+            ## App Screenshots
+            | Locale | Link |
+            | ------ | ---- |
+            | en-AU | ${{ needs.e2e_tests.outputs.app_screenshots_en_au_url }} |
+            | en-AU-ocker | ${{ needs.e2e_tests.outputs.app_screenshots_en_au_ocker_url }} |
+            | en-CA | ${{ needs.e2e_tests.outputs.app_screenshots_en_ca_url }} |
+            | en-US | ${{ needs.e2e_tests.outputs.app_screenshots_en_us_url }} |
+            | en-US-pirate | ${{ needs.e2e_tests.outputs.app_screenshots_en_us_pirate_url }} |

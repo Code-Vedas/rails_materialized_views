@@ -11,7 +11,8 @@ RSpec.describe 'UI screenshots', type: :feature do
       'English (United States)',
       'English (Canada)',
       'Aussie (Ocker)',
-      'Pirate English (Arrr!)'
+      'Pirate English (Arrr!)',
+      'English (Australia)'
     ]
   end
   let(:lang_map) do
@@ -19,7 +20,8 @@ RSpec.describe 'UI screenshots', type: :feature do
       'English (United States)' => 'en-US',
       'English (Canada)' => 'en-CA',
       'Aussie (Ocker)' => 'en-AU-ocker',
-      'Pirate English (Arrr!)' => 'en-US-pirate'
+      'Pirate English (Arrr!)' => 'en-US-pirate',
+      'English (Australia)' => 'en-AU'
     }
   end
   let(:themes) { %w[light dark] }
@@ -49,6 +51,11 @@ RSpec.describe 'UI screenshots', type: :feature do
         name: 'Definitions View',
         url: "/mat_views/:lang/admin?open=definitions_view_#{example_definition.id}",
         wait_for_drawer: true
+      },
+      {
+        name: 'Definitions New',
+        url: '/mat_views/:lang/admin?open=definitions_new',
+        wait_drawer_open: true
       },
       {
         name: 'Definitions Edit',
@@ -100,6 +107,7 @@ RSpec.describe 'UI screenshots', type: :feature do
     visit url
     wait_for_turbo_idle
     wait_drawer_open(timeout: 10) if wait_drawer_open
+    sleep 1
 
     FileUtils.mkdir_p(screenshot_dir.join(lang_map[lang], theme.downcase))
     filename = screenshot_dir.join(lang_map[lang], theme.downcase, "#{name.downcase.tr(' ', '_')}.png").to_s
