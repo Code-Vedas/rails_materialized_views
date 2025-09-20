@@ -50,6 +50,8 @@ else
   Capybara.javascript_driver = :firefox_headless
 end
 
+Capybara.disable_animation = true
+
 RSpec.configure do |config|
   config.after(:each, type: :feature) do |example|
     next unless example.exception

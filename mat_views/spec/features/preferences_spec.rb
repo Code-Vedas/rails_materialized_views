@@ -10,12 +10,13 @@ RSpec.describe 'Preferences', type: :feature do
 
   let(:lang_options) do
     [
-      'English (United States)',
-      'English (Canada)',
       'Aussie (Ocker)',
-      'Pirate English (Arrr!)',
       'English (Australia)',
-      'Børk! Børk! Børk!'
+      'Børk! Børk! Børk!',
+      'English (Canada)',
+      'English (United Kingdom)',
+      'Pirate English (Arrr!)',
+      'English (United States)'
     ]
   end
 
@@ -87,11 +88,12 @@ RSpec.describe 'Preferences', type: :feature do
   end
 
   describe 'Change Language', :js do
-    it_behaves_like 'change language', 'English (United States)', 'English (Canada)', 'Language', 'Language'
-    it_behaves_like 'change language', 'English (United States)', 'English (United States)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'Aussie (Ocker)', 'Language', 'Lingo'
-    it_behaves_like 'change language', 'English (United States)', 'Pirate English (Arrr!)', 'Language', 'Tongue'
     it_behaves_like 'change language', 'English (United States)', 'English (Australia)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'Børk! Børk! Børk!', 'Language', 'Lengoeege-a'
+    it_behaves_like 'change language', 'English (United States)', 'English (Canada)', 'Language', 'Language'
+    it_behaves_like 'change language', 'English (United States)', 'English (United Kingdom)', 'Language', 'Language'
+    it_behaves_like 'change language', 'English (United States)', 'English (United States)', 'Language', 'Language'
+    it_behaves_like 'change language', 'English (United States)', 'Pirate English (Arrr!)', 'Language', 'Tongue'
   end
 end

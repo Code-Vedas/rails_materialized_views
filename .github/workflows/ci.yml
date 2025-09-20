@@ -108,9 +108,10 @@ jobs:
             ## App Screenshots
             | Locale | Link |
             | ------ | ---- |
-            | en-AU | ${{ needs.e2e_tests.outputs.app_screenshots_en_au_url }} |
-            | en-AU-ocker | ${{ needs.e2e_tests.outputs.app_screenshots_en_au_ocker_url }} |
-            | en-BORK | ${{ needs.e2e_tests.outputs.app_screenshots_en_bork_url }} |
-            | en-CA | ${{ needs.e2e_tests.outputs.app_screenshots_en_ca_url }} |
-            | en-US | ${{ needs.e2e_tests.outputs.app_screenshots_en_us_url }} |
-            | en-US-pirate | ${{ needs.e2e_tests.outputs.app_screenshots_en_us_pirate_url }} |
+            | en-AU | [English \(Australia\)](${{ needs.e2e_tests.outputs.app_screenshots_en_au_url }}) |
+            | en-AU-ocker | [English \(Australia\) Ocker](${{ needs.e2e_tests.outputs.app_screenshots_en_au_ocker_url }}) |
+            | en-BORK | [Bork \(Swedish Chef\)](${{ needs.e2e_tests.outputs.app_screenshots_en_bork_url }}) |
+            | en-CA | [English \(Canada\)](${{ needs.e2e_tests.outputs.app_screenshots_en_ca_url }}) |
+            | en-GB | [English \(United Kingdom\)](${{ needs.e2e_tests.outputs.app_screenshots_en_gb_url }}) |
+            | en-US | [English \(United States\)](${{ needs.e2e_tests.outputs.app_screenshots_en_us_url }}) |
+            | en-US-pirate | [English \(Pirate\)](${{ needs.e2e_tests.outputs.app_screenshots_en_us_pirate_url }}) |
