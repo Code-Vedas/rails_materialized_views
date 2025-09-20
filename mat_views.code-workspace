@@ -2,15 +2,15 @@
   "folders": [
     {
       "name": "docs",
-      "path": "./docs"
+      "path": "docs"
     },
     {
       "name": "mat_views",
-      "path": "./mat_views"
+      "path": "mat_views"
     },
     {
       "name": "mat_views_demo",
-      "path": "./mat_views_demo"
+      "path": "mat_views_demo"
     },
     {
       "name": "root",

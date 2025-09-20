@@ -6,7 +6,7 @@
 # LICENSE file in the root directory of this source tree.
 
 # rubocop:disable Style/SignalException
-valid_prefixes = %w[feat/ bugfix/ docs/ release/ chore/ refactor/ test/ style/ ci/ perf/ build/]
+valid_prefixes = %w[feat/ bugfix/ docs/ release/ chore/ refactor/ test/ style/ ci/ perf/ build/ lang/]
 
 def all_modified_files(git)
   all_added = git.added_files + git.modified_files + git.renamed_files.map { |file| file[:after] }

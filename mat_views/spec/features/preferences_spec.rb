@@ -8,6 +8,8 @@
 RSpec.describe 'Preferences', type: :feature do
   before { visit_dashboard }
 
+  let(:lang_options) { ['English (United States)', 'English (Canada)', 'Aussie (Ocker)'] }
+
   shared_examples 'change theme' do |theme_before, theme_after|
     scenario "Change to from #{theme_before} to #{theme_after}", :js do
       expect(page).to have_css("html[data-theme='#{theme_before}']")
@@ -37,8 +39,6 @@ RSpec.describe 'Preferences', type: :feature do
   end
 
   shared_examples 'change language' do |lang_before, lang_after, language_txt_before, language_txt_after|
-    let(:lang_options) { ['English (United States)', 'English (Canada)'] }
-
     scenario "Change language from #{lang_before} to #{lang_after}", :js do
       open_preferences
       within_drawer do
@@ -67,9 +67,7 @@ RSpec.describe 'Preferences', type: :feature do
       expect(page).to have_field('theme', type: 'radio', with: 'dark')
 
       expect(page).to have_css('label.mv-label', text: 'Language')
-      expect(page).to have_select('locale',
-                                  options: ['English (United States)', 'English (Canada)'],
-                                  selected: 'English (United States)')
+      expect(page).to have_select('locale', options: lang_options, selected: 'English (United States)')
     end
   end
 
@@ -82,5 +80,6 @@ RSpec.describe 'Preferences', type: :feature do
   describe 'Change Language', :js do
     it_behaves_like 'change language', 'English (United States)', 'English (Canada)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'English (United States)', 'Language', 'Language'
+    it_behaves_like 'change language', 'English (United States)', 'Aussie (Ocker)', 'Language', 'Lingo'
   end
 end
