@@ -113,6 +113,7 @@ jobs:
   app_screenshots:
     runs-on: ubuntu-latest
     needs: [discover_locales]
+    if: github.event_name == 'pull_request'
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.discover_locales.outputs.locales_matrix_json) }}

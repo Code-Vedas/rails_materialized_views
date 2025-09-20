@@ -1,4 +1,4 @@
-en-IND:
+en-PK:
   activerecord:
     attributes:
       mat_views/mat_view_definition:
@@ -84,7 +84,7 @@ en-IND:
         operation: "Select operation"
         status: "Select status"
   i18n:
-    name: English (India)
+    name: English (Pakistan)
   mat_views:
     actions: "Actions"
     all_definitions: "All definitions"
