@@ -13,6 +13,7 @@ RSpec.describe 'UI screenshots', type: :feature do
       'Børk! Børk! Børk!',
       'English (Canada)',
       'English (United Kingdom)',
+      'English (India)',
       'Pirate English (Arrr!)',
       'English (United States)'
     ]
@@ -24,6 +25,7 @@ RSpec.describe 'UI screenshots', type: :feature do
       'Børk! Børk! Børk!' => 'en-BORK',
       'English (Canada)' => 'en-CA',
       'English (United Kingdom)' => 'en-GB',
+      'English (India)' => 'en-IND',
       'Pirate English (Arrr!)' => 'en-US-pirate',
       'English (United States)' => 'en-US'
     }

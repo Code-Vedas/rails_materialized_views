@@ -113,5 +113,6 @@ jobs:
             | en-BORK | [Bork \(Swedish Chef\)](${{ needs.e2e_tests.outputs.app_screenshots_en_bork_url }}) |
             | en-CA | [English \(Canada\)](${{ needs.e2e_tests.outputs.app_screenshots_en_ca_url }}) |
             | en-GB | [English \(United Kingdom\)](${{ needs.e2e_tests.outputs.app_screenshots_en_gb_url }}) |
+            | en-IND | [English \(India\)](${{ needs.e2e_tests.outputs.app_screenshots_en_ind_url }}) |
             | en-US | [English \(United States\)](${{ needs.e2e_tests.outputs.app_screenshots_en_us_url }}) |
             | en-US-pirate | [English \(Pirate\)](${{ needs.e2e_tests.outputs.app_screenshots_en_us_pirate_url }}) |
