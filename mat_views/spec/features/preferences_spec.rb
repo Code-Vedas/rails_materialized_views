@@ -8,7 +8,14 @@
 RSpec.describe 'Preferences', type: :feature do
   before { visit_dashboard }
 
-  let(:lang_options) { ['English (United States)', 'English (Canada)', 'Aussie (Ocker)'] }
+  let(:lang_options) do
+    [
+      'English (United States)',
+      'English (Canada)',
+      'Aussie (Ocker)',
+      'Pirate English (Arrr!)'
+    ]
+  end
 
   shared_examples 'change theme' do |theme_before, theme_after|
     scenario "Change to from #{theme_before} to #{theme_after}", :js do
@@ -81,5 +88,6 @@ RSpec.describe 'Preferences', type: :feature do
     it_behaves_like 'change language', 'English (United States)', 'English (Canada)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'English (United States)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'Aussie (Ocker)', 'Language', 'Lingo'
+    it_behaves_like 'change language', 'English (United States)', 'Pirate English (Arrr!)', 'Language', 'Tongue'
   end
 end
