@@ -1,4 +1,4 @@
-en-AU:
+en-MS:
   activerecord:
     attributes:
       mat_views/mat_view_definition:
@@ -39,7 +39,7 @@ en-AU:
         status:
           failed: "Failed"
           running: "Running"
-          success: "Succeeded"
+          success: "Successful"
     errors:
       models:
         mat_views/mat_view_definition:

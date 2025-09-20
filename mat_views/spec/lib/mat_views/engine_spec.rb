@@ -24,6 +24,7 @@ RSpec.describe MatViews::Engine, type: :engine do
         en-GB
         en-IND
         en-KE
+        en-MS
         en-US-pirate
         en-US
       ]
