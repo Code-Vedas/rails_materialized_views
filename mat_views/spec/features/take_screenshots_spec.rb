@@ -12,6 +12,7 @@ RSpec.describe 'UI screenshots', type: :feature do
       'English (Australia)',
       'Børk! Børk! Børk!',
       'English (Canada)',
+      'English (United Kingdom)',
       'Pirate English (Arrr!)',
       'English (United States)'
     ]
@@ -22,6 +23,7 @@ RSpec.describe 'UI screenshots', type: :feature do
       'English (Australia)' => 'en-AU',
       'Børk! Børk! Børk!' => 'en-BORK',
       'English (Canada)' => 'en-CA',
+      'English (United Kingdom)' => 'en-GB',
       'Pirate English (Arrr!)' => 'en-US-pirate',
       'English (United States)' => 'en-US'
     }
@@ -109,7 +111,7 @@ RSpec.describe 'UI screenshots', type: :feature do
     visit url
     wait_for_turbo_idle
     wait_drawer_open(timeout: 10) if wait_drawer_open
-    sleep 1
+    # sleep 1
 
     FileUtils.mkdir_p(screenshot_dir.join(lang_map[lang], theme.downcase))
     filename = screenshot_dir.join(lang_map[lang], theme.downcase, "#{name.downcase.tr(' ', '_')}.png").to_s

@@ -83,8 +83,8 @@ export default class extends Controller {
 
   show() {
     const root = this._root();
-    root?.classList.add("is-open");
     document.addEventListener("keydown", this._escHandler);
+    root?.classList.add("is-open");
     root?.setAttribute("aria-hidden", "false");
   }
 

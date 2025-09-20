@@ -19,6 +19,9 @@ on:
       app_screenshots_en_ca_url:
         description: URL to download the app screenshots artifact (en-CA)
         value: ${{ jobs.test.outputs.app_screenshots_en_ca_url }}
+      app_screenshots_en_gb_url:
+        description: URL to download the app screenshots artifact (en-GB)
+        value: ${{ jobs.test.outputs.app_screenshots_en_gb_url }}
       app_screenshots_en_us_url:
         description: URL to download the app screenshots artifact (en-US)
         value: ${{ jobs.test.outputs.app_screenshots_en_us_url }}
@@ -38,6 +41,7 @@ jobs:
       app_screenshots_en_au_ocker_url: ${{ steps.upload-screenshots-en-au-ocker.outputs.artifact-url }}
       app_screenshots_en_bork_url: ${{ steps.upload-screenshots-en-bork.outputs.artifact-url }}
       app_screenshots_en_ca_url: ${{ steps.upload-screenshots-en-ca.outputs.artifact-url }}
+      app_screenshots_en_gb_url: ${{ steps.upload-screenshots-en-gb.outputs.artifact-url }}
       app_screenshots_en_us_url: ${{ steps.upload-screenshots-en-us.outputs.artifact-url }}
       app_screenshots_en_us_pirate_url: ${{ steps.upload-screenshots-en-us-pirate.outputs.artifact-url }}
     services:
@@ -125,6 +129,13 @@ jobs:
         with:
           name: app-screenshots-en-ca
           path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-CA
+          if-no-files-found: error
+      - name: Upload app screenshots artifact (en-GB)
+        uses: actions/upload-artifact@v4
+        id: upload-screenshots-en-gb
+        with:
+          name: app-screenshots-en-gb
+          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-GB
           if-no-files-found: error
       - name: Upload app screenshots artifact (en-US)
         uses: actions/upload-artifact@v4
