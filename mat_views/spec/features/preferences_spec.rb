@@ -15,6 +15,7 @@ RSpec.describe 'Preferences', type: :feature do
       'Børk! Børk! Børk!',
       'English (Canada)',
       'English (United Kingdom)',
+      'English (India)',
       'Pirate English (Arrr!)',
       'English (United States)'
     ]
@@ -93,6 +94,7 @@ RSpec.describe 'Preferences', type: :feature do
     it_behaves_like 'change language', 'English (United States)', 'Børk! Børk! Børk!', 'Language', 'Lengoeege-a'
     it_behaves_like 'change language', 'English (United States)', 'English (Canada)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'English (United Kingdom)', 'Language', 'Language'
+    it_behaves_like 'change language', 'English (United States)', 'English (India)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'English (United States)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'Pirate English (Arrr!)', 'Language', 'Tongue'
   end
