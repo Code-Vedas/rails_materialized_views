@@ -8,6 +8,7 @@
 require 'capybara/rails'
 require 'capybara/rspec'
 require 'selenium/webdriver'
+require 'support/screenshot_helpers'
 
 Capybara.server = :puma, { Silent: true }
 Capybara.default_max_wait_time = ENV.fetch('CAPYBARA_WAIT_TIME', 6).to_i
@@ -53,16 +54,14 @@ end
 Capybara.disable_animation = true
 
 RSpec.configure do |config|
-  config.after(:each, type: :feature) do |example|
-    next unless example.exception
+  config.include ScreenshotHelpers, type: :feature
+  config.include ScreenshotHelpers, type: :feature_app_screenshots
+  config.include Capybara::DSL, type: :feature_app_screenshots
+  config.include Capybara::RSpecMatchers,  type: :feature_app_screenshots
 
-    dir = Rails.root.join('tmp/screenshots')
-    FileUtils.mkdir_p(dir)
-    stamp = Time.now.strftime('%Y%m%d-%H%M%S')
-    name  = example.metadata[:full_description][0..60].parameterize
-    path  = dir.join("#{name}-#{stamp}.png")
-
-    page.save_screenshot(path.to_s) # rubocop:disable Lint/Debugger
-    RSpec.configuration.reporter.message("Saved screenshot: #{path}")
+  %i[feature feature_app_screenshots].each do |type|
+    config.after(type: type) do |example|
+      save_failure_screenshot(example)
+    end
   end
 end

@@ -11,4 +11,4 @@ has_children: true
 
 > As of writing, no UI is provided; all operations are via service objects, background jobs, and rake tasks.
 
-This section a multiple pages that explain how to define, create, refresh, and delete materialized views using the `mat_views` gem. Each page covers a specific aspect of usage:
+This section a multiple pages that explain how to define, create, refresh, and delete materialised views using the `mat_views` gem. Each page covers a specific aspect of usage:

@@ -9,7 +9,7 @@ module MatViews
   module Services
     # MatViews::Services::CheckMatviewExists
     # --------------------------------------
-    # Service object that checks whether the underlying PostgreSQL **materialized view**
+    # Service object that checks whether the underlying PostgreSQL **materialised view**
     # for a given {MatViews::MatViewDefinition} currently exists.
     #
     # ### Contract
@@ -23,7 +23,7 @@ module MatViews
     # - On success: status `:ok`, with `response: { exists: true|false }`.
     # - On validation failure (bad view name): raises via {BaseService#raise_err}.
     #
-    # @example Check if a materialized view exists
+    # @example Check if a materialised view exists
     #   defn = MatViews::MatViewDefinition.find(1)
     #   res  = MatViews::Services::CheckMatviewExists.new(defn).call
     #   if res.success?

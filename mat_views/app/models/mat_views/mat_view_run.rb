@@ -10,9 +10,9 @@
 module MatViews
   ##
   # ActiveRecord model that tracks the lifecycle of *runs* for
-  # materialized views.
+  # materialised views.
   #
-  # Each record corresponds to a single attempt to mutate a materialized view
+  # Each record corresponds to a single attempt to mutate a materialised view
   # from a {MatViews::MatViewDefinition}, storing its status, timing, and
   # any associated error or metadata.
   #
@@ -59,9 +59,9 @@ module MatViews
     #
     # @!attribute [r] operation
     #   @return [Symbol] One of:
-    #     - `:create` - initial creation of the materialized view
+    #     - `:create` - initial creation of the materialised view
     #     - `:refresh` - refreshing an existing view
-    #     - `:drop` - dropping the materialized view
+    #     - `:drop` - dropping the materialised view
     enum :operation, {
       create: 0,
       refresh: 1,

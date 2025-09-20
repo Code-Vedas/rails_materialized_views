@@ -12,8 +12,8 @@ Gem::Specification.new do |spec|
   spec.version     = MatViews::VERSION
   spec.authors     = ['Nitesh Purohit']
   spec.email       = ['nitesh.purohit.it@gmail.com']
-  spec.summary       = 'Manage and refresh PostgreSQL materialized views in Rails'
-  spec.description   = 'A mountable Rails engine to track, define, refresh, and monitor Postgres materialized views.'
+  spec.summary       = 'Manage and refresh PostgreSQL materialised views in Rails'
+  spec.description   = 'A mountable Rails engine to track, define, refresh, and monitor Postgres materialised views.'
   spec.homepage      = 'https://github.com/Code-Vedas/rails_materialized_views'
   spec.license       = 'MIT'
   spec.metadata['bug_tracker_uri'] = 'https://github.com/Code-Vedas/rails_materialized_views/issues'

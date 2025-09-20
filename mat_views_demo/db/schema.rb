@@ -36,19 +36,19 @@ ActiveRecord::Schema[8.0].define(version: 20_250_814_012_801) do
   end
 
   create_table 'mat_view_definitions', force: :cascade do |t|
-    t.string 'name', null: false, comment: 'The name of the materialized view'
-    t.text 'sql', null: false, comment: 'The SQL query defining the materialized view'
+    t.string 'name', null: false, comment: 'The name of the materialised view'
+    t.text 'sql', null: false, comment: 'The SQL query defining the materialised view'
     t.integer 'refresh_strategy', default: 0, null: false,
-                                  comment: 'Strategy for refreshing the materialized view. Options: regular, concurrent, swap'
-    t.string 'schedule_cron', comment: 'Cron schedule for automatic refresh of the materialized view'
+                                  comment: 'Strategy for refreshing the materialised view. Options: regular, concurrent, swap'
+    t.string 'schedule_cron', comment: 'Cron schedule for automatic refresh of the materialised view'
     t.jsonb 'unique_index_columns', default: [], comment: 'Columns used for unique indexing, if any'
-    t.jsonb 'dependencies', default: [], comment: 'Dependencies of the materialized view, such as other views or tables'
+    t.jsonb 'dependencies', default: [], comment: 'Dependencies of the materialised view, such as other views or tables'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
   end
 
   create_table 'mat_view_runs', force: :cascade do |t|
-    t.bigint 'mat_view_definition_id', null: false, comment: 'Reference to the materialized view definition'
+    t.bigint 'mat_view_definition_id', null: false, comment: 'Reference to the materialised view definition'
     t.integer 'status', default: 0, null: false, comment: '0=running,1=success,2=failed'
     t.integer 'operation', default: 0, null: false, comment: '0=create,1=refresh,2=drop'
     t.datetime 'started_at', comment: 'Timestamp when the operation started'

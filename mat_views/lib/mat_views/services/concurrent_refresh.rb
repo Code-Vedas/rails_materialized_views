@@ -13,7 +13,7 @@ module MatViews
     #   `REFRESH MATERIALIZED VIEW CONCURRENTLY <schema>.<rel>`
     #
     # It keeps the view readable during refresh, but **requires at least one
-    # UNIQUE index** on the materialized view (a PostgreSQL constraint).
+    # UNIQUE index** on the materialised view (a PostgreSQL constraint).
     #
     # Options:
     # - `row_count_strategy:` (Symbol, default: :none) → one of `:estimated`, `:exact`, or `:none or nil` to control row count reporting

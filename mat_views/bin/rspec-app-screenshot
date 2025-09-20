@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export E2E="1"
+export NO_COVERAGE="1"
+export SCREENSHOT_LANG="${SCREENSHOT_LANG:-en}"
+
+bin/rspec --tag type:feature_app_screenshots "$@"

@@ -24,10 +24,10 @@ require 'mat_views/admin/default_auth'
 
 ##
 # MatViews is a Rails engine that provides first-class support for
-# PostgreSQL materialized views in Rails applications.
+# PostgreSQL materialised views in Rails applications.
 #
 # Features include:
-# - Declarative definitions for materialized views
+# - Declarative definitions for materialised views
 # - Safe creation, refresh (regular, concurrent, swap), and deletion
 # - Background job integration (ActiveJob, Sidekiq, Resque)
 # - Tracking of run history and metrics
@@ -40,7 +40,7 @@ require 'mat_views/admin/default_auth'
 #   end
 #
 # Once mounted, Rails apps can leverage MatViews services and jobs
-# to manage materialized views consistently.
+# to manage materialised views consistently.
 module MatViews
   class << self
     # Global configuration for MatViews
@@ -52,7 +52,7 @@ module MatViews
     # Example:
     #   MatViews.configure do |config|
     #     config.job_adapter = :sidekiq
-    #     config.job_queue   = :materialized
+    #     config.job_queue   = :materialised
     #   end
     def configure
       @configuration ||= Configuration.new

@@ -20,7 +20,7 @@ RSpec.describe 'Definitions - MV operations', type: :feature do
       end
     end
 
-    scenario 'clicking create MV creates the materialized view', :js do
+    scenario 'clicking create MV creates the materialised view', :js do
       defn = create(:mat_view_definition, name: "sales_mv_#{uniq_token}", sql: 'SELECT 1 AS id')
 
       visit_dashboard
@@ -63,7 +63,7 @@ RSpec.describe 'Definitions - MV operations', type: :feature do
       end
     end
 
-    scenario 'clicking refresh refreshes the materialized view', :js do
+    scenario 'clicking refresh refreshes the materialised view', :js do
       defn = create(:mat_view_definition, name: "sales_mv_#{uniq_token}", sql: 'SELECT 1 AS id')
 
       visit_dashboard
@@ -99,7 +99,7 @@ RSpec.describe 'Definitions - MV operations', type: :feature do
 
     context 'when dropping the MV', :js do
       context 'when there are no dependent objects', :js do
-        scenario 'clicking drop drops the materialized view', :js do
+        scenario 'clicking drop drops the materialised view', :js do
           defn = create(:mat_view_definition, name: "sales_mv_#{uniq_token}", sql: 'SELECT 1 AS id')
 
           visit_dashboard
@@ -133,7 +133,7 @@ RSpec.describe 'Definitions - MV operations', type: :feature do
       end
 
       context 'when there are dependent objects', :js do
-        scenario 'clicking drop mv does not drop the materialized view', :js do
+        scenario 'clicking drop mv does not drop the materialised view', :js do
           defn = create(:mat_view_definition, name: "sales_mv_#{uniq_token}", sql: 'SELECT 1 AS id')
           dependent_defn = create(:mat_view_definition, name: "zdependent_mv_#{uniq_token}", sql: "SELECT 1 FROM #{defn.name}")
 
@@ -173,7 +173,7 @@ RSpec.describe 'Definitions - MV operations', type: :feature do
           expect(run.error['message']).to match(/cannot drop materialized view .* because other objects depend on it/)
         end
 
-        scenario 'clicking drop cascade drops the materialized view and dependents', :js do
+        scenario 'clicking drop cascade drops the materialised view and dependents', :js do
           defn = create(:mat_view_definition, name: "sales_mv_#{uniq_token}", sql: 'SELECT 1 AS id')
           dependent_defn = create(:mat_view_definition, name: "zdependent_mv_#{uniq_token}", sql: "SELECT 1 FROM #{defn.name}")
 

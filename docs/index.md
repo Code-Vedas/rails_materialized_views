@@ -13,7 +13,7 @@ nav_order: 1
 ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12%2B-336791?style=flat-square&logo=postgresql&logoColor=white)
 
-> A Rails engine to define, create, refresh, and delete **PostgreSQL materialized views** with clean APIs, background jobs, observability, and CLI tasks. Built for **high availability** and **repeatable ops**.
+> A Rails engine to define, create, refresh, and delete **PostgreSQL materialised views** with clean APIs, background jobs, observability, and CLI tasks. Built for **high availability** and **repeatable ops**.
 
 - 📦 Engine/gem: [`mat_views/`](https://github.com/Code-Vedas/rails_materialized_views/tree/main/mat_views)
 - 🧪 Demo app: [`mat_views_demo/`](https://github.com/Code-Vedas/rails_materialized_views/tree/main/mat_views_demo) _(not shipped with the gem)_
@@ -40,12 +40,12 @@ bin/rails db:migrate
 
 ## Links
 
-- [Installation & Setup](./install) for how to install the `mat_views` gem, configure it, and use the CLI tasks for managing materialized views in your Rails application.
-- [Usage & Examples](./usage) section for detailed guides on defining, creating, refreshing, and deleting materialized views using the `mat_views` gem.
+- [Installation & Setup](./install) for how to install the `mat_views` gem, configure it, and use the CLI tasks for managing materialised views in your Rails application.
+- [Usage & Examples](./usage) section for detailed guides on defining, creating, refreshing, and deleting materialised views using the `mat_views` gem.
 - [Engine](./engine) section for an overview of the engine's structure, configuration, and how it integrates with your Rails application.
-- [Validation & Benchmarking](./validation) for how to validate your materialized views and benchmark their performance.
-- [PostgreSQL MV Best Practices](./pg-best-practices) for practical, production-oriented advice on managing materialized views in PostgreSQL.
-- [FAQ / Troubleshooting](./faq) for answers to common questions and troubleshooting tips when working with the `mat_views` gem and PostgreSQL materialized views.
+- [Validation & Benchmarking](./validation) for how to validate your materialised views and benchmark their performance.
+- [PostgreSQL MV Best Practices](./pg-best-practices) for practical, production-oriented advice on managing materialised views in PostgreSQL.
+- [FAQ / Troubleshooting](./faq) for answers to common questions and troubleshooting tips when working with the `mat_views` gem and PostgreSQL materialised views.
 
 ## Features
 

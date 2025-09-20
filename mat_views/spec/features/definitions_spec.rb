@@ -318,7 +318,7 @@ RSpec.describe 'Definitions', type: :feature do
 
       wait_for_turbo_idle
 
-      expect(page).to have_current_path("/mat_views/en-US/admin?mat_view_definition_id=#{defn.id}&tab=runs")
+      expect(page).to have_current_path("/mat_views/en/admin?mat_view_definition_id=#{defn.id}&tab=runs")
       expect(page).to have_select('mat_view_definition_id', selected: defn.name)
     end
   end

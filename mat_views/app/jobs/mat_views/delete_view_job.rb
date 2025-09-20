@@ -9,7 +9,7 @@
 # Top-level namespace for the mat_views engine.
 module MatViews
   ##
-  # ActiveJob that handles *deletion* of PostgreSQL materialized views via
+  # ActiveJob that handles *deletion* of PostgreSQL materialised views via
   # {MatViews::Services::DeleteView}.
   #
   # This job mirrors {MatViews::CreateViewJob} and {MatViews::RefreshViewJob}:
@@ -39,7 +39,7 @@ module MatViews
     queue_as { MatViews.configuration.job_queue || :default }
 
     ##
-    # Perform the job for the given materialized view definition.
+    # Perform the job for the given materialised view definition.
     #
     # @api public
     #

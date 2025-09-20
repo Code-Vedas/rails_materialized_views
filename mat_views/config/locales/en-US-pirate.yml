@@ -84,17 +84,7 @@ en-US-pirate:
         operation: "Pick the deed"
         status: "Pick the fate"
   i18n:
-    languages:
-      en-AU: English (Australia)
-      en-AU-ocker: Aussie (Ocker)
-      en-BORK: Børk! Børk! Børk!
-      en-CA: English (Canada)
-      en-GB: English (United Kingdom)
-      en-IND: English (India)
-      en-KE: English (Kenya)
-      en-MS: English (Montserrat)
-      en-US: English (United States)
-      en-US-pirate: Pirate English (Arrr!)
+    name: Pirate English (Arrr!)
   mat_views:
     actions: "Deeds"
     all_definitions: "All scrolls"

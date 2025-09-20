@@ -7,55 +7,45 @@ on:
         type: string
         description: Command to run tests (e.g., bin/rspec-unit or bin/rspec-e2e)
     outputs:
-      app_screenshots_en_au_url:
-        description: URL to download the app screenshots artifact (en-AU)
-        value: ${{ jobs.test.outputs.app_screenshots_en_au_url }}
-      app_screenshots_en_au_ocker_url:
-        description: URL to download the app screenshots artifact (en-AU-ocker)
-        value: ${{ jobs.test.outputs.app_screenshots_en_au_ocker_url }}
-      app_screenshots_en_bork_url:
-        description: URL to download the app screenshots artifact (en-BORK)
-        value: ${{ jobs.test.outputs.app_screenshots_en_bork_url }}
-      app_screenshots_en_ca_url:
-        description: URL to download the app screenshots artifact (en-CA)
-        value: ${{ jobs.test.outputs.app_screenshots_en_ca_url }}
-      app_screenshots_en_gb_url:
-        description: URL to download the app screenshots artifact (en-GB)
-        value: ${{ jobs.test.outputs.app_screenshots_en_gb_url }}
-      app_screenshots_en_ind_url:
-        description: URL to download the app screenshots artifact (en-IND)
-        value: ${{ jobs.test.outputs.app_screenshots_en_ind_url }}
-      app_screenshots_en_ke_url:
-        description: URL to download the app screenshots artifact (en-KE)
-        value: ${{ jobs.test.outputs.app_screenshots_en_ke_url }}
-      app_screenshots_en_ms_url:
-        description: URL to download the app screenshots artifact (en-MS)
-        value: ${{ jobs.test.outputs.app_screenshots_en_ms_url }}
-      app_screenshots_en_us_url:
-        description: URL to download the app screenshots artifact (en-US)
-        value: ${{ jobs.test.outputs.app_screenshots_en_us_url }}
-      app_screenshots_en_us_pirate_url:
-        description: URL to download the app screenshots artifact (en-US-pirate)
-        value: ${{ jobs.test.outputs.app_screenshots_en_us_pirate_url }}
+      locales_matrix_json:
+        description: JSON for strategy.matrix (includes slug & label)
+        value: ${{ jobs.discover_locales.outputs.locales_matrix_json }}
+      locales_labels_json:
+        description: JSON map of code -> display label
+        value: ${{ jobs.discover_locales.outputs.locales_labels_json }}
 permissions:
   contents: read
 env:
   RUBY_VERSION: 3.4.3
   APP_DIR: ${{ github.workspace }}/mat_views
 jobs:
-  test:
+  discover_locales:
     runs-on: ubuntu-latest
     outputs:
-      app_screenshots_en_au_url: ${{ steps.upload-screenshots-en-au.outputs.artifact-url }}
-      app_screenshots_en_au_ocker_url: ${{ steps.upload-screenshots-en-au-ocker.outputs.artifact-url }}
-      app_screenshots_en_bork_url: ${{ steps.upload-screenshots-en-bork.outputs.artifact-url }}
-      app_screenshots_en_ca_url: ${{ steps.upload-screenshots-en-ca.outputs.artifact-url }}
-      app_screenshots_en_gb_url: ${{ steps.upload-screenshots-en-gb.outputs.artifact-url }}
-      app_screenshots_en_ind_url: ${{ steps.upload-screenshots-en-ind.outputs.artifact-url }}
-      app_screenshots_en_ke_url: ${{ steps.upload-screenshots-en-ke.outputs.artifact-url }}
-      app_screenshots_en_ms_url: ${{ steps.upload-screenshots-en-ms.outputs.artifact-url }}
-      app_screenshots_en_us_url: ${{ steps.upload-screenshots-en-us.outputs.artifact-url }}
-      app_screenshots_en_us_pirate_url: ${{ steps.upload-screenshots-en-us-pirate.outputs.artifact-url }}
+      locales_matrix_json: ${{ steps.discover.outputs.matrix }}
+      locales_labels_json: ${{ steps.discover.outputs.labels }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+          working-directory: ${{ env.APP_DIR }}
+      - name: Discover locales from Engine
+        id: discover
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          bundle exec ruby -rjson -e '
+            require_relative "spec/dummy/config/environment"
+            mapping = MatViews::Engine.locale_code_mapping
+            include = mapping.map { |code, label| { "slug" => code, "label" => label } }
+            matrix = { "include" => include }
+            puts "matrix=#{matrix.to_json}"
+            puts "labels=#{mapping.to_json}"
+          ' >> "$GITHUB_OUTPUT"
+  test:
+    runs-on: ubuntu-latest
     services:
       firefox:
         image: selenium/standalone-firefox:latest
@@ -77,7 +67,6 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-
     steps:
       - name: Install apt packages
         run: |
@@ -114,80 +103,82 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
         run: ${{ inputs.rspec_task }}
-      - name: Upload app screenshots artifact (en-AU)
-        uses: actions/upload-artifact@v4
-        id: upload-screenshots-en-au
-        with:
-          name: app-screenshots-en-au
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-AU
-          if-no-files-found: error
-      - name: Upload app screenshots artifact (en-AU-ocker)
-        uses: actions/upload-artifact@v4
-        id: upload-screenshots-en-au-ocker
-        with:
-          name: app-screenshots-en-au-ocker
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-AU-ocker
-          if-no-files-found: error
-      - name: Upload app screenshots artifact (en-BORK)
-        uses: actions/upload-artifact@v4
-        id: upload-screenshots-en-bork
-        with:
-          name: app-screenshots-en-bork
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-BORK
-          if-no-files-found: error
-      - name: Upload app screenshots artifact (en-CA)
-        uses: actions/upload-artifact@v4
-        id: upload-screenshots-en-ca
-        with:
-          name: app-screenshots-en-ca
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-CA
-          if-no-files-found: error
-      - name: Upload app screenshots artifact (en-GB)
-        uses: actions/upload-artifact@v4
-        id: upload-screenshots-en-gb
-        with:
-          name: app-screenshots-en-gb
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-GB
-          if-no-files-found: error
-      - name: Upload app screenshots artifact (en-IND)
-        uses: actions/upload-artifact@v4
-        id: upload-screenshots-en-ind
-        with:
-          name: app-screenshots-en-ind
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-IND
-          if-no-files-found: error
-      - name: Upload app screenshots artifact (en-KE)
-        uses: actions/upload-artifact@v4
-        id: upload-screenshots-en-ke
-        with:
-          name: app-screenshots-en-ke
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-KE
-          if-no-files-found: error
-      - name: Upload app screenshots artifact (en-MS)
-        uses: actions/upload-artifact@v4
-        id: upload-screenshots-en-ms
-        with:
-          name: app-screenshots-en-ms
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-MS
-          if-no-files-found: error
-      - name: Upload app screenshots artifact (en-US)
-        uses: actions/upload-artifact@v4
-        id: upload-screenshots-en-us
-        with:
-          name: app-screenshots-en-us
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-US
-          if-no-files-found: error
-      - name: Upload app screenshots artifact (en-US-pirate)
-        uses: actions/upload-artifact@v4
-        id: upload-screenshots-en-us-pirate
-        with:
-          name: app-screenshots-en-us-pirate
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-US-pirate
-          if-no-files-found: error
       - name: Upload error screenshots artifact
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: ${{ env.APP_DIR }}/spec/dummy/tmp/screenshots
+          if-no-files-found: ignore
+  app_screenshots:
+    runs-on: ubuntu-latest
+    needs: [discover_locales]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.discover_locales.outputs.locales_matrix_json) }}
+    services:
+      firefox:
+        image: selenium/standalone-firefox:latest
+        ports: [4444:4444]
+        options: >-
+          --add-host=host.docker.internal:host-gateway
+          --health-cmd="/opt/bin/check-grid.sh || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: [5432:5432]
+        options: >-
+          --mount type=tmpfs,destination=/var/lib/postgresql/data
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    steps:
+      - name: Install apt packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            build-essential git libpq-dev libyaml-dev pkg-config
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+          working-directory: ${{ env.APP_DIR }}
+      - name: Cache Bootsnap
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.APP_DIR }}/spec/dummy/tmp/cache
+          key: bootsnap-${{ runner.os }}-${{ env.RUBY_VERSION }}-${{ hashFiles('**/Gemfile.lock') }}
+      - name: Prepare database
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: |
+          bin/rails db:drop || true
+          bin/rails db:create
+          bin/rails db:schema:load
+      - name: Take app screenshots for locale ${{ matrix.slug }}
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
+          SCREENSHOT_LANG: ${{ matrix.slug }}
+        run: |
+          bin/rspec-app-screenshot
+      - name: Upload app screenshots artifact for locale ${{ matrix.slug }}
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-screenshots-${{ matrix.slug }}
+          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/${{ matrix.slug }}
           if-no-files-found: ignore

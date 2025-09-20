@@ -66,6 +66,7 @@ RSpec.configure do |config|
 
     Rails.application.load_tasks
     FileUtils.rm_rf(Dir[Rails.root.join('tmp/screenshots')])
+    FileUtils.rm_rf(Dir[Rails.root.join('tmp/app-screenshots')])
   end
 
   config.after(:suite) do

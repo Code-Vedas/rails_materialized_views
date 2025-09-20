@@ -8,7 +8,7 @@
 module MatViews
   module Services
     ##
-    # Service that safely drops a PostgreSQL materialized view.
+    # Service that safely drops a PostgreSQL materialised view.
     #
     # Options:
     # - `cascade:` (Boolean, default: false) → drop with CASCADE instead of RESTRICT

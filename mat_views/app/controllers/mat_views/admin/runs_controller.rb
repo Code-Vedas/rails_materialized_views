@@ -9,7 +9,7 @@ module MatViews
   module Admin
     # MatViews::Admin::RunsController
     # -------------------------------
-    # Controller for viewing materialized view run history in the admin UI.
+    # Controller for viewing materialised view run history in the admin UI.
     #
     # Responsibilities:
     # - Provides a list of recent runs (create/refresh/delete) for all definitions.
@@ -31,7 +31,7 @@ module MatViews
 
       # GET /:lang/admin/runs
       #
-      # Lists all materialized view runs ordered by start time.
+      # Lists all materialised view runs ordered by start time.
       #
       # @return [void]
       def index

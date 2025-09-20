@@ -4,40 +4,12 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-RSpec.describe 'UI screenshots', type: :feature do
-  let(:screenshot_dir) { Rails.root.join('tmp', 'app-screenshots') }
-  let(:langs) do
-    [
-      'Aussie (Ocker)',
-      'English (Australia)',
-      'Børk! Børk! Børk!',
-      'English (Canada)',
-      'English (United Kingdom)',
-      'English (India)',
-      'English (Kenya)',
-      'English (Montserrat)',
-      'Pirate English (Arrr!)',
-      'English (United States)'
-    ]
-  end
-  let(:lang_map) do
-    {
-      'Aussie (Ocker)' => 'en-AU-ocker',
-      'English (Australia)' => 'en-AU',
-      'Børk! Børk! Børk!' => 'en-BORK',
-      'English (Canada)' => 'en-CA',
-      'English (United Kingdom)' => 'en-GB',
-      'English (India)' => 'en-IND',
-      'English (Kenya)' => 'en-KE',
-      'English (Montserrat)' => 'en-MS',
-      'Pirate English (Arrr!)' => 'en-US-pirate',
-      'English (United States)' => 'en-US'
-    }
-  end
-  let(:themes) { %w[light dark] }
+
+RSpec.describe 'UI screenshots', type: :feature_app_screenshots do
   let!(:example_definition) do
     create(:mat_view_definition, name: 'mv_test', sql: 'SELECT 1 AS id', schedule_cron: '0 * * * *')
   end
+
   let!(:example_run) do
     create(:mat_view_run,
            mat_view_definition: example_definition,
@@ -45,54 +17,11 @@ RSpec.describe 'UI screenshots', type: :feature do
            status: :failed,
            finished_at: 10.minutes.ago,
            meta: { response: { row_count_before: 100, row_count_after: 122 } },
-           error: { message: 'Refresh failed',
-                    class: 'StandardError',
-                    backtrace: [] },
+           error: { message: 'Refresh failed', class: 'StandardError', backtrace: [] },
            duration_ms: 10)
   end
 
-  let(:urls) do
-    [
-      {
-        name: 'Definitions List',
-        url: '/mat_views/:lang/admin'
-      },
-      {
-        name: 'Definitions View',
-        url: "/mat_views/:lang/admin?open=definitions_view_#{example_definition.id}",
-        wait_for_drawer: true
-      },
-      {
-        name: 'Definitions New',
-        url: '/mat_views/:lang/admin?open=definitions_new',
-        wait_drawer_open: true
-      },
-      {
-        name: 'Definitions Edit',
-        url: "/mat_views/:lang/admin?open=definitions_edit_#{example_definition.id}",
-        wait_drawer_open: true
-      },
-      {
-        name: 'Runs List',
-        url: '/mat_views/:lang/admin?tab=runs'
-      },
-      {
-        name: 'Runs View',
-        url: "/mat_views/:lang/admin?tab=runs&open=runs_view_#{example_run.id}",
-        wait_drawer_open: true
-      },
-      {
-        name: 'Preferences',
-        url: '/mat_views/:lang/admin?open=preferences_edit',
-        wait_drawer_open: true
-      }
-    ]
-  end
-
   before do
-    FileUtils.rm_rf(screenshot_dir)
-    FileUtils.mkdir_p(screenshot_dir)
-
     create(:mat_view_definition, name: 'mv_other', sql: 'SELECT 1 AS id', refresh_strategy: :swap)
 
     create(:mat_view_run,
@@ -102,35 +31,71 @@ RSpec.describe 'UI screenshots', type: :feature do
            status: :success,
            duration_ms: 20,
            meta: { response: { row_count_before: 100, row_count_after: 122 } })
+
     create(:mat_view_run, mat_view_definition: example_definition, operation: :refresh, status: :running)
 
     visit_dashboard
   end
 
-  def visit_url_and_take_screenshot(name, url, wait_drawer_open, lang, theme)
+  def visit_url_and_take_screenshot(lang_name, lang_code, url, wait_drawer_open, name, theme)
+    screenshot_dir = Rails.root.join('tmp', 'app-screenshots')
     visit_dashboard
     wait_for_turbo_idle
-    select_language(lang)
+    select_language(lang_name)
     wait_for_turbo_idle
     select_theme(theme)
     wait_for_turbo_idle
+
     visit url
     wait_for_turbo_idle
     wait_drawer_open(timeout: 10) if wait_drawer_open
-    # sleep 1
 
-    FileUtils.mkdir_p(screenshot_dir.join(lang_map[lang], theme.downcase))
-    filename = screenshot_dir.join(lang_map[lang], theme.downcase, "#{name.downcase.tr(' ', '_')}.png").to_s
+    dir = screenshot_dir.join(lang_code, theme.downcase)
+    FileUtils.mkdir_p(dir)
+    filename = dir.join("#{name.downcase.tr(' ', '_')}.png").to_s
 
+    RSpec.configuration.reporter.message("Saving screenshot: #{filename}")
     page.save_screenshot(filename) # rubocop:disable Lint/Debugger
   end
 
-  it 'takes screenshots for various pages, languages and themes', :js do
-    langs.each do |lang|
-      themes.each do |theme|
-        urls.each do |url_info|
-          url = url_info[:url].gsub(':lang', lang_map[lang])
-          expect { visit_url_and_take_screenshot(url_info[:name], url, url_info[:wait_drawer_open], lang, theme) }.not_to raise_error
+  lang_code = ENV.fetch('SCREENSHOT_LANG', nil)
+
+  if lang_code.present? && MatViews::Engine.locale_code_mapping.key?(lang_code.to_sym)
+    lang_name = MatViews::Engine.locale_code_mapping[lang_code.to_sym]
+
+    %w[light dark].freeze.each do |theme|
+      it "captures screenshots for #{lang_name} (#{lang_code}) in #{theme} theme", :js do
+        urls = [
+          { name: 'Definitions List', url: "/mat_views/#{lang_code}/admin" },
+          { name: 'Definitions View',
+            url: "/mat_views/#{lang_code}/admin?open=definitions_view_#{example_definition.id}",
+            wait_drawer_open: true },
+          { name: 'Definitions New',
+            url: "/mat_views/#{lang_code}/admin?open=definitions_new",
+            wait_drawer_open: true },
+          { name: 'Definitions Edit',
+            url: "/mat_views/#{lang_code}/admin?open=definitions_edit_#{example_definition.id}",
+            wait_drawer_open: true },
+          { name: 'Runs List', url: "/mat_views/#{lang_code}/admin?tab=runs" },
+          { name: 'Runs View',
+            url: "/mat_views/#{lang_code}/admin?tab=runs&open=runs_view_#{example_run.id}",
+            wait_drawer_open: true },
+          { name: 'Preferences',
+            url: "/mat_views/#{lang_code}/admin?open=preferences_edit",
+            wait_drawer_open: true }
+        ]
+
+        urls.each do |info|
+          expect do
+            visit_url_and_take_screenshot(
+              lang_name,
+              lang_code,
+              info[:url],
+              info[:wait_drawer_open],
+              info[:name],
+              theme
+            )
+          end.not_to raise_error
         end
       end
     end

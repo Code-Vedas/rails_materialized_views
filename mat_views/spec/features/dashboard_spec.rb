@@ -10,9 +10,9 @@ RSpec.describe 'Dashboard', type: :feature do
     background { visit_dashboard }
 
     scenario 'displays the header with logo and title' do
-      expect(page).to have_link(href: '/mat_views/en-US/admin', class: 'mv-brand', count: 1)
+      expect(page).to have_link(href: '/mat_views/en/admin', class: 'mv-brand', count: 1)
 
-      within("a.mv-brand[href='/mat_views/en-US/admin']") do
+      within("a.mv-brand[href='/mat_views/en/admin']") do
         expect(page).to have_css("img.mv-logo[alt='MatViews Admin']")
         expect(page).to have_css('span', text: 'MatViews Admin')
       end

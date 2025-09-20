@@ -18,7 +18,7 @@ namespace :mat_views do
 
     conn = ActiveRecord::Base.connection
 
-    # Discover all materialized views present in the DB (exclude system schemas)
+    # Discover all materialised views present in the DB (exclude system schemas)
     rows = conn.select_all(<<~SQL.squish)
       SELECT schemaname, matviewname
       FROM pg_matviews
@@ -28,7 +28,7 @@ namespace :mat_views do
 
     mv_names = rows.rows.map { |(_, name)| name }.uniq
     if mv_names.empty?
-      Rails.logger.info('[validate_demo] No materialized views found in the database. Nothing to validate.')
+      Rails.logger.info('[validate_demo] No materialised views found in the database. Nothing to validate.')
       next
     end
 

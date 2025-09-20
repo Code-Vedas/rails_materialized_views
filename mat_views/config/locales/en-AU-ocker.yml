@@ -84,17 +84,7 @@ en-AU-ocker:
         operation: "Pick what to do"
         status: "Pick a status"
   i18n:
-    languages:
-      en-AU: English (Australia)
-      en-AU-ocker: Aussie (Ocker)
-      en-BORK: Børk! Børk! Børk!
-      en-CA: English (Canada)
-      en-GB: English (United Kingdom)
-      en-IND: English (India)
-      en-KE: English (Kenya)
-      en-MS: English (Montserrat)
-      en-US: English (United States)
-      en-US-pirate: Pirate English (Arrr!)
+    name: Aussie (Ocker)
   mat_views:
     actions: "Stuff ya can do"
     all_definitions: "Every def'n"

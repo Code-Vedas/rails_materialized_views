@@ -7,7 +7,7 @@
 
 ##
 # MatViews is a Rails engine that provides first-class support for
-# PostgreSQL materialized views in Rails applications.
+# PostgreSQL materialised views in Rails applications.
 module MatViews
   class << self
     attr_accessor :importmap
@@ -16,8 +16,8 @@ module MatViews
   # Rails Engine for MatViews.
   #
   # This engine encapsulates all functionality related to
-  # materialized views, including:
-  # - Defining materialized view definitions
+  # materialised views, including:
+  # - Defining materialised view definitions
   # - Creating and refreshing views
   # - Managing background jobs for refresh/create/delete
   #
@@ -53,20 +53,22 @@ module MatViews
       end
     end
 
-    def self.available_locales = %i[
-      en-AU-ocker
-      en-AU
-      en-BORK
-      en-CA
-      en-GB
-      en-IND
-      en-KE
-      en-MS
-      en-US-pirate
-      en-US
-    ]
+    def self.locale_code_mapping
+      @locale_code_mapping ||= begin
+        mappings = Dir[root.join('config', 'locales', '*.yml')].map.to_h do |file|
+          code = File.basename(file, '.yml').to_sym
+          name = I18n.t('i18n.name', locale: code)
+          [code, name]
+        end
+        mappings.sort_by { |code, _name| code.to_s }.to_h
+      end
+    end
 
-    def self.default_locale = :'en-US'
+    def self.available_locales
+      @available_locales ||= locale_code_mapping.keys.freeze
+    end
+
+    def self.default_locale = :en
     def self.loaded_spec = Gem.loaded_specs['mat_views']
     def self.project_name = loaded_spec&.name
     def self.project_version = MatViews::VERSION

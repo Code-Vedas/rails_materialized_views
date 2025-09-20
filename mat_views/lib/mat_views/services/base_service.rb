@@ -8,7 +8,7 @@
 module MatViews
   module Services
     ##
-    # Base class for service objects that operate on PostgreSQL materialized
+    # Base class for service objects that operate on PostgreSQL materialised
     # views (create/refresh/delete, schema discovery, quoting, and common
     # response helpers).
     #
@@ -47,7 +47,7 @@ module MatViews
       DEFAULT_NIL_STRATEGY = :none
 
       ##
-      # @return [MatViews::MatViewDefinition] The target materialized view definition.
+      # @return [MatViews::MatViewDefinition] The target materialised view definition.
       attr_reader :definition
 
       ##
@@ -224,7 +224,7 @@ module MatViews
       # ────────────────────────────────────────────────────────────────
 
       ##
-      # Whether the materialized view exists for the resolved `schema` and `rel`.
+      # Whether the materialised view exists for the resolved `schema` and `rel`.
       #
       # @api private
       # @return [Boolean]
@@ -249,7 +249,7 @@ module MatViews
       end
 
       ##
-      # Drop the materialized view if it exists (idempotent).
+      # Drop the materialised view if it exists (idempotent).
       #
       # @api private
       # @return [void]
@@ -403,7 +403,7 @@ module MatViews
       end
 
       ##
-      # Check for any UNIQUE index on the materialized view, required by CONCURRENTLY.
+      # Check for any UNIQUE index on the materialised view, required by CONCURRENTLY.
       #
       # @api private
       # @return [Boolean]
@@ -458,7 +458,7 @@ module MatViews
       end
 
       ##
-      # Accurate row count using `COUNT(*)` on the materialized view.
+      # Accurate row count using `COUNT(*)` on the materialised view.
       #
       # @api private
       # @return [Integer]

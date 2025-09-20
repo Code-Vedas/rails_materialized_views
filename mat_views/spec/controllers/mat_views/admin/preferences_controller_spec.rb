@@ -57,7 +57,7 @@ RSpec.describe MatViews::Admin::PreferencesController, type: :controller do
   describe 'PATCH #update' do
     context 'with valid theme and valid locale' do
       before do
-        patch :update, params: { lang:, frame_id:, theme: 'light', locale: 'en-US' }
+        patch :update, params: { lang:, frame_id:, theme: 'light', locale: 'en' }
       end
 
       it 'authorizes access' do
@@ -69,12 +69,12 @@ RSpec.describe MatViews::Admin::PreferencesController, type: :controller do
       end
 
       it 'stores the locale in session when allowed' do
-        expect(session[:mat_views_locale]).to eq('en-US')
+        expect(session[:mat_views_locale]).to eq('en')
       end
 
       it 'redirects back with force_reload=1 and carries frame_id' do
         expect(response).to have_http_status(:see_other)
-        expected_url = 'http://test.host/mat_views/en-US/admin/preferences?force_reload=1&frame_id=dash-preferences'
+        expected_url = 'http://test.host/mat_views/en/admin/preferences?force_reload=1&frame_id=dash-preferences'
         expect(response).to redirect_to(expected_url)
       end
     end
@@ -97,7 +97,7 @@ RSpec.describe MatViews::Admin::PreferencesController, type: :controller do
 
       it 'redirects with force_reload=1 and frame_id' do
         expect(response).to have_http_status(:see_other)
-        expected_url = 'http://test.host/mat_views/en-US/admin/preferences?force_reload=1&frame_id=dash-preferences'
+        expected_url = 'http://test.host/mat_views/en/admin/preferences?force_reload=1&frame_id=dash-preferences'
         expect(response.location).to eq(expected_url)
       end
     end
