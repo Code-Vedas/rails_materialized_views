@@ -13,6 +13,9 @@ on:
       app_screenshots_en_au_ocker_url:
         description: URL to download the app screenshots artifact (en-AU-ocker)
         value: ${{ jobs.test.outputs.app_screenshots_en_au_ocker_url }}
+      app_screenshots_en_bork_url:
+        description: URL to download the app screenshots artifact (en-BORK)
+        value: ${{ jobs.test.outputs.app_screenshots_en_bork_url }}
       app_screenshots_en_ca_url:
         description: URL to download the app screenshots artifact (en-CA)
         value: ${{ jobs.test.outputs.app_screenshots_en_ca_url }}
@@ -33,6 +36,7 @@ jobs:
     outputs:
       app_screenshots_en_au_url: ${{ steps.upload-screenshots-en-au.outputs.artifact-url }}
       app_screenshots_en_au_ocker_url: ${{ steps.upload-screenshots-en-au-ocker.outputs.artifact-url }}
+      app_screenshots_en_bork_url: ${{ steps.upload-screenshots-en-bork.outputs.artifact-url }}
       app_screenshots_en_ca_url: ${{ steps.upload-screenshots-en-ca.outputs.artifact-url }}
       app_screenshots_en_us_url: ${{ steps.upload-screenshots-en-us.outputs.artifact-url }}
       app_screenshots_en_us_pirate_url: ${{ steps.upload-screenshots-en-us-pirate.outputs.artifact-url }}
@@ -107,6 +111,13 @@ jobs:
         with:
           name: app-screenshots-en-au-ocker
           path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-AU-ocker
+          if-no-files-found: error
+      - name: Upload app screenshots artifact (en-BORK)
+        uses: actions/upload-artifact@v4
+        id: upload-screenshots-en-bork
+        with:
+          name: app-screenshots-en-bork
+          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/en-BORK
           if-no-files-found: error
       - name: Upload app screenshots artifact (en-CA)
         uses: actions/upload-artifact@v4

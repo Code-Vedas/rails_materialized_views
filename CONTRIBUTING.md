@@ -132,16 +132,21 @@ There is no expiration date for CLAs. Once signed, your CLA will remain valid fo
 This project uses [Jekyll](https://jekyllrb.com/) to generate documentation pages from markdown files located in the `docs/pages/` directory. The documentation is built and published automatically using GitHub Pages.
 
 ### General instructions to run Jekyll locally
+
 1. Ensure you have Ruby and Bundler installed on your machine.
 2. Navigate to the `docs/` directory in your terminal.
 3. Install the required gems by running:
+
    ```bash
    bundle install
    ```
+
 4. Start the Jekyll server with:
+
    ```bash
    bundle exec jekyll serve
    ```
+
 5. Open your web browser and go to `http://localhost:4000` to view the documentation.
 
 ### Updating docs
@@ -158,7 +163,9 @@ When there are user-visible changes in the Admin UI, please update the screensho
 cd mat_views
 bin/rspec-e2e
 ```
+
 This command will save the screenshots to the `spec/dummy/tmp/app-screenshots/<locale>/<theme>/` directory. Each set must contain 7 images:
+
 - definitions_list.png
 - definitions_view.png
 - definitions_new.png
@@ -166,7 +173,7 @@ This command will save the screenshots to the `spec/dummy/tmp/app-screenshots/<l
 - runs_list.png
 - runs_view.png
 - preferences.png
-Copy the new screenshots to the appropriate folder in `docs/assets/images/app-screenshots/` and update the relevant markdown files in `docs/pages/` to reflect the new screenshots, or create new files for new locales/themes.
+  Copy the new screenshots to the appropriate folder in `docs/assets/images/app-screenshots/` and update the relevant markdown files in `docs/pages/` to reflect the new screenshots, or create new files for new locales/themes.
 
 ## Release Process
 
@@ -232,11 +239,11 @@ Pick the version number from draft release notes on the
    git push -u origin release/<version>
    ```
 
-9.  **Open a PR to `main`**
+9. **Open a PR to `main`**
    Create a pull request to merge `release/<version>` into `main`.
 
 10. **Label the PR**
-   Tag the PR with `release`, `release/<version>`, and `skip-changelog`.
+    Tag the PR with `release`, `release/<version>`, and `skip-changelog`.
 
 11. **Create a GitHub Release**
     After the PR is approved and merged, create a new Release on the
