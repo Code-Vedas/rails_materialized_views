@@ -15,8 +15,8 @@ RSpec.describe MatViews::Engine, type: :engine do
   end
 
   describe '.available_locales' do
-    it 'returns [:en-US, :en-CA, :en-AU-ocker, :en-US-pirate, en-AU]' do
-      expect(described_class.available_locales).to eq(%i[en-US en-CA en-AU-ocker en-US-pirate en-AU])
+    it 'returns correct values' do
+      expect(described_class.available_locales).to eq(%i[en-US en-CA en-AU-ocker en-US-pirate en-AU en-BORK])
     end
   end
 

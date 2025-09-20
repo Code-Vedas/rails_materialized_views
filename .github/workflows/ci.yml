@@ -94,7 +94,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           hide_and_recreate: true
-          hide_classify: "OUTDATED"
+          hide_classify: OUTDATED
           header: 📸 MatViews Admin App Screenshots
           message: |
             App screenshots from the latest e2e test run are available.
@@ -110,6 +110,7 @@ jobs:
             | ------ | ---- |
             | en-AU | ${{ needs.e2e_tests.outputs.app_screenshots_en_au_url }} |
             | en-AU-ocker | ${{ needs.e2e_tests.outputs.app_screenshots_en_au_ocker_url }} |
+            | en-BORK | ${{ needs.e2e_tests.outputs.app_screenshots_en_bork_url }} |
             | en-CA | ${{ needs.e2e_tests.outputs.app_screenshots_en_ca_url }} |
             | en-US | ${{ needs.e2e_tests.outputs.app_screenshots_en_us_url }} |
             | en-US-pirate | ${{ needs.e2e_tests.outputs.app_screenshots_en_us_pirate_url }} |

@@ -8,20 +8,22 @@ RSpec.describe 'UI screenshots', type: :feature do
   let(:screenshot_dir) { Rails.root.join('tmp', 'app-screenshots') }
   let(:langs) do
     [
-      'English (United States)',
-      'English (Canada)',
       'Aussie (Ocker)',
+      'English (Australia)',
+      'Børk! Børk! Børk!',
+      'English (Canada)',
       'Pirate English (Arrr!)',
-      'English (Australia)'
+      'English (United States)'
     ]
   end
   let(:lang_map) do
     {
-      'English (United States)' => 'en-US',
-      'English (Canada)' => 'en-CA',
       'Aussie (Ocker)' => 'en-AU-ocker',
+      'English (Australia)' => 'en-AU',
+      'Børk! Børk! Børk!' => 'en-BORK',
+      'English (Canada)' => 'en-CA',
       'Pirate English (Arrr!)' => 'en-US-pirate',
-      'English (Australia)' => 'en-AU'
+      'English (United States)' => 'en-US'
     }
   end
   let(:themes) { %w[light dark] }
