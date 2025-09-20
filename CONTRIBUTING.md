@@ -158,9 +158,10 @@ When there are user-visible changes in the Admin UI, please update the screensho
 cd mat_views
 bin/rspec-e2e
 ```
-This command will save the screenshots to the `spec/dummy/tmp/app-screenshots/<locale>/<theme>/` directory. Each set must contain 6 images:
+This command will save the screenshots to the `spec/dummy/tmp/app-screenshots/<locale>/<theme>/` directory. Each set must contain 7 images:
 - definitions_list.png
 - definitions_view.png
+- definitions_new.png
 - definitions_edit.png
 - runs_list.png
 - runs_view.png
@@ -199,9 +200,10 @@ Pick the version number from draft release notes on the
 5. **App Screenshots**
    If there are any user-visible changes, update the app screenshots in `docs/assets/images/app-screenshots/`:
    - When running bin/rspec-e2e, screenshots are saved to `spec/dummy/tmp/app-screenshots/<locale>/<theme>/`
-   - Each set must contain 6 images:
+   - Each set must contain 7 images:
      - definitions_list.png
      - definitions_view.png
+     - definitions_new.png
      - definitions_edit.png
      - runs_list.png
      - runs_view.png

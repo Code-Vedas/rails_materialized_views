@@ -53,7 +53,7 @@ module MatViews
       end
     end
 
-    def self.available_locales = %i[en-US en-CA en-AU-ocker en-US-pirate]
+    def self.available_locales = %i[en-US en-CA en-AU-ocker en-US-pirate en-AU]
     def self.default_locale = :'en-US'
     def self.loaded_spec = Gem.loaded_specs['mat_views']
     def self.project_name = loaded_spec&.name
