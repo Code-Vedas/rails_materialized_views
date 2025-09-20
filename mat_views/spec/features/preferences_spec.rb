@@ -17,6 +17,7 @@ RSpec.describe 'Preferences', type: :feature do
       'English (United Kingdom)',
       'English (India)',
       'English (Kenya)',
+      'English (Montserrat)',
       'Pirate English (Arrr!)',
       'English (United States)'
     ]
@@ -97,6 +98,7 @@ RSpec.describe 'Preferences', type: :feature do
     it_behaves_like 'change language', 'English (United States)', 'English (United Kingdom)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'English (India)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'English (Kenya)', 'Language', 'Language'
+    it_behaves_like 'change language', 'English (United States)', 'English (Montserrat)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'English (United States)', 'Language', 'Language'
     it_behaves_like 'change language', 'English (United States)', 'Pirate English (Arrr!)', 'Language', 'Tongue'
   end
