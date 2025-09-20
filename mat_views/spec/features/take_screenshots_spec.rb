@@ -6,8 +6,14 @@
 # LICENSE file in the root directory of this source tree.
 RSpec.describe 'UI screenshots', type: :feature do
   let(:screenshot_dir) { Rails.root.join('tmp', 'app-screenshots') }
-  let(:langs) { ['English (United States)', 'English (Canada)'] }
-  let(:lang_map) { { 'English (United States)' => 'en-US', 'English (Canada)' => 'en-CA' } }
+  let(:langs) { ['English (United States)', 'English (Canada)', 'Aussie (Ocker)'] }
+  let(:lang_map) do
+    {
+      'English (United States)' => 'en-US',
+      'English (Canada)' => 'en-CA',
+      'Aussie (Ocker)' => 'en-AU-ocker'
+    }
+  end
   let(:themes) { %w[light dark] }
   let!(:example_definition) do
     create(:mat_view_definition, name: 'mv_test', sql: 'SELECT 1 AS id', schedule_cron: '0 * * * *')

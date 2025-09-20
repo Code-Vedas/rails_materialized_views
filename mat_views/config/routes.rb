@@ -5,7 +5,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-LANG_RE = /[a-z]{2}(?:-[a-z]{2,8})?/i
+LANG_RE = /[a-z]{2}(?:-[a-z]{2,8}(?:-[a-z]{2,8})?)?/i
 MatViews::Engine.routes.draw do
   scope '(:lang)', constraints: { lang: LANG_RE } do
     namespace :admin do

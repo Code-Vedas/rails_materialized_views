@@ -1,0 +1,190 @@
+en-AU-ocker:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "Cooked up at"
+        dependencies: "Mates it leans on"
+        name: "Name"
+        refresh_strategy: "Refresh trick"
+        schedule_cron: "Roster (cron)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "Unique index columns"
+        updated_at: "Spruced up at"
+      mat_views/mat_view_run:
+        created_at: "Cooked up at"
+        details: "The nitty-gritty"
+        duration_ms: "How long (ms)"
+        error: "Stuff-up"
+        finished_at: "Wrapped up at"
+        mat_view_definition: "Definition"
+        meta: "Extra bits"
+        operation: "What we did"
+        row_count_after: "Row count after"
+        row_count_before: "Row count before"
+        rows_before_after: "Rows (before/after)"
+        started_at: "Kicked off at"
+        status: "Status"
+        updated_at: "Spruced up at"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "All at once"
+          regular: "The usual"
+          swap: "Quick swap"
+      mat_views/mat_view_run:
+        operation:
+          create: "Spin up"
+          drop: "Chuck out"
+          refresh: "Give it a tickle"
+        status:
+          failed: "Gone bung"
+          running: "Flat out"
+          success: "All good"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "ya gotta give it a name"
+              invalid: "nah mate, that's not a fair dinkum PostgreSQL name"
+              taken: "someone's already nabbed that"
+            sql:
+              blank: "chuck in some SQL, mate"
+              invalid: "has to start with SELECT, no muckin' about"
+            unique_index_columns:
+              at_least_one: "need at least one column when usin' the concurrent trick"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "List the tables or views it leans on, comma separated."
+        name: "What we call the materialised view in the DB."
+        refresh_strategy: "How you wanna give it a tickle."
+        schedule_cron: "Use cron format. Leave it blank if ya can't be bothered."
+        sql: "Has to be a proper SELECT statement."
+        unique_index_columns: "Columns for a unique index. Needed for the all-at-once trick."
+      mat_views/mat_view_run:
+        error: "Stuff-up if it went bung."
+        meta: "Extra bits in JSON."
+        operation: "What sort of job we ran."
+        status: "Where it's at."
+    models:
+      mat_views/mat_view_definition: "Mat View Def'n"
+      mat_views/mat_view_run: "Mat View Run"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "Chuck in dependencies (comma separated, optional)"
+        name: "Give it a name, mate"
+        refresh_strategy: "Pick how to refresh"
+        schedule_cron: "0 0 * * * for midnight daily, leave blank otherwise"
+        sql: "Type in ya SQL (SELECT ...)"
+        unique_index_columns: "Unique index columns (comma separated, optional)"
+      mat_views/mat_view_run:
+        error: "Error msg"
+        mat_view_definition: "Pick a mat view"
+        meta: "Extra bits (JSON)"
+        operation: "Pick what to do"
+        status: "Pick a status"
+  i18n:
+    languages:
+      en-AU-ocker: Aussie (Ocker)
+      en-CA: English (Canada)
+      en-US: English (United States)
+  mat_views:
+    actions: "Stuff ya can do"
+    all_definitions: "Every def'n"
+    all_operations: "Every job"
+    all_statuses: "Every status"
+    cancel: "Nah, cancel"
+    close: "Shut it"
+    close_window: "Shut the window"
+    create: "Knock one up"
+    dashboard:
+      metrics:
+        title: "Stats & that"
+      title: "Dashy board"
+    definition: "Def'n"
+    definitions: "Def'ns"
+    delete: "Chuck it"
+    details: "The nitty-gritty"
+    edit: "Tweak it"
+    edit_var: "Tweak %{name}"
+    errors:
+      frame_only: "Oi, only works in a frame. Back to the dashy board."
+      prevented_saving:
+        one: "1 stuff-up stopped savin':"
+        other: "%{count} stuff-ups stopped savin':"
+    filter_by: "Filter by:"
+    footer:
+      copyright: "© %{year} %{company} — all rights, mate."
+      documentation: "The manual"
+      need_help: "Need a hand, cobber?"
+      open_issue: "Yell out (open issue)"
+      project_homepage: "Project home"
+      support: "Fair dinkum support →"
+      tagline: "Built with ❤️ by battlers, for battlers."
+      tooltip:
+        documentation: "Have a squiz at the docs"
+        gem_version: "Hop over to RubyGems"
+        open_issue: "Report a bug or ask for somethin'"
+        project_homepage: "Check the repo"
+        support: "Paid help if ya keen"
+      version: "v%{version}"
+    header:
+      signed_in_as: "Signed in as %{email}"
+    history: "Back story"
+    loading: "Hang on..."
+    loading_definitions: "Grabbin' the defs..."
+    loading_runs: "Grabbin' the runs..."
+    mat_view_definition:
+      create_mv: "Spin up MV"
+      create_mv_tooltip: "Makes the MV in the DB."
+      delete_confirm: "Sure ya wanna chuck %{name}? (Does NOT drop MV)"
+      delete_tooltip: "Deletes the def'n but leaves the MV."
+      drop_mv: "Drop MV"
+      drop_mv_cascade: "Drop MV (Cascade)"
+      drop_mv_cascade_confirm: "Drop the MV and all the tag-alongs for %{name}?"
+      drop_mv_cascade_tooltip: "Drops MV + mates, but keeps def'n."
+      drop_mv_confirm: "Drop the MV for %{name}?"
+      drop_mv_tooltip: "Drops the MV but keeps def'n."
+      edit_tooltip: "Tweak the mat view def'n."
+      materialized_view: "Mat View"
+      materialized_view_exists: "Mat view's there"
+      materialized_view_not_exists: "Mat view's not made yet!"
+      new_definition: "New def'n"
+      new_definition_tooltip: "Knock up a new mat view def'n."
+      no_definitions: "No defs found. Knock one up to start."
+      refresh_tooltip: "Give the mat view a tickle."
+      sql_summary_tooltip: "Click to open/close SQL"
+      view_tooltip: "See the mat view def'n."
+    mat_view_run:
+      error_tooltip: "Error if it went bung."
+      meta_tooltip: "Extra bits in JSON."
+      no_runs: "No runs yet."
+      no_runs_if_filtered: "No runs for that filter."
+      view_details: "See the deets"
+      view_tooltip: "See the run deets."
+    project_author: "Codevedas Inc."
+    project_description: "Admin UI for bossin' around Postgres mat views in Rails apps."
+    project_tags: "rails, ruby, mat views, admin, dashy, ui, managing stuff"
+    refresh: "Give it a tickle"
+    refresh_contents: "Tickle contents"
+    reloading: "Reloadin'..."
+    reset: "Start over"
+    run: "Run"
+    runs: "Runs"
+    save_changes: "Save it"
+    settings:
+      auto: "Auto"
+      dark: "Dark"
+      language: "Lingo"
+      language_hint: "Pick ya lingo for the UI."
+      light: "Light"
+      theme: "Theme"
+      theme_hint: "Auto follows system, light/dark overrides."
+      title: "Prefs"
+    title: "MatViews Admin"
+    view_var: "See %{name}"
+  time:
+    am: "AM"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "PM"
