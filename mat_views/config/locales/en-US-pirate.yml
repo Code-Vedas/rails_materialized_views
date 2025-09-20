@@ -1,0 +1,191 @@
+en-US-pirate:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "Plundered at"
+        dependencies: "Matey tables"
+        name: "Name o' the beast"
+        refresh_strategy: "How ye refresh"
+        schedule_cron: "Ship's bell (cron)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "Unique mast columns"
+        updated_at: "Polished at"
+      mat_views/mat_view_run:
+        created_at: "Plundered at"
+        details: "The booty details"
+        duration_ms: "How long in clicks (ms)"
+        error: "Blunder"
+        finished_at: "Anchored at"
+        mat_view_definition: "Definition"
+        meta: "Hidden map"
+        operation: "What be done"
+        row_count_after: "Row count after"
+        row_count_before: "Row count afore"
+        rows_before_after: "Rows (afore/after)"
+        started_at: "Set sail at"
+        status: "Status"
+        updated_at: "Polished at"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "All hands at once"
+          regular: "As usual"
+          swap: "Hoist the swap"
+      mat_views/mat_view_run:
+        operation:
+          create: "Hoist new"
+          drop: "Scuttle"
+          refresh: "Swab it"
+        status:
+          failed: "Wrecked"
+          running: "Sailin'"
+          success: "Treasure found"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "Ye must give it a moniker"
+              invalid: "That be no true PostgreSQL name, ye scallywag"
+              taken: "That name be plundered already"
+            sql:
+              blank: "Hoist a SQL query, ye lazy dog"
+              invalid: "It must begin with SELECT, arrr!"
+            unique_index_columns:
+              at_least_one: "Ye need at least one mast when usin' the all-hands refresh"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "Mark the tables/views it leans on, ye buccaneer."
+        name: "Name of yer cursed view in the hold."
+        refresh_strategy: "How ye want to swab it clean."
+        schedule_cron: "Set yer ship's bell (cron). Leave blank fer none."
+        sql: "Must be a SELECT, arrr!"
+        unique_index_columns: "Columns fer a unique mast. Needed fer all-hands refresh."
+      mat_views/mat_view_run:
+        error: "The blunder if it sank."
+        meta: "Hidden treasure map (JSON)."
+        operation: "The deed done."
+        status: "The ship's current fate."
+    models:
+      mat_views/mat_view_definition: "Mat View Scroll"
+      mat_views/mat_view_run: "Mat View Voyage"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "List yer dependencies, matey"
+        name: "Give it a proper moniker"
+        refresh_strategy: "Choose how to swab"
+        schedule_cron: "Cron chant, or leave blank"
+        sql: "Type yer SELECT..."
+        unique_index_columns: "Unique mast columns (comma separated, optional)"
+      mat_views/mat_view_run:
+        error: "Blunder message"
+        mat_view_definition: "Pick yer cursed view"
+        meta: "Hidden map (JSON)"
+        operation: "Pick the deed"
+        status: "Pick the fate"
+  i18n:
+    languages:
+      en-AU-ocker: Aussie (Ocker)
+      en-CA: English (Canada)
+      en-US: English (United States)
+      en-US-pirate: Pirate English (Arrr!)
+  mat_views:
+    actions: "Deeds"
+    all_definitions: "All scrolls"
+    all_operations: "All voyages"
+    all_statuses: "All fates"
+    cancel: "Abandon ship"
+    close: "Batten down"
+    close_window: "Shut the porthole"
+    create: "Hoist new"
+    dashboard:
+      metrics:
+        title: "Booty counts"
+      title: "Captain's deck"
+    definition: "Scroll"
+    definitions: "Scrolls"
+    delete: "Scuttle"
+    details: "The deets"
+    edit: "Tweak it"
+    edit_var: "Tweak %{name}"
+    errors:
+      frame_only: "Nay! Only in a frame. Back to the deck."
+      prevented_saving:
+        one: "1 blunder stopped the save:"
+        other: "%{count} blunders stopped the save:"
+    filter_by: "Filter by:"
+    footer:
+      copyright: "© %{year} %{company} — all booty reserved."
+      documentation: "Captain's log"
+      need_help: "Need a hand, matey?"
+      open_issue: "Raise yer flag (open issue)"
+      project_homepage: "Ship's homepage"
+      support: "Get paid mateship →"
+      tagline: "Built with ❤️ by pirates, for pirates."
+      tooltip:
+        documentation: "Read the scrolls"
+        gem_version: "See the Ruby chest"
+        open_issue: "Shout fer help"
+        project_homepage: "Find the repo"
+        support: "Support fer doubloons"
+      version: "v%{version}"
+    header:
+      signed_in_as: "Sailed in as %{email}"
+    history: "Tales past"
+    loading: "Hoistin' sails..."
+    loading_definitions: "Fetchin' the scrolls..."
+    loading_runs: "Fetchin' the voyages..."
+    mat_view_definition:
+      create_mv: "Hoist MV"
+      create_mv_tooltip: "Hoist the cursed MV."
+      delete_confirm: "Scuttle %{name}? (Does NOT sink MV)"
+      delete_tooltip: "Deletes the scroll but keeps the ship."
+      drop_mv: "Sink MV"
+      drop_mv_cascade: "Sink MV (Cascade)"
+      drop_mv_cascade_confirm: "Sink MV & crew for %{name}?"
+      drop_mv_cascade_tooltip: "Sinks MV & its mates. Scroll remains."
+      drop_mv_confirm: "Sink MV for %{name}?"
+      drop_mv_tooltip: "Sinks MV but scroll remains."
+      edit_tooltip: "Tweak the cursed scroll."
+      materialized_view: "Cursed MV"
+      materialized_view_exists: "The cursed MV be afloat"
+      materialized_view_not_exists: "The cursed MV be not afloat yet!"
+      new_definition: "New scroll"
+      new_definition_tooltip: "Craft a new cursed scroll."
+      no_definitions: "No scrolls yet. Craft one to start yer voyage."
+      refresh_tooltip: "Swab the cursed MV."
+      sql_summary_tooltip: "Open/close the SQL chest"
+      view_tooltip: "Read the cursed scroll."
+    mat_view_run:
+      error_tooltip: "Blunder if voyage sank."
+      meta_tooltip: "Hidden map in JSON."
+      no_runs: "No voyages found."
+      no_runs_if_filtered: "No voyages fit yer chart."
+      view_details: "See the booty"
+      view_tooltip: "See voyage details."
+    project_author: "Codevedas Inc."
+    project_description: "Captain's UI fer bossin' around Postgres cursed views in Rails seas."
+    project_tags: "rails, ruby, cursed views, admin, deck, ui, sailin'"
+    refresh: "Swab"
+    refresh_contents: "Swab the hold"
+    reloading: "Reloadin' the cannons..."
+    reset: "Start anew"
+    run: "Voyage"
+    runs: "Voyages"
+    save_changes: "Save yer loot"
+    settings:
+      auto: "Auto"
+      dark: "Dark seas"
+      language: "Tongue"
+      language_hint: "Pick yer pirate tongue."
+      light: "Light seas"
+      theme: "Theme"
+      theme_hint: "Auto follows the tide, light/dark override."
+      title: "Captain's prefs"
+    title: "MatViews Captain"
+    view_var: "Spy %{name}"
+  time:
+    am: "Afore noon"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "After noon"

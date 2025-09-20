@@ -6,12 +6,20 @@
 # LICENSE file in the root directory of this source tree.
 RSpec.describe 'UI screenshots', type: :feature do
   let(:screenshot_dir) { Rails.root.join('tmp', 'app-screenshots') }
-  let(:langs) { ['English (United States)', 'English (Canada)', 'Aussie (Ocker)'] }
+  let(:langs) do
+    [
+      'English (United States)',
+      'English (Canada)',
+      'Aussie (Ocker)',
+      'Pirate English (Arrr!)'
+    ]
+  end
   let(:lang_map) do
     {
       'English (United States)' => 'en-US',
       'English (Canada)' => 'en-CA',
-      'Aussie (Ocker)' => 'en-AU-ocker'
+      'Aussie (Ocker)' => 'en-AU-ocker',
+      'Pirate English (Arrr!)' => 'en-US-pirate'
     }
   end
   let(:themes) { %w[light dark] }
