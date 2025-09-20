@@ -84,17 +84,7 @@ en-BORK:
         operation: "Select oopereshun"
         status: "Select steetus"
   i18n:
-    languages:
-      en-AU: English (Australia)
-      en-AU-ocker: Aussie (Ocker)
-      en-BORK: Børk! Børk! Børk!
-      en-CA: English (Canada)
-      en-GB: English (United Kingdom)
-      en-IND: English (India)
-      en-KE: English (Kenya)
-      en-MS: English (Montserrat)
-      en-US: English (United States)
-      en-US-pirate: Pirate English (Arrr!)
+    name: Børk! Børk! Børk!
   mat_views:
     actions: "Ecteeuns"
     all_definitions: "Ell defeeneshuns"

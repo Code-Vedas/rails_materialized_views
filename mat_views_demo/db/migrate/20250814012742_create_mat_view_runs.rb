@@ -5,8 +5,8 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-# This migration creates the mat_view_runs table, which tracks the mutation runs(create,refresh,drop) of materialized views.
-# It includes references to the materialized view definition, status, operation type, timestamps,
+# This migration creates the mat_view_runs table, which tracks the mutation runs(create,refresh,drop) of materialised views.
+# It includes references to the materialised view definition, status, operation type, timestamps,
 # duration, error messages, and additional metadata.
 class CreateMatViewRuns < ActiveRecord::Migration[7.1]
   def change
@@ -14,7 +14,7 @@ class CreateMatViewRuns < ActiveRecord::Migration[7.1]
       t.references :mat_view_definition,
                    null: false,
                    foreign_key: true,
-                   comment: 'Reference to the materialized view definition'
+                   comment: 'Reference to the materialised view definition'
 
       # 0=running, 1=success, 2=failed
       t.integer  :status, null: false, default: 0, comment: '0=running,1=success,2=failed'

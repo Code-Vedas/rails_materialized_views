@@ -6,7 +6,7 @@ permalink: /validation
 
 # Validation & Benchmarking
 
-This guide shows how we **verify correctness** (materialized view rows match the baseline SQL) and **measure performance** (baseline vs. MV reads) using the companion demo app **`mat_views_demo`**.
+This guide shows how we **verify correctness** (materialised view rows match the baseline SQL) and **measure performance** (baseline vs. MV reads) using the companion demo app **`mat_views_demo`**.
 
 It uses two sets of tasks:
 
@@ -97,7 +97,7 @@ ITER=100 bin/rake mat_views:validate_demo
 
 ### What the validator does
 
-- Discovers existing materialized views from `pg_matviews`
+- Discovers existing materialised views from `pg_matviews`
   _(excluding system schemas)_.
 - Matches them to `MatViews::MatViewDefinition` records (to fetch the baseline SQL).
 - For each definition present as a physical MV:
@@ -187,7 +187,7 @@ rows_baseline,rows_mv
 
 ## Troubleshooting
 
-- **“No materialized views found”**
+- **“No materialised views found”**
   Run the bootstrap or create views. The validator discovers views from `pg_matviews`.
 
 - **“Found MVs in DB, but no matching MatViewDefinition records”**
@@ -205,7 +205,7 @@ rows_baseline,rows_mv
 
 - CSV lives under `tmp/mv_validate/<timestamp>/report.csv` (demo app).
 - Paste rendered Markdown tables into:
-  - Root `README.md` → **Why materialized views? Real numbers**
+  - Root `README.md` → **Why materialised views? Real numbers**
   - `docs/validation/` → per-run archives, if you keep historical results
 
 You can also drop the CSV into `/docs/validation/` and link it from the docs site.

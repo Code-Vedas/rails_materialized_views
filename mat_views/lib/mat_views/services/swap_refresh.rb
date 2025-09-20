@@ -10,10 +10,10 @@ require 'securerandom'
 module MatViews
   module Services
     ##
-    # Service that performs a **swap-style refresh** of a materialized view.
+    # Service that performs a **swap-style refresh** of a materialised view.
     #
     # Instead of locking the existing view, this strategy builds a new
-    # temporary materialized view and atomically swaps it in. This approach
+    # temporary materialised view and atomically swaps it in. This approach
     # minimizes downtime and allows for safer rebuilds of large views.
     #
     # Steps:
@@ -126,7 +126,7 @@ module MatViews
       end
 
       ##
-      # Quote the temporary materialized view name.
+      # Quote the temporary materialised view name.
       #
       # @api private
       # @return [String] quoted temporary view name
@@ -135,7 +135,7 @@ module MatViews
       end
 
       ##
-      # Quote the original materialized view name.
+      # Quote the original materialised view name.
       #
       # @api private
       # @return [String] quoted original view name

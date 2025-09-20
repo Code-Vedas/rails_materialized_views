@@ -8,7 +8,7 @@
 module MatViews
   module Services
     ##
-    # Service responsible for creating PostgreSQL materialized views.
+    # Service responsible for creating PostgreSQL materialised views.
     #
     # The service validates the view definition, handles existence checks,
     # executes `CREATE MATERIALIZED VIEW ... WITH DATA`, and, when the
@@ -67,7 +67,7 @@ module MatViews
       #
       # - Validates name, SQL, and concurrent-index requirements.
       # - Handles existing view: skipped (default) or drop+recreate (`force: true`).
-      # - Creates the materialized view WITH DATA.
+      # - Creates the materialised view WITH DATA.
       # - Creates a UNIQUE index if refresh strategy is concurrent.
       #
       # @api private

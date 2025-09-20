@@ -170,8 +170,8 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
     around do |ex|
       old_backend = I18n.backend
       I18n.backend = I18n::Backend::Simple.new
-      I18n.backend.store_translations(:'en-US', { mat_views: { greet: 'Howdy %<name>s' } })
-      I18n.locale = :'en-US'
+      I18n.backend.store_translations(:en, { mat_views: { greet: 'Howdy %<name>s' } })
+      I18n.locale = :en
       ex.run
     ensure
       I18n.backend = old_backend

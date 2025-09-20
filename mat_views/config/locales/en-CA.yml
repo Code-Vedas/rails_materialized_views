@@ -21,7 +21,7 @@ en-CA:
         operation: "Operation"
         row_count_after: "Row count after"
         row_count_before: "Row count before"
-        rows_before_after: "Rows(before/after)"
+        rows_before_after: "Rows (before/after)"
         started_at: "Started at"
         status: "Status"
         updated_at: "Updated at"
@@ -55,9 +55,9 @@ en-CA:
               at_least_one: "must have at least one column when using concurrent refresh strategy"
     hints:
       mat_views/mat_view_definition:
-        dependencies: "Comma-separated list of tables or views this materialized view depends on."
-        name: "Name of the materialized view in the database."
-        refresh_strategy: "Determines how the materialized view is refreshed."
+        dependencies: "Comma-separated list of tables or views this materialised view depends on."
+        name: "Name of the materialised view in the database."
+        refresh_strategy: "Determines how the materialised view is refreshed."
         schedule_cron: "Use standard cron format. Leave empty for no scheduling."
         sql: "The SQL query must be a valid SELECT statement."
         unique_index_columns: "Columns to create a unique index on. Required for concurrent refresh."
@@ -67,8 +67,8 @@ en-CA:
         operation: "Type of operation performed."
         status: "Current status of the run."
     models:
-      mat_views/mat_view_definition: "Materialized View Definition"
-      mat_views/mat_view_run: "Materialized View Run"
+      mat_views/mat_view_definition: "Materialised View Definition"
+      mat_views/mat_view_run: "Materialised View Run"
     placeholders:
       mat_views/mat_view_definition:
         dependencies: "Enter dependencies (comma separated, optional)"
@@ -79,22 +79,12 @@ en-CA:
         unique_index_columns: "Enter unique index columns (comma separated, optional)"
       mat_views/mat_view_run:
         error: "Error message"
-        mat_view_definition: "Select materialized view"
+        mat_view_definition: "Select materialised view"
         meta: "Metadata (JSON)"
         operation: "Select operation"
         status: "Select status"
   i18n:
-    languages:
-      en-AU: English (Australia)
-      en-AU-ocker: Aussie (Ocker)
-      en-BORK: Børk! Børk! Børk!
-      en-CA: English (Canada)
-      en-GB: English (United Kingdom)
-      en-IND: English (India)
-      en-KE: English (Kenya)
-      en-MS: English (Montserrat)
-      en-US: English (United States)
-      en-US-pirate: Pirate English (Arrr!)
+    name: English (Canada)
   mat_views:
     actions: "Actions"
     all_definitions: "All definitions"
@@ -132,7 +122,7 @@ en-CA:
         documentation: "Read the documentation"
         gem_version: "Click to visit the RubyGems page"
         open_issue: "Report a bug or request a feature"
-        project_homepage: "Github repository"
+        project_homepage: "GitHub repository"
         support: "Professional support plans"
       version: "v%{version}"
     header:
@@ -143,25 +133,25 @@ en-CA:
     loading_runs: "Loading runs..."
     mat_view_definition:
       create_mv: "Create MV"
-      create_mv_tooltip: "Creates the materialized view in the database."
+      create_mv_tooltip: "Creates the materialised view in the database."
       delete_confirm: "Delete definition %{name}? (Does NOT drop MV)"
-      delete_tooltip: "Deletes the definition but does NOT drop the materialized view in the database."
+      delete_tooltip: "Deletes the definition but does NOT drop the materialised view in the database."
       drop_mv: "Drop MV"
-      drop_mv_cascade: "Drop MV(Cascade)"
-      drop_mv_cascade_confirm: "Drop materialized view and all dependent objects for %{name}?"
-      drop_mv_cascade_tooltip: "Drops the materialized view and all dependent objects in the database. Definition remains."
-      drop_mv_confirm: "Drop materialized view for %{name}?"
-      drop_mv_tooltip: "Drops the materialized view in the database. Definition remains."
-      edit_tooltip: "Edit materialized view definition."
-      materialized_view: "Materialized View"
-      materialized_view_exists: "Materialized view exists"
-      materialized_view_not_exists: "Materialized view not created yet!"
+      drop_mv_cascade: "Drop MV (Cascade)"
+      drop_mv_cascade_confirm: "Drop materialised view and all dependent objects for %{name}?"
+      drop_mv_cascade_tooltip: "Drops the materialised view and all dependent objects in the database. Definition remains."
+      drop_mv_confirm: "Drop materialised view for %{name}?"
+      drop_mv_tooltip: "Drops the materialised view in the database. Definition remains."
+      edit_tooltip: "Edit materialised view definition."
+      materialized_view: "Materialised View"
+      materialized_view_exists: "Materialised view exists"
+      materialized_view_not_exists: "Materialised view not created yet!"
       new_definition: "New definition"
-      new_definition_tooltip: "Create a new materialized view definition."
-      no_definitions: "No materialized view definitions found. Create one to get started."
-      refresh_tooltip: "Refreshes the materialized view in the database."
+      new_definition_tooltip: "Create a new materialised view definition."
+      no_definitions: "No materialised view definitions found. Create one to get started."
+      refresh_tooltip: "Refreshes the materialised view in the database."
       sql_summary_tooltip: "Click to expand/collapse SQL"
-      view_tooltip: "View materialized view definition."
+      view_tooltip: "View materialised view definition."
     mat_view_run:
       error_tooltip: "Error message if the run failed."
       meta_tooltip: "Additional metadata in JSON format."
@@ -170,8 +160,8 @@ en-CA:
       view_details: "View details"
       view_tooltip: "View run details."
     project_author: "Codevedas Inc."
-    project_description: "Admin interface for managing PostgreSQL materialized views in Rails applications."
-    project_tags: "rails, ruby, materialized views, admin, dashboard, ui, interface, management"
+    project_description: "Admin interface for managing PostgreSQL materialised views in Rails applications."
+    project_tags: "rails, ruby, materialised views, admin, dashboard, ui, interface, management"
     refresh: "Refresh"
     refresh_contents: "Refresh contents"
     reloading: "Reloading..."

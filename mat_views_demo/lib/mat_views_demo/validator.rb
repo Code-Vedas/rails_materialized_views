@@ -10,7 +10,7 @@ require 'csv'
 module MatViewsDemo
   # Validator benchmarks query performance by comparing:
   # - A baseline SQL query (the raw definition SQL wrapped in COUNT(*))
-  # - The equivalent query against the materialized view (MV)
+  # - The equivalent query against the materialised view (MV)
   #
   # It executes a configurable number of iterations and returns timing
   # statistics for both approaches, along with row counts and relative speedup.
@@ -28,7 +28,7 @@ module MatViewsDemo
   class Validator
     attr_reader :definition, :iterations, :connection
 
-    # @param definition [MatViews::MatViewDefinition] the materialized view definition
+    # @param definition [MatViews::MatViewDefinition] the materialised view definition
     # @param iterations [Integer] how many times to run each benchmark (default: 5)
     # @param connection [ActiveRecord::ConnectionAdapters::PostgreSQLAdapter] DB connection
     def initialize(definition, iterations: 5, connection: ActiveRecord::Base.connection)
@@ -83,12 +83,12 @@ module MatViewsDemo
       connection.select_value(sql).to_i
     end
 
-    # Count rows directly from the materialized view.
+    # Count rows directly from the materialised view.
     #
     # @private
-    # @return [Integer] row count from the materialized view
+    # @return [Integer] row count from the materialised view
     #
-    # This method executes a simple COUNT(*) query against the materialized view defined by
+    # This method executes a simple COUNT(*) query against the materialised view defined by
     # the MatViewDefinition. It returns the total number of rows in the view.
     def mv_count
       rel = %("#{definition.name}")
@@ -127,11 +127,11 @@ module MatViewsDemo
     #
     # @private
     # @param baseline_avg [Integer] average time of the baseline query in ms
-    # @param mv_avg [Integer] average time of the materialized view query in ms
+    # @param mv_avg [Integer] average time of the materialised view query in ms
     # @return [Float] speedup factor, rounded to 2 decimal places
     #
-    # This method calculates how many times faster the materialized view is compared to the baseline query.
-    # If the materialized view average time is zero or less, it returns 0.0 to avoid division by zero.
+    # This method calculates how many times faster the materialised view is compared to the baseline query.
+    # If the materialised view average time is zero or less, it returns 0.0 to avoid division by zero.
     def speedup(baseline_avg, mv_avg)
       return 0.0 if mv_avg.to_f <= 0.0
 

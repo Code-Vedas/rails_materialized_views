@@ -9,7 +9,7 @@
 # Top-level namespace for the mat_views engine.
 module MatViews
   ##
-  # ActiveJob that handles *creation* of PostgreSQL materialized views for a
+  # ActiveJob that handles *creation* of PostgreSQL materialised views for a
   # given {MatViews::MatViewDefinition}.
   #
   # The job:
@@ -40,7 +40,7 @@ module MatViews
     queue_as { MatViews.configuration.job_queue || :default }
 
     ##
-    # Perform the create job for the given materialized view definition.
+    # Perform the create job for the given materialised view definition.
     #
     # @api public
     #

@@ -8,7 +8,7 @@
 ##
 # Top-level namespace for the mat_views engine.
 #
-# All classes, modules, and services for materialized view management
+# All classes, modules, and services for materialised view management
 # are defined under this namespace.
 #
 # @example Accessing a job

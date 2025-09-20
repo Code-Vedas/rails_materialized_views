@@ -28,4 +28,5 @@ end
 
 RSpec.configure do |config|
   config.include SystemHelpers, type: :feature
+  config.include SystemHelpers, type: :feature_app_screenshots
 end

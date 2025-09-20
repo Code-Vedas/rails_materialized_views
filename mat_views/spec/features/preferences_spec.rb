@@ -9,18 +9,7 @@ RSpec.describe 'Preferences', type: :feature do
   before { visit_dashboard }
 
   let(:lang_options) do
-    [
-      'Aussie (Ocker)',
-      'English (Australia)',
-      'Børk! Børk! Børk!',
-      'English (Canada)',
-      'English (United Kingdom)',
-      'English (India)',
-      'English (Kenya)',
-      'English (Montserrat)',
-      'Pirate English (Arrr!)',
-      'English (United States)'
-    ]
+    MatViews::Engine.locale_code_mapping.values.sort
   end
 
   shared_examples 'change theme' do |theme_before, theme_after|
@@ -53,6 +42,7 @@ RSpec.describe 'Preferences', type: :feature do
 
   shared_examples 'change language' do |lang_before, lang_after, language_txt_before, language_txt_after|
     scenario "Change language from #{lang_before} to #{lang_after}", :js do
+      select_language(lang_before)
       open_preferences
       within_drawer do
         expect(page).to have_css('label.mv-label', text: language_txt_before)
@@ -80,7 +70,7 @@ RSpec.describe 'Preferences', type: :feature do
       expect(page).to have_field('theme', type: 'radio', with: 'dark')
 
       expect(page).to have_css('label.mv-label', text: 'Language')
-      expect(page).to have_select('locale', options: lang_options, selected: 'English (United States)')
+      expect(page).to have_select('locale', options: lang_options, selected: 'English')
     end
   end
 
@@ -91,15 +81,14 @@ RSpec.describe 'Preferences', type: :feature do
   end
 
   describe 'Change Language', :js do
-    it_behaves_like 'change language', 'English (United States)', 'Aussie (Ocker)', 'Language', 'Lingo'
-    it_behaves_like 'change language', 'English (United States)', 'English (Australia)', 'Language', 'Language'
-    it_behaves_like 'change language', 'English (United States)', 'Børk! Børk! Børk!', 'Language', 'Lengoeege-a'
-    it_behaves_like 'change language', 'English (United States)', 'English (Canada)', 'Language', 'Language'
-    it_behaves_like 'change language', 'English (United States)', 'English (United Kingdom)', 'Language', 'Language'
-    it_behaves_like 'change language', 'English (United States)', 'English (India)', 'Language', 'Language'
-    it_behaves_like 'change language', 'English (United States)', 'English (Kenya)', 'Language', 'Language'
-    it_behaves_like 'change language', 'English (United States)', 'English (Montserrat)', 'Language', 'Language'
-    it_behaves_like 'change language', 'English (United States)', 'English (United States)', 'Language', 'Language'
-    it_behaves_like 'change language', 'English (United States)', 'Pirate English (Arrr!)', 'Language', 'Tongue'
+    all_locales = MatViews::Engine.locale_code_mapping.to_a
+
+    locale_pair = all_locales.sample(2)
+    lang_code_before, lang_code_after = locale_pair.map { |e| e[0] }
+    lang_name_before, lang_name_after = locale_pair.map { |e| e[1] }
+    language_txt_before = I18n.t('mat_views.settings.language', locale: lang_code_before)
+    language_txt_after = I18n.t('mat_views.settings.language', locale: lang_code_after)
+    it_behaves_like 'change language', lang_name_before, lang_name_after, language_txt_before, language_txt_after
+    it_behaves_like 'change language', lang_name_after, lang_name_before, language_txt_after, language_txt_before
   end
 end

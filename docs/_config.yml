@@ -1,6 +1,6 @@
 title: Rails Materialized Views
 description: >-
-  MatViews is a mountable Ruby on Rails engine that makes PostgreSQL materialized views first-class citizens in your app.
+  MatViews is a mountable Ruby on Rails engine that makes PostgreSQL materialised views first-class citizens in your app.
   From declaration to concurrent refresh, automated scheduling, metrics tracking, and 
   large-dataset validation - MatViews helps you tame big queries and keep your reports lightning-fast.
 baseurl: ""

@@ -13,7 +13,7 @@ module MatViews
     #
     # Responsibilities:
     # - Full CRUD lifecycle: index, show, new, create, edit, update, destroy.
-    # - Admin-only actions to trigger materialized view operations:
+    # - Admin-only actions to trigger materialised view operations:
     #   - {#create_now} → enqueues {MatViews::CreateViewJob}
     #   - {#refresh} → enqueues {MatViews::RefreshViewJob}
     #   - {#delete_now} → enqueues {MatViews::DeleteViewJob}
@@ -125,7 +125,7 @@ module MatViews
 
       # POST /:lang/admin/definitions/:id/create_now
       #
-      # Immediately enqueues a background job to create the materialized view.
+      # Immediately enqueues a background job to create the materialised view.
       #
       # @return [void]
       def create_now
@@ -141,7 +141,7 @@ module MatViews
 
       # POST /:lang/admin/definitions/:id/refresh
       #
-      # Immediately enqueues a background job to refresh the materialized view.
+      # Immediately enqueues a background job to refresh the materialised view.
       #
       # @return [void]
       def refresh
@@ -156,7 +156,7 @@ module MatViews
 
       # POST /:lang/admin/definitions/:id/delete_now
       #
-      # Immediately enqueues a background job to delete the materialized view.
+      # Immediately enqueues a background job to delete the materialised view.
       #
       # @return [void]
       def delete_now

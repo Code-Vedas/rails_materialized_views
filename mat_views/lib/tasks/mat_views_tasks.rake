@@ -37,7 +37,7 @@ namespace :mat_views do
     helpers.logger.info("[mat_views] Enqueued CreateViewJob for definition ##{defn.id} (#{defn.name}), force=#{force}, row_count_strategy=#{rcs}.")
   end
 
-  desc 'Enqueue CREATE jobs for ALL defined materialized views'
+  desc 'Enqueue CREATE jobs for ALL defined materialised views'
   task :create_all, %i[force row_count_strategy yes] => :environment do |_t, args|
     rcs   = helpers.parse_row_count_strategy(args[:row_count_strategy])
     force = helpers.parse_force?(args[:force])
@@ -83,7 +83,7 @@ namespace :mat_views do
     helpers.logger.info("[mat_views] Enqueued RefreshViewJob for definition ##{defn.id} (#{defn.name}), row_count_strategy=#{rcs}.")
   end
 
-  desc 'Enqueue REFRESH jobs for ALL defined materialized views'
+  desc 'Enqueue REFRESH jobs for ALL defined materialised views'
   task :refresh_all, %i[row_count_strategy yes] => :environment do |_t, args|
     rcs  = helpers.parse_row_count_strategy(args[:row_count_strategy])
     skip = helpers.skip_confirm?(args[:yes])
@@ -130,7 +130,7 @@ namespace :mat_views do
     helpers.logger.info("[mat_views] Enqueued DeleteViewJob for definition ##{defn.id} (#{defn.name}), cascade=#{cascade}, row_count_strategy=#{rcs}.")
   end
 
-  desc 'Enqueue DELETE jobs for ALL defined materialized views'
+  desc 'Enqueue DELETE jobs for ALL defined materialised views'
   task :delete_all, %i[cascade row_count_strategy yes] => :environment do |_t, args|
     rcs     = helpers.parse_row_count_strategy(args[:row_count_strategy])
     cascade = helpers.parse_cascade?(args[:cascade])

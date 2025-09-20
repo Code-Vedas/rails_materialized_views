@@ -13,7 +13,7 @@ module MatViews
     # - Parsing boolean/flag-like arguments
     # - Confirmation prompts
     # - Enqueueing background jobs for create, refresh, and delete operations
-    # - Looking up materialized view definitions
+    # - Looking up materialised view definitions
     #
     # By extracting this logic, Rake tasks can remain clean and declarative.
     module Helpers
@@ -59,7 +59,7 @@ module MatViews
         str.to_sym
       end
 
-      # Check if a materialized view exists in schema.
+      # Check if a materialised view exists in schema.
       # @param rel [String] relation name
       # @param schema [String] schema name
       # @return [Boolean]
@@ -171,7 +171,7 @@ module MatViews
       # @param row_count_strategy [Symbol] :estimated or :exact or :none
       # @return [void]
       #
-      # This method schedules a job to delete the materialized view, optionally with CASCADE.
+      # This method schedules a job to delete the materialised view, optionally with CASCADE.
       # It uses the configured job adapter to enqueue the job.
       def enqueue_delete(mat_view_definition_id, cascade, row_count_strategy)
         MatViews::Jobs::Adapter.enqueue(

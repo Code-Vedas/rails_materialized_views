@@ -48,7 +48,7 @@ module MatViews
     queue_as { MatViews.configuration.job_queue || :default }
 
     ##
-    # Perform the refresh job for the given materialized view definition.
+    # Perform the refresh job for the given materialised view definition.
     #
     # @api public
     #

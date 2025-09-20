@@ -9,9 +9,9 @@
 # Top-level namespace for the mat_views engine.
 module MatViews
   ##
-  # Represents a **materialized view definition** managed by the engine.
+  # Represents a **materialised view definition** managed by the engine.
   #
-  # A definition stores the canonical name and SQL for a materialized view and
+  # A definition stores the canonical name and SQL for a materialised view and
   # drives lifecycle operations (create, refresh, delete) via background jobs
   # and services. It also tracks operational history through associated
   # run models.

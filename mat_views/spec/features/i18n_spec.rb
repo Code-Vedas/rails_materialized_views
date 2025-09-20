@@ -10,12 +10,12 @@ RSpec.describe 'I18n & URL', type: :feature do
 
   scenario 'Dashboard path includes locale', :js do
     wait_for_turbo_idle
-    expect(page).to have_current_path('/mat_views/en-US/admin', ignore_query: true)
+    expect(page).to have_current_path('/mat_views/en/admin', ignore_query: true)
   end
 
   scenario 'Locale redirect to chosen locale', :js do
     visit('/mat_views/fr/admin')
     wait_for_turbo_idle
-    expect(page).to have_current_path('/mat_views/en-US/admin', ignore_query: true)
+    expect(page).to have_current_path('/mat_views/en/admin', ignore_query: true)
   end
 end
