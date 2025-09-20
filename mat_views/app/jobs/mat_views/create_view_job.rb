@@ -17,7 +17,7 @@ module MatViews
   # 2. Looks up the target {MatViews::MatViewDefinition}.
   # 3. Starts a {MatViews::MatViewRun} row to track lifecycle/timing, with `operation: :create`.
   # 4. Executes {MatViews::Services::CreateView}.
-  # 5. Finalizes the run with success/failure, duration, and payload meta.
+  # 5. Finalizes the run with success/failure, duration, and meta.
   #
   # @see MatViews::Services::CreateView
   # @see MatViews::MatViewDefinition
@@ -44,24 +44,25 @@ module MatViews
     #
     # @api public
     #
-    # @param definition_id [Integer, String] ID of {MatViews::MatViewDefinition}.
+    # @param mat_view_definition_id [Integer, String] ID of {MatViews::MatViewDefinition}.
     # @param force_arg [Boolean, Hash, nil] Optional flag or hash (`{ force: true }`)
     # @param row_count_strategy_arg [:Symbol, String] One of: `:estimated`, `:exact`, `:none` or `nil`.
     #
     # @return [Hash] Serialized {MatViews::ServiceResponse#to_h}:
     #   - `:status` [Symbol]
-    #   - `:payload` [Hash]
     #   - `:error` [String, nil]
     #   - `:duration_ms` [Integer]
     #   - `:meta` [Hash]
     #
     # @raise [StandardError] Re-raised on unexpected failure after marking the run failed.
     #
-    def perform(definition_id, force_arg = nil, row_count_strategy_arg = nil)
-      definition = MatViews::MatViewDefinition.find(definition_id)
+    def perform(mat_view_definition_id, force_arg = nil, row_count_strategy_arg = nil)
+      definition = MatViews::MatViewDefinition.find(mat_view_definition_id)
 
       record_run(definition, :create) do
-        MatViews::Services::CreateView.new(definition, force: force?(force_arg), row_count_strategy: normalize_strategy(row_count_strategy_arg)).run
+        MatViews::Services::CreateView.new(definition,
+                                           force: force?(force_arg),
+                                           row_count_strategy: normalize_strategy(row_count_strategy_arg)).call
       end
     end
 

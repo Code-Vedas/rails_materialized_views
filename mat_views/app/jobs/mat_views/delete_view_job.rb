@@ -43,24 +43,24 @@ module MatViews
     #
     # @api public
     #
-    # @param definition_id [Integer, String] ID of {MatViews::MatViewDefinition}.
+    # @param mat_view_definition_id [Integer, String] ID of {MatViews::MatViewDefinition}.
     # @param cascade_arg [Boolean, String, Integer, Hash, nil] Cascade option.
     # @param row_count_strategy_arg [:Symbol, String] One of: `:estimated`, `:exact`, `:none` or `nil`.
     #
     # @return [Hash] Serialized {MatViews::ServiceResponse#to_h}:
     #   - `:status` [Symbol]
-    #   - `:payload` [Hash]
     #   - `:error` [String, nil]
     #   - `:duration_ms` [Integer]
     #   - `:meta` [Hash]
     #
     # @raise [StandardError] Re-raised on unexpected failure after marking the run failed.
     #
-    def perform(definition_id, cascade_arg = nil, row_count_strategy_arg = nil)
-      definition = MatViews::MatViewDefinition.find(definition_id)
+    def perform(mat_view_definition_id, cascade_arg = nil, row_count_strategy_arg = nil)
+      definition = MatViews::MatViewDefinition.find(mat_view_definition_id)
       record_run(definition, :drop) do
-        MatViews::Services::DeleteView.new(definition, cascade: cascade?(cascade_arg),
-                                                       row_count_strategy: normalize_strategy(row_count_strategy_arg)).run
+        MatViews::Services::DeleteView.new(definition,
+                                           cascade: cascade?(cascade_arg),
+                                           row_count_strategy: normalize_strategy(row_count_strategy_arg)).call
       end
     end
 

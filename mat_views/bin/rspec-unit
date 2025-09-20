@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+set -euo pipefail
+bin/rspec --tag ~type:feature "$@"

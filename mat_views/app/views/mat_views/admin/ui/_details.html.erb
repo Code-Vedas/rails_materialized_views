@@ -1,0 +1,10 @@
+<% body = capture { yield } %>
+<details data-controller="details" data-details-duration-value="200" class="mv-details"
+         open>
+  <summary data-action="click->details#toggle" data-controller="tooltip" data-tooltip-text-value="<%= tooltip_text %>">
+    <%= mv_icon(:arrow_right, class_name: "mv-chevron") %>
+    <%= title %>
+  </summary>
+
+  <div data-details-target="content" class="mv-details__content"><%= body -%></div>
+</details>

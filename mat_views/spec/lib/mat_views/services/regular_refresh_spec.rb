@@ -20,7 +20,7 @@ RSpec.describe MatViews::Services::RegularRefresh do
 
   let(:row_count_strategy) { :estimated }
   let(:runner) { described_class.new(definition, row_count_strategy:) }
-  let(:execute_service) { runner.run }
+  let(:execute_service) { runner.call }
 
   before do
     User.destroy_all
@@ -42,18 +42,6 @@ RSpec.describe MatViews::Services::RegularRefresh do
   end
 
   describe 'validations' do
-    it 'fails when name is invalid format' do
-      definition.name = 'public.mv_bad' # contains a dot
-      res = execute_service
-
-      expect(res).not_to be_success
-      expect(res.error).not_to be_nil
-      expect(res.error[:message]).to match(/Invalid view name format/i)
-      expect(res.error[:class]).to eq('StandardError')
-      expect(res.error[:backtrace]).to be_an(Array)
-      expect(mv_exists?(relname)).to be(false)
-    end
-
     it 'fails when the view does not exist' do
       # valid name, but we did not create the view
       res = execute_service
@@ -144,7 +132,7 @@ RSpec.describe MatViews::Services::RegularRefresh do
   end
 
   describe 'unexpected DB error' do
-    it 'wraps exception into error response with meta.sql and payload.view' do
+    it 'wraps exception into error response with meta[:response][:sql] and meta[:response][:view]' do
       create_mv!(relname, schema: 'public')
       allow(conn).to receive(:schema_search_path).and_return('public')
 

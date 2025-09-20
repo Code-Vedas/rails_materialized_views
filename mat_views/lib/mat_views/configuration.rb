@@ -17,6 +17,7 @@ module MatViews
   #   MatViews.configure do |config|
   #     config.job_adapter = :sidekiq
   #     config.job_queue   = :low_priority
+  #     config.admin_ui   = { row_count_strategy: :estimated }
   #   end
   #
   # Supported job adapters:
@@ -38,12 +39,20 @@ module MatViews
     attr_accessor :job_queue
 
     ##
+    # admin_ui configuration
+    # @return [Hash]
+    attr_accessor :admin_ui
+
+    ##
     # Initialize with defaults.
     #
     # @return [void]
     def initialize
       @job_adapter = :active_job
       @job_queue   = :default
+      @admin_ui    = {
+        row_count_strategy: :none
+      }
     end
   end
 end

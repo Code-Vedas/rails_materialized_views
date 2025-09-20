@@ -5,8 +5,32 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+LANG_RE = /[a-z]{2}(?:-[a-z]{2,8})?/i
 MatViews::Engine.routes.draw do
-  # Routes for MatViews can be defined here.
-  # For example, you can add a root route or other resources as needed.
-  # root 'mat_views#home'
+  scope '(:lang)', constraints: { lang: LANG_RE } do
+    namespace :admin do
+      root to: 'dashboard#index'
+      resource :preferences, only: %i[show update]
+      resources :mat_view_definitions, path: 'definitions' do
+        member do
+          post :create_now
+          post :refresh
+          post :delete_now
+        end
+      end
+      resources :runs, only: %i[index show]
+
+      # redirect to dashboard for unknown paths.
+      get '*path', to: redirect { |params, req|
+        lang = (params[:lang].presence || MatViews::Engine.default_locale).to_s
+        "#{req.script_name}/#{lang}/admin"
+      }
+    end
+
+    # redirect to admin dashboard for root path including lang.
+    root to: redirect { |params, req|
+      lang = (params[:lang].presence || MatViews::Engine.default_locale).to_s
+      "#{req.script_name}/#{lang}/admin"
+    }
+  end
 end

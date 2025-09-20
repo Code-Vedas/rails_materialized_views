@@ -1,0 +1,50 @@
+<input type="hidden" id="mv-drawer-open-url-identifier" value="preferences_edit" %>
+<div class="mv-card">
+  <div class="mv-card-b">
+    <%= form_with url: admin_preferences_path(frame_id: 'mv-drawer', frame_action: "window-reload"), method: :put, data: { turbo_frame: :"mv-drawer" } do %>
+      <!-- Theme -->
+      <div class="mv-field">
+        <div class="mv-label"><%= mv_t("settings.theme") %></div>
+        <p class="mv-label mv-label--sublabel">
+          <%= mv_t("settings.theme_hint") %>
+        </p>
+        <div class="mv-actions" style="justify-content:flex-start">
+          <% [["auto", mv_t("settings.auto")], ["light", mv_t("settings.light")], ["dark", mv_t("settings.dark")]].each do |value, label| %>
+            <label for="lang-<%= label %>" class="mv-btn mv-btn--secondary mv-btn--sm" style="gap:.4rem;">
+              <input id="lang-<%= label %>" type="radio" name="theme" value="<%= value %>" <%= "checked" if @theme == value %> style="margin:0"/>
+              <span><%= label %></span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+      <br/>
+      <!-- Language -->
+      <div class="mv-field">
+        <label for="locale" class="mv-label"><%= mv_t("settings.language") %></label>
+        <p class="mv-label mv-label--sublabel">
+          <%= mv_t("settings.language_hint") %>
+        </p>
+        <select name="locale" id="locale" class="mv-select">
+          <% @locales.each do |loc| %>
+            <% label = I18n.t("i18n.languages.#{loc}") %>
+            <option value="<%= loc %>" <%= "selected" if @locale == loc %>>
+              <%= label %>
+            </option>
+          <% end %>
+        </select>
+      </div>
+      <div class="mv-actions">
+        <%= mv_submit_button class: "mv-btn mv-btn--primary mv-btn--md",
+                             testid: 'PREFERENCES_SAVE_BUTTON' do %>
+          <%= mv_t("save_changes") %>
+        <% end %>
+
+        <%= mv_cancel_button variant: :ghost, data: { action: "click->drawer#close" },
+                             class: 'mv-btn mv-btn--ghost mv-btn--md', 
+                             testid: 'PREFERENCES_CANCEL_BUTTON' do %>
+          <%= mv_t("cancel") %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

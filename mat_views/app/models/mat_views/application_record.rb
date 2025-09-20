@@ -30,5 +30,6 @@ module MatViews
     # @return [void]
     #
     self.abstract_class = true
+    include MatViewsI18n
   end
 end

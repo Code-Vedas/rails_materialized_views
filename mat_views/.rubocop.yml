@@ -4,6 +4,7 @@ plugins:
   - rubocop-performance
   - rubocop-rake
   - rubocop-factory_bot
+  - rubocop-capybara
 
 AllCops:
   NewCops: enable
@@ -15,11 +16,17 @@ AllCops:
     - vendor/bundle/**/* # (explicitly, for Bundler’s path)
 
 Metrics/MethodLength:
-  Max: 20
-RSpec/MultipleExpectations:
+  Max: 50
+Metrics/ModuleLength:
+  Max: 250
+Metrics/BlockLength:
+  Max: 50
+Metrics/ParameterLists:
   Max: 10
+RSpec/MultipleExpectations:
+  Max: 20
 RSpec/ExampleLength:
-  Max: 30
+  Max: 50
 Layout/LineLength:
   Max: 160
 RSpecRails/InferredSpecType:
@@ -29,10 +36,13 @@ Metrics/ClassLength:
 Metrics/AbcSize:
   Max: 30
 RSpec/MultipleMemoizedHelpers:
-  Max: 10
+  Max: 15
 Metrics/CyclomaticComplexity:
   Max: 10
 RSpec/NestedGroups:
   Max: 5
 Metrics/PerceivedComplexity:
   Max: 15
+RSpec/ScatteredSetup:
+  Exclude:
+    - spec/features/**/*

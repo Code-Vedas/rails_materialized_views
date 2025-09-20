@@ -8,6 +8,7 @@
 require 'ext/exception'
 require 'mat_views/version'
 require 'mat_views/engine'
+require 'mat_views/helpers/ui_test_ids'
 require 'mat_views/configuration'
 require 'mat_views/jobs/adapter'
 require 'mat_views/service_response'
@@ -17,6 +18,9 @@ require 'mat_views/services/regular_refresh'
 require 'mat_views/services/concurrent_refresh'
 require 'mat_views/services/swap_refresh'
 require 'mat_views/services/delete_view'
+require 'mat_views/services/check_matview_exists'
+require 'mat_views/admin/auth_bridge'
+require 'mat_views/admin/default_auth'
 
 ##
 # MatViews is a Rails engine that provides first-class support for
@@ -53,6 +57,8 @@ module MatViews
     def configure
       @configuration ||= Configuration.new
       yield(configuration)
+
+      configuration.admin_ui[:row_count_strategy] ||= :none
     end
   end
 end

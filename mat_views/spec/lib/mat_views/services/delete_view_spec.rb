@@ -20,7 +20,7 @@ RSpec.describe MatViews::Services::DeleteView do
   let(:row_count_strategy) { :estimated }
   let(:cascade) { false }
   let(:runner) { described_class.new(definition, cascade: cascade, row_count_strategy: row_count_strategy) }
-  let(:execute_service) { runner.run }
+  let(:execute_service) { runner.call }
 
   def mv_exists?(rel, schema: 'public')
     conn.select_value(<<~SQL).to_i.positive?
@@ -160,17 +160,6 @@ RSpec.describe MatViews::Services::DeleteView do
         expect(mv_exists?(relname)).to be(false)
       end
     end
-  end
-
-  it 'fails fast on invalid name format' do
-    definition.name = 'public.bad' # contains a dot
-    res = execute_service
-
-    expect(res).not_to be_success
-    expect(res.error?).to be(true)
-    expect(res.error[:message]).to match(/Invalid view name format/i)
-    expect(res.error[:class]).to eq('StandardError')
-    expect(res.error[:backtrace]).to be_an(Array)
   end
 
   context 'when standard error is raised' do

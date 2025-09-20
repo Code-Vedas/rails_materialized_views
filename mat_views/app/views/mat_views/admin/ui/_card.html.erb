@@ -1,0 +1,15 @@
+<% body = capture { yield } %>
+<div class="mv-card">
+  <% if content_for?(:title) %>
+    <div class="mv-card-h">
+      <%= yield :title %>
+    </div>
+  <% end %>
+
+  <div class="mv-card-b"><%= body %></div>
+  <% if content_for?(:footer) %>
+    <div class="mv-card-f">
+      <%= yield :footer %>
+    </div>
+  <% end %>
+</div>

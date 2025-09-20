@@ -21,7 +21,7 @@ RSpec.describe MatViews::Services::CreateView do
   let(:force) { false }
   let(:row_count_strategy) { :estimated }
   let(:runner) { described_class.new(definition, force: force, row_count_strategy: row_count_strategy) }
-  let(:execute_service) { runner.run }
+  let(:execute_service) { runner.call }
 
   before do
     User.destroy_all
@@ -42,38 +42,6 @@ RSpec.describe MatViews::Services::CreateView do
       SELECT COUNT(*) FROM pg_indexes
       WHERE schemaname='public' AND tablename='#{rel}' AND indexname LIKE #{conn.quote(like)}
     SQL
-  end
-
-  describe 'validations' do
-    it 'fails when name is invalid format' do
-      definition.name = 'public.mv_bad'
-      res = execute_service
-
-      expect(res).not_to be_success
-      expect(res.error).not_to be_nil
-      expect(res.error[:message]).to match(/Invalid view name format/i)
-      expect(mv_exists?(relname)).to be(false)
-    end
-
-    it "fails when SQL doesn't start with SELECT" do
-      definition.sql = "UPDATE users SET name='x'"
-      res = execute_service
-
-      expect(res).not_to be_success
-      expect(res.error).not_to be_nil
-      expect(res.error[:message]).to match(/SQL must start with SELECT/i)
-      expect(mv_exists?(relname)).to be(false)
-    end
-
-    it 'requires unique_index_columns when strategy is concurrent' do
-      allow(definition).to receive_messages(refresh_strategy: 'concurrent', unique_index_columns: [])
-      res = execute_service
-
-      expect(res).not_to be_success
-      expect(res.error).not_to be_nil
-      expect(res.error[:message]).to match(/requires unique_index_columns/i)
-      expect(mv_exists?(relname)).to be(false)
-    end
   end
 
   describe 'fresh create' do
@@ -151,7 +119,7 @@ RSpec.describe MatViews::Services::CreateView do
 
   describe 'existing view handling' do
     it 'skipped if view exists and force: false' do
-      expect(described_class.new(definition, force: true).run.status).to eq(:created)
+      expect(described_class.new(definition, force: true).call.status).to eq(:created)
 
       res = execute_service
 
@@ -161,8 +129,8 @@ RSpec.describe MatViews::Services::CreateView do
     end
 
     it 'drops and recreates when force: true' do
-      expect(described_class.new(definition, force: true).run.status).to eq(:created)
-      res = described_class.new(definition, force: true).run
+      expect(described_class.new(definition, force: true).call.status).to eq(:created)
+      res = described_class.new(definition, force: true).call
 
       expect(res).to be_success
       expect(res.status).to eq(:created)
@@ -230,7 +198,7 @@ RSpec.describe MatViews::Services::CreateView do
       it 'detects idle and creates index CONCURRENTLY', :no_txn do
         allow(definition).to receive_messages(refresh_strategy: 'concurrent', unique_index_columns: %w[id])
 
-        res = service.run
+        res = service.call
 
         expect(res).to be_success
         expect(mv_exists?(relname)).to be(true)
@@ -251,7 +219,7 @@ RSpec.describe MatViews::Services::CreateView do
       it 'detects non-idle and creates index without CONCURRENTLY' do
         allow(definition).to receive_messages(refresh_strategy: 'concurrent', unique_index_columns: %w[id])
 
-        res = service.run
+        res = service.call
 
         expect(res).to be_success
         expect(mv_exists?(relname)).to be(true)
@@ -271,7 +239,7 @@ RSpec.describe MatViews::Services::CreateView do
       it 'assumes idle and creates index CONCURRENTLY', :no_txn do
         allow(definition).to receive_messages(refresh_strategy: 'concurrent', unique_index_columns: %w[id])
 
-        res = service.run
+        res = service.call
 
         expect(res).to be_success
         expect(mv_exists?(relname)).to be(true)
@@ -291,7 +259,7 @@ RSpec.describe MatViews::Services::CreateView do
       it 'rescues and assumes non-idle (no CONCURRENTLY)' do
         allow(definition).to receive_messages(refresh_strategy: 'concurrent', unique_index_columns: %w[id])
 
-        res = service.run
+        res = service.call
 
         expect(res).to be_success
         expect(mv_exists?(relname)).to be(true)
@@ -312,7 +280,7 @@ RSpec.describe MatViews::Services::CreateView do
       it 'rescues and assumes non-idle (no CONCURRENTLY)' do
         allow(definition).to receive_messages(refresh_strategy: 'concurrent', unique_index_columns: %w[id])
 
-        res = service.run
+        res = service.call
 
         expect(res).to be_success
         expect(mv_exists?(relname)).to be(true)

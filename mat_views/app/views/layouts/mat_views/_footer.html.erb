@@ -1,0 +1,41 @@
+<footer class="mv-footer">
+  <div class="mv-container mv-footer-row">
+    <div>
+      <%= mv_t("footer.tagline") %><br>
+      <%= mv_t("footer.copyright", year: Time.current.year, company: MatViews::Engine.company_name) %>
+    </div>
+    <div class="mv-text-right">
+      <%= mv_link_to MatViews::Engine.rubygems_uri, tooltip: mv_t("footer.tooltip.gem_version"), testid: 'GEM_LINK' do %>
+        <strong><%= MatViews::Engine.project_name %></strong>
+        <%= mv_t("footer.version", version: MatViews::Engine.project_version) %><br>
+      <% end %>
+      <%= mv_link_to mv_t("footer.project_homepage"), MatViews::Engine.project_homepage, tooltip: mv_t("footer.tooltip.project_homepage"), testid: "PROJECT_HOMEPAGE_LINK" %>
+      <%= mv_link_to mv_t("footer.open_issue"), MatViews::Engine.bug_tracker_uri, tooltip: mv_t("footer.tooltip.open_issue"), testid: "OPEN_ISSUE_LINK" %>
+      <%= mv_link_to mv_t("footer.documentation"), MatViews::Engine.documentation_uri, tooltip: mv_t("footer.tooltip.documentation"), testid: "DOCUMENTATION_LINK" %>
+      <br/>
+      <span class="text-rose-700"><%= mv_t("footer.need_help") %></span>
+      <%= mv_link_to mv_t("footer.support"), MatViews::Engine.support_uri, tooltip: mv_t("footer.tooltip.support"), testid: "SUPPORT_LINK" %>
+    </div>
+  </div>
+</footer>
+<div class="mv-drawer-root" aria-hidden="true">
+  <div data-drawer-target="overlay" class="mv-drawer-overlay" data-action="click->drawer#close"></div>
+  <aside data-drawer-target="panel" class="mv-drawer" role="dialog" aria-modal="true">
+    <div class="mv-drawer-head" aria-label="<%= mv_t('details') %>">
+      <h2 id="mv-drawer-title">
+        <%= mv_t("details") %>
+      </h2>
+      <div class='row-item'>
+        <%= mv_drawer_action_button(mv_t("refresh"), "refresh", mv_t("refresh_contents"), "left", testid: "DRAWER_REFRESH_LINK") { mv_icon(:refresh) } %>
+        <%= mv_drawer_action_button(mv_t("close"), "close", mv_t("close_window"), "left", testid: "DRAWER_CLOSE_LINK") { mv_icon(:x_circle) } %>
+      </div>
+    </div>
+    <div class="mv-drawer-body">
+      <turbo-frame id="mv-drawer" data-drawer-target="frame">
+        <div class="mv-card">
+          <div class="mv-card-b"><%= mv_t("loading") %></div>
+        </div>
+      </turbo-frame>
+    </div>
+  </aside>
+</div>
