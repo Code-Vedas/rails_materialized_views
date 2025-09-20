@@ -14,6 +14,7 @@ RSpec.describe 'UI screenshots', type: :feature do
       'English (Canada)',
       'English (United Kingdom)',
       'English (India)',
+      'English (Kenya)',
       'Pirate English (Arrr!)',
       'English (United States)'
     ]
@@ -26,6 +27,7 @@ RSpec.describe 'UI screenshots', type: :feature do
       'English (Canada)' => 'en-CA',
       'English (United Kingdom)' => 'en-GB',
       'English (India)' => 'en-IND',
+      'English (Kenya)' => 'en-KE',
       'Pirate English (Arrr!)' => 'en-US-pirate',
       'English (United States)' => 'en-US'
     }
