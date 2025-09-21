@@ -18,6 +18,9 @@ on:
     secrets:
       QLTY_COVERAGE_TOKEN:
         required: false
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-unit-{0}', github.event.pull_request.number) || format('ref-unit-{0}', github.ref) }}
+  cancel-in-progress: true
 permissions:
   contents: read
 env:

@@ -15,6 +15,9 @@ on:
         value: ${{ jobs.discover_locales.outputs.locales_labels_json }}
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-e2e-{0}', github.event.pull_request.number) || format('ref-e2e-{0}', github.ref) }}
+  cancel-in-progress: true
 env:
   RUBY_VERSION: 3.4.3
   APP_DIR: ${{ github.workspace }}/mat_views
