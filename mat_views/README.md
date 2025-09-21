@@ -4,7 +4,7 @@
 [![CI](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml/badge.svg)](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 
-Rails engine that manages **PostgreSQL materialised views** with definitions, services, background jobs, and Rake tasks.
+Rails engine that manages **PostgreSQL materialized views** with definitions, services, background jobs, and Rake tasks.
 
 ---
 

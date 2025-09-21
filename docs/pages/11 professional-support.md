@@ -7,12 +7,12 @@ permalink: /support
 
 # Professional Support
 
-For organizations relying on materialised views in production, we offer **professional support plans** to ensure your systems run smoothly.
+For organizations relying on materialized views in production, we offer **professional support plans** to ensure your systems run smoothly.
 
 ## Why Choose Professional Support?
 
-- **Guaranteed Uptime:** Ensure your materialised views are always available and performant.
-- **Expert Assistance:** Get help from our team of experts who understand the intricacies of materialised views.
+- **Guaranteed Uptime:** Ensure your materialized views are always available and performant.
+- **Expert Assistance:** Get help from our team of experts who understand the intricacies of materialized views.
 - **Priority Response:** Receive faster response times for critical issues.
 
 ## Contact Us
