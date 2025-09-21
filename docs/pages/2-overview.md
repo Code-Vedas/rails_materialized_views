@@ -4,9 +4,9 @@ nav_order: 2
 permalink: /overview
 ---
 
-## ⚡ Why materialised views? Real numbers
+## ⚡ Why materialized views? Real numbers
 
-On a \~50k-row dataset, reading from pre-aggregated materialised views turns heavy joins into **double-digit to triple-digit speedups** compared to running the raw SQL each time.
+On a \~50k-row dataset, reading from pre-aggregated materialized views turns heavy joins into **double-digit to triple-digit speedups** compared to running the raw SQL each time.
 
 ### All features are designed to be **production-ready** with following principles
 
@@ -51,4 +51,4 @@ With 50,000 rows
   - MVs are **not** a silver bullet for all queries; use them when they fit the use case.
   - If you have a slow query with poor performance, MVs might help you speed it up significantly.
   - MVs are not a replacement for proper indexing and query optimization.
-  - Read more about [PostgreSQL materialised views](https://www.postgresql.org/docs/current/rules-materializedviews.html).
+  - Read more about [PostgreSQL materialized views](https://www.postgresql.org/docs/current/rules-materializedviews.html).

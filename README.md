@@ -7,16 +7,16 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12%2B-336791?style=flat-square&logo=postgresql&logoColor=white)
 
-> A Rails engine to define, create, refresh, and delete **PostgreSQL materialised views** with clean APIs, background jobs, observability, and CLI tasks. Built for **high availability** and **repeatable ops**.
+> A Rails engine to define, create, refresh, and delete **PostgreSQL materialized views** with clean APIs, background jobs, observability, and CLI tasks. Built for **high availability** and **repeatable ops**.
 
 - 📦 Engine/gem: [`mat_views/`](./mat_views)
 - 🧪 Demo app: [`mat_views_demo/`](./mat_views_demo) _(not shipped with the gem)_
 
 ---
 
-## ⚡ Why materialised views? Real numbers
+## ⚡ Why materialized views? Real numbers
 
-On a \~50k-row dataset, reading from pre-aggregated materialised views turns heavy joins into **double-digit to triple-digit speedups** compared to running the raw SQL each time.
+On a \~50k-row dataset, reading from pre-aggregated materialized views turns heavy joins into **double-digit to triple-digit speedups** compared to running the raw SQL each time.
 
 ### All features are designed to be **production-ready** with following principles
 
@@ -61,7 +61,7 @@ With 50,000 rows
   - MVs are **not** a silver bullet for all queries; use them when they fit the use case.
   - If you have a slow query with poor performance, MVs might help you speed it up significantly.
   - MVs are not a replacement for proper indexing and query optimization.
-  - Read more about [PostgreSQL materialised views](https://www.postgresql.org/docs/current/rules-materializedviews.html).
+  - Read more about [PostgreSQL materialized views](https://www.postgresql.org/docs/current/rules-materializedviews.html).
 
 ---
 

@@ -4,7 +4,7 @@ nav_order: 3
 permalink: /install
 ---
 
-This page explains how to install the `mat_views` gem, configure it, and use the CLI tasks for managing materialised views in your Rails application.
+This page explains how to install the `mat_views` gem, configure it, and use the CLI tasks for managing materialized views in your Rails application.
 
 ## Install (engine)
 
@@ -26,7 +26,7 @@ bin/rails db:migrate
 
 ## Initializer
 
-`bin/rails g mat_views:install` creates an initializer file at `config/initializers/mat_views.rb` and migrations for the run tracking tables and the materialised views definitions table.
+`bin/rails g mat_views:install` creates an initializer file at `config/initializers/mat_views.rb` and migrations for the run tracking tables and the materialized views definitions table.
 
 ```ruby
 # config/initializers/mat_views.rb

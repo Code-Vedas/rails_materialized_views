@@ -199,7 +199,7 @@ DROP MATERIALIZED VIEW IF EXISTS "public"."mv_x__old_20250817";
 ## 14) Common pitfalls
 
 - **Concurrent refresh without unique index**
-  You’ll get: “cannot refresh materialised view concurrently without a unique index”.
+  You’ll get: “cannot refresh materialized view concurrently without a unique index”.
 - **Wrapping concurrent refresh in a transaction**
   Like `CREATE INDEX CONCURRENTLY`, it must be outside a transaction block.
 - **`SELECT *` drift**
