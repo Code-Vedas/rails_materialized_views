@@ -1,5 +1,69 @@
 # CHANGELOG
 
+## [0.3.0](https://github.com/code-vedas/rails_materialized_views/tree/v0.3.0) (2025-08-22)
+
+[Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.2.0...v0.3.0)
+
+## 🌐 Localization
+
+- lang: Add localization: en-GI @niteshpurohit (#269)
+- lang: Add localization: en-CY @niteshpurohit (#268)
+- lang: Add localization: en-FJ @niteshpurohit (#266)
+- lang: Add localization: en-PG @niteshpurohit (#267)
+- lang: Add localization: en-LK @niteshpurohit (#265)
+- lang: Add localization: en-BD @niteshpurohit (#264)
+- lang: Add localization: en-GM @niteshpurohit (#263)
+- lang: Add localization: en-SL @niteshpurohit (#262)
+- lang: Add localization: en-SS @niteshpurohit (#261)
+- lang: Add localization: en-RW @niteshpurohit (#260)
+- lang: Add localization: en-MW @niteshpurohit (#259)
+- lang: Add localization: en-BZ @niteshpurohit (#258)
+- lang: Add localization: en-GY @niteshpurohit (#257)
+- lang: Add localization: en-TT @niteshpurohit (#256)
+- lang: Add localization: en-BB @niteshpurohit (#255)
+- lang: Add localization: en-CM @niteshpurohit (#239)
+- lang: Add localization: en-ZW @niteshpurohit (#238)
+- lang: Add localization: en-BS @niteshpurohit (#237)
+- lang: Add localization: en-LR @niteshpurohit (#236)
+- lang: Add localization: en-MT @niteshpurohit (#235)
+- lang: Add localization: en-EG @niteshpurohit (#234)
+- lang: Add localization: en-BE @niteshpurohit (#233)
+- lang: Add localization: en-SHAKESPEARE @niteshpurohit (#223)
+- lang: Add localization: en-YODA @niteshpurohit (#225)
+- lang: Add localization: en-SCOT @niteshpurohit (#224)
+- lang: Add localization: en-LOL @niteshpurohit (#222)
+- lang: Add localization: en-JM @niteshpurohit (#221)
+- lang: Add localization: en-GH @niteshpurohit (#220)
+- lang: Add localization: en-TZ @niteshpurohit (#219)
+- lang: Add localization: en-HK @niteshpurohit (#217)
+- lang: Add localization: en-MY @niteshpurohit (#218)
+- lang: Add localization: en-PH @niteshpurohit (#216)
+- lang: Add localization: en-IE @niteshpurohit (#215)
+- lang: Add localization: en-ZA @niteshpurohit (#203)
+- lang: Add localization: en-UG @niteshpurohit (#202)
+- lang: Add localization: en-PK @niteshpurohit (#199)
+- lang: Add localization: en-TH @niteshpurohit (#201)
+- lang: Add localization: en-SG @niteshpurohit (#200)
+- lang: Add localization: en-NG @niteshpurohit (#198)
+- lang: Add localization: en-NZ @niteshpurohit (#197)
+- lang: Add localization: en-NP @niteshpurohit (#196)
+- lang: Add localization: en-MS @niteshpurohit (#195)
+- lang: Add localization: en-KE @niteshpurohit (#194)
+- lang: Add localization: en-IND @niteshpurohit (#193)
+- lang: Add localization: en-GB @niteshpurohit (#192)
+- lang: Add localization: en-BORK @niteshpurohit (#191)
+- lang: Add localization: en-AU @niteshpurohit (#190)
+- lang: Add localization: en-US-pirate @niteshpurohit (#189)
+- lang: Add localization: en-au-ocker @niteshpurohit (#187)
+
+## 🚀 Features
+
+- feat: Add mountable admin UI for managing views @niteshpurohit (#186)
+
+## ⚙️ CI
+
+- ci: change individual jobs for screenshot to single @niteshpurohit (#270)
+
 ## [0.2.0](https://github.com/code-vedas/rails_materialized_views/tree/v0.2.0) (2025-08-22)
 
 [Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.1.2...v0.2.0)
