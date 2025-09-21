@@ -1,0 +1,187 @@
+en-LOL:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "MAED AT"
+        dependencies: "DEPENZ"
+        name: "NAYM"
+        refresh_strategy: "REFRESH STRATJEE"
+        schedule_cron: "SKEDULE (CRONZ)"
+        sql: "SQL (SELECT ... LOL)"
+        unique_index_columns: "UNEEK INDEX COLYUMNZ"
+        updated_at: "UPDAETD AT"
+      mat_views/mat_view_run:
+        created_at: "MAED AT"
+        details: "DEETAILZ"
+        duration_ms: "HOW LONG (MS)"
+        error: "OOPSIE"
+        finished_at: "FINISHD AT"
+        mat_view_definition: "DEFNISHUN"
+        meta: "META STUFFZ"
+        operation: "OPERASHUN"
+        row_count_after: "ROWZ AFTA"
+        row_count_before: "ROWZ BEFOAR"
+        rows_before_after: "ROWZ (BEFOAR/AFTA)"
+        started_at: "STARTD AT"
+        status: "STAYTUS"
+        updated_at: "UPDAETD AT"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "ALL AT ONCE"
+          regular: "REGULUR"
+          swap: "SWAPZ"
+      mat_views/mat_view_run:
+        operation:
+          create: "MAKEZ"
+          drop: "DROPZ"
+          refresh: "REFRESHZ"
+        status:
+          failed: "FAILZ"
+          running: "RUNNIN"
+          success: "WINZ"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "NEEDZ A NAYM!!"
+              invalid: "NAWT A GUD POSTGRES NAYM"
+              taken: "SOMEONE HAZ IT"
+            sql:
+              blank: "U FORGOT DA SQL"
+              invalid: "MUST START WIF SELECT!!"
+            unique_index_columns:
+              at_least_one: "NEEDZ 1 COLYUMN AT LEAST FOR KONKURRENT REFRESH LOL"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "LIST TABLEZ/VIEWS SEPARATED WIF COMMA, KTHX."
+        name: "NAYM OF DA MAT VIEW IN DB"
+        refresh_strategy: "HOW TO REFRESH DIS VIEW"
+        schedule_cron: "STANDARD CRON STUFF. EMPTY = NO SCHEDULZ."
+        sql: "DA QUERY MUST START WIF SELECT. SRSLY."
+        unique_index_columns: "COLYUMNZ 4 UNEEK INDEX. NEEDZ FOR KONKURRENT REFRESH."
+      mat_views/mat_view_run:
+        error: "SHOWZ TEH ERROR IF IT FAILZ"
+        meta: "EXTRA INFOZ"
+        operation: "WUT U DID"
+        status: "IZ IT GUD OR BORKED?"
+    models:
+      mat_views/mat_view_definition: "MAT VIEW DEFNISHUN LOL"
+      mat_views/mat_view_run: "MAT VIEW RUNNIN LOL"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "TYPE DEPENZ (OPTIONALZ)"
+        name: "TYPE NAYM"
+        refresh_strategy: "CHOOSE STRATJEE"
+        schedule_cron: "PUT CRON HERE OR NAWT"
+        sql: "TYPE SQL (SELECT...)"
+        unique_index_columns: "TYPE COLYUMNZ (OPTIONALZ)"
+      mat_views/mat_view_run:
+        error: "TYPE ERROR MSG"
+        mat_view_definition: "CHOOSZ MAT VIEW"
+        meta: "META (JSONZ)"
+        operation: "CHOOSZ OPERASHUN"
+        status: "CHOOSZ STAYTUS"
+  i18n:
+    name: English (LOLspeak)
+  mat_views:
+    actions: "ACTIONZ"
+    all_definitions: "ALL DEFNISHUNZ"
+    all_operations: "ALL OPERASHUNZ"
+    all_statuses: "ALL STAYTUS"
+    cancel: "CANCELZ"
+    close: "CLOZE"
+    close_window: "CLOZE WINDOWZ"
+    create: "MAKEZ"
+    dashboard:
+      metrics:
+        title: "NUMBRZ"
+      title: "DASHBORDZ"
+    definition: "DEFNISHUN"
+    definitions: "DEFNISHUNZ"
+    delete: "DELEEET"
+    details: "DETAILZ"
+    edit: "EDITZ"
+    edit_var: "EDIT %{name}"
+    errors:
+      frame_only: "ONLY IN FRAME LOL. GO BAK 2 DASHBORDZ."
+      prevented_saving:
+        one: "1 ERROR STOPZ SAVE!!"
+        other: "%{count} ERRORZ STOPZ SAVE!!"
+    filter_by: "FILTER BY:"
+    footer:
+      copyright: "© %{year} %{company} ALL UR RIGHTS RESERVED"
+      documentation: "DOCZ"
+      need_help: "NEEDZ HALP?"
+      open_issue: "OPEN ISSUEZ"
+      project_homepage: "PROJEKT HOME"
+      support: "GETZ PRO SUPPPORT →"
+      tagline: "BUILT WIF ❤️ BY KITTEHS"
+      tooltip:
+        documentation: "READ DOCZ"
+        gem_version: "VISIT RUBYGEMS PAGE LOL"
+        open_issue: "REPORT BUGZ OR ASK 4 STUFF"
+        project_homepage: "SEE GITHUBZ"
+        support: "SUPPORT PLANZ"
+      version: "v%{version}"
+    header:
+      signed_in_as: "LOGGED AS %{email} LOL"
+    history: "HISTORYZ"
+    loading: "LOADING... PLZ WAIT KTHX"
+    loading_definitions: "LOADING DEFNISHUNZ..."
+    loading_runs: "LOADING RUNZ..."
+    mat_view_definition:
+      create_mv: "MAKE MV"
+      create_mv_tooltip: "MAKEZ NEW MAT VIEW"
+      delete_confirm: "U SHUR WANNA DELETE %{name}? (MV STAYZ)"
+      delete_tooltip: "DELETE DEFNISHUN BUT KEEPZ DA MV"
+      drop_mv: "DROPZ MV"
+      drop_mv_cascade: "DROPZ MV (CASCADE)"
+      drop_mv_cascade_confirm: "DROPZ %{name} + DEPENZ? SRSLY?"
+      drop_mv_cascade_tooltip: "DROPZ MV + ALL DEPENZ IN DB"
+      drop_mv_confirm: "DROP MV %{name}?"
+      drop_mv_tooltip: "DROPZ MV ONLY"
+      edit_tooltip: "EDITZ DEFNISHUN"
+      materialized_view: "MATERIALIZED VIEW LOL"
+      materialized_view_exists: "YUP, IT EXISTZ"
+      materialized_view_not_exists: "NOPE, NOT EXIST YET!"
+      new_definition: "NEW DEFNISHUN"
+      new_definition_tooltip: "MAKE NEW DEFNISHUN"
+      no_definitions: "NO DEFNISHUNZ FOUND. MAKE SUM!"
+      refresh_tooltip: "REFRESHZ TEH MV"
+      sql_summary_tooltip: "CLICK 2 SHOW/HIDE SQL"
+      view_tooltip: "SEE DEFNISHUN"
+    mat_view_run:
+      error_tooltip: "SHOWZ ERROR IF FAILZ"
+      meta_tooltip: "MORE INFOZ"
+      no_runs: "NO RUNZ YET"
+      no_runs_if_filtered: "NO RUNZ 4 DIS FILTER"
+      view_details: "SEE DETAILZ"
+      view_tooltip: "SEE RUN DETAILZ"
+    project_author: "CODEVEDAS INC LOL"
+    project_description: "ADMIN UI 4 POSTGRES MATERIALIZED VIEWZ. IZ FUN."
+    project_tags: "rails, ruby, materialized viewz, admin, dashbordz, lol"
+    refresh: "REFRESHZ"
+    refresh_contents: "REFRESH CONTENTZ"
+    reloading: "RELOADIN..."
+    reset: "RESETZ"
+    run: "RUNZ"
+    runs: "RUNZ"
+    save_changes: "SAVEZ"
+    settings:
+      auto: "AUTO"
+      dark: "DARKZ"
+      language: "LANG"
+      language_hint: "CHOOSZ UR LANG"
+      light: "LITE"
+      theme: "THEEM"
+      theme_hint: "AUTO = SYSTEM, ELSE PICKZ"
+      title: "PREFZ"
+    title: "MATVIEWS ADMIN LOL"
+    view_var: "SEE %{name}"
+  time:
+    am: "AM"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "PM"
