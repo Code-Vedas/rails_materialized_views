@@ -5,7 +5,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-RSpec.describe 'Drawer behaviour', type: :feature do
+RSpec.describe 'Drawer behaviour', :feature do
   before do
     create(:mat_view_definition, name: "sales_mv_#{uniq_token}", sql: 'SELECT 1 AS id')
     visit_dashboard

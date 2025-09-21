@@ -5,7 +5,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-RSpec.describe 'Definitions - MV operations', type: :feature do
+RSpec.describe 'Definitions - MV operations', :feature do
   before { visit_dashboard }
 
   context 'when MV is not present', :js do

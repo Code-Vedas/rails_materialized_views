@@ -27,6 +27,6 @@ module SystemHelpers
 end
 
 RSpec.configure do |config|
-  config.include SystemHelpers, type: :feature
-  config.include SystemHelpers, type: :feature_app_screenshots
+  config.include SystemHelpers, :feature
+  config.include SystemHelpers, :feature_app_screenshots
 end

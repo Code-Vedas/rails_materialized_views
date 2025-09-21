@@ -54,10 +54,12 @@ end
 Capybara.disable_animation = true
 
 RSpec.configure do |config|
-  config.include ScreenshotHelpers, type: :feature
-  config.include ScreenshotHelpers, type: :feature_app_screenshots
-  config.include Capybara::DSL, type: :feature_app_screenshots
-  config.include Capybara::RSpecMatchers,  type: :feature_app_screenshots
+  config.include ScreenshotHelpers, :feature
+  config.include ScreenshotHelpers, :feature_app_screenshots
+  config.include Capybara::DSL, :feature
+  config.include Capybara::RSpecMatchers, :feature
+  config.include Capybara::DSL, :feature_app_screenshots
+  config.include Capybara::RSpecMatchers,  :feature_app_screenshots
 
   %i[feature feature_app_screenshots].each do |type|
     config.after(type: type) do |example|

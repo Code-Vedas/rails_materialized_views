@@ -34,7 +34,7 @@ module MatViews
       def show
         @theme   = read_theme
         @locale  = I18n.locale.to_s
-        @locales = MatViews::Engine.locale_code_mapping.sort_by { |_, name| name }.map { |code, _name| code.to_s }.uniq
+        @locales = MatViews::Engine.locale_code_mapping.sort_by { |_key, name| name }.map { |code, _name| code.to_s }.uniq
 
         # force reload frame if requested
         if params[:force_reload].to_s == '1'
