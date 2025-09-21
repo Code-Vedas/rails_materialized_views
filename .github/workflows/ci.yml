@@ -107,11 +107,13 @@ jobs:
               const label = labels[code] ?? code;
               const safeLabel = label.replace(/\(/g, "\\(").replace(/\)/g, "\\)");
               const uiUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}/artifacts/${a.id}`;
-              rows.push(`| ${code} | [${safeLabel}](${uiUrl}) |`);
+              rows.push({ code, label: safeLabel, uiUrl });
             }
 
+            rows.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: "base" }));
+
             const table = rows.length
-              ? `| Locale | Link |\n| ------ | ---- |\n${rows.join("\n")}`
+              ? `| Locale | Link |\n| ------ | ---- |\n${rows.map(r => `| ${r.code} | [${r.label}](${r.uiUrl}) |`).join("\n")}`
               : "_No app screenshots were uploaded._";
 
             core.setOutput("table", table);
