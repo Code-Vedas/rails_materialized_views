@@ -7,12 +7,9 @@ on:
         type: string
         description: Command to run tests (e.g., bin/rspec-unit or bin/rspec-e2e)
     outputs:
-      locales_matrix_json:
-        description: JSON for strategy.matrix (includes slug & label)
-        value: ${{ jobs.discover_locales.outputs.locales_matrix_json }}
-      locales_labels_json:
-        description: JSON map of code -> display label
-        value: ${{ jobs.discover_locales.outputs.locales_labels_json }}
+      screenshot_files:
+        description: The uploaded screenshot files artifact name
+        value: ${{ jobs.app_screenshots.outputs.screenshot_files }}
 permissions:
   contents: read
 concurrency:
@@ -22,31 +19,6 @@ env:
   RUBY_VERSION: 3.4.3
   APP_DIR: ${{ github.workspace }}/mat_views
 jobs:
-  discover_locales:
-    runs-on: ubuntu-latest
-    outputs:
-      locales_matrix_json: ${{ steps.discover.outputs.matrix }}
-      locales_labels_json: ${{ steps.discover.outputs.labels }}
-    steps:
-      - uses: actions/checkout@v5
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ env.RUBY_VERSION }}
-          bundler-cache: true
-          working-directory: ${{ env.APP_DIR }}
-      - name: Discover locales from Engine
-        id: discover
-        working-directory: ${{ env.APP_DIR }}
-        run: |
-          bundle exec ruby -rjson -e '
-            require_relative "spec/dummy/config/environment"
-            mapping = MatViews::Engine.locale_code_mapping
-            include = mapping.map { |code, label| { "slug" => code, "label" => label } }
-            matrix = { "include" => include }
-            puts "matrix=#{matrix.to_json}"
-            puts "labels=#{mapping.to_json}"
-          ' >> "$GITHUB_OUTPUT"
   test:
     runs-on: ubuntu-latest
     services:
@@ -115,11 +87,9 @@ jobs:
           if-no-files-found: ignore
   app_screenshots:
     runs-on: ubuntu-latest
-    needs: [discover_locales]
     if: github.event_name == 'pull_request'
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.discover_locales.outputs.locales_matrix_json) }}
+    outputs:
+      screenshot_files: ${{ steps.upload_screenshots.outputs.artifact-url }}
     services:
       firefox:
         image: selenium/standalone-firefox:latest
@@ -170,19 +140,19 @@ jobs:
           bin/rails db:drop || true
           bin/rails db:create
           bin/rails db:schema:load
-      - name: Take app screenshots for locale ${{ matrix.slug }}
+      - name: Take app screenshots for all locales
         working-directory: ${{ env.APP_DIR }}
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
-          SCREENSHOT_LANG: ${{ matrix.slug }}
         run: |
-          bin/rspec-app-screenshot
-      - name: Upload app screenshots artifact for locale ${{ matrix.slug }}
+          bin/rspec-app-screenshots
+      - name: Upload app screenshots artifact for all locales
         if: always()
+        id: upload_screenshots
         uses: actions/upload-artifact@v4
         with:
-          name: app-screenshots-${{ matrix.slug }}
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots/${{ matrix.slug }}
+          name: app-screenshots
+          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots
           if-no-files-found: ignore

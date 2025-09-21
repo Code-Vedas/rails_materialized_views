@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 set -euo pipefail
-E2E="1" NO_COVERAGE=1 bin/rspec --tag type:feature "$@"
+E2E="1" NO_COVERAGE=1 bin/rspec --tag feature "$@"

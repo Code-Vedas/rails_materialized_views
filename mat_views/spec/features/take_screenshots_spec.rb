@@ -5,7 +5,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-RSpec.describe 'UI screenshots', type: :feature_app_screenshots do
+RSpec.describe 'UI screenshots', :feature_app_screenshots do
   let!(:example_definition) do
     create(:mat_view_definition, name: 'mv_test', sql: 'SELECT 1 AS id', schedule_cron: '0 * * * *')
   end
@@ -54,13 +54,17 @@ RSpec.describe 'UI screenshots', type: :feature_app_screenshots do
     FileUtils.mkdir_p(dir)
     filename = dir.join("#{name.downcase.tr(' ', '_')}.png").to_s
 
-    RSpec.configuration.reporter.message("Saving screenshot: #{filename}")
     page.save_screenshot(filename) # rubocop:disable Lint/Debugger
   end
 
-  lang_code = ENV.fetch('SCREENSHOT_LANG', nil)
+  lang_code_env = ENV.fetch('SCREENSHOT_LANG', nil)
+  locales = if lang_code_env.nil? || lang_code_env.strip.downcase == 'all'
+              MatViews::Engine.available_locales.map(&:to_s)
+            else
+              [lang_code_env.strip]
+            end
 
-  if lang_code.present? && MatViews::Engine.locale_code_mapping.key?(lang_code.to_sym)
+  locales.each do |lang_code|
     lang_name = MatViews::Engine.locale_code_mapping[lang_code.to_sym]
 
     %w[light dark].freeze.each do |theme|

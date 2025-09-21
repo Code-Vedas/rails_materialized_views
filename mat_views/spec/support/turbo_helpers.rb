@@ -100,6 +100,6 @@ module TurboHelpers
 end
 
 RSpec.configure do |config|
-  config.include TurboHelpers, type: :feature
-  config.include TurboHelpers, type: :feature_app_screenshots
+  config.include TurboHelpers, :feature
+  config.include TurboHelpers, :feature_app_screenshots
 end
