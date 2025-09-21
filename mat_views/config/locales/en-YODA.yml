@@ -1,0 +1,187 @@
+en-YODA:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "Created, it was"
+        dependencies: "Dependents, hmm"
+        name: "Name, it is"
+        refresh_strategy: "Refresh way, choose you must"
+        schedule_cron: "Cron schedule, yes"
+        sql: "SQL (SELECT ... do)"
+        unique_index_columns: "Unique index columns, hmm"
+        updated_at: "Updated, it is"
+      mat_views/mat_view_run:
+        created_at: "Created, it was"
+        details: "Details, they are"
+        duration_ms: "Time passed (ms)"
+        error: "Error, yes"
+        finished_at: "Finished, it is"
+        mat_view_definition: "Definition, this is"
+        meta: "Metadata, hmm"
+        operation: "Undertaking"
+        row_count_after: "Rows after, see you must"
+        row_count_before: "Rows before, see you must"
+        rows_before_after: "Rows (before/after), compare you shall"
+        started_at: "Begun, it has"
+        status: "Status, it be"
+        updated_at: "Updated, it is"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "At once, all run"
+          regular: "Regular, it is"
+          swap: "Swap, do or do not"
+      mat_views/mat_view_run:
+        operation:
+          create: "Create, you must"
+          drop: "Drop, hmmm"
+          refresh: "Refresh, yes"
+        status:
+          failed: "Failed, it has"
+          running: "Running, it is"
+          success: "Succeeded, victory!"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "A name, provide you must"
+              invalid: "Valid PostgreSQL name, this is not"
+              taken: "Taken, the name is"
+            sql:
+              blank: "SQL, provide you must"
+              invalid: "Begin with SELECT, it must"
+            unique_index_columns:
+              at_least_one: "One column at least, you need for concurrent refresh"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "Depend on tables or views, this does. Comma separated, yes."
+        name: "Name of the materialised view, in the database it is."
+        refresh_strategy: "How to refresh, decide you must."
+        schedule_cron: "Cron format, use. Empty, no schedule it means."
+        sql: "SELECT, the SQL query must be."
+        unique_index_columns: "Unique index columns, provide for concurrent refresh, you must."
+      mat_views/mat_view_run:
+        error: "If fail it does, error message show"
+        meta: "Extra info in JSON, there is"
+        operation: "Operation, hmm"
+        status: "Current status, this be"
+    models:
+      mat_views/mat_view_definition: "Materialised View Definition"
+      mat_views/mat_view_run: "Materialised View Run"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "Enter dependencies, you should"
+        name: "Name, enter"
+        refresh_strategy: "Refresh way, choose"
+        schedule_cron: "Cron, type. Empty means none"
+        sql: "SQL (SELECT ...) type"
+        unique_index_columns: "Unique index columns, type (optional)"
+      mat_views/mat_view_run:
+        error: "Error message, type"
+        mat_view_definition: "Materialised view, select"
+        meta: "Metadata (JSON), type"
+        operation: "Operation, choose"
+        status: "Status, choose"
+  i18n:
+    name: English (Yoda)
+  mat_views:
+    actions: "Deeds, they are"
+    all_definitions: "All definitions, these be"
+    all_operations: "All operations, hmmm"
+    all_statuses: "All statuses, listed they are"
+    cancel: "Cancel, you may"
+    close: "Close, it is"
+    close_window: "Close the window, you must"
+    create: "Create, you will"
+    dashboard:
+      metrics:
+        title: "Metrics, hmmm"
+      title: "Dashboard, it is"
+    definition: "Definition, yes"
+    definitions: "Definitions, many there are"
+    delete: "Delete, you must"
+    details: "Details, see"
+    edit: "Edit, you can"
+    edit_var: "Edit %{name}, hmm"
+    errors:
+      frame_only: "Only in frame, this action may be. Back to dashboard, go you will."
+      prevented_saving:
+        one: "One error stopped saving, it has:"
+        other: "%{count} errors stopped saving, they did:"
+    filter_by: "Filter by, choose"
+    footer:
+      copyright: "© %{year} %{company} Rights reserved, all"
+      documentation: "Documentation, read"
+      need_help: "Expert help, need you do?"
+      open_issue: "Open an Issue, raise it shall"
+      project_homepage: "Project Homepage, this is"
+      support: "Professional Support →, seek you may"
+      tagline: "❤️ built by developers, for developers it was"
+      tooltip:
+        documentation: "Documentation, read"
+        gem_version: "RubyGems page, visit you must"
+        open_issue: "Bug report, file or feature ask you shall"
+        project_homepage: "GitHub repository, this is"
+        support: "Support plans, available they are"
+      version: "v%{version}, it be"
+    header:
+      signed_in_as: "Signed in as %{email}, you are"
+    history: "History, see"
+    loading: "Loading… patience you must have"
+    loading_definitions: "Loading definitions…"
+    loading_runs: "Loading runs…"
+    mat_view_definition:
+      create_mv: "Create MV, do"
+      create_mv_tooltip: "In database, materialised view make"
+      delete_confirm: "Delete definition %{name}? Drop MV, not it does."
+      delete_tooltip: "Delete definition only. Drop MV, not."
+      drop_mv: "Drop MV, hmmm"
+      drop_mv_cascade: "Drop MV (Cascade), strong choice"
+      drop_mv_cascade_confirm: "Drop %{name} and dependents? Dangerous, it is."
+      drop_mv_cascade_tooltip: "MV and all dependents drop, yes. Definition remain, it shall."
+      drop_mv_confirm: "Drop MV %{name}, are you sure?"
+      drop_mv_tooltip: "Only MV, drop. Definition remain."
+      edit_tooltip: "Definition edit, you may."
+      materialized_view: "Materialised View"
+      materialized_view_exists: "Exist, it does"
+      materialized_view_not_exists: "Created, not yet it is"
+      new_definition: "New definition, make"
+      new_definition_tooltip: "Materialised view definition, create you can"
+      no_definitions: "No definitions found. Create, you must."
+      refresh_tooltip: "Materialised view, refresh"
+      sql_summary_tooltip: "Click to show/hide SQL, yes"
+      view_tooltip: "Definition view, see"
+    mat_view_run:
+      error_tooltip: "Error message, show if failed"
+      meta_tooltip: "Metadata, more info"
+      no_runs: "No runs found, there are"
+      no_runs_if_filtered: "No runs for these filters, hmm"
+      view_details: "Details, see"
+      view_tooltip: "Run details, view"
+    project_author: "Codevedas Inc."
+    project_description: "Admin interface, for PostgreSQL materialised views it is"
+    project_tags: "rails, ruby, materialised views, admin, dashboard, ui"
+    refresh: "Refresh, do"
+    refresh_contents: "Contents, refresh"
+    reloading: "Reloading, hmm"
+    reset: "Reset, it is"
+    run: "Run, yes"
+    runs: "Runs, many"
+    save_changes: "Save changes, do"
+    settings:
+      auto: "Auto, it is"
+      dark: "Dark side"
+      language: "Tongue, choose"
+      language_hint: "Your tongue, choose you must"
+      light: "Light side"
+      theme: "Theme, select"
+      theme_hint: "System, follow auto does. Light or dark, override you can."
+      title: "Preferences, they are"
+    title: "MatViews Admin, it is"
+    view_var: "View %{name}, you will"
+  time:
+    am: "AM"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "PM"
