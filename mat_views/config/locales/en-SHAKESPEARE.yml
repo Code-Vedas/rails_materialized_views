@@ -1,0 +1,187 @@
+en-SHAKESPEARE:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "Wrought At"
+        dependencies: "Entanglements"
+        name: "Appellation"
+        refresh_strategy: "Manner of Renewing"
+        schedule_cron: "Schedule (cron, by the hourglass)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "Singular Columns of Index"
+        updated_at: "Renewed At"
+      mat_views/mat_view_run:
+        created_at: "Wrought At"
+        details: "Particulars"
+        duration_ms: "Passage of Time (ms)"
+        error: "Mishap"
+        finished_at: "Concluded At"
+        mat_view_definition: "Definition"
+        meta: "Annotations"
+        operation: "Undertaking"
+        row_count_after: "Tally After"
+        row_count_before: "Tally Ere"
+        rows_before_after: "Tally (Ere/After)"
+        started_at: "Begun At"
+        status: "Condition"
+        updated_at: "Renewed At"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "All at Once"
+          regular: "Ordinary"
+          swap: "Exchange"
+      mat_views/mat_view_run:
+        operation:
+          create: "Conjure"
+          drop: "Cast Away"
+          refresh: "Renew"
+        status:
+          failed: "Hath Failed"
+          running: "In Motion"
+          success: "Triumph"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "A name must thou bestow."
+              invalid: "This name suiteth not PostgreSQL."
+              taken: "Another lay claim to this name."
+            sql:
+              blank: "Provide thine SQL, I prithee."
+              invalid: "It must commenceth with SELECT, else all is folly."
+            unique_index_columns:
+              at_least_one: "At least one column thou must choose for concurrent refresh."
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "A list, separated by commas, of tables or views upon which this view doth lean."
+        name: "The name whereby the materialised view is known in the realm of the database."
+        refresh_strategy: "The fashion in which this view is to be renewed."
+        schedule_cron: "Use the common cron form. Leave blank if none be required."
+        sql: "The query must needs be a SELECT statement true and proper."
+        unique_index_columns: "Columns upon which a unique index is cast. Required for concurrent refresh."
+      mat_views/mat_view_run:
+        error: "The tale of mishap, should it fail."
+        meta: "Supplemental notes writ in JSON."
+        operation: "The deed performed."
+        status: "The current estate of the run."
+    models:
+      mat_views/mat_view_definition: "Materialised View Definition"
+      mat_views/mat_view_run: "Materialised View Run"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "Speak thy dependencies (comma separated, if thou wilt)"
+        name: "Bestow a name"
+        refresh_strategy: "Select thy manner of renewing"
+        schedule_cron: "0 0 * * * for midnight’s chime, leave blank else"
+        sql: "Write SQL (SELECT ...)"
+        unique_index_columns: "Enter unique index columns (optional)"
+      mat_views/mat_view_run:
+        error: "The tale of mishap"
+        mat_view_definition: "Select the materialised view"
+        meta: "Annotations (JSON)"
+        operation: "Select the undertaking"
+        status: "Select the estate"
+  i18n:
+    name: English (Shakespearean)
+  mat_views:
+    actions: "Deeds"
+    all_definitions: "All Definitions"
+    all_operations: "All Undertakings"
+    all_statuses: "All Estates"
+    cancel: "Cease"
+    close: "Close"
+    close_window: "Close the Window"
+    create: "Conjure"
+    dashboard:
+      metrics:
+        title: "Measures"
+      title: "Hall of Oversight"
+    definition: "Definition"
+    definitions: "Definitions"
+    delete: "Expunge"
+    details: "Particulars"
+    edit: "Amend"
+    edit_var: "Amend %{name}"
+    errors:
+      frame_only: "This act may be done in frame alone; thou art redirected to the dashboard."
+      prevented_saving:
+        one: "One error hath staid the saving:"
+        other: "%{count} errors hath staid the saving:"
+    filter_by: "Filter by:"
+    footer:
+      copyright: "© %{year} %{company} All rights reserved."
+      documentation: "The Book of Lore"
+      need_help: "Requirest thou uptime and wise counsel?"
+      open_issue: "Raise a Petition"
+      project_homepage: "Project’s Abode"
+      support: "Seek Professional Succour →"
+      tagline: "Forged with ❤️ by scribes, for scribes."
+      tooltip:
+        documentation: "Peruse the Book of Lore"
+        gem_version: "Go thither to RubyGems"
+        open_issue: "Report a bug or crave a boon"
+        project_homepage: "Behold the GitHub repository"
+        support: "Avail thyself of support plans"
+      version: "v%{version}"
+    header:
+      signed_in_as: "Thou art signed in as %{email}"
+    history: "Chronicles"
+    loading: "Loading... Pray tarry a moment."
+    loading_definitions: "Loading definitions..."
+    loading_runs: "Loading runs..."
+    mat_view_definition:
+      create_mv: "Conjure MV"
+      create_mv_tooltip: "Bring forth a materialised view in the database."
+      delete_confirm: "Expunge definition %{name}? (MV remaineth)"
+      delete_tooltip: "Expunge the definition, yet the MV abideth."
+      drop_mv: "Cast Away MV"
+      drop_mv_cascade: "Cast Away MV (Cascade)"
+      drop_mv_cascade_confirm: "Cast away %{name} and all dependents?"
+      drop_mv_cascade_tooltip: "Drops the MV and all dependent forms. The definition remaineth."
+      drop_mv_confirm: "Cast away MV %{name}?"
+      drop_mv_tooltip: "Drops the MV alone. The definition remaineth."
+      edit_tooltip: "Amend the materialised view definition."
+      materialized_view: "Materialised View"
+      materialized_view_exists: "The materialised view existeth."
+      materialized_view_not_exists: "The materialised view hath not yet been wrought!"
+      new_definition: "New Definition"
+      new_definition_tooltip: "Bring forth a new materialised view definition."
+      no_definitions: "No definitions yet discovered. Forge one, that thou may proceed."
+      refresh_tooltip: "Renew the materialised view."
+      sql_summary_tooltip: "Click to expand or collapse the SQL."
+      view_tooltip: "Behold the materialised view definition."
+    mat_view_run:
+      error_tooltip: "The mishap tale, if failure befall."
+      meta_tooltip: "Supplemental annotations in JSON."
+      no_runs: "No runs found."
+      no_runs_if_filtered: "No runs found for the chosen filters."
+      view_details: "Behold particulars"
+      view_tooltip: "Behold run details."
+    project_author: "Codevedas Inc."
+    project_description: "An admin chamber for the governance of PostgreSQL materialised views."
+    project_tags: "rails, ruby, materialised views, admin, hall, interface, governance"
+    refresh: "Renew"
+    refresh_contents: "Renew Contents"
+    reloading: "Reloading..."
+    reset: "Reset"
+    run: "Run"
+    runs: "Runs"
+    save_changes: "Save Changes"
+    settings:
+      auto: "Auto"
+      dark: "Dark"
+      language: "Tongue"
+      language_hint: "Choose thy tongue for the interface."
+      light: "Light"
+      theme: "Theme"
+      theme_hint: "Auto followeth thy system’s mood; light and dark override it."
+      title: "Preferences"
+    title: "MatViews Admin"
+    view_var: "Behold %{name}"
+  time:
+    am: "Ante Meridiem"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "Post Meridiem"
