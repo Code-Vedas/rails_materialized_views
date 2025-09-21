@@ -8,9 +8,11 @@ on:
       - main
   pull_request:
     types: [opened, reopened, synchronize]
+
 concurrency:
-  group: release-drafter
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('ref-{0}', github.ref) }}
   cancel-in-progress: true
+
 jobs:
   release_drafter:
     permissions:

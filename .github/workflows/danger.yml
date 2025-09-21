@@ -4,8 +4,9 @@ name: Danger
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+
 concurrency:
-  group: danger
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('ref-{0}', github.ref) }}
   cancel-in-progress: true
 env:
   RUBY_VERSION: 3.4.3

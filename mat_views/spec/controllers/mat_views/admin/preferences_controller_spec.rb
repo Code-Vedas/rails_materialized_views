@@ -32,7 +32,8 @@ RSpec.describe MatViews::Admin::PreferencesController, type: :controller do
       it 'assigns theme, locale, and locales list' do
         expect(controller.instance_variable_get(:@theme)).to eq('dark')
         expect(controller.instance_variable_get(:@locale)).to eq(lang)
-        expect(controller.instance_variable_get(:@locales)).to eq(MatViews::Engine.available_locales.map(&:to_s).sort)
+        expected_values = MatViews::Engine.locale_code_mapping.sort_by { |_, name| name }.map { |code, _name| code.to_s }.uniq
+        expect(controller.instance_variable_get(:@locales)).to eq(expected_values)
       end
 
       it 'responds successfully and does not set force-reload status/header' do
