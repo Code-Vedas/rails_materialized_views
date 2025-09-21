@@ -1,0 +1,187 @@
+en-SCOT:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "Made at"
+        dependencies: "Dependins"
+        name: "Name"
+        refresh_strategy: "Wey o Refreshin"
+        schedule_cron: "Schedule (cron)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "Unique index columns"
+        updated_at: "Updatit at"
+      mat_views/mat_view_run:
+        created_at: "Made at"
+        details: "Detail[s]"
+        duration_ms: "Lenth o time (ms)"
+        error: "Mishanter"
+        finished_at: "Feinish't at"
+        mat_view_definition: "Defineetion"
+        meta: "Meta"
+        operation: "Opration"
+        row_count_after: "Row coont efter"
+        row_count_before: "Row coont afore"
+        rows_before_after: "Rows (afore/efter)"
+        started_at: "Stairtit at"
+        status: "Status"
+        updated_at: "Updatit at"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "Concurrent"
+          regular: "Regular"
+          swap: "Swap"
+      mat_views/mat_view_run:
+        operation:
+          create: "Mak"
+          drop: "Drap"
+          refresh: "Refresh"
+        status:
+          failed: "Fail't"
+          running: "Rinnin"
+          success: "Succeedit"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "Ye maun gie a name."
+              invalid: "No a guid PostgreSQL name."
+              taken: "That name's awready taen."
+            sql:
+              blank: "Ye maun gie SQL."
+              invalid: "Maun stairt wi SELECT."
+            unique_index_columns:
+              at_least_one: "Ye'll need at least ae column for concurrent refresh."
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "Comma-separatit list o tables or views this yin depends on."
+        name: "The name o the materialised view in the database."
+        refresh_strategy: "Hou the materialised view'll be refresh't."
+        schedule_cron: "Use standard cron. Leave blank gin there's nae schedule."
+        sql: "The SQL query maun be a SELECT statement."
+        unique_index_columns: "Columns tae mak a unique index on; needit for concurrent refresh."
+      mat_views/mat_view_run:
+        error: "Mishanter message gin the rin fail."
+        meta: "Mair metadata in JSON."
+        operation: "Kynd o opration duin."
+        status: "The noo status o the rin."
+    models:
+      mat_views/mat_view_definition: "Materialised View Defineetion"
+      mat_views/mat_view_run: "Materialised View Rin"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "Pit in dependins (comma-separatit, optional)"
+        name: "Pit in name"
+        refresh_strategy: "Pick a refresh wey"
+        schedule_cron: "0 0 * * * for ilka midnicht; leave blank for nae schedule"
+        sql: "Pit in SQL (SELECT ...)"
+        unique_index_columns: "Pit in unique index columns (comma-separatit, optional)"
+      mat_views/mat_view_run:
+        error: "Mishanter message"
+        mat_view_definition: "Wale a materialised view"
+        meta: "Metadata (JSON)"
+        operation: "Wale an opration"
+        status: "Wale status"
+  i18n:
+    name: English (Scots)
+  mat_views:
+    actions: "Actions"
+    all_definitions: "A' defineetions"
+    all_operations: "A' oprations"
+    all_statuses: "A' statuses"
+    cancel: "Cancel"
+    close: "Sneck"
+    close_window: "Sneck windae"
+    create: "Mak"
+    dashboard:
+      metrics:
+        title: "Metrics"
+      title: "Dashbuird"
+    definition: "Defineetion"
+    definitions: "Defineetions"
+    delete: "Delyte"
+    details: "Details"
+    edit: "Eedit"
+    edit_var: "Eedit %{name}"
+    errors:
+      frame_only: "This kin o action can be duin in a frame alane; ye're sent back tae the dashbuird."
+      prevented_saving:
+        one: "Ae faut stappit the savin:"
+        other: "%{count} fauts stappit the savin:"
+    filter_by: "Filter by:"
+    footer:
+      copyright: "© %{year} %{company} A' richts reservit."
+      documentation: "Docs"
+      need_help: "Dae ye need uptime & expert help?"
+      open_issue: "Open an Issue"
+      project_homepage: "Project Hamepage"
+      support: "Get Professional Support →"
+      tagline: "Biggit wi ❤️ by developers, for developers."
+      tooltip:
+        documentation: "Read the docs"
+        gem_version: "Clap ower tae RubyGems"
+        open_issue: "Report a bug or speir a feature"
+        project_homepage: "Github repository"
+        support: "Support plans"
+      version: "v%{version}"
+    header:
+      signed_in_as: "Signed in as %{email}"
+    history: "Chronicle"
+    loading: "Loadin..."
+    loading_definitions: "Loadin defineetions..."
+    loading_runs: "Loadin rins..."
+    mat_view_definition:
+      create_mv: "Mak MV"
+      create_mv_tooltip: "Maks the materialised view in the database."
+      delete_confirm: "Delyte defineetion %{name}? (Disna drap the MV)"
+      delete_tooltip: "Delytes the defineetion but disna drap the materialised view in the DB."
+      drop_mv: "Drap MV"
+      drop_mv_cascade: "Drap MV (Cascade)"
+      drop_mv_cascade_confirm: "Drap the materialised view an a' dependents for %{name}?"
+      drop_mv_cascade_tooltip: "Draps the materialised view an a' dependents in the DB. Defineetion bides."
+      drop_mv_confirm: "Drap the MV for %{name}?"
+      drop_mv_tooltip: "Draps the MV alane. Defineetion bides."
+      edit_tooltip: "Eedit the materialised view defineetion."
+      materialized_view: "Materialised View"
+      materialized_view_exists: "Materialised view exists"
+      materialized_view_not_exists: "Materialised view no made yet!"
+      new_definition: "New defineetion"
+      new_definition_tooltip: "Mak a new materialised view defineetion."
+      no_definitions: "Nae materialised view defineetions fund. Mak ane tae get stertit."
+      refresh_tooltip: "Refreshes the materialised view in the DB."
+      sql_summary_tooltip: "Click tae shaw/hide the SQL"
+      view_tooltip: "View the materialised view defineetion."
+    mat_view_run:
+      error_tooltip: "Mishanter message gin the rin fail."
+      meta_tooltip: "Mair metadata in JSON."
+      no_runs: "Nae rins fund."
+      no_runs_if_filtered: "Nae rins for the pickit filters."
+      view_details: "View details"
+      view_tooltip: "View rin details."
+    project_author: "Codevedas Inc."
+    project_description: "Admin interface for managin PostgreSQL materialised views in Rails apps."
+    project_tags: "rails, ruby, materialised views, admin, dashbuird, UI, interface, management"
+    refresh: "Refresh"
+    refresh_contents: "Refresh contents"
+    reloading: "Reloadin..."
+    reset: "Reset"
+    run: "Rin"
+    runs: "Rins"
+    save_changes: "Save chynges"
+    settings:
+      auto: "Auto"
+      dark: "Derk"
+      language: "Leid"
+      language_hint: "Wale the leid for yer interface."
+      light: "Licht"
+      theme: "Theme"
+      theme_hint: "Auto follaes yer system; licht or derk owerrides it."
+      title: "Prefs"
+    title: "MatViews Admin"
+    view_var: "View %{name}"
+  time:
+    am: "AM"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "PM"
