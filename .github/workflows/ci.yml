@@ -7,10 +7,6 @@ on:
   push:
     branches: [main]
 
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: false
-
 env:
   RUBY_VERSION: 3.4.3
   APP_DIR: ${{ github.workspace }}/mat_views
