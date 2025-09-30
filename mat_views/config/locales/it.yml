@@ -1,0 +1,187 @@
+it:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "Creato il"
+        dependencies: "Dipendenze"
+        name: "Nome"
+        refresh_strategy: "Strategia di aggiornamento"
+        schedule_cron: "Pianificazione (cron)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "Colonne indice uniche"
+        updated_at: "Aggiornato il"
+      mat_views/mat_view_run:
+        created_at: "Creato il"
+        details: "Dettagli"
+        duration_ms: "Durata (ms)"
+        error: "Errore"
+        finished_at: "Terminato il"
+        mat_view_definition: "Definizione"
+        meta: "Metadati"
+        operation: "Operazione"
+        row_count_after: "Numero righe dopo"
+        row_count_before: "Numero righe prima"
+        rows_before_after: "Righe (prima/dopo)"
+        started_at: "Iniziato il"
+        status: "Stato"
+        updated_at: "Aggiornato il"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "Concorrente"
+          regular: "Regolare"
+          swap: "Scambio"
+      mat_views/mat_view_run:
+        operation:
+          create: "Crea"
+          drop: "Elimina"
+          refresh: "Aggiorna"
+        status:
+          failed: "Fallito"
+          running: "In esecuzione"
+          success: "Successo"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "deve essere fornito"
+              invalid: "non è un identificatore PostgreSQL valido"
+              taken: "deve essere univoco"
+            sql:
+              blank: "deve essere fornito"
+              invalid: "deve iniziare con SELECT"
+            unique_index_columns:
+              at_least_one: "deve avere almeno una colonna quando si usa la strategia di aggiornamento concorrente"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "Elenco separato da virgole di tabelle o viste da cui dipende questa vista materializzata."
+        name: "Nome della vista materializzata nel database."
+        refresh_strategy: "Determina come viene aggiornata la vista materializzata."
+        schedule_cron: "Usa il formato cron standard. Lascia vuoto per nessuna pianificazione."
+        sql: "La query SQL deve essere un'istruzione SELECT valida."
+        unique_index_columns: "Colonne su cui creare un indice univoco. Necessario per aggiornamento concorrente."
+      mat_views/mat_view_run:
+        error: "Messaggio di errore se l'esecuzione è fallita."
+        meta: "Metadati aggiuntivi in formato JSON."
+        operation: "Tipo di operazione eseguita."
+        status: "Stato corrente dell'esecuzione."
+    models:
+      mat_views/mat_view_definition: "Definizione vista materializzata"
+      mat_views/mat_view_run: "Esecuzione vista materializzata"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "Inserisci dipendenze (separate da virgole, opzionale)"
+        name: "Inserisci nome"
+        refresh_strategy: "Seleziona strategia di aggiornamento"
+        schedule_cron: "0 0 * * * per giornaliero a mezzanotte, lascia vuoto per nessuna pianificazione"
+        sql: "Inserisci SQL (SELECT ...)"
+        unique_index_columns: "Inserisci colonne indice uniche (separate da virgole, opzionale)"
+      mat_views/mat_view_run:
+        error: "Messaggio di errore"
+        mat_view_definition: "Seleziona vista materializzata"
+        meta: "Metadati (JSON)"
+        operation: "Seleziona operazione"
+        status: "Seleziona stato"
+  i18n:
+    name: Italiano
+  mat_views:
+    actions: "Azioni"
+    all_definitions: "Tutte le definizioni"
+    all_operations: "Tutte le operazioni"
+    all_statuses: "Tutti gli stati"
+    cancel: "Annulla"
+    close: "Chiudi"
+    close_window: "Chiudi finestra"
+    create: "Crea"
+    dashboard:
+      metrics:
+        title: "Metriche"
+      title: "Dashboard"
+    definition: "Definizione"
+    definitions: "Definizioni"
+    delete: "Elimina"
+    details: "Dettagli"
+    edit: "Modifica"
+    edit_var: "Modifica %{name}"
+    errors:
+      frame_only: "Questa azione può essere eseguita solo in un frame, reindirizzato alla dashboard."
+      prevented_saving:
+        one: "1 errore ha impedito il salvataggio:"
+        other: "%{count} errori hanno impedito il salvataggio:"
+    filter_by: "Filtra per:"
+    footer:
+      copyright: "© %{year} %{company} Tutti i diritti riservati."
+      documentation: "Documentazione"
+      need_help: "Hai bisogno di uptime garantito e aiuto esperto?"
+      open_issue: "Apri un ticket"
+      project_homepage: "Homepage del progetto"
+      support: "Ottieni supporto professionale →"
+      tagline: "Costruito con ❤️ da sviluppatori, per sviluppatori."
+      tooltip:
+        documentation: "Leggi la documentazione"
+        gem_version: "Clicca per visitare la pagina RubyGems"
+        open_issue: "Segnala un bug o richiedi una funzionalità"
+        project_homepage: "Repository GitHub"
+        support: "Piani di supporto professionale"
+      version: "v%{version}"
+    header:
+      signed_in_as: "Connesso come %{email}"
+    history: "Cronologia"
+    loading: "Caricamento..."
+    loading_definitions: "Caricamento definizioni..."
+    loading_runs: "Caricamento esecuzioni..."
+    mat_view_definition:
+      create_mv: "Crea MV"
+      create_mv_tooltip: "Crea la vista materializzata nel database."
+      delete_confirm: "Eliminare la definizione %{name}? (NON elimina la MV)"
+      delete_tooltip: "Elimina la definizione ma NON la vista materializzata nel database."
+      drop_mv: "Elimina MV"
+      drop_mv_cascade: "Elimina MV (a cascata)"
+      drop_mv_cascade_confirm: "Eliminare la vista materializzata e tutti gli oggetti dipendenti per %{name}?"
+      drop_mv_cascade_tooltip: "Elimina la vista materializzata e tutti gli oggetti dipendenti nel database. La definizione rimane."
+      drop_mv_confirm: "Eliminare la vista materializzata per %{name}?"
+      drop_mv_tooltip: "Elimina la vista materializzata nel database. La definizione rimane."
+      edit_tooltip: "Modifica definizione vista materializzata."
+      materialized_view: "Vista materializzata"
+      materialized_view_exists: "La vista materializzata esiste"
+      materialized_view_not_exists: "La vista materializzata non è ancora stata creata!"
+      new_definition: "Nuova definizione"
+      new_definition_tooltip: "Crea una nuova definizione di vista materializzata."
+      no_definitions: "Nessuna definizione di vista materializzata trovata. Creane una per iniziare."
+      refresh_tooltip: "Aggiorna la vista materializzata nel database."
+      sql_summary_tooltip: "Clicca per espandere/ridurre SQL"
+      view_tooltip: "Visualizza definizione vista materializzata."
+    mat_view_run:
+      error_tooltip: "Messaggio di errore se l'esecuzione è fallita."
+      meta_tooltip: "Metadati aggiuntivi in formato JSON."
+      no_runs: "Nessuna esecuzione trovata."
+      no_runs_if_filtered: "Nessuna esecuzione trovata per i filtri selezionati."
+      view_details: "Visualizza dettagli"
+      view_tooltip: "Visualizza dettagli esecuzione."
+    project_author: "Codevedas Inc."
+    project_description: "Interfaccia di amministrazione per gestire viste materializzate PostgreSQL nelle applicazioni Rails."
+    project_tags: "rails, ruby, viste materializzate, admin, dashboard, ui, interfaccia, gestione"
+    refresh: "Aggiorna"
+    refresh_contents: "Aggiorna contenuti"
+    reloading: "Ricaricamento..."
+    reset: "Reset"
+    run: "Esegui"
+    runs: "Esecuzioni"
+    save_changes: "Salva modifiche"
+    settings:
+      auto: "Auto"
+      dark: "Scuro"
+      language: "Lingua"
+      language_hint: "Scegli la lingua dell'interfaccia."
+      light: "Chiaro"
+      theme: "Tema"
+      theme_hint: "Auto segue la preferenza di sistema, chiaro e scuro la sovrascrivono."
+      title: "Preferenze"
+    title: "MatViews Admin"
+    view_var: "Visualizza %{name}"
+  time:
+    am: "AM"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "PM"
