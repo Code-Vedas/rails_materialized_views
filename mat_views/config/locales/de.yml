@@ -1,0 +1,187 @@
+de:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "Erstellt am"
+        dependencies: "Abhängigkeiten"
+        name: "Name"
+        refresh_strategy: "Aktualisierungsstrategie"
+        schedule_cron: "Zeitplan (Cron)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "Eindeutige Indexspalten"
+        updated_at: "Aktualisiert am"
+      mat_views/mat_view_run:
+        created_at: "Erstellt am"
+        details: "Details"
+        duration_ms: "Dauer (ms)"
+        error: "Fehler"
+        finished_at: "Beendet am"
+        mat_view_definition: "Definition"
+        meta: "Metadaten"
+        operation: "Vorgang"
+        row_count_after: "Zeilenanzahl danach"
+        row_count_before: "Zeilenanzahl davor"
+        rows_before_after: "Zeilen (davor/danach)"
+        started_at: "Gestartet am"
+        status: "Status"
+        updated_at: "Aktualisiert am"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "Gleichzeitig"
+          regular: "Regulär"
+          swap: "Tauschen"
+      mat_views/mat_view_run:
+        operation:
+          create: "Erstellen"
+          drop: "Löschen"
+          refresh: "Aktualisieren"
+        status:
+          failed: "Fehlgeschlagen"
+          running: "Läuft"
+          success: "Erfolgreich"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "muss angegeben werden"
+              invalid: "ist kein gültiger PostgreSQL-Bezeichner"
+              taken: "muss eindeutig sein"
+            sql:
+              blank: "muss angegeben werden"
+              invalid: "muss mit SELECT beginnen"
+            unique_index_columns:
+              at_least_one: "muss mindestens eine Spalte enthalten, wenn die gleichzeitige Aktualisierung verwendet wird"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "Durch Komma getrennte Liste von Tabellen oder Views, von denen diese Materialized View abhängt."
+        name: "Name der Materialized View in der Datenbank."
+        refresh_strategy: "Legt fest, wie die Materialized View aktualisiert wird."
+        schedule_cron: "Verwenden Sie das Standard-Cron-Format. Leer lassen für keine Planung."
+        sql: "Die SQL-Abfrage muss ein gültiges SELECT sein."
+        unique_index_columns: "Spalten, für die ein eindeutiger Index erstellt werden soll. Erforderlich für gleichzeitige Aktualisierung."
+      mat_views/mat_view_run:
+        error: "Fehlermeldung, falls der Lauf fehlschlug."
+        meta: "Zusätzliche Metadaten im JSON-Format."
+        operation: "Art des ausgeführten Vorgangs."
+        status: "Aktueller Status des Laufs."
+    models:
+      mat_views/mat_view_definition: "Materialisierte View-Definition"
+      mat_views/mat_view_run: "Materialisierte View-Lauf"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "Abhängigkeiten eingeben (Komma-getrennt, optional)"
+        name: "Namen eingeben"
+        refresh_strategy: "Aktualisierungsstrategie auswählen"
+        schedule_cron: "0 0 * * * für täglich um Mitternacht, leer lassen für keine Planung"
+        sql: "SQL eingeben (SELECT ...)"
+        unique_index_columns: "Eindeutige Indexspalten eingeben (Komma-getrennt, optional)"
+      mat_views/mat_view_run:
+        error: "Fehlermeldung"
+        mat_view_definition: "Materialisierte View auswählen"
+        meta: "Metadaten (JSON)"
+        operation: "Vorgang auswählen"
+        status: "Status auswählen"
+  i18n:
+    name: Deutsch
+  mat_views:
+    actions: "Aktionen"
+    all_definitions: "Alle Definitionen"
+    all_operations: "Alle Vorgänge"
+    all_statuses: "Alle Status"
+    cancel: "Abbrechen"
+    close: "Schließen"
+    close_window: "Fenster schließen"
+    create: "Erstellen"
+    dashboard:
+      metrics:
+        title: "Metriken"
+      title: "Dashboard"
+    definition: "Definition"
+    definitions: "Definitionen"
+    delete: "Löschen"
+    details: "Details"
+    edit: "Bearbeiten"
+    edit_var: "Bearbeite %{name}"
+    errors:
+      frame_only: "Diese Aktion kann nur in einem Frame ausgeführt werden. Zurück zum Dashboard."
+      prevented_saving:
+        one: "1 Fehler hat das Speichern verhindert:"
+        other: "%{count} Fehler haben das Speichern verhindert:"
+    filter_by: "Filtern nach:"
+    footer:
+      copyright: "© %{year} %{company} Alle Rechte vorbehalten."
+      documentation: "Dokumentation"
+      need_help: "Benötigen Sie garantierte Betriebszeit & Expertenhilfe?"
+      open_issue: "Ein Problem melden"
+      project_homepage: "Projekt-Homepage"
+      support: "Professionellen Support erhalten →"
+      tagline: "Mit ❤️ entwickelt, von Entwicklern für Entwickler."
+      tooltip:
+        documentation: "Dokumentation lesen"
+        gem_version: "Zur RubyGems-Seite"
+        open_issue: "Fehler melden oder Feature anfordern"
+        project_homepage: "GitHub-Repository"
+        support: "Professionelle Support-Pläne"
+      version: "v%{version}"
+    header:
+      signed_in_as: "Angemeldet als %{email}"
+    history: "Verlauf"
+    loading: "Laden..."
+    loading_definitions: "Definitionen werden geladen..."
+    loading_runs: "Läufe werden geladen..."
+    mat_view_definition:
+      create_mv: "MV erstellen"
+      create_mv_tooltip: "Erstellt die materialisierte View in der Datenbank."
+      delete_confirm: "Definition %{name} löschen? (Löscht nicht die MV)"
+      delete_tooltip: "Löscht die Definition, aber nicht die materialisierte View in der Datenbank."
+      drop_mv: "MV löschen"
+      drop_mv_cascade: "MV löschen (Kaskade)"
+      drop_mv_cascade_confirm: "Materialisierte View und alle abhängigen Objekte für %{name} löschen?"
+      drop_mv_cascade_tooltip: "Löscht die materialisierte View und alle abhängigen Objekte. Definition bleibt bestehen."
+      drop_mv_confirm: "Materialisierte View für %{name} löschen?"
+      drop_mv_tooltip: "Löscht nur die materialisierte View. Definition bleibt bestehen."
+      edit_tooltip: "Definition der materialisierten View bearbeiten."
+      materialized_view: "Materialisierte View"
+      materialized_view_exists: "Materialisierte View existiert"
+      materialized_view_not_exists: "Materialisierte View noch nicht erstellt!"
+      new_definition: "Neue Definition"
+      new_definition_tooltip: "Neue Definition einer materialisierten View erstellen."
+      no_definitions: "Keine Definitionen gefunden. Erstellen Sie eine, um zu beginnen."
+      refresh_tooltip: "Aktualisiert die materialisierte View."
+      sql_summary_tooltip: "Zum Ein-/Ausklappen von SQL klicken"
+      view_tooltip: "Definition der materialisierten View anzeigen."
+    mat_view_run:
+      error_tooltip: "Fehlermeldung, falls der Lauf fehlschlug."
+      meta_tooltip: "Zusätzliche Metadaten im JSON-Format."
+      no_runs: "Keine Läufe gefunden."
+      no_runs_if_filtered: "Keine Läufe für die gewählten Filter gefunden."
+      view_details: "Details anzeigen"
+      view_tooltip: "Laufdetails anzeigen."
+    project_author: "Codevedas Inc."
+    project_description: "Administrationsoberfläche für die Verwaltung von PostgreSQL-Materialized Views in Rails-Anwendungen."
+    project_tags: "rails, ruby, materialisierte Views, Admin, Dashboard, UI, Management"
+    refresh: "Aktualisieren"
+    refresh_contents: "Inhalte aktualisieren"
+    reloading: "Neu laden..."
+    reset: "Zurücksetzen"
+    run: "Lauf"
+    runs: "Läufe"
+    save_changes: "Änderungen speichern"
+    settings:
+      auto: "Automatisch"
+      dark: "Dunkel"
+      language: "Sprache"
+      language_hint: "Wählen Sie Ihre Sprache aus."
+      light: "Hell"
+      theme: "Thema"
+      theme_hint: "Automatisch folgt den Systemeinstellungen. Hell und Dunkel überschreiben dies."
+      title: "Einstellungen"
+    title: "MatViews Admin"
+    view_var: "Zeige %{name}"
+  time:
+    am: "AM"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "PM"
