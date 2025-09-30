@@ -85,7 +85,7 @@ RSpec.describe MatViews::Admin::PreferencesController, type: :controller do
         session.delete(:mat_views_locale)
         cookies.delete(:theme)
 
-        patch :update, params: { lang:, frame_id:, theme: 'solarized', locale: 'fr' }
+        patch :update, params: { lang:, frame_id:, theme: 'solarized', locale: 'frr' }
       end
 
       it 'deletes the theme cookie' do
