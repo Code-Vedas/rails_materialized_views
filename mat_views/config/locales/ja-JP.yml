@@ -1,0 +1,187 @@
+ja-JP:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "作成日"
+        dependencies: "依存関係"
+        name: "名前"
+        refresh_strategy: "更新方法"
+        schedule_cron: "スケジュール (cron)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "一意インデックス列"
+        updated_at: "更新日"
+      mat_views/mat_view_run:
+        created_at: "作成日"
+        details: "詳細"
+        duration_ms: "所要時間 (ms)"
+        error: "エラー"
+        finished_at: "終了日"
+        mat_view_definition: "定義"
+        meta: "メタデータ"
+        operation: "操作"
+        row_count_after: "行数 (後)"
+        row_count_before: "行数 (前)"
+        rows_before_after: "行 (前/後)"
+        started_at: "開始日"
+        status: "ステータス"
+        updated_at: "更新日"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "同時"
+          regular: "通常"
+          swap: "スワップ"
+      mat_views/mat_view_run:
+        operation:
+          create: "作成"
+          drop: "削除"
+          refresh: "更新"
+        status:
+          failed: "失敗"
+          running: "実行中"
+          success: "成功"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "必須です"
+              invalid: "有効なPostgreSQL識別子ではありません"
+              taken: "一意でなければなりません"
+            sql:
+              blank: "必須です"
+              invalid: "SELECTで始める必要があります"
+            unique_index_columns:
+              at_least_one: "同時更新を使用する場合は少なくとも1列が必要です"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "このマテリアライズドビューが依存するテーブルまたはビューのカンマ区切りリスト。"
+        name: "データベース内のマテリアライズドビューの名前。"
+        refresh_strategy: "マテリアライズドビューをどのように更新するかを決定します。"
+        schedule_cron: "標準のcron形式を使用します。スケジュールしない場合は空のままにします。"
+        sql: "SQLクエリは有効なSELECT文でなければなりません。"
+        unique_index_columns: "一意インデックスを作成する列。同時更新に必須です。"
+      mat_views/mat_view_run:
+        error: "実行が失敗した場合のエラーメッセージ。"
+        meta: "追加のメタデータ (JSON形式)。"
+        operation: "実行された操作の種類。"
+        status: "実行の現在のステータス。"
+    models:
+      mat_views/mat_view_definition: "マテリアライズドビュー定義"
+      mat_views/mat_view_run: "マテリアライズドビュ―実行"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "依存関係を入力 (カンマ区切り、任意)"
+        name: "名前を入力"
+        refresh_strategy: "更新方法を選択"
+        schedule_cron: "0 0 * * * で毎日深夜に実行、スケジュールしない場合は空欄"
+        sql: "SQLを入力 (SELECT ...)"
+        unique_index_columns: "一意インデックス列を入力 (カンマ区切り、任意)"
+      mat_views/mat_view_run:
+        error: "エラーメッセージ"
+        mat_view_definition: "マテリアライズドビューを選択"
+        meta: "メタデータ (JSON)"
+        operation: "操作を選択"
+        status: "ステータスを選択"
+  i18n:
+    name: 日本語
+  mat_views:
+    actions: "操作"
+    all_definitions: "すべての定義"
+    all_operations: "すべての操作"
+    all_statuses: "すべてのステータス"
+    cancel: "キャンセル"
+    close: "閉じる"
+    close_window: "ウィンドウを閉じる"
+    create: "作成"
+    dashboard:
+      metrics:
+        title: "メトリクス"
+      title: "ダッシュボード"
+    definition: "定義"
+    definitions: "定義一覧"
+    delete: "削除"
+    details: "詳細"
+    edit: "編集"
+    edit_var: "%{name} を編集"
+    errors:
+      frame_only: "この操作はフレーム内でのみ実行できます。ダッシュボードにリダイレクトされました。"
+      prevented_saving:
+        one: "1件のエラーにより保存できませんでした:"
+        other: "%{count} 件のエラーにより保存できませんでした:"
+    filter_by: "フィルター:"
+    footer:
+      copyright: "© %{year} %{company} 無断複製を禁じます。"
+      documentation: "ドキュメント"
+      need_help: "稼働保証と専門サポートが必要ですか？"
+      open_issue: "課題を開く"
+      project_homepage: "プロジェクトホームページ"
+      support: "プロフェッショナルサポートを取得 →"
+      tagline: "開発者によって❤️で作られた、開発者のために。"
+      tooltip:
+        documentation: "ドキュメントを読む"
+        gem_version: "RubyGemsページを開く"
+        open_issue: "バグを報告または機能をリクエスト"
+        project_homepage: "GitHubリポジトリ"
+        support: "プロフェッショナルサポートプラン"
+      version: "v%{version}"
+    header:
+      signed_in_as: "%{email} としてサインイン中"
+    history: "履歴"
+    loading: "読み込み中..."
+    loading_definitions: "定義を読み込み中..."
+    loading_runs: "実行を読み込み中..."
+    mat_view_definition:
+      create_mv: "MV作成"
+      create_mv_tooltip: "データベースにマテリアライズドビューを作成します。"
+      delete_confirm: "定義 %{name} を削除しますか？ (MVは削除されません)"
+      delete_tooltip: "定義を削除しますが、データベース内のビューは削除されません。"
+      drop_mv: "MV削除"
+      drop_mv_cascade: "MV削除 (カスケード)"
+      drop_mv_cascade_confirm: "%{name} のマテリアライズドビューと依存オブジェクトをすべて削除しますか？"
+      drop_mv_cascade_tooltip: "ビューと依存オブジェクトを削除します。定義は残ります。"
+      drop_mv_confirm: "%{name} のマテリアライズドビューを削除しますか？"
+      drop_mv_tooltip: "データベースからビューを削除します。定義は残ります。"
+      edit_tooltip: "マテリアライズドビュー定義を編集します。"
+      materialized_view: "マテリアライズドビュー"
+      materialized_view_exists: "マテリアライズドビューは存在します"
+      materialized_view_not_exists: "マテリアライズドビューはまだ作成されていません！"
+      new_definition: "新しい定義"
+      new_definition_tooltip: "新しいマテリアライズドビュー定義を作成します。"
+      no_definitions: "定義が見つかりませんでした。作成して始めてください。"
+      refresh_tooltip: "ビューをデータベース内で更新します。"
+      sql_summary_tooltip: "クリックしてSQLを展開/折りたたむ"
+      view_tooltip: "マテリアライズドビュー定義を表示。"
+    mat_view_run:
+      error_tooltip: "実行が失敗した場合のエラーメッセージ。"
+      meta_tooltip: "追加のメタデータ (JSON形式)。"
+      no_runs: "実行が見つかりません。"
+      no_runs_if_filtered: "選択したフィルターでは実行が見つかりません。"
+      view_details: "詳細を表示"
+      view_tooltip: "実行の詳細を表示。"
+    project_author: "Codevedas Inc."
+    project_description: "RailsアプリケーションでPostgreSQLマテリアライズドビューを管理する管理インターフェイス。"
+    project_tags: "rails, ruby, materialized views, admin, dashboard, ui, interface, management"
+    refresh: "更新"
+    refresh_contents: "内容を更新"
+    reloading: "再読み込み中..."
+    reset: "リセット"
+    run: "実行"
+    runs: "実行履歴"
+    save_changes: "変更を保存"
+    settings:
+      auto: "自動"
+      dark: "ダーク"
+      language: "言語"
+      language_hint: "インターフェイスの言語を選択してください。"
+      light: "ライト"
+      theme: "テーマ"
+      theme_hint: "自動はシステム設定に従い、ライトとダークは上書きします。"
+      title: "設定"
+    title: "MatViews 管理"
+    view_var: "%{name} を表示"
+  time:
+    am: "午前"
+    formats:
+      datetime12hour: "%Y-%m-%d %p %I:%M:%S"
+    pm: "午後"
