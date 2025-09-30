@@ -1,0 +1,187 @@
+ar:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "تاريخ الإنشاء"
+        dependencies: "الاعتمادات"
+        name: "الاسم"
+        refresh_strategy: "إستراتيجية التحديث"
+        schedule_cron: "جدول (كرون)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "أعمدة الفهرس الفريدة"
+        updated_at: "تاريخ التحديث"
+      mat_views/mat_view_run:
+        created_at: "تاريخ الإنشاء"
+        details: "التفاصيل"
+        duration_ms: "المدة (مللي ثانية)"
+        error: "خطأ"
+        finished_at: "انتهى في"
+        mat_view_definition: "التعريف"
+        meta: "البيانات الوصفية"
+        operation: "العملية"
+        row_count_after: "عدد الصفوف بعد"
+        row_count_before: "عدد الصفوف قبل"
+        rows_before_after: "الصفوف (قبل/بعد)"
+        started_at: "بدأ في"
+        status: "الحالة"
+        updated_at: "تاريخ التحديث"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "متزامن"
+          regular: "عادي"
+          swap: "تبديل"
+      mat_views/mat_view_run:
+        operation:
+          create: "إنشاء"
+          drop: "حذف"
+          refresh: "تحديث"
+        status:
+          failed: "فشل"
+          running: "قيد التنفيذ"
+          success: "نجاح"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "يجب إدخال الاسم"
+              invalid: "ليس معرف PostgreSQL صالح"
+              taken: "يجب أن يكون فريدًا"
+            sql:
+              blank: "يجب إدخال SQL"
+              invalid: "يجب أن يبدأ بـ SELECT"
+            unique_index_columns:
+              at_least_one: "يجب أن يحتوي على عمود واحد على الأقل عند استخدام إستراتيجية التحديث المتزامن"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "قائمة مفصولة بفواصل من الجداول أو العروض التي يعتمد عليها العرض المادي."
+        name: "اسم العرض المادي في قاعدة البيانات."
+        refresh_strategy: "يحدد كيفية تحديث العرض المادي."
+        schedule_cron: "استخدم تنسيق كرون القياسي. اتركه فارغًا لعدم جدولة."
+        sql: "يجب أن تكون استعلام SQL صالحًا من نوع SELECT."
+        unique_index_columns: "الأعمدة لإنشاء فهرس فريد عليها. مطلوب للتحديث المتزامن."
+      mat_views/mat_view_run:
+        error: "رسالة الخطأ إذا فشل التشغيل."
+        meta: "بيانات وصفية إضافية بتنسيق JSON."
+        operation: "نوع العملية المنفذة."
+        status: "الحالة الحالية للتشغيل."
+    models:
+      mat_views/mat_view_definition: "تعريف العرض المادي"
+      mat_views/mat_view_run: "تشغيل العرض المادي"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "أدخل الاعتمادات (مفصولة بفواصل، اختياري)"
+        name: "أدخل الاسم"
+        refresh_strategy: "اختر إستراتيجية التحديث"
+        schedule_cron: "0 0 * * * للتشغيل اليومي عند منتصف الليل، اتركه فارغًا لعدم جدولة"
+        sql: "أدخل SQL (SELECT ...)"
+        unique_index_columns: "أدخل أعمدة الفهرس الفريدة (مفصولة بفواصل، اختياري)"
+      mat_views/mat_view_run:
+        error: "رسالة الخطأ"
+        mat_view_definition: "اختر العرض المادي"
+        meta: "بيانات وصفية (JSON)"
+        operation: "اختر العملية"
+        status: "اختر الحالة"
+  i18n:
+    name: العربية
+  mat_views:
+    actions: "إجراءات"
+    all_definitions: "كل التعريفات"
+    all_operations: "كل العمليات"
+    all_statuses: "كل الحالات"
+    cancel: "إلغاء"
+    close: "إغلاق"
+    close_window: "إغلاق النافذة"
+    create: "إنشاء"
+    dashboard:
+      metrics:
+        title: "المقاييس"
+      title: "لوحة التحكم"
+    definition: "التعريف"
+    definitions: "التعريفات"
+    delete: "حذف"
+    details: "التفاصيل"
+    edit: "تعديل"
+    edit_var: "تعديل %{name}"
+    errors:
+      frame_only: "يمكن تنفيذ هذا الإجراء فقط داخل إطار، تمت إعادة التوجيه إلى لوحة التحكم."
+      prevented_saving:
+        one: "خطأ واحد منع الحفظ:"
+        other: "%{count} أخطاء منعت الحفظ:"
+    filter_by: "تصفية حسب:"
+    footer:
+      copyright: "© %{year} %{company} جميع الحقوق محفوظة."
+      documentation: "التوثيق"
+      need_help: "هل تحتاج إلى وقت تشغيل مضمون ودعم خبراء؟"
+      open_issue: "افتح تذكرة"
+      project_homepage: "الصفحة الرئيسية للمشروع"
+      support: "احصل على دعم احترافي →"
+      tagline: "بُني بحب ❤️ من قبل المطورين، للمطورين."
+      tooltip:
+        documentation: "اقرأ التوثيق"
+        gem_version: "انقر لزيارة صفحة RubyGems"
+        open_issue: "أبلغ عن خطأ أو اطلب ميزة"
+        project_homepage: "مستودع GitHub"
+        support: "خطط الدعم الاحترافي"
+      version: "الإصدار v%{version}"
+    header:
+      signed_in_as: "مسجل الدخول كـ %{email}"
+    history: "السجل"
+    loading: "جارٍ التحميل..."
+    loading_definitions: "جارٍ تحميل التعريفات..."
+    loading_runs: "جارٍ تحميل التشغيلات..."
+    mat_view_definition:
+      create_mv: "إنشاء MV"
+      create_mv_tooltip: "ينشئ العرض المادي في قاعدة البيانات."
+      delete_confirm: "حذف التعريف %{name}؟ (لن يحذف العرض المادي)"
+      delete_tooltip: "يحذف التعريف لكن لا يحذف العرض المادي من قاعدة البيانات."
+      drop_mv: "حذف MV"
+      drop_mv_cascade: "حذف MV (مع التوابع)"
+      drop_mv_cascade_confirm: "حذف العرض المادي وكل الكائنات التابعة لـ %{name}؟"
+      drop_mv_cascade_tooltip: "يحذف العرض المادي وكل الكائنات التابعة في قاعدة البيانات. يبقى التعريف."
+      drop_mv_confirm: "حذف العرض المادي لـ %{name}؟"
+      drop_mv_tooltip: "يحذف العرض المادي فقط. يبقى التعريف."
+      edit_tooltip: "تعديل تعريف العرض المادي."
+      materialized_view: "العرض المادي"
+      materialized_view_exists: "العرض المادي موجود"
+      materialized_view_not_exists: "العرض المادي لم يتم إنشاؤه بعد!"
+      new_definition: "تعريف جديد"
+      new_definition_tooltip: "إنشاء تعريف عرض مادي جديد."
+      no_definitions: "لم يتم العثور على أي تعريفات للعرض المادي. أنشئ واحدًا للبدء."
+      refresh_tooltip: "يُحدِّث العرض المادي في قاعدة البيانات."
+      sql_summary_tooltip: "انقر لتوسيع/طي SQL"
+      view_tooltip: "عرض تعريف العرض المادي."
+    mat_view_run:
+      error_tooltip: "رسالة الخطأ إذا فشل التشغيل."
+      meta_tooltip: "بيانات وصفية إضافية بتنسيق JSON."
+      no_runs: "لم يتم العثور على تشغيلات."
+      no_runs_if_filtered: "لم يتم العثور على تشغيلات للمرشحات المحددة."
+      view_details: "عرض التفاصيل"
+      view_tooltip: "عرض تفاصيل التشغيل."
+    project_author: "Codevedas Inc."
+    project_description: "واجهة إدارية لإدارة العروض المادية في PostgreSQL لتطبيقات Rails."
+    project_tags: "rails، ruby، عروض مادية، إدارة، لوحة تحكم، واجهة مستخدم"
+    refresh: "تحديث"
+    refresh_contents: "تحديث المحتوى"
+    reloading: "جارٍ إعادة التحميل..."
+    reset: "إعادة تعيين"
+    run: "تشغيل"
+    runs: "تشغيلات"
+    save_changes: "حفظ التغييرات"
+    settings:
+      auto: "تلقائي"
+      dark: "داكن"
+      language: "اللغة"
+      language_hint: "اختر لغة الواجهة."
+      light: "فاتح"
+      theme: "المظهر"
+      theme_hint: "التلقائي يتبع إعداد النظام. الفاتح والداكن يتجاوزانه."
+      title: "التفضيلات"
+    title: "إدارة MatViews"
+    view_var: "عرض %{name}"
+  time:
+    am: "ص"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "م"
