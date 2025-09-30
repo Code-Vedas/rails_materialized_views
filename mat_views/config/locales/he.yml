@@ -1,0 +1,187 @@
+he:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "נוצר בתאריך"
+        dependencies: "תלויות"
+        name: "שם"
+        refresh_strategy: "אסטרטגיית רענון"
+        schedule_cron: "לוח זמנים (cron)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "עמודות אינדקס ייחודיות"
+        updated_at: "עודכן בתאריך"
+      mat_views/mat_view_run:
+        created_at: "נוצר בתאריך"
+        details: "פרטים"
+        duration_ms: "משך (ms)"
+        error: "שגיאה"
+        finished_at: "הסתיים בתאריך"
+        mat_view_definition: "הגדרה"
+        meta: "מטא־נתונים"
+        operation: "פעולה"
+        row_count_after: "מספר שורות אחרי"
+        row_count_before: "מספר שורות לפני"
+        rows_before_after: "שורות (לפני/אחרי)"
+        started_at: "התחיל בתאריך"
+        status: "סטטוס"
+        updated_at: "עודכן בתאריך"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "מקבילי"
+          regular: "רגיל"
+          swap: "החלפה"
+      mat_views/mat_view_run:
+        operation:
+          create: "צור"
+          drop: "מחק"
+          refresh: "רענן"
+        status:
+          failed: "נכשל"
+          running: "פועל"
+          success: "הצלחה"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "חובה לספק"
+              invalid: "אינו מזהה תקף של PostgreSQL"
+              taken: "חייב להיות ייחודי"
+            sql:
+              blank: "חובה לספק"
+              invalid: "חייב להתחיל ב־SELECT"
+            unique_index_columns:
+              at_least_one: "חייב להכיל לפחות עמודה אחת כאשר משתמשים באסטרטגיית רענון מקבילי"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "רשימה מופרדת בפסיקים של טבלאות או תצוגות שהתצוגה החומרית תלויה בהן."
+        name: "שם התצוגה החומרית במסד הנתונים."
+        refresh_strategy: "קובע כיצד התצוגה החומרית תרוענן."
+        schedule_cron: "השתמשו בפורמט cron סטנדרטי. השאירו ריק ללא תזמון."
+        sql: "השאילתה חייבת להיות משפט SELECT תקף."
+        unique_index_columns: "עמודות ליצירת אינדקס ייחודי. חובה לרענון מקבילי."
+      mat_views/mat_view_run:
+        error: "הודעת שגיאה אם ההרצה נכשלה."
+        meta: "מטא־נתונים נוספים בפורמט JSON."
+        operation: "סוג הפעולה שבוצעה."
+        status: "הסטטוס הנוכחי של ההרצה."
+    models:
+      mat_views/mat_view_definition: "הגדרת תצוגה חומרית"
+      mat_views/mat_view_run: "הרצת תצוגה חומרית"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "הזן תלויות (מופרדות בפסיקים, אופציונלי)"
+        name: "הזן שם"
+        refresh_strategy: "בחר אסטרטגיית רענון"
+        schedule_cron: "0 0 * * * לרענון יומי בחצות, השאר ריק ללא תזמון"
+        sql: "הזן SQL (SELECT ...)"
+        unique_index_columns: "הזן עמודות אינדקס ייחודיות (מופרדות בפסיקים, אופציונלי)"
+      mat_views/mat_view_run:
+        error: "הודעת שגיאה"
+        mat_view_definition: "בחר תצוגה חומרית"
+        meta: "מטא־נתונים (JSON)"
+        operation: "בחר פעולה"
+        status: "בחר סטטוס"
+  i18n:
+    name: עברית
+  mat_views:
+    actions: "פעולות"
+    all_definitions: "כל ההגדרות"
+    all_operations: "כל הפעולות"
+    all_statuses: "כל הסטטוסים"
+    cancel: "ביטול"
+    close: "סגור"
+    close_window: "סגור חלון"
+    create: "צור"
+    dashboard:
+      metrics:
+        title: "מדדים"
+      title: "לוח בקרה"
+    definition: "הגדרה"
+    definitions: "הגדרות"
+    delete: "מחק"
+    details: "פרטים"
+    edit: "ערוך"
+    edit_var: "ערוך %{name}"
+    errors:
+      frame_only: "ניתן לבצע פעולה זו רק במסגרת, מנותב ללוח הבקרה."
+      prevented_saving:
+        one: "שגיאה אחת מנעה שמירה:"
+        other: "%{count} שגיאות מנעו שמירה:"
+    filter_by: "סינון לפי:"
+    footer:
+      copyright: "© %{year} %{company} כל הזכויות שמורות."
+      documentation: "תיעוד"
+      need_help: "זקוק לזמן פעולה מובטח ולעזרה מקצועית?"
+      open_issue: "פתח פנייה"
+      project_homepage: "עמוד הפרויקט"
+      support: "קבל תמיכה מקצועית →"
+      tagline: "נבנה באהבה ❤️ על ידי מפתחים, עבור מפתחים."
+      tooltip:
+        documentation: "קרא את התיעוד"
+        gem_version: "לחץ לביקור בעמוד RubyGems"
+        open_issue: "דווח על באג או בקש פיצ'ר"
+        project_homepage: "מאגר GitHub"
+        support: "תכניות תמיכה מקצועית"
+      version: "גירסה %{version}"
+    header:
+      signed_in_as: "מחובר כ-%{email}"
+    history: "היסטוריה"
+    loading: "טוען..."
+    loading_definitions: "טוען הגדרות..."
+    loading_runs: "טוען הרצות..."
+    mat_view_definition:
+      create_mv: "צור MV"
+      create_mv_tooltip: "יוצר את ה-MV במסד הנתונים."
+      delete_confirm: "למחוק את ההגדרה %{name}? (לא מוחק את ה-MV)"
+      delete_tooltip: "מוחק את ההגדרה אך לא את ה-MV במסד."
+      drop_mv: "מחק MV"
+      drop_mv_cascade: "מחק MV (Cascade)"
+      drop_mv_cascade_confirm: "למחוק את ה-MV וכל העצמים התלויים עבור %{name}?"
+      drop_mv_cascade_tooltip: "מוחק את ה-MV וכל העצמים התלויים במסד. ההגדרה נשארת."
+      drop_mv_confirm: "למחוק את ה-MV עבור %{name}?"
+      drop_mv_tooltip: "מוחק את ה-MV במסד. ההגדרה נשארת."
+      edit_tooltip: "ערוך את הגדרת ה-MV."
+      materialized_view: "תצוגה חומרית"
+      materialized_view_exists: "ה-MV קיים"
+      materialized_view_not_exists: "ה-MV עדיין לא נוצר!"
+      new_definition: "הגדרה חדשה"
+      new_definition_tooltip: "צור הגדרת MV חדשה."
+      no_definitions: "לא נמצאו הגדרות MV. צור אחת כדי להתחיל."
+      refresh_tooltip: "מרענן את ה-MV במסד הנתונים."
+      sql_summary_tooltip: "לחץ להרחבת/צמצום ה-SQL"
+      view_tooltip: "צפה בהגדרת ה-MV."
+    mat_view_run:
+      error_tooltip: "הודעת שגיאה אם ההרצה נכשלה."
+      meta_tooltip: "מטא־נתונים נוספים בפורמט JSON."
+      no_runs: "לא נמצאו הרצות."
+      no_runs_if_filtered: "לא נמצאו הרצות עבור המסננים שנבחרו."
+      view_details: "צפה בפרטים"
+      view_tooltip: "צפה בפרטי ההרצה."
+    project_author: "Codevedas Inc."
+    project_description: "ממשק ניהול לניהול PostgreSQL Materialized Views באפליקציות Rails."
+    project_tags: "rails, ruby, materialized views, admin, dashboard, ui, interface, management"
+    refresh: "רענן"
+    refresh_contents: "רענן תוכן"
+    reloading: "טוען מחדש..."
+    reset: "אפס"
+    run: "הרץ"
+    runs: "הרצות"
+    save_changes: "שמור שינויים"
+    settings:
+      auto: "אוטומטי"
+      dark: "כהה"
+      language: "שפה"
+      language_hint: "בחר את שפת הממשק שלך."
+      light: "בהיר"
+      theme: "ערכת נושא"
+      theme_hint: "אוטומטי עוקב אחרי העדפת המערכת שלך, כהה ובהיר מחליפים אותה."
+      title: "העדפות"
+    title: "MatViews Admin"
+    view_var: "צפה %{name}"
+  time:
+    am: "AM"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "PM"
