@@ -1,0 +1,187 @@
+ur:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "تخلیق کی تاریخ"
+        dependencies: "انحصارات"
+        name: "نام"
+        refresh_strategy: "ریفریش حکمت عملی"
+        schedule_cron: "شیڈول (cron)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "یونیک انڈیکس کالم"
+        updated_at: "تازہ کاری کی تاریخ"
+      mat_views/mat_view_run:
+        created_at: "تخلیق کی تاریخ"
+        details: "تفصیلات"
+        duration_ms: "دورانیہ (ms)"
+        error: "غلطی"
+        finished_at: "اختتام کی تاریخ"
+        mat_view_definition: "تعریف"
+        meta: "میٹا ڈیٹا"
+        operation: "عمل"
+        row_count_after: "قطاروں کی تعداد (بعد)"
+        row_count_before: "قطاروں کی تعداد (پہلے)"
+        rows_before_after: "قطاریں (پہلے/بعد)"
+        started_at: "آغاز کی تاریخ"
+        status: "اسٹیٹس"
+        updated_at: "تازہ کاری کی تاریخ"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "متوازی"
+          regular: "معمولی"
+          swap: "تبدیل"
+      mat_views/mat_view_run:
+        operation:
+          create: "بنائیں"
+          drop: "حذف کریں"
+          refresh: "ریفریش کریں"
+        status:
+          failed: "ناکام"
+          running: "چل رہا ہے"
+          success: "کامیاب"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "ضروری ہے"
+              invalid: "یہ ایک درست PostgreSQL شناخت کنندہ نہیں ہے"
+              taken: "منفرد ہونا چاہئے"
+            sql:
+              blank: "ضروری ہے"
+              invalid: "SELECT سے شروع ہونا چاہئے"
+            unique_index_columns:
+              at_least_one: "متوازی ریفریش کے لئے کم از کم ایک کالم ہونا ضروری ہے"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "ان جدولوں یا ویوز کی فہرست (کوما سے جدا) جن پر یہ میٹیریلائزڈ ویو انحصار کرتا ہے۔"
+        name: "ڈیٹابیس میں میٹیریلائزڈ ویو کا نام۔"
+        refresh_strategy: "یہ طے کرتا ہے کہ میٹیریلائزڈ ویو کیسے ریفریش ہوگا۔"
+        schedule_cron: "معیاری کرون فارمیٹ استعمال کریں۔ کوئی شیڈول نہ رکھنے کے لئے خالی چھوڑ دیں۔"
+        sql: "SQL کوئری ایک درست SELECT بیان ہونا چاہئے۔"
+        unique_index_columns: "یونیک انڈیکس بنانے کے لئے کالم۔ متوازی ریفریش کیلئے ضروری۔"
+      mat_views/mat_view_run:
+        error: "اگر رن ناکام ہو تو غلطی کا پیغام۔"
+        meta: "اضافی میٹا ڈیٹا JSON میں۔"
+        operation: "کیا گیا عمل۔"
+        status: "رن کی موجودہ حیثیت۔"
+    models:
+      mat_views/mat_view_definition: "میٹیریلائزڈ ویو کی تعریف"
+      mat_views/mat_view_run: "میٹیریلائزڈ ویو رن"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "انحصارات درج کریں (کوما سے جدا، اختیاری)"
+        name: "نام درج کریں"
+        refresh_strategy: "ریفریش حکمت عملی منتخب کریں"
+        schedule_cron: "روزانہ آدھی رات کے لئے 0 0 * * *، کوئی شیڈول نہ رکھنے کیلئے خالی چھوڑ دیں"
+        sql: "SQL درج کریں (SELECT ...)"
+        unique_index_columns: "یونیک انڈیکس کالم درج کریں (کوما سے جدا، اختیاری)"
+      mat_views/mat_view_run:
+        error: "غلطی کا پیغام"
+        mat_view_definition: "میٹیریلائزڈ ویو منتخب کریں"
+        meta: "میٹا ڈیٹا (JSON)"
+        operation: "عمل منتخب کریں"
+        status: "اسٹیٹس منتخب کریں"
+  i18n:
+    name: اردو
+  mat_views:
+    actions: "اعمال"
+    all_definitions: "تمام تعریفات"
+    all_operations: "تمام اعمال"
+    all_statuses: "تمام اسٹیٹس"
+    cancel: "منسوخ کریں"
+    close: "بند کریں"
+    close_window: "ونڈو بند کریں"
+    create: "بنائیں"
+    dashboard:
+      metrics:
+        title: "میٹرکس"
+      title: "ڈیش بورڈ"
+    definition: "تعریف"
+    definitions: "تعریفات"
+    delete: "حذف کریں"
+    details: "تفصیلات"
+    edit: "ترمیم کریں"
+    edit_var: "%{name} ترمیم کریں"
+    errors:
+      frame_only: "یہ عمل صرف فریم میں کیا جا سکتا ہے، ڈیش بورڈ پر ری ڈائریکٹ کر دیا گیا۔"
+      prevented_saving:
+        one: "1 غلطی نے محفوظ ہونے سے روکا:"
+        other: "%{count} غلطیوں نے محفوظ ہونے سے روکا:"
+    filter_by: "فلٹر بذریعہ:"
+    footer:
+      copyright: "© %{year} %{company} جملہ حقوق محفوظ ہیں۔"
+      documentation: "دستاویزات"
+      need_help: "گارنٹیڈ اپ ٹائم اور ماہر مدد درکار ہے؟"
+      open_issue: "ایشو کھولیں"
+      project_homepage: "پروجیکٹ ہوم پیج"
+      support: "پروفیشنل سپورٹ حاصل کریں →"
+      tagline: "ڈویلپرز کی طرف سے ❤️ سے بنایا گیا، ڈویلپرز کیلئے۔"
+      tooltip:
+        documentation: "دستاویزات پڑھیں"
+        gem_version: "RubyGems صفحہ دیکھنے کیلئے کلک کریں"
+        open_issue: "بگ رپورٹ کریں یا فیچر کی درخواست کریں"
+        project_homepage: "GitHub ریپوزٹری"
+        support: "پروفیشنل سپورٹ پلانز"
+      version: "v%{version}"
+    header:
+      signed_in_as: "%{email} کے طور پر سائن ان ہیں"
+    history: "تاریخچہ"
+    loading: "لوڈ ہو رہا ہے..."
+    loading_definitions: "تعریفات لوڈ ہو رہی ہیں..."
+    loading_runs: "رنز لوڈ ہو رہے ہیں..."
+    mat_view_definition:
+      create_mv: "MV بنائیں"
+      create_mv_tooltip: "ڈیٹابیس میں میٹیریلائزڈ ویو بناتا ہے۔"
+      delete_confirm: "تعریف %{name} حذف کریں؟ (MV کو نہیں ہٹاتا)"
+      delete_tooltip: "تعریف کو حذف کرتا ہے لیکن ویو کو ڈیٹابیس میں برقرار رکھتا ہے۔"
+      drop_mv: "MV حذف کریں"
+      drop_mv_cascade: "MV حذف کریں (کاسکیڈ)"
+      drop_mv_cascade_confirm: "میٹیریلائزڈ ویو اور تمام متعلقہ آبجیکٹس %{name} کے لئے حذف کریں؟"
+      drop_mv_cascade_tooltip: "ڈیٹابیس میں ویو اور متعلقہ آبجیکٹس کو حذف کرتا ہے۔ تعریف برقرار رہتی ہے۔"
+      drop_mv_confirm: "میٹیریلائزڈ ویو %{name} حذف کریں؟"
+      drop_mv_tooltip: "ڈیٹابیس سے ویو کو حذف کرتا ہے۔ تعریف برقرار رہتی ہے۔"
+      edit_tooltip: "میٹیریلائزڈ ویو کی تعریف ترمیم کریں۔"
+      materialized_view: "میٹیریلائزڈ ویو"
+      materialized_view_exists: "میٹیریلائزڈ ویو موجود ہے"
+      materialized_view_not_exists: "میٹیریلائزڈ ویو ابھی تک نہیں بنایا گیا!"
+      new_definition: "نئی تعریف"
+      new_definition_tooltip: "میٹیریلائزڈ ویو کی نئی تعریف بنائیں۔"
+      no_definitions: "کوئی تعریف نہیں ملی۔ شروع کرنے کیلئے ایک بنائیں۔"
+      refresh_tooltip: "ڈیٹابیس میں میٹیریلائزڈ ویو کو ریفریش کریں۔"
+      sql_summary_tooltip: "SQL کو پھیلانے/سکڑنے کیلئے کلک کریں"
+      view_tooltip: "میٹیریلائزڈ ویو کی تعریف دیکھیں۔"
+    mat_view_run:
+      error_tooltip: "اگر رن ناکام ہو تو غلطی کا پیغام۔"
+      meta_tooltip: "اضافی میٹا ڈیٹا JSON میں۔"
+      no_runs: "کوئی رن نہیں ملا۔"
+      no_runs_if_filtered: "منتخب فلٹرز کیلئے کوئی رن نہیں ملا۔"
+      view_details: "تفصیلات دیکھیں"
+      view_tooltip: "رن کی تفصیلات دیکھیں۔"
+    project_author: "Codevedas Inc."
+    project_description: "Rails ایپلیکیشنز میں PostgreSQL میٹیریلائزڈ ویوز کے انتظام کیلئے ایڈمن انٹرفیس۔"
+    project_tags: "rails, ruby, materialized views, admin, dashboard, ui, interface, management"
+    refresh: "ریفریش"
+    refresh_contents: "مواد ریفریش کریں"
+    reloading: "دوبارہ لوڈ ہو رہا ہے..."
+    reset: "ری سیٹ"
+    run: "رن کریں"
+    runs: "رنز"
+    save_changes: "تبدیلیاں محفوظ کریں"
+    settings:
+      auto: "خودکار"
+      dark: "ڈارک"
+      language: "زبان"
+      language_hint: "انٹرفیس کی زبان منتخب کریں۔"
+      light: "لائٹ"
+      theme: "تھیم"
+      theme_hint: "خودکار نظام کی ترجیح کو فالو کرتا ہے، لائٹ اور ڈارک اسے اووررائیڈ کرتے ہیں۔"
+      title: "ترجیحات"
+    title: "MatViews ایڈمن"
+    view_var: "%{name} دیکھیں"
+  time:
+    am: "AM"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "PM"
