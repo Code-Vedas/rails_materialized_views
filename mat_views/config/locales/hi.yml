@@ -1,0 +1,187 @@
+hi:
+  activerecord:
+    attributes:
+      mat_views/mat_view_definition:
+        created_at: "निर्माण तिथि"
+        dependencies: "निर्भरताएँ"
+        name: "नाम"
+        refresh_strategy: "रिफ्रेश रणनीति"
+        schedule_cron: "शेड्यूल (cron)"
+        sql: "SQL (SELECT ...)"
+        unique_index_columns: "यूनिक इंडेक्स कॉलम"
+        updated_at: "अद्यतन तिथि"
+      mat_views/mat_view_run:
+        created_at: "निर्माण तिथि"
+        details: "विवरण"
+        duration_ms: "अवधि (ms)"
+        error: "त्रुटि"
+        finished_at: "समाप्ति तिथि"
+        mat_view_definition: "परिभाषा"
+        meta: "मेटाडेटा"
+        operation: "ऑपरेशन"
+        row_count_after: "पंक्तियों की संख्या (बाद में)"
+        row_count_before: "पंक्तियों की संख्या (पहले)"
+        rows_before_after: "पंक्तियाँ (पहले/बाद में)"
+        started_at: "प्रारंभ तिथि"
+        status: "स्थिति"
+        updated_at: "अद्यतन तिथि"
+    enums:
+      mat_views/mat_view_definition:
+        refresh_strategy:
+          concurrent: "समांतर"
+          regular: "सामान्य"
+          swap: "स्वैप"
+      mat_views/mat_view_run:
+        operation:
+          create: "बनाएँ"
+          drop: "हटाएँ"
+          refresh: "रिफ्रेश"
+        status:
+          failed: "असफल"
+          running: "चल रहा है"
+          success: "सफल"
+    errors:
+      models:
+        mat_views/mat_view_definition:
+          attributes:
+            name:
+              blank: "देना आवश्यक है"
+              invalid: "मान्य PostgreSQL पहचानकर्ता नहीं है"
+              taken: "अद्वितीय होना चाहिए"
+            sql:
+              blank: "देना आवश्यक है"
+              invalid: "SELECT से शुरू होना चाहिए"
+            unique_index_columns:
+              at_least_one: "समांतर रिफ्रेश रणनीति के लिए कम से कम एक कॉलम आवश्यक है"
+    hints:
+      mat_views/mat_view_definition:
+        dependencies: "कॉमा से अलग की गई उन तालिकाओं या व्यूज़ की सूची जिन पर यह मटीरियलाइज़्ड व्यू निर्भर है।"
+        name: "डेटाबेस में मटीरियलाइज़्ड व्यू का नाम।"
+        refresh_strategy: "निर्धारित करता है कि मटीरियलाइज़्ड व्यू कैसे रिफ्रेश होगा।"
+        schedule_cron: "मानक क्रॉन फ़ॉर्मेट का उपयोग करें। शेड्यूल न करने के लिए खाली छोड़ें।"
+        sql: "SQL क्वेरी एक वैध SELECT स्टेटमेंट होनी चाहिए।"
+        unique_index_columns: "जिन कॉलम पर यूनिक इंडेक्स बनाना है। समांतर रिफ्रेश के लिए आवश्यक।"
+      mat_views/mat_view_run:
+        error: "यदि रन विफल हो तो त्रुटि संदेश।"
+        meta: "अतिरिक्त मेटाडेटा (JSON) में।"
+        operation: "किए गए ऑपरेशन का प्रकार।"
+        status: "रन की वर्तमान स्थिति।"
+    models:
+      mat_views/mat_view_definition: "मटीरियलाइज़्ड व्यू परिभाषा"
+      mat_views/mat_view_run: "मटीरियलाइज़्ड व्यू रन"
+    placeholders:
+      mat_views/mat_view_definition:
+        dependencies: "निर्भरताएँ दर्ज करें (कॉमा से अलग, वैकल्पिक)"
+        name: "नाम दर्ज करें"
+        refresh_strategy: "रिफ्रेश रणनीति चुनें"
+        schedule_cron: "दैनिक मध्यरात्रि के लिए 0 0 * * * , बिना शेड्यूल के लिए खाली छोड़ें"
+        sql: "SQL दर्ज करें (SELECT ...)"
+        unique_index_columns: "यूनिक इंडेक्स कॉलम दर्ज करें (कॉमा से अलग, वैकल्पिक)"
+      mat_views/mat_view_run:
+        error: "त्रुटि संदेश"
+        mat_view_definition: "मटीरियलाइज़्ड व्यू चुनें"
+        meta: "मेटाडेटा (JSON)"
+        operation: "ऑपरेशन चुनें"
+        status: "स्थिति चुनें"
+  i18n:
+    name: हिंदी
+  mat_views:
+    actions: "क्रियाएँ"
+    all_definitions: "सभी परिभाषाएँ"
+    all_operations: "सभी ऑपरेशन्स"
+    all_statuses: "सभी स्थितियाँ"
+    cancel: "रद्द करें"
+    close: "बंद करें"
+    close_window: "विंडो बंद करें"
+    create: "बनाएँ"
+    dashboard:
+      metrics:
+        title: "मेट्रिक्स"
+      title: "डैशबोर्ड"
+    definition: "परिभाषा"
+    definitions: "परिभाषाएँ"
+    delete: "हटाएँ"
+    details: "विवरण"
+    edit: "संपादित करें"
+    edit_var: "%{name} संपादित करें"
+    errors:
+      frame_only: "यह क्रिया केवल फ्रेम में की जा सकती है, डैशबोर्ड पर पुनर्निर्देशित किया गया।"
+      prevented_saving:
+        one: "1 त्रुटि के कारण सहेजा नहीं जा सका:"
+        other: "%{count} त्रुटियों के कारण सहेजा नहीं जा सका:"
+    filter_by: "फ़िल्टर करें:"
+    footer:
+      copyright: "© %{year} %{company} सर्वाधिकार सुरक्षित."
+      documentation: "दस्तावेज़"
+      need_help: "गारंटीड अपटाइम और विशेषज्ञ सहायता चाहिए?"
+      open_issue: "इश्यू खोलें"
+      project_homepage: "प्रोजेक्ट होमपेज"
+      support: "प्रोफ़ेशनल सपोर्ट प्राप्त करें →"
+      tagline: "डेवलपर्स द्वारा, डेवलपर्स के लिए ❤️ से निर्मित।"
+      tooltip:
+        documentation: "दस्तावेज़ पढ़ें"
+        gem_version: "RubyGems पेज पर जाने के लिए क्लिक करें"
+        open_issue: "बग रिपोर्ट करें या फीचर का अनुरोध करें"
+        project_homepage: "GitHub रिपॉज़िटरी"
+        support: "प्रोफ़ेशनल सपोर्ट प्लान"
+      version: "v%{version}"
+    header:
+      signed_in_as: "%{email} के रूप में साइन इन"
+    history: "इतिहास"
+    loading: "लोड हो रहा है..."
+    loading_definitions: "परिभाषाएँ लोड हो रही हैं..."
+    loading_runs: "रन लोड हो रहे हैं..."
+    mat_view_definition:
+      create_mv: "MV बनाएँ"
+      create_mv_tooltip: "डेटाबेस में मटीरियलाइज़्ड व्यू बनाता है।"
+      delete_confirm: "परिभाषा %{name} हटाएँ? (MV को नहीं हटाता)"
+      delete_tooltip: "परिभाषा हटाता है, लेकिन डेटाबेस में मटीरियलाइज़्ड व्यू को नहीं।"
+      drop_mv: "MV हटाएँ"
+      drop_mv_cascade: "MV हटाएँ (कैस्केड)"
+      drop_mv_cascade_confirm: "%{name} के लिए मटीरियलाइज़्ड व्यू और सभी निर्भर ऑब्जेक्ट हटाएँ?"
+      drop_mv_cascade_tooltip: "डेटाबेस में मटीरियलाइज़्ड व्यू और सभी निर्भर ऑब्जेक्ट हटाता है। परिभाषा बनी रहती है।"
+      drop_mv_confirm: "%{name} के लिए मटीरियलाइज़्ड व्यू हटाएँ?"
+      drop_mv_tooltip: "डेटाबेस में मटीरियलाइज़्ड व्यू हटाता है। परिभाषा बनी रहती है।"
+      edit_tooltip: "मटीरियलाइज़्ड व्यू परिभाषा संपादित करें।"
+      materialized_view: "मटीरियलाइज़्ड व्यू"
+      materialized_view_exists: "मटीरियलाइज़्ड व्यू मौजूद है"
+      materialized_view_not_exists: "मटीरियलाइज़्ड व्यू अभी तक नहीं बनाया गया!"
+      new_definition: "नई परिभाषा"
+      new_definition_tooltip: "नई मटीरियलाइज़्ड व्यू परिभाषा बनाएँ।"
+      no_definitions: "कोई मटीरियलाइज़्ड व्यू परिभाषा नहीं मिली। आरंभ करने के लिए एक बनाएँ।"
+      refresh_tooltip: "डेटाबेस में मटीरियलाइज़्ड व्यू रिफ्रेश करता है।"
+      sql_summary_tooltip: "SQL विस्तार/संकुचन के लिए क्लिक करें"
+      view_tooltip: "मटीरियलाइज़्ड व्यू परिभाषा देखें।"
+    mat_view_run:
+      error_tooltip: "रन विफल होने पर त्रुटि संदेश।"
+      meta_tooltip: "अतिरिक्त मेटाडेटा JSON फ़ॉर्मेट में।"
+      no_runs: "कोई रन नहीं मिला।"
+      no_runs_if_filtered: "चयनित फ़िल्टर्स के लिए कोई रन नहीं मिला।"
+      view_details: "विवरण देखें"
+      view_tooltip: "रन विवरण देखें।"
+    project_author: "Codevedas Inc."
+    project_description: "Rails अनुप्रयोगों में PostgreSQL मटीरियलाइज़्ड व्यूज़ के प्रबंधन हेतु एडमिन इंटरफ़ेस।"
+    project_tags: "rails, ruby, materialized views, admin, dashboard, ui, interface, management"
+    refresh: "रिफ्रेश"
+    refresh_contents: "कंटेंट रिफ्रेश करें"
+    reloading: "पुनः लोड हो रहा है..."
+    reset: "रीसेट"
+    run: "रन करें"
+    runs: "रन"
+    save_changes: "परिवर्तन सहेजें"
+    settings:
+      auto: "ऑटो"
+      dark: "डार्क"
+      language: "भाषा"
+      language_hint: "अपनी इंटरफ़ेस भाषा चुनें।"
+      light: "लाइट"
+      theme: "थीम"
+      theme_hint: "ऑटो सिस्टम प्रेफ़रेंस का अनुसरण करता है; लाइट और डार्क उसे ओवरराइड करते हैं।"
+      title: "प्राथमिकताएँ"
+    title: "MatViews Admin"
+    view_var: "%{name} देखें"
+  time:
+    am: "AM"
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: "PM"
