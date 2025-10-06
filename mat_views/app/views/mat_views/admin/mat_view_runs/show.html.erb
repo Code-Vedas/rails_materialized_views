@@ -4,12 +4,12 @@
 <div class="mv-card">
   <div class="mv-card-b">
     <div class="mv-field">
-      <div class="mv-label"><%= mv_t("definition") %></div>
+      <div class="mv-label"><%= t("mat_views.definition") %></div>
       <div>
-        <%= mv_drawer_link(admin_mat_view_definition_path(@run.mat_view_definition, frame_id: "mv-drawer"), mv_t("view_var", name: @run.mat_view_definition.name),
+        <%= mv_drawer_link(admin_mat_view_definition_path(@run.mat_view_definition, frame_id: "mv-drawer"), t("mat_views.view_var", name: @run.mat_view_definition.name),
                            variant: :ghost,
                            underline: true,
-                           tooltip: mv_t("mat_view_definition.view_tooltip")) do %>
+                           tooltip: t("mat_views.mat_view_definition.view_tooltip")) do %>
           <%= @run.mat_view_definition.name %>
         <% end %>
       </div>
@@ -20,11 +20,11 @@
     </div>
     <div class="mv-field">
       <div class="mv-label"><%= humanize_attr.call(:started_at) %></div>
-      <div><%= l(@run.started_at.in_time_zone, format: :datetime12hour) %></div>
+      <div><%= l_with_digits(@run.started_at.in_time_zone, format: :datetime12hour) %></div>
     </div>
     <div class="mv-field">
       <div class="mv-label"><%= humanize_attr.call(:finished_at) %></div>
-      <div><%= l(@run.finished_at&.in_time_zone, format: :datetime12hour) || "-" %></div>
+      <div><%= l_with_digits(@run.finished_at&.in_time_zone, format: :datetime12hour) || "-" %></div>
     </div>
     <div class="mv-field">
       <div class="mv-label"><%= humanize_attr.call(:status) %></div>
@@ -32,20 +32,20 @@
     </div>
     <div class="mv-field">
       <div class="mv-label"><%= humanize_attr.call(:duration_ms) %></div>
-      <div><%= @run.duration_ms ? "#{@run.duration_ms} ms" : "-" %></div>
+      <div><%= @run.duration_ms ? localized_digits(t("mat_views.x_miliseconds", count: @run.duration_ms)) : "-" %></div>
     </div>
     <div class="mv-field">
       <div class="mv-label"><%= humanize_attr.call(:row_count_before) %></div>
-      <div><%= @run.row_count_before || "-" %></div>
+      <div><%= localized_digits(@run.row_count_before || "-") %></div>
     </div>
     <div class="mv-field">
       <div class="mv-label"><%= humanize_attr.call(:row_count_after) %></div>
-      <div><%= @run.row_count_after || "-" %></div>
+      <div><%= localized_digits(@run.row_count_after || "-") %></div>
     </div>
 
     <div class="mv-field">
       <%= render "mat_views/admin/ui/details",
-                 tooltip_text: mv_t("mat_view_run.meta_tooltip"),
+                 tooltip_text: t("mat_views.mat_view_run.meta_tooltip"),
                  title: content_tag(:div, humanize_attr.call(:meta), class: "mv-label") do %>
         <pre><%= JSON.pretty_generate(@run.meta || {}).strip -%></pre>
       <% end %>
@@ -54,7 +54,7 @@
     <% if @run.try(:error).present? %>
       <div class="mv-field">
         <%= render "mat_views/admin/ui/details",
-                   tooltip_text: mv_t("mat_view_run.error_tooltip"),
+                   tooltip_text: t("mat_views.mat_view_run.error_tooltip"),
                    title: content_tag(:div, humanize_attr.call(:error), class: "mv-label") do %>
           <pre><%= JSON.pretty_generate(@run.error || {}).strip -%></pre>
         <% end %>

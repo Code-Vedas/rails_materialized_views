@@ -1,187 +1,228 @@
+---
 ru:
   activerecord:
     attributes:
       mat_views/mat_view_definition:
-        created_at: "Создано"
-        dependencies: "Зависимости"
-        name: "Имя"
-        refresh_strategy: "Стратегия обновления"
-        schedule_cron: "Расписание (cron)"
-        sql: "SQL (SELECT ...)"
-        unique_index_columns: "Уникальные индексы"
-        updated_at: "Обновлено"
+        created_at: Создано
+        dependencies: Зависимости
+        last_run_at: Последний запуск
+        name: Название
+        refresh_strategy: Стратегия обновления
+        schedule_cron: Расписание (cron)
+        sql: SQL (SELECT ...)
+        unique_index_columns: Столбцы уникального индекса
+        updated_at: Обновлено
       mat_views/mat_view_run:
-        created_at: "Создано"
-        details: "Детали"
-        duration_ms: "Длительность (мс)"
-        error: "Ошибка"
-        finished_at: "Завершено"
-        mat_view_definition: "Определение"
-        meta: "Метаданные"
-        operation: "Операция"
-        row_count_after: "Количество строк после"
-        row_count_before: "Количество строк до"
-        rows_before_after: "Строки (до/после)"
-        started_at: "Начато"
-        status: "Статус"
-        updated_at: "Обновлено"
+        created_at: Создано
+        details: Подробности
+        duration_ms: Длительность (мс)
+        error: Ошибка
+        finished_at: Завершено
+        mat_view_definition: Определение
+        meta: Метаданные
+        operation: Операция
+        row_count_after: Количество строк после
+        row_count_before: Количество строк до
+        rows_before_after: Строки (до/после)
+        started_at: Запущено
+        status: Статус
+        updated_at: Обновлено
     enums:
       mat_views/mat_view_definition:
         refresh_strategy:
-          concurrent: "Параллельная"
-          regular: "Обычная"
-          swap: "Замена"
+          concurrent: Параллельная
+          regular: Обычная
+          swap: Замена
       mat_views/mat_view_run:
         operation:
-          create: "Создать"
-          drop: "Удалить"
-          refresh: "Обновить"
+          create: Создание
+          drop: Удаление
+          refresh: Обновление
         status:
-          failed: "Неудача"
-          running: "Выполняется"
-          success: "Успех"
+          failed: Ошибка
+          running: Выполняется
+          success: Успешно
     errors:
       models:
         mat_views/mat_view_definition:
           attributes:
             name:
-              blank: "должно быть указано"
-              invalid: "не является допустимым идентификатором PostgreSQL"
-              taken: "должно быть уникальным"
+              blank: должно быть указано
+              invalid: не является допустимым идентификатором PostgreSQL
+              taken: должно быть уникальным
             sql:
-              blank: "должно быть указано"
-              invalid: "должно начинаться с SELECT"
+              blank: должен быть указан
+              invalid: должен начинаться с SELECT
             unique_index_columns:
-              at_least_one: "необходимо как минимум одно поле при использовании параллельной стратегии обновления"
+              at_least_one: должен содержать минимум один столбец при использовании
+                параллельной стратегии обновления
     hints:
       mat_views/mat_view_definition:
-        dependencies: "Список таблиц или представлений, от которых зависит это материализованное представление (через запятую)."
-        name: "Имя материализованного представления в базе данных."
-        refresh_strategy: "Определяет способ обновления материализованного представления."
-        schedule_cron: "Используйте стандартный cron-формат. Оставьте пустым для отключения расписания."
-        sql: "SQL-запрос должен быть корректным SELECT."
-        unique_index_columns: "Столбцы для создания уникального индекса. Обязательно для параллельного обновления."
+        dependencies: Список таблиц или представлений, от которых зависит это материализованное
+          представление, через запятую.
+        name: Имя материализованного представления в базе данных.
+        refresh_strategy: Определяет способ обновления материализованного представления.
+        schedule_cron: Используйте стандартный формат cron. Оставьте пустым, чтобы
+          не планировать.
+        sql: SQL-запрос должен быть корректным выражением SELECT.
+        unique_index_columns: Столбцы, для которых создаётся уникальный индекс. Требуется
+          для параллельного обновления.
       mat_views/mat_view_run:
-        error: "Сообщение об ошибке, если выполнение не удалось."
-        meta: "Дополнительные метаданные в формате JSON."
-        operation: "Тип выполненной операции."
-        status: "Текущий статус выполнения."
+        error: Сообщение об ошибке, если запуск завершился неудачно.
+        meta: Дополнительные метаданные в формате JSON.
+        operation: Тип выполненной операции.
+        status: Текущий статус запуска.
     models:
-      mat_views/mat_view_definition: "Определение материализованного представления"
-      mat_views/mat_view_run: "Выполнение материализованного представления"
+      mat_views/mat_view_definition: Определение материализованного представления
+      mat_views/mat_view_run: Запуск материализованного представления
     placeholders:
       mat_views/mat_view_definition:
-        dependencies: "Введите зависимости (через запятую, необязательно)"
-        name: "Введите имя"
-        refresh_strategy: "Выберите стратегию обновления"
-        schedule_cron: "0 0 * * * для ежедневного обновления в полночь, оставьте пустым для отключения"
-        sql: "Введите SQL (SELECT ...)"
-        unique_index_columns: "Введите уникальные индексы (через запятую, необязательно)"
+        dependencies: Введите зависимости (через запятую, необязательно)
+        name: Введите название
+        refresh_strategy: Выберите стратегию обновления
+        schedule_cron: 0 0 * * * для ежедневного запуска в полночь, оставьте пустым
+          без расписания
+        sql: Введите SQL (SELECT ...)
+        unique_index_columns: Введите столбцы уникального индекса (через запятую,
+          необязательно)
       mat_views/mat_view_run:
-        error: "Сообщение об ошибке"
-        mat_view_definition: "Выберите материализованное представление"
-        meta: "Метаданные (JSON)"
-        operation: "Выберите операцию"
-        status: "Выберите статус"
+        error: Сообщение об ошибке
+        mat_view_definition: Выберите материализованное представление
+        meta: Метаданные (JSON)
+        operation: Выберите операцию
+        status: Выберите статус
   i18n:
     name: Русский
   mat_views:
-    actions: "Действия"
-    all_definitions: "Все определения"
-    all_operations: "Все операции"
-    all_statuses: "Все статусы"
-    cancel: "Отмена"
-    close: "Закрыть"
-    close_window: "Закрыть окно"
-    create: "Создать"
+    actions: Действия
+    cancel: Отмена
+    close: Закрыть
+    close_window: Закрыть окно
+    create: Создать
     dashboard:
       metrics:
-        title: "Метрики"
-      title: "Панель управления"
-    definition: "Определение"
-    definitions: "Определения"
-    delete: "Удалить"
-    details: "Детали"
-    edit: "Редактировать"
-    edit_var: "Редактировать %{name}"
+        title: Метрики
+      title: Панель
+    datatable:
+      clear_search_aria_label: Очистить поиск
+      search_aria_label: Поиск по таблице
+      search_placeholder: Поиск...
+    definition: Определение
+    definitions: Определения
+    delete: Удалить
+    details: Подробности
+    edit: Редактировать
+    edit_var: Редактировать %{name}
     errors:
-      frame_only: "Это действие можно выполнить только во фрейме, перенаправление на панель управления."
+      frame_only: Это действие доступно только во фрейме, выполнено перенаправление
+        на панель.
       prevented_saving:
-        one: "1 ошибка помешала сохранению:"
+        few: "%{count} ошибки помешали сохранению:"
+        many: "%{count} ошибок помешали сохранению:"
+        one: '1 ошибка помешала сохранению:'
         other: "%{count} ошибок помешали сохранению:"
-    filter_by: "Фильтровать по:"
+        two: '2 ошибки помешали сохранению:'
+        zero: Ошибок нет, всё отлично!
+    filter_by: 'Фильтр по:'
     footer:
       copyright: "© %{year} %{company} Все права защищены."
-      documentation: "Документация"
-      need_help: "Нужна гарантированная доступность и помощь экспертов?"
-      open_issue: "Открыть Issue"
-      project_homepage: "Домашняя страница проекта"
-      support: "Получить профессиональную поддержку →"
-      tagline: "Создано с ❤️ разработчиками для разработчиков."
+      documentation: Документация
+      need_help: Нужны гарантированный аптайм и помощь экспертов?
+      open_issue: Создать Issue
+      project_homepage: Домашняя страница проекта
+      support: Получить профессиональную поддержку →
+      tagline: Создано с ❤️ разработчиками для разработчиков.
       tooltip:
-        documentation: "Прочитать документацию"
-        gem_version: "Посетить страницу RubyGems"
-        open_issue: "Сообщить об ошибке или запросить функцию"
-        project_homepage: "GitHub-репозиторий"
-        support: "Планы профессиональной поддержки"
-      version: "v%{version}"
+        documentation: Прочитать документацию
+        gem_version: Перейти на страницу RubyGems
+        open_issue: Сообщить об ошибке или запросить функцию
+        project_homepage: Репозиторий GitHub
+        support: Планы профессиональной поддержки
+      version: v%{version}
     header:
-      signed_in_as: "Вошли как %{email}"
-    history: "История"
-    loading: "Загрузка..."
-    loading_definitions: "Загрузка определений..."
-    loading_runs: "Загрузка запусков..."
+      signed_in_as: Вход выполнен как %{email}
+    history: История
+    loading: Загрузка...
+    loading_definitions: Загрузка определений...
+    loading_runs: Загрузка запусков...
     mat_view_definition:
-      create_mv: "Создать MV"
-      create_mv_tooltip: "Создает материализованное представление в базе данных."
-      delete_confirm: "Удалить определение %{name}? (MV не удаляется)"
-      delete_tooltip: "Удаляет определение, но не само представление."
-      drop_mv: "Удалить MV"
-      drop_mv_cascade: "Удалить MV (каскадно)"
-      drop_mv_cascade_confirm: "Удалить материализованное представление и все зависимые объекты %{name}?"
-      drop_mv_cascade_tooltip: "Удаляет представление и зависимые объекты. Определение остается."
-      drop_mv_confirm: "Удалить материализованное представление %{name}?"
-      drop_mv_tooltip: "Удаляет представление из базы. Определение остается."
-      edit_tooltip: "Редактировать определение представления."
-      materialized_view: "Материализованное представление"
-      materialized_view_exists: "Представление существует"
-      materialized_view_not_exists: "Представление еще не создано!"
-      new_definition: "Новое определение"
-      new_definition_tooltip: "Создать новое определение материализованного представления."
-      no_definitions: "Определения не найдены. Создайте одно, чтобы начать."
-      refresh_tooltip: "Обновляет материализованное представление."
-      sql_summary_tooltip: "Щелкните, чтобы развернуть/свернуть SQL"
-      view_tooltip: "Просмотреть определение представления."
+      create_mv: Создать MatViews
+      create_mv_tooltip: Создаёт материализованное представление в базе данных.
+      delete_confirm: Удалить определение %{name}? (Материализованное представление
+        НЕ удаляется)
+      delete_tooltip: Удаляет определение, но НЕ удаляет материализованное представление
+        из базы данных.
+      drop_mv: Удалить MatViews
+      drop_mv_cascade: Удалить MatViews (каскад)
+      drop_mv_cascade_confirm: Удалить материализованное представление и все зависимые
+        объекты %{name}?
+      drop_mv_cascade_tooltip: Удаляет материализованное представление и все зависимые
+        объекты в базе данных. Определение остаётся.
+      drop_mv_confirm: Удалить материализованное представление для %{name}?
+      drop_mv_tooltip: Удаляет материализованное представление в базе данных. Определение
+        остаётся.
+      edit_tooltip: Редактировать определение материализованного представления.
+      materialized_view: Материализованное представление
+      materialized_view_exists: Материализованное представление существует
+      materialized_view_not_exists: Материализованное представление ещё не создано!
+      new_definition: Новое определение
+      new_definition_tooltip: Создать новое определение материализованного представления.
+      no_definitions: Определений материализованного представления не найдено. Создайте
+        одно, чтобы начать.
+      no_definitions_if_filtered: Нет определений материализованного представления
+        для выбранных фильтров или поиска.
+      refresh_tooltip: Обновляет материализованное представление в базе данных.
+      sql_summary_tooltip: Нажмите, чтобы раскрыть/свернуть SQL
+      view_tooltip: Просмотреть определение материализованного представления.
     mat_view_run:
-      error_tooltip: "Сообщение об ошибке, если выполнение не удалось."
-      meta_tooltip: "Дополнительные метаданные (JSON)."
-      no_runs: "Запусков не найдено."
-      no_runs_if_filtered: "Нет запусков для выбранных фильтров."
-      view_details: "Посмотреть детали"
-      view_tooltip: "Посмотреть детали запуска."
-    project_author: "Codevedas Inc."
-    project_description: "Админ-интерфейс для управления материализованными представлениями PostgreSQL в приложениях Rails."
-    project_tags: "rails, ruby, материализованные представления, админ, панель, ui, интерфейс, управление"
-    refresh: "Обновить"
-    refresh_contents: "Обновить содержимое"
-    reloading: "Перезагрузка..."
-    reset: "Сбросить"
-    run: "Запустить"
-    runs: "Запуски"
-    save_changes: "Сохранить изменения"
+      error_tooltip: Сообщение об ошибке, если запуск завершился неудачно.
+      meta_tooltip: Дополнительные метаданные в формате JSON.
+      no_runs: Запуски не найдены.
+      no_runs_if_filtered: Запуски не найдены для выбранных фильтров.
+      view_details: Просмотреть детали
+      view_tooltip: Просмотреть детали запуска.
+    no_filter: Любой (без фильтра)
+    no_value: Нет значения (nil или пусто)
+    per_page: На страницу
+    project_author: CodeVedas Inc.
+    project_description: Административный интерфейс для управления материализованными
+      представлениями PostgreSQL в приложениях Rails.
+    project_tags: rails, ruby, материализованные представления, администрирование,
+      dashboard, ui, интерфейс, управление
+    refresh: Обновить
+    refresh_contents: Обновить содержимое
+    reloading: Повторная загрузка...
+    reset: Сбросить
+    run: Запуск
+    runs: Запуски
+    save_changes: Сохранить изменения
     settings:
-      auto: "Авто"
-      dark: "Темная"
-      language: "Язык"
-      language_hint: "Выберите язык интерфейса."
-      light: "Светлая"
-      theme: "Тема"
-      theme_hint: "Авто следует системным настройкам, светлая и темная — заменяют."
-      title: "Настройки"
-    title: "MatViews Admin"
-    view_var: "Просмотр %{name}"
+      auto: Авто
+      dark: Тёмная
+      language: Язык
+      language_hint: Выберите язык интерфейса.
+      light: Светлая
+      theme: Тема
+      theme_hint: Авто следует настройкам системы; светлая и тёмная их переопределяют.
+      title: Настройки
+    title: MatViews Admin
+    view_var: Просмотреть %{name}
+    x_miliseconds: "%{count} мс"
+  number:
+    format:
+      delimiter: " "
+      separator: ","
+  numbers:
+    eight: '8'
+    five: '5'
+    four: '4'
+    nine: '9'
+    one: '1'
+    seven: '7'
+    six: '6'
+    three: '3'
+    two: '2'
+    zero: '0'
   time:
-    am: "AM"
     formats:
-      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
-    pm: "PM"
+      datetime12hour: "%Y-%m-%d %H:%M:%S"

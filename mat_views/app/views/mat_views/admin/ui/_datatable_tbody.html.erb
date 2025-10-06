@@ -1,0 +1,11 @@
+<% dt_config = @dt_config
+row_values = Array(@data) %>
+<tbody id="datatable-body-<%= dt_config[:id] %>">
+  <% if row_values.size.positive? %>
+    <% row_values.each do |row| %>
+      <%= render dt_config[:row_partial_name], dt_config: dt_config, row_value: row, **row_meta %>
+    <% end %>
+  <% else %>
+    <%= render dt_config[:empty_row_partial_name], dt_config: dt_config, **row_meta %>
+  <% end %>
+</tbody>

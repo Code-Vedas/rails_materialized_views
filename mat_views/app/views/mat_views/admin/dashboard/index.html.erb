@@ -7,7 +7,7 @@
     </div>
   </div>
 </div>
-<div data-controller="tabs">
+<div data-controller="tabs" data-tabs-active-link-class="mv-tab--on" data-tabs-default-tab-value="definitions">
   <nav class="mv-tabs" style="margin-bottom:1rem;">
     <%= mv_tab_link 'definitions', selected: true, testid: 'DEFINITIONS_TAB_LINK' do %>
       <%= t("mat_views.definitions") %>
@@ -17,14 +17,19 @@
     <% end %>
   </nav>
   <div data-tabs-target="panel" data-name="definitions">
-    <turbo-frame id="dash-definitions" data-src="<%= admin_mat_view_definitions_path(frame_id: 'dash-definitions') %>" data-turbo-temporary>
+    <turbo-frame
+      id="dash-definitions"
+      data-src="<%= admin_mat_view_definitions_path(frame_id: 'dash-definitions') %>"
+      data-turbo-frame-lifecycle-target="frame"
+      data-turbo-temporary
+    >
       <div class="mv-card">
         <div class="mv-card-b"><%= t("mat_views.loading_definitions") %></div>
       </div>
     </turbo-frame>
   </div>
   <div data-tabs-target="panel" data-name="runs" hidden>
-    <turbo-frame id="dash-runs" data-src="<%= admin_runs_path(frame_id: 'dash-runs') %>" data-turbo-temporary>
+    <turbo-frame id="dash-runs" data-src="<%= admin_mat_view_runs_path(frame_id: 'dash-runs') %>" data-turbo-frame-lifecycle-target="frame" data-turbo-temporary>
       <div class="mv-card">
         <div class="mv-card-b"><%= t("mat_views.loading_runs") %></div>
       </div>

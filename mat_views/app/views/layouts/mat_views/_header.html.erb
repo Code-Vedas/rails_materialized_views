@@ -2,24 +2,24 @@
   <div class="mv-container mv-header-row">
     <div class="row-item">
       <%= mv_link_to admin_root_path, class: "mv-brand", underline: false, testid: 'HEADER_LINK' do %>
-        <%= image_tag "mat_views/logo.svg", alt: mv_t("title"), class: "mv-logo" %>
-        <span><%= mv_t("title") %></span>
+        <%= image_tag "mat_views/logo.svg", alt: t("mat_views.title"), class: "mv-logo" %>
+        <span><%= t("mat_views.title") %></span>
       <% end %>
     </div>
     <div class='row-item'>
       <% if user %>
         <span>
-          <%= mv_t("header.signed_in_as", email: user.respond_to?(:email) ? user.email : user.to_s) %>
+          <%= t("mat_views.header.signed_in_as", email: user.respond_to?(:email) ? user.email : user.to_s) %>
         </span>
       <% end %>
       <%= mv_drawer_link(
-            admin_preferences_path(frame_id: "mv-drawer"),
-            mv_t("settings.title"),
-            variant: :ghost,
-            tooltip: mv_t("settings.title"),
-            tooltip_placement: "bottom",
-            testid: "PREFERENCES_LINK",
-          ) { mv_icon(:gear) } %>
+        admin_preferences_path(frame_id: "mv-drawer"),
+        t("mat_views.settings.title"),
+        variant: :ghost,
+        tooltip: t("mat_views.settings.title"),
+        tooltip_placement: "bottom",
+        testid: "PREFERENCES_LINK",
+      ) { mv_icon(:gear) } %>
     </div>
   </div>
 </header>

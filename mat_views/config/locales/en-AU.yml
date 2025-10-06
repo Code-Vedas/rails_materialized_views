@@ -180,6 +180,21 @@ en-AU:
       title: "Preferences"
     title: "MatViews Admin"
     view_var: "View %{name}"
+  number:
+    format:
+      delimiter: ","
+      separator: "."
+  numbers:
+    eight: 8
+    five: 5
+    four: 4
+    nine: 9
+    one: 1
+    seven: 7
+    six: 6
+    three: 3
+    two: 2
+    zero: 0
   time:
     am: "AM"
     formats:

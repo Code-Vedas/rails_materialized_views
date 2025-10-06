@@ -2,33 +2,33 @@
   <!-- GROUP: Definition -->
   <div class="mv-action-group">
     <div class="mv-action-title"><%= mv_icon(:layers) %>
-      <%= mv_t("definition") %></div>
+      <%= t("mat_views.definition") %></div>
     <div class="mv-buttons">
-      <%= mv_button_link admin_root_path(tab: 'runs', mat_view_definition_id: defn.id),
+      <%= mv_button_link admin_root_path(tab: 'runs', dtfilter: "definition:#{defn.id}"),
                          variant: :ghost,
                          testid: 'VIEW_HISTORY_LINK',
                          testid_identifier: "defn-#{defn.id}",
                          data: { turbo: false, turbo_frame: "_top" } do %>
         <%= mv_icon(:history) %>
-        <%= mv_t("history") %>
+        <%= t("mat_views.history") %>
       <% end %>
       <%= mv_drawer_link(edit_admin_mat_view_definition_path(defn, frame_id: 'mv-drawer'),
-                         mv_t("edit_var", name: defn.name),
+                         t("mat_views.edit_var", name: defn.name),
                          testid: 'EDIT_LINK',
                          testid_identifier: "defn-#{defn.id}",
-                         tooltip: mv_t("mat_view_definition.edit_tooltip")) do %>
+                         tooltip: t("mat_views.mat_view_definition.edit_tooltip")) do %>
         <%= mv_icon(:edit) %>
-        <%= mv_t("edit") %>
+        <%= t("mat_views.edit") %>
       <% end %>
-      <%= mv_button_to admin_mat_view_definition_path(defn, frame_id: frame_id, frame_action: 'close-and-refresh'),
+      <%= mv_button_to admin_mat_view_definition_path(defn, frame_id: frame_id),
                        method: :delete,
                        variant: :negative,
                        testid: 'DELETE_LINK',
                        testid_identifier: "defn-#{defn.id}",
-                       tooltip: mv_t("mat_view_definition.delete_tooltip"), tooltip_placement: "bottom",
-                       confirm: mv_t("mat_view_definition.delete_confirm", name: defn.name) do %>
+                       tooltip: t("mat_views.mat_view_definition.delete_tooltip"), tooltip_placement: "bottom",
+                       confirm: t("mat_views.mat_view_definition.delete_confirm", name: defn.name) do %>
         <%= mv_icon(:trash) %>
-        <%= mv_t("delete") %>
+        <%= t("mat_views.delete") %>
       <% end %>
     </div>
   </div>
@@ -36,13 +36,13 @@
   <div class="mv-action-group">
     <div class="mv-action-title">
       <%= mv_icon(:database) %>
-      <%= mv_t("mat_view_definition.materialized_view") %>
+      <%= t("mat_views.mat_view_definition.materialized_view") %>
       <% if mv_exists %>
-        <span class="mv-status-icon" data-controller="tooltip" data-tooltip-text-value="<%= mv_t("mat_view_definition.materialized_view_exists") %>">
+        <span class="mv-status-icon" data-controller="tooltip" data-tooltip-text-value="<%= t("mat_views.mat_view_definition.materialized_view_exists") %>">
           <%= mv_icon(:check_circle, class_name: "mv-status-ok") %>
         </span>
       <% else %>
-        <span class="mv-status-icon" data-controller="tooltip" data-tooltip-text-value="<%= mv_t("mat_view_definition.materialized_view_not_exists") %>">
+        <span class="mv-status-icon" data-controller="tooltip" data-tooltip-text-value="<%= t("mat_views.mat_view_definition.materialized_view_not_exists") %>">
           <%= mv_icon(:x_circle, class_name: "mv-status-missing") %>
         </span>
       <% end %>
@@ -54,29 +54,29 @@
                          method: :post,
                          testid: 'REFRESH_LINK',
                          testid_identifier: "defn-#{defn.id}",
-                         tooltip: mv_t("mat_view_definition.refresh_tooltip") do %>
+                         tooltip: t("mat_views.mat_view_definition.refresh_tooltip") do %>
           <%= mv_icon(:refresh) %>
-          <%= mv_t("refresh") %>
+          <%= t("mat_views.refresh") %>
         <% end %>
         <%= mv_button_to delete_now_admin_mat_view_definition_path(defn, frame_id: frame_id),
                          method: :post,
                          variant: :negative,
                          testid: 'DROP_LINK',
                          testid_identifier: "defn-#{defn.id}",
-                         tooltip: mv_t("mat_view_definition.drop_mv_tooltip"), tooltip_placement: "bottom",
-                         confirm: mv_t("mat_view_definition.drop_mv_confirm", name: defn.name) do %>
+                         tooltip: t("mat_views.mat_view_definition.drop_mv_tooltip"), tooltip_placement: "bottom",
+                         confirm: t("mat_views.mat_view_definition.drop_mv_confirm", name: defn.name) do %>
           <%= mv_icon(:x_circle) %>
-          <%= mv_t("mat_view_definition.drop_mv") %>
+          <%= t("mat_views.mat_view_definition.drop_mv") %>
         <% end %>
         <%= mv_button_to delete_now_admin_mat_view_definition_path(defn, frame_id: frame_id, cascade: true),
                          method: :post,
                          variant: :negative,
                          testid: 'DROP_CASCADE_LINK',
                          testid_identifier: "defn-#{defn.id}",
-                         tooltip: mv_t("mat_view_definition.drop_mv_cascade_tooltip"), tooltip_placement: "bottom",
-                         confirm: mv_t("mat_view_definition.drop_mv_cascade_confirm", name: defn.name) do %>
+                         tooltip: t("mat_views.mat_view_definition.drop_mv_cascade_tooltip"), tooltip_placement: "bottom",
+                         confirm: t("mat_views.mat_view_definition.drop_mv_cascade_confirm", name: defn.name) do %>
           <%= mv_icon(:x_circle) %>
-          <%= mv_t("mat_view_definition.drop_mv_cascade") %>
+          <%= t("mat_views.mat_view_definition.drop_mv_cascade") %>
         <% end %>
       <% else %>
         <%= mv_button_to create_now_admin_mat_view_definition_path(defn, frame_id: frame_id),
@@ -84,9 +84,9 @@
                          variant: :secondary,
                          testid: 'CREATE_MV_LINK',
                          testid_identifier: "defn-#{defn.id}",
-                         tooltip: mv_t("mat_view_definition.create_mv_tooltip"), tooltip_placement: "bottom" do %>
+                         tooltip: t("mat_views.mat_view_definition.create_mv_tooltip"), tooltip_placement: "bottom" do %>
           <%= mv_icon(:hammer) %>
-          <%= mv_t("mat_view_definition.create_mv") %>
+          <%= t("mat_views.mat_view_definition.create_mv") %>
         <% end %>
       <% end %>
     </div>

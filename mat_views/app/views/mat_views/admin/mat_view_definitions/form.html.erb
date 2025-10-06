@@ -4,7 +4,7 @@
 <input
   type="hidden"
   id="mv-drawer-title-text"
-  value="<%= @definition.new_record? ? mv_t('mat_view_definition.new_definition') : mv_t("edit_var", name: @definition.name) %>"
+  value="<%= @definition.new_record? ? t('mat_views.mat_view_definition.new_definition') : t("mat_views.edit_var", name: @definition.name) %>"
 />
 
 <input type="hidden" id="mv-drawer-open-url-identifier" value="definitions_<%= @definition.new_record? ? 'new' : "edit_#{@definition.id}" %>"/>
@@ -73,7 +73,7 @@
     <%= mv_cancel_button variant: :ghost, data: { action: "click->drawer#close" },
                              testid: 'CANCEL_BUTTON',
                              testid_identifier: "defn-#{@definition.id || 'new'}"  do %>
-      <%= mv_t("cancel") %>
+      <%= t("mat_views.cancel") %>
     <% end %>
   </div>
 <% end %>

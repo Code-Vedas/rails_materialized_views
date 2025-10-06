@@ -18,7 +18,7 @@ MatViews::Engine.routes.draw do
           post :delete_now
         end
       end
-      resources :runs, only: %i[index show]
+      resources :mat_view_runs, only: %i[index show], path: 'runs'
 
       # redirect to dashboard for unknown paths.
       get '*path', to: redirect { |params, req|

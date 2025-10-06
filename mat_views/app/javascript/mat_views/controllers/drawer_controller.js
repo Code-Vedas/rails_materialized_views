@@ -4,249 +4,467 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+
+/**
+ * Stimulus Controller: DrawerController
+ * -------------------------------------
+ * Controls a slide-in drawer backed by a Turbo Frame. Supports opening via
+ * triggers, deep-linking with a query param, refreshing content, and handling
+ * Turbo submission outcomes.
+ *
+ * Responsibilities:
+ * - Open/close drawer; manage trigger stack for nested opens.
+ * - Load frame content from trigger attributes or by name (router-style).
+ * - Sync drawer state with a query parameter for deep links.
+ * - Update header/title from loaded frame content.
+ * - Handle Turbo events:
+ *   - 299 → clear param + full page reload
+ *   - 298 → close drawer
+ *   - others → refresh active datatable
+ *
+ * Key Components:
+ * - Public actions: `open`, `show`, `close`, `refresh`, `refreshActiveDatatable`, `refreshFrameById`, `openDrawerByName`, `load`
+ * - Frame events: `_handleFrameLoad`, `_handleSubmitEnd`
+ * - Helpers: `_installFrameListeners`, `_removeFrameListeners`, `_loadFromTrigger`,
+ *            `_updateHeader`, `_hideDrawer`, `_rootElement`, `_handleEscape`,
+ *            `_clearQueryParam`, `_setQueryParam`, `_openFromQueryParam`,
+ *            `_openRun`, `_openPreferences`, `_openDefinition`
+ */
+
 import { Controller } from "@hotwired/stimulus";
 
+/**
+ * @class DrawerController
+ * @extends Controller
+ */
 export default class extends Controller {
-  static targets = ["overlay", "panel", "frame"];
-  static currentTargetStack = [];
+  /**
+   * Targets:
+   * - root: container element for the drawer (optional; falls back to this.element)
+   * - overlay: backdrop element (optional)
+   * - panel: the drawer panel (optional)
+   * - frame: Turbo Frame inside the drawer
+   * - header: header element (for aria-label updates)
+   * - title: element for visible title text
+   */
+  static targets = ["root", "overlay", "panel", "frame", "header", "title"];
 
-  connect() {
+  /**
+   * CSS classes:
+   * - open: toggled on the root to show/hide the drawer
+   */
+  static classes = ["open"];
+
+  /**
+   * Values:
+   * - queryParam: name of the URL query parameter to reflect drawer state
+   */
+  static values = {
+    queryParam: { type: String, default: "open" },
+  };
+
+  /**
+   * Initialize internal state and bind handlers.
+   * @return {void}
+   */
+  initialize() {
     this.currentTargetStack = [];
-    this._escHandler = (e) => {
-      if (e.key === "Escape") this.close();
-    };
-    if (this.hasFrameTarget) {
-      this._submitEndHandler = (e) => this.onSubmitEnd(e);
-      this._frameLoadHandler = (e) => this.onFrameLoad(e);
-      this.frameTarget.addEventListener(
-        "turbo:submit-end",
-        this._submitEndHandler,
-      );
-      this.frameTarget.addEventListener(
-        "turbo:frame-load",
-        this._frameLoadHandler,
-      );
-    }
-    const qs = new URLSearchParams(window.location.search);
-    const open = qs.get("open");
-    if (open) {
-      this.openDrawerByName(open);
-    }
+    this.triggerEl = null;
+    this._handleEscape = this._handleEscape.bind(this);
+    this._handleSubmitEnd = this._handleSubmitEnd.bind(this);
+    this._handleFrameLoad = this._handleFrameLoad.bind(this);
   }
 
+  /**
+   * Lifecycle: connect
+   * Installs frame listeners and opens drawer if query param is present.
+   * @return {void}
+   */
+  connect() {
+    this._installFrameListeners();
+    this._openFromQueryParam();
+  }
+
+  /**
+   * Lifecycle: disconnect
+   * Removes listeners.
+   * @return {void}
+   */
   disconnect() {
-    if (this.hasFrameTarget) {
-      this.frameTarget.removeEventListener(
-        "turbo:submit-end",
-        this._submitEndHandler,
-      );
-      this.frameTarget.removeEventListener(
-        "turbo:frame-load",
-        this._frameLoadHandler,
-      );
-    }
-    document.removeEventListener("keydown", this._escHandler);
+    this._removeFrameListeners();
+    document.removeEventListener("keydown", this._handleEscape);
   }
 
-  loadAndShow() {
-    let currentTarget = this.currentTargetStack.at(-1);
-    if (!currentTarget) return;
+  // ── Public actions ───────────────────────────────────────────────
 
-    const title =
-      currentTarget?.dataset.drawerTitle ||
-      currentTarget?.getAttribute("title") ||
-      currentTarget?.getAttribute("aria-label");
-    const url =
-      currentTarget?.dataset.drawerUrl || currentTarget?.getAttribute("href");
-    if (!url || url === "#" || url === "javascript:void(0);") return;
-
-    const header = this._drawerHeader();
-    header.setAttribute("aria-label", title);
-    const titleEle = header.querySelector("h2");
-    titleEle.textContent = title;
-    this.show();
-    this.load(url);
-  }
-
+  /**
+   * Opens the drawer for the current trigger (pushes onto trigger stack).
+   * @param {Event} [event]
+   * @return {void}
+   */
   open(event) {
-    if (!this.currentTargetStack) {
-      this.currentTargetStack = [];
-    }
     if (event) {
       event.preventDefault();
       event.stopPropagation();
       if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+      if (event.currentTarget) {
+        this.currentTargetStack.push(event.currentTarget);
+        this.triggerEl = event.currentTarget;
+      }
     }
-    this.currentTargetStack.push(event?.currentTarget);
-    this.loadAndShow();
+    this._loadFromTrigger();
   }
 
+  /**
+   * Shows the drawer (adds open class, sets aria, enables ESC handler).
+   * @return {void}
+   */
   show() {
-    const root = this._root();
-    document.addEventListener("keydown", this._escHandler);
-    root?.classList.add("is-open");
-    root?.setAttribute("aria-hidden", "false");
+    document.addEventListener("keydown", this._handleEscape);
+    const root = this._rootElement();
+    root.classList.add(this.openClass);
+    root.setAttribute("aria-hidden", "false");
+    this.overlayTarget?.setAttribute("aria-hidden", "false");
   }
 
+  /**
+   * Closes the drawer. If there is a previous trigger on the stack,
+   * it loads that trigger instead (nested/stacked draws).
+   * @return {void}
+   */
   close() {
     this.currentTargetStack.pop();
-    if (this.currentTargetStack.length > 0) {
-      this.loadAndShow();
+    this.triggerEl = this.currentTargetStack.at(-1) || null;
+
+    if (this.triggerEl) {
+      this._loadFromTrigger();
       return;
     }
 
-    const root = this._root();
-    document.activeElement?.blur();
-    document.body.focus();
-    root?.classList.remove("is-open");
-    document.removeEventListener("keydown", this._escHandler);
-    root?.setAttribute("aria-hidden", "true");
-
-    const url = new URL(window.location);
-    url.searchParams.delete("open");
-    history.replaceState({}, "", url);
-
-    this.frameTarget.removeAttribute("src");
+    this._hideDrawer();
+    this._clearQueryParam();
+    if (this.hasFrameTarget) this.frameTarget.removeAttribute("src");
   }
 
-  openDrawerByName(name) {
-    const type = name.split("_")[0];
-    const action = name.split("_")[1];
-    const id = name.split("_")[2];
-    switch (type) {
-      case "definitions":
-        this.openDrawerByDefinition(action, id);
-        break;
-      case "runs":
-        this.openDrawerByRun(action, id);
-        break;
-      case "preferences":
-        this.openDrawerByPreferences(action);
-        break;
-    }
-  }
-
-  openDrawerByRun(action, id) {
-    if (action == "view") {
-      this.show();
-      this.load(window.MatViewsRoutes.runsPath + `/${id}?frame_id=mv-drawer`);
-    }
-  }
-
-  openDrawerByPreferences(action) {
-    if (action == "edit") {
-      this.show();
-      this.load(window.MatViewsRoutes.preferencesPath + `?frame_id=mv-drawer`);
-    }
-  }
-
-  openDrawerByDefinition(action, id) {
-    switch (action) {
-      case "new":
-        this.show();
-        this.load(
-          window.MatViewsRoutes.definitionsPath + "/new?frame_id=mv-drawer",
-        );
-        break;
-      case "view":
-        this.show();
-        this.load(
-          window.MatViewsRoutes.definitionsPath + `/${id}?frame_id=mv-drawer`,
-        );
-        break;
-      case "edit":
-        this.show();
-        this.load(
-          window.MatViewsRoutes.definitionsPath +
-            `/${id}/edit?frame_id=mv-drawer`,
-        );
-        break;
-    }
-  }
-
+  /**
+   * Reloads the drawer frame if it has a `src`.
+   * @return {void}
+   */
   refresh() {
     if (this.frameTarget?.src) {
       this.load(this.frameTarget.src);
     }
   }
 
-  load(url) {
-    const frame = this.frameTarget;
-    if (!frame) return;
-
-    const u = new URL(url, window.location.href);
-    frame.src = u.toString();
-  }
-
-  // ── Events ───────────────────────────────────────────────────────
-
-  onFrameLoad(event) {
-    // get title from hidden input if present
-    const frame = event.target;
-    const titleInput = frame?.querySelector("#mv-drawer-title-text")?.value;
-    if (titleInput) {
-      const header = this._drawerHeader();
-      header.setAttribute("aria-label", titleInput);
-      const titleEle = header.querySelector("h2");
-      titleEle.textContent = titleInput;
-    }
-
-    const urlIdentifier = frame?.querySelector(
-      "#mv-drawer-open-url-identifier",
-    )?.value;
-    if (urlIdentifier) {
-      const url = new URL(window.location);
-      url.searchParams.set("open", urlIdentifier);
-      history.replaceState({}, "", url);
-    }
-  }
-
-  onSubmitEnd(event) {
-    if (event.detail.fetchResponse.statusCode === 299) {
-      const url = new URL(window.location);
-      url.searchParams.delete("open");
-      history.replaceState({}, "", url);
-      window.location.reload();
-      return;
-    } else if (event.detail.fetchResponse.statusCode === 298) {
-      this.close();
-    }
-
-    this.refreshActiveFrame();
-  }
-
-  // ── Helpers ──────────────────────────────────────────────────────
-
-  refreshActiveFrame() {
-    const activeTabAnchor = document.querySelector(".mv-tab.mv-tab--on");
-    const dataName = activeTabAnchor?.dataset.name;
-    const activePanel = document.querySelector(
-      `[data-tabs-target="panel"][data-name="${dataName}"]`,
+  /**
+   * Dispatches a datatable refresh event for the active page.
+   * @return {void}
+   */
+  refreshActiveDatatable() {
+    // First notify the Turbo Frame Lifecycle controller to flush busy states
+    // in case any datatables were affected by the drawer action.
+    // Subsiquently, turbo_frame_lifecycle_controller.js will notify datatables.
+    document.dispatchEvent(
+      new CustomEvent("drawer:refresh", {
+        bubbles: false,
+        cancelable: false,
+      }),
     );
-    const activeTurboFrame = activePanel?.querySelector("turbo-frame");
-    this.refreshFrameById(activeTurboFrame.id);
   }
 
+  /**
+   * Hard-refreshes a Turbo Frame by id, cache-busting with a timestamp param.
+   * @param {string} id
+   * @return {void}
+   */
   refreshFrameById(id) {
     const frame = document.getElementById(id);
     if (!frame) return;
-    let url = frame.getAttribute("src") || frame.dataset.src;
-    if (!url) return;
+    const src = frame.getAttribute("src") || frame.dataset.src;
+    if (!src) return;
+
     try {
-      const u = new URL(url, window.location.href);
-      u.searchParams.set("_", Date.now().toString());
-      frame.src = u.toString();
+      const url = new URL(src, window.location.href);
+      url.searchParams.set("_", Date.now().toString());
+      frame.src = url.toString();
     } catch {
-      const sep = url.includes("?") ? "&" : "?";
-      frame.src = url + sep + "_=" + Date.now();
+      const separator = src.includes("?") ? "&" : "?";
+      frame.src = `${src}${separator}_=${Date.now()}`;
     }
   }
 
-  _root() {
-    return document.querySelector(".mv-drawer-root");
+  /**
+   * Opens a drawer route by a logical name (e.g., "definitions_new_",
+   * "definitions_view_42", "preferences_edit_", "runs_view_123").
+   * @param {string} name - Pattern: "<type>_<action>_<id?>"
+   * @return {void}
+   */
+  openDrawerByName(name) {
+    if (!name) return;
+    const [type, action, id] = name.split("_");
+    switch (type) {
+      case "definitions":
+        this._openDefinition(action, id);
+        break;
+      case "runs":
+        this._openRun(action, id);
+        break;
+      case "preferences":
+        this._openPreferences(action);
+        break;
+      default:
+    }
   }
 
-  _drawerHeader() {
-    return this._root()?.querySelector(".mv-drawer-head");
+  /**
+   * Loads a URL into the drawer’s Turbo Frame.
+   * @param {string} url
+   * @return {void}
+   */
+  load(url) {
+    if (!this.hasFrameTarget || !url) return;
+    try {
+      const resolved = new URL(url, window.location.href);
+      this.frameTarget.src = resolved.toString();
+    } catch {
+      this.frameTarget.src = url;
+    }
+  }
+
+  // ── Frame events ─────────────────────────────────────────────────
+
+  /**
+   * Handles Turbo frame load: updates title and sets deep-link param if present.
+   * Expects hidden inputs inside the frame:
+   * - #mv-drawer-title-text
+   * - #mv-drawer-open-url-identifier
+   * @param {Event} event
+   * @return {void}
+   */
+  _handleFrameLoad(event) {
+    const frame = event.target;
+    const title = frame?.querySelector("#mv-drawer-title-text")?.value;
+    if (title) this._updateHeader(title);
+
+    const identifier = frame?.querySelector(
+      "#mv-drawer-open-url-identifier",
+    )?.value;
+    if (identifier) this._setQueryParam(identifier);
+  }
+
+  /**
+   * Handles Turbo submit-end results for drawer forms.
+   * Status codes:
+   * - 299: Clear param and full reload.
+   * - 298: Close drawer.
+   * - otherwise: refresh active datatable.
+   * @param {CustomEvent} event
+   * @return {void}
+   */
+  _handleSubmitEnd(event) {
+    const statusCode = event.detail.fetchResponse.statusCode;
+    if (statusCode === 299) {
+      this._clearQueryParam();
+      window.location.reload();
+      return;
+    }
+    if (statusCode === 298) {
+      this.close();
+      this.refreshActiveDatatable();
+    }
+  }
+
+  // ── Internal helpers ────────────────────────────────────────────
+
+  /**
+   * Attaches Turbo event listeners to the drawer frame.
+   * @return {void}
+   */
+  _installFrameListeners() {
+    if (!this.hasFrameTarget) return;
+    this.frameTarget.addEventListener(
+      "turbo:submit-end",
+      this._handleSubmitEnd,
+    );
+    this.frameTarget.addEventListener(
+      "turbo:frame-load",
+      this._handleFrameLoad,
+    );
+  }
+
+  /**
+   * Removes Turbo event listeners from the drawer frame.
+   * @return {void}
+   */
+  _removeFrameListeners() {
+    if (!this.hasFrameTarget) return;
+    this.frameTarget.removeEventListener(
+      "turbo:submit-end",
+      this._handleSubmitEnd,
+    );
+    this.frameTarget.removeEventListener(
+      "turbo:frame-load",
+      this._handleFrameLoad,
+    );
+  }
+
+  /**
+   * Loads URL/title from the top-of-stack trigger and opens the drawer.
+   * Trigger attributes:
+   * - data-drawer-title / title / aria-label → title
+   * - data-drawer-url / href → URL
+   * @return {void}
+   */
+  _loadFromTrigger() {
+    const trigger = this.currentTargetStack.at(-1);
+    if (!trigger) return;
+
+    const title =
+      trigger.dataset.drawerTitle ||
+      trigger.getAttribute("title") ||
+      trigger.getAttribute("aria-label") ||
+      "";
+    const url =
+      trigger.dataset.drawerUrl || trigger.getAttribute("href") || null;
+
+    if (!url || url === "#" || url.startsWith("javascript")) return;
+
+    this._updateHeader(title);
+    this.show();
+    this.load(url);
+  }
+
+  /**
+   * Updates header aria-label and visible title (if present).
+   * @param {string} title
+   * @return {void}
+   */
+  _updateHeader(title) {
+    if (!this.hasHeaderTarget) return;
+    this.headerTarget.setAttribute("aria-label", title || "");
+    if (this.hasTitleTarget) {
+      this.titleTarget.textContent = title || "";
+    }
+  }
+
+  /**
+   * Hides the drawer and overlay, removes ESC handler, and blurs focus.
+   * @return {void}
+   */
+  _hideDrawer() {
+    document.removeEventListener("keydown", this._handleEscape);
+    const root = this._rootElement();
+    root.classList.remove(this.openClass);
+    root.setAttribute("aria-hidden", "true");
+    if (this.hasOverlayTarget) {
+      this.overlayTarget.setAttribute("aria-hidden", "true");
+    }
+    document.activeElement?.blur();
+    document.body.focus();
+  }
+
+  /**
+   * Resolves the root element: `rootTarget` if present, otherwise controller element.
+   * @return {HTMLElement}
+   */
+  _rootElement() {
+    return this.hasRootTarget ? this.rootTarget : this.element;
+  }
+
+  /**
+   * Closes the drawer on Escape key.
+   * @param {KeyboardEvent} event
+   * @return {void}
+   */
+  _handleEscape(event) {
+    if (event.key === "Escape") this.close();
+  }
+
+  /**
+   * Clears the deep-link query param.
+   * @return {void}
+   */
+  _clearQueryParam() {
+    const url = new URL(window.location.href);
+    url.searchParams.delete(this.queryParamValue);
+    history.replaceState({}, "", url);
+  }
+
+  /**
+   * Sets the deep-link query param to `value`.
+   * @param {string} value
+   * @return {void}
+   */
+  _setQueryParam(value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set(this.queryParamValue, value);
+    history.replaceState({}, "", url);
+  }
+
+  /**
+   * Opens the drawer from the current page’s query param (if present).
+   * @return {void}
+   */
+  _openFromQueryParam() {
+    const param = new URLSearchParams(window.location.search).get(
+      this.queryParamValue,
+    );
+    if (param) this.openDrawerByName(param);
+  }
+
+  /**
+   * Opens a run in view mode.
+   * @param {string} action - expected "view"
+   * @param {string|number} id
+   * @return {void}
+   */
+  _openRun(action, id) {
+    if (action !== "view") return;
+    this._updateHeader("");
+    this.show();
+    this.load(`${window.MatViewsRoutes.runsPath}/${id}?frame_id=mv-drawer`);
+  }
+
+  /**
+   * Opens preferences in edit mode.
+   * @param {string} action - expected "edit"
+   * @return {void}
+   */
+  _openPreferences(action) {
+    if (action !== "edit") return;
+    this._updateHeader("");
+    this.show();
+    this.load(`${window.MatViewsRoutes.preferencesPath}?frame_id=mv-drawer`);
+  }
+
+  /**
+   * Opens a definition in new/view/edit mode based on `action`.
+   * @param {"new"|"view"|"edit"} action
+   * @param {string|number} id
+   * @return {void}
+   */
+  _openDefinition(action, id) {
+    this._updateHeader("");
+    switch (action) {
+      case "new":
+        this.show();
+        this.load(
+          `${window.MatViewsRoutes.definitionsPath}/new?frame_id=mv-drawer`,
+        );
+        break;
+      case "view":
+        this.show();
+        this.load(
+          `${window.MatViewsRoutes.definitionsPath}/${id}?frame_id=mv-drawer`,
+        );
+        break;
+      case "edit":
+        this.show();
+        this.load(
+          `${window.MatViewsRoutes.definitionsPath}/${id}/edit?frame_id=mv-drawer`,
+        );
+        break;
+      default:
+    }
   }
 }

@@ -1,0 +1,11 @@
+<tr class="mv-tr">
+  <td class="mv-td" colspan="<%= dt_config[:columns].size %>">
+    <div class="mv-cell">
+      <% if params[:dtfilter] || params[:dtsearch] %>
+        <%= t("mat_views.mat_view_definition.no_definitions_if_filtered") %>
+      <% else %>
+        <%= t("mat_views.mat_view_definition.no_definitions") %>
+      <% end %>
+    </div>
+  </td>
+</tr>

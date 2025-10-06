@@ -10,7 +10,6 @@ RSpec.describe MatViews::Admin::PreferencesController, type: :controller do
 
   let(:lang)         { I18n.locale.to_s }
   let(:frame_id)     { 'dash-preferences' }
-  let(:frame_action) { 'show' }
 
   before do
     allow(controller).to receive(:authorize_mat_views!).and_return(true)
@@ -22,11 +21,11 @@ RSpec.describe MatViews::Admin::PreferencesController, type: :controller do
     context 'without force_reload' do
       before do
         cookies[:theme] = 'dark'
-        get :show, params: { lang:, frame_id:, frame_action: }
+        get :show, params: { lang:, frame_id: }
       end
 
       it 'authorizes access to preferences' do
-        expect(controller).to have_received(:authorize_mat_views!).with(:read, MatViews::MatViewDefinition)
+        expect(controller).to have_received(:authorize_mat_views!).with(:view, :mat_views_dashboard)
       end
 
       it 'assigns theme, locale, and locales list' do
@@ -45,7 +44,7 @@ RSpec.describe MatViews::Admin::PreferencesController, type: :controller do
 
     context 'with force_reload=1' do
       before do
-        get :show, params: { lang:, frame_id:, frame_action:, force_reload: '1' }
+        get :show, params: { lang:, frame_id:, force_reload: '1' }
       end
 
       it 'sets non-standard 299 status and X-Status-Name header' do
@@ -62,7 +61,7 @@ RSpec.describe MatViews::Admin::PreferencesController, type: :controller do
       end
 
       it 'authorizes access' do
-        expect(controller).to have_received(:authorize_mat_views!).with(:read, MatViews::MatViewDefinition)
+        expect(controller).to have_received(:authorize_mat_views!).with(:view, :mat_views_dashboard)
       end
 
       it 'sets the theme cookie' do

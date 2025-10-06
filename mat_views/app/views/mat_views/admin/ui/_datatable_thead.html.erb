@@ -1,0 +1,105 @@
+<% dt_config = @dt_config
+dt_humanize_ref = dt_config[:dt_humanize_ref]
+dt_cols = dt_config[:columns]
+dt_humanize_ref_klass = dt_humanize_ref.constantize
+search_enabled = dt_config[:search_enabled]
+filter_enabled = dt_config[:filter_enabled]
+humanize_attr = ->(attr) { dt_humanize_ref_klass.human_attribute_name(attr) }
+humanize_enum_attr = ->(col, val) { dt_humanize_ref_klass.human_enum_name(col, val) } %>
+<colgroup>
+  <% dt_cols.keys.each do |key| %>
+    <col class="col-<%= key.to_s.dasherize %>">
+  <% end %>
+</colgroup>
+<thead>
+  <% if search_enabled %>
+    <tr class="mv-tr">
+      <th class="mv-th" colspan="<%= dt_cols.size %>">
+        <div class="dt-filter-section">
+          <div class="mv-input-group">
+            <input
+              id="<%= dt_config[:id] %>-search-input"
+              name="dtsearch"
+              type="text"
+              class="mv-input mv-input--full-width"
+              placeholder="<%= t('mat_views.datatable.search_placeholder') %>"
+              data-datatable-target="searchInput"
+              data-action="input->datatable#onSearchInput"
+              value="<%= params[:dtsearch].presence || '' %>"
+              autocomplete="off"
+              spellcheck="false"
+              autocapitalize="none"
+              autocorrect="off"
+              aria-label="<%= t('mat_views.datatable.search_aria_label') %>"
+              data-testid='<%= "#{MatViews::Helpers::UiTestIds::DT_SEARCH_INPUT}-#{dt_config[:id]}-search" %>'
+            />
+            <%= mv_button variant: :tertiary, class: 'btn-clear mv-btn--no-padding', padding: false, data: { action: "click->datatable#clearSearchInput" },
+                     aria: { label: t('mat_views.datatable.clear_search_aria_label') },
+                     testid: 'DT_CLEAR_SEARCH_BTN',
+                     testid_identifier: "#{dt_config[:id]}-clear-search" do %>
+              <%= mv_icon(:x_circle) %>
+            <% end %>
+          </div>
+        </div>
+      </th>
+    </tr>
+
+  <% end %>
+  <% if filter_enabled %>
+    <tr class="mv-tr">
+      <th class="mv-th" colspan="<%= dt_cols.size %>">
+        <div class="dt-filter-section">
+          <div class="mv-input-group" id="datatable-filters-<%= dt_config[:id] %>">
+            <%= t("mat_views.loading") %>
+          </div>
+        </div>
+      </th>
+    </tr>
+  <% end %>
+  <tr class="mv-tr">
+    <% dt_cols.keys.each do |key|
+      value = dt_cols[key] 
+      sort = value[:sort]
+      sort_enabled = sort.present?
+      th_label = if value[:label_type] == 'i18n'
+                  t("mat_views.#{value[:label_ref]}")
+                 elsif value[:label_type] == 'humanize_attr'
+                   humanize_attr.call(value[:label_ref])
+                 else
+                   value[:label_ref]
+                 end
+      data = {}
+      if sort_enabled
+        data = {
+          'datatable-target': 'th',
+          key: key,
+          testid: 'TOGGLE_SORT_BUTTON',
+          testid_identifier: "#{dt_config[:id]}-#{key}",
+        }
+      end %>
+      <th class="mv-th" id="<%= dt_config[:id] %>-<%= key %>" <%= data.map { |k, v| "data-#{k.to_s.dasherize}=\"#{v}\"" }.join(' ').html_safe %>>
+        <div class="mv-cell" <%= value[:th_style].nil? ? '' : "style=\"#{value[:th_style]}\"".html_safe %>>
+          <% if sort_enabled %>
+            <span>
+              <%= th_label %>
+            </span>
+            <%= mv_button variant: :ghost, data: { action: "click->datatable#toggleSort" },
+                             class: 'mv-btn--no-padding has-annotation', 
+                             padding: false,
+                             testid: 'TOGGLE_SORT_BUTTON',
+                             testid_identifier: "#{dt_config[:id]}-#{key}" do %>
+              <%= mv_icon(:sort_neutral, size: 24, class_name: "muted sort-neutral") %>
+              <%= mv_icon(:sort_asc, size: 24, class_name: "active hidden sort-asc") %>
+              <%= mv_icon(:sort_desc, size: 24, class_name: "active hidden sort-desc") %>
+              <span class="mv-annotation hidden"></span>
+            <% end %>
+          <% else %>
+            <span>
+              <%= th_label %>
+            </span>
+          <% end %>
+        </div>
+      </th>
+    <% end %>
+  </tr>
+</thead>

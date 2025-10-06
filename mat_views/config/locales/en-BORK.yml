@@ -1,187 +1,225 @@
+---
 en-BORK:
   activerecord:
     attributes:
       mat_views/mat_view_definition:
-        created_at: "Creooted-a et"
-        dependencies: "Deeependencees"
-        name: "Nemee"
-        refresh_strategy: "Reffresh-a stretegy"
-        schedule_cron: "Schedoole-a (crun)"
-        sql: "SQL (SELECT ...)"
-        unique_index_columns: "Uneeque-a indeex coloomns"
-        updated_at: "Updeded et"
+        created_at: Cre-aated-a et
+        dependencies: Deppy-dependees
+        last_run_at: Lest roon et
+        name: Nemey
+        refresh_strategy: Reffreshy strotegy
+        schedule_cron: Schedoole-a (crun)
+        sql: SQL (SELECT ... ya-hey!)
+        unique_index_columns: Oooneeke-a index culumns
+        updated_at: Updeeted-a et
       mat_views/mat_view_run:
-        created_at: "Creooted-a et"
-        details: "Deetyails"
-        duration_ms: "Duroshun (ms)"
-        error: "Errur, bork bork"
-        finished_at: "Feenished et"
-        mat_view_definition: "Defeeneshun"
-        meta: "Metee"
-        operation: "Oopereshun"
-        row_count_after: "Roo cooont effter"
-        row_count_before: "Roo cooont beffure-a"
-        rows_before_after: "Roos (beffure-a/effter)"
-        started_at: "Sterted et"
-        status: "Stetus"
-        updated_at: "Updeded et"
+        created_at: Cre-aated-a et
+        details: Deeteeels
+        duration_ms: Dooreeshun (ms)
+        error: Ooops-a-doops
+        finished_at: Ffeenished-a et
+        mat_view_definition: Deffeeneshun
+        meta: Meetadeta
+        operation: Ooopereshun
+        row_count_after: Roo coont efter
+        row_count_before: Roo coont beffoore-a
+        rows_before_after: Rooos (beffoore-a/efter)
+        started_at: Sterted-a et
+        status: Stu-toos
+        updated_at: Updeeted-a et
     enums:
       mat_views/mat_view_definition:
         refresh_strategy:
-          concurrent: "Cuncurrunt"
-          regular: "Regooler"
-          swap: "Sveepp"
+          concurrent: Cuncurrunt
+          regular: Regooler
+          swap: Svep
       mat_views/mat_view_run:
         operation:
-          create: "Creoot"
-          drop: "Drup"
-          refresh: "Reffresh"
+          create: Creete-a
+          drop: Drupp
+          refresh: Reffresh
         status:
-          failed: "Feiled"
-          running: "Runneng"
-          success: "Soocceess"
+          failed: Fffooled
+          running: Rooneeng
+          success: Sooccess
     errors:
       models:
         mat_views/mat_view_definition:
           attributes:
             name:
-              blank: "moost be-a prooffeeded"
-              invalid: "noo goood PostgreSQL ideenteeffeer"
-              taken: "alreedy teeken"
+              blank: moost be-a prooffeeded-a
+              invalid: is noo a fffoonee PostgreSQL ide-a
+              taken: moost be-a oooneeke-a
             sql:
-              blank: "moost be-a prooffeeded"
-              invalid: "moost stert veet SELECT"
+              blank: moost be-a prooffeeded-a
+              invalid: moost stert veet SELECT
             unique_index_columns:
-              at_least_one: "moost hefe-a et leest oone-a coloomn vhee useeng cuncoorrent"
+              at_least_one: moost hefe-a et leeast vun culoom vhee youoo zee cuncurrunt
+                reffresh strotegy
     hints:
       mat_views/mat_view_definition:
-        dependencies: "Cummu-seepareted leest ooff tebles oor feeews."
-        name: "Nemee ooff zee metereeelised feeoo."
-        refresh_strategy: "Hooow zee feeoo gets reffreshed."
-        schedule_cron: "Use-a crun furmet. Leefe-a empty fur noo schedoole-a."
-        sql: "Moost be-a SELECT steetement, bork bork."
-        unique_index_columns: "Coloomns fur uneeque-a indeex. Requuured fur cuncoorrent."
+        dependencies: Cummu-sepereted leest ooff tebles oor feeoos thees metereealized-a
+          feeoo deppends oon.
+        name: Nemee ooff zee metereealized-a feeoo in zee detebese-a.
+        refresh_strategy: Determenes hoo zee metereealized-a feeoo geets reffreshed-a.
+        schedule_cron: Use-a stenderd crun furmet. Leeefe-a it empty fur noo schedoole-a.
+        sql: Zee SQL query moost be-a feery deenkum SELECT stutement. Bork bork!
+        unique_index_columns: Culumns fur creeting-a unooque-a index. Reqooered fur
+          cuncurrunt reffresh.
       mat_views/mat_view_run:
-        error: "Errur meesseege-a iff feiled."
-        meta: "Eddeshunel metee in JSON."
-        operation: "Keened ooff oopereshun."
-        status: "Coorent steetus."
+        error: Errur messege-a iff zee roon fffoels.
+        meta: Eddite-iunes meetadeta in JSON furmet.
+        operation: Type-a ooff ooopereshun perfurmed-a.
+        status: Coorent stootus ooff zee roon.
     models:
-      mat_views/mat_view_definition: "Met Feeoo Defeeneshun"
-      mat_views/mat_view_run: "Met Feeoo Roon"
+      mat_views/mat_view_definition: Metereealized-a Feeoo Deffeeneshun
+      mat_views/mat_view_run: Metereealized-a Feeoo Roon
     placeholders:
       mat_views/mat_view_definition:
-        dependencies: "Inter deeependencees (cumma-seepareted)"
-        name: "Inter nemee"
-        refresh_strategy: "Select reffresh stretegy"
-        schedule_cron: "0 0 * * * fur meedneeght, leefe-a emty fur nune-a"
-        sql: "Inter SQL (SELECT ...)"
-        unique_index_columns: "Inter uneeque-a indeex coloomns (cumma-seepareted, oopshunel)"
+        dependencies: Entered-a deppy-dependees (cummu sepereted-a, oopshunal)
+        name: Entered-a nemey
+        refresh_strategy: Sellect-a reffresh strotegy
+        schedule_cron: 0 0 * * * fur deely et meedneeght, leeefe-a empty fur noo schedoole-a
+        sql: Entered-a SQL (SELECT ...)
+        unique_index_columns: Entered-a unooque-a index culumns (cummu sepereted-a,
+          oopshunal)
       mat_views/mat_view_run:
-        error: "Errur meesseege-a"
-        mat_view_definition: "Select met feeoo"
-        meta: "Metee (JSON)"
-        operation: "Select oopereshun"
-        status: "Select steetus"
+        error: Ooops-a-doops messege-a
+        mat_view_definition: Sellect-a metereealized-a feeoo
+        meta: Meetadeta (JSON)
+        operation: Sellect-a ooopereshun
+        status: Sellect-a stootus
   i18n:
-    name: Børk! Børk! Børk!
+    name: English (Börk Börk!)
   mat_views:
-    actions: "Ecteeuns"
-    all_definitions: "Ell defeeneshuns"
-    all_operations: "Ell oopereshuns"
-    all_statuses: "Ell steetuses"
-    cancel: "Cuncel"
-    close: "Cluse-a"
-    close_window: "Cluse-a veendoo"
-    create: "Creoot"
+    actions: Ecteeuns
+    cancel: Cuncel
+    close: Cluse-a
+    close_window: Cluse-a veendoo
+    create: Creete-a
     dashboard:
       metrics:
-        title: "Metreecs"
-      title: "Deshbuerd"
-    definition: "Defeeneshun"
-    definitions: "Defeeneshuns"
-    delete: "Deleete-a"
-    details: "Deetyails"
-    edit: "Ideet"
-    edit_var: "Ideet %{name}"
+        title: Metreecs
+      title: Deshbuerd
+    datatable:
+      clear_search_aria_label: Cleer zee serch
+      search_aria_label: Serch zee teble-a
+      search_placeholder: Serchy serch...
+    definition: Deffeeneshun
+    definitions: Deffeeneshuns
+    delete: Delete-a
+    details: Deeteeels
+    edit: I-deet
+    edit_var: I-deet %{name}
     errors:
-      frame_only: "Ooonly in a freeme-a, beck tu deshbuerd."
+      frame_only: Thees ecteeun oonly vurk-a in a freme-a, off tu zee deshbuerd!
       prevented_saving:
-        one: "1 errur stoopped sefing:"
-        other: "%{count} errurs stoopped sefing:"
-    filter_by: "Feelter by:"
+        few: "%{count} errs stoopped-a zee sefing:"
+        many: "%{count} errs stoopped-a zee sefing:"
+        one: 'Luun err stoopped-a zee sefing:'
+        other: "%{count} errs stoopped-a zee sefing:"
+        two: 'Tvu errs stoopped-a zee sefing:'
+        zero: Noo errs, bork bork!
+    filter_by: 'Feelter by:'
     footer:
-      copyright: "© %{year} %{company} Ell reeghts reserfed."
-      documentation: "Ducumenteshun"
-      need_help: "Need-a hulp?"
-      open_issue: "Oopen en Ishoee"
-      project_homepage: "Pruject Humpage"
-      support: "Get Prefeshunel Support →"
-      tagline: "Buooolt veet ❤️ by develupers, fur develupers. Bork bork!"
+      copyright: "© %{year} %{company} All rights reserved."
+      documentation: Dookoomenteshun
+      need_help: Need guurunteed-oopteeme-a und expert help-a?
+      open_issue: Oopen an Issue
+      project_homepage: Pruject Humepege-a
+      support: Get-a Pruffeshoonel Sooppurt →
+      tagline: Built veet ❤️ by developers, fur developers.
       tooltip:
-        documentation: "Read-a zee ducumenteshun"
-        gem_version: "Cleeck tu RubyGems"
-        open_issue: "Reepurt e boog"
-        project_homepage: "GitHub reepu"
-        support: "Prefeshunel sooppurt"
-      version: "v%{version}"
+        documentation: Reed dookoomenteshun
+        gem_version: Hop oon tu RubyGems pege-a
+        open_issue: Repert a bug oor requeest-a a feeeture-a
+        project_homepage: GitHub repositoriesh
+        support: Pruffeshoonel sooppurt pleens
+      version: v%{version}
     header:
-      signed_in_as: "Seegned in es %{email}"
-    history: "Heestury"
-    loading: "Lueding..."
-    loading_definitions: "Lueding defeeneshuns..."
-    loading_runs: "Lueding roons..."
+      signed_in_as: Seeigned-a in es %{email}
+    history: Heestury
+    loading: Lueding...
+    loading_definitions: Lueding deffeeneshuns...
+    loading_runs: Lueding roons...
     mat_view_definition:
-      create_mv: "Creoot MV"
-      create_mv_tooltip: "Creoots zee metereeelised feeoo."
-      delete_confirm: "Deleete-a %{name}? (Does NOOT drup MV)"
-      delete_tooltip: "Deleetes zee defeeneshun boot NOOT zee MV."
-      drop_mv: "Drup MV"
-      drop_mv_cascade: "Drup MV (Cescade-a)"
-      drop_mv_cascade_confirm: "Drup MV und ell dependees fur %{name}?"
-      drop_mv_cascade_tooltip: "Drups MV und dependees. Defeeneshun remeyns."
-      drop_mv_confirm: "Drup MV fur %{name}?"
-      drop_mv_tooltip: "Drups MV. Defeeneshun steys."
-      edit_tooltip: "Ideet zee met feeoo defeeneshun."
-      materialized_view: "Metereeelised Feeoo"
-      materialized_view_exists: "Met feeoo ixists"
-      materialized_view_not_exists: "Met feeoo nut creooted yet!"
-      new_definition: "Noo defeeneshun"
-      new_definition_tooltip: "Creoot noo met feeoo defeeneshun."
-      no_definitions: "Nu defeeneshuns. Creoot oone-a tu stert."
-      refresh_tooltip: "Reffreshes zee met feeoo."
-      sql_summary_tooltip: "Cleeck tu ixpend/collupse-a SQL"
-      view_tooltip: "Feeoo met feeoo defeeneshun."
+      create_mv: Creete-a MatViews
+      create_mv_tooltip: Creetes-a zee metereealized-a feeoo in zee detebese-a.
+      delete_confirm: Delete-a deffeeneshun %{name}? (Dues NOOHT drop MatViews)
+      delete_tooltip: Deletes-a deffeeneshun boot dues-a NOOHT drop zee metereealized-a
+        feeoo in zee detebese-a.
+      drop_mv: Drupp MatViews
+      drop_mv_cascade: Drupp MatViews (Cescede-a)
+      drop_mv_cascade_confirm: Drupp metereealized-a feeoo und ell depends fur %{name}?
+      drop_mv_cascade_tooltip: Drupps-a metereealized-a feeoo und ell depends in detebese-a.
+        Deffeeneshun steys.
+      drop_mv_confirm: Drupp metereealized-a feeoo fur %{name}?
+      drop_mv_tooltip: Drupps-a metereealized-a feeoo in detebese-a. Deffeeneshun
+        steys.
+      edit_tooltip: I-deet metereealized-a feeoo deffeeneshun.
+      materialized_view: Metereealized-a feeoo
+      materialized_view_exists: Metereealized-a feeoo existe-a
+      materialized_view_not_exists: Metereealized-a feeoo nut creeted-a yet!
+      new_definition: Noo deffeeneshun
+      new_definition_tooltip: Creete-a noo metereealized-a feeoo deffeeneshun.
+      no_definitions: Noo metereealized-a feeoo deffeeneshuns fffoond. Creete-a vun
+        tu stert.
+      no_definitions_if_filtered: Noo metereealized-a feeoo deffeeneshuns mutch zee
+        feilters oor serch.
+      refresh_tooltip: Reffreshes-a metereealized-a feeoo in detebese-a.
+      sql_summary_tooltip: Cleeck tu expeend/culleps SQL
+      view_tooltip: Feeoo metereealized-a feeoo deffeeneshun.
     mat_view_run:
-      error_tooltip: "Errur meesseege-a iff feiled."
-      meta_tooltip: "Metee in JSON."
-      no_runs: "Nu roons found."
-      no_runs_if_filtered: "Nu roons mit feelters."
-      view_details: "Feeoo deetyails"
-      view_tooltip: "Feeoo roon deetyails."
-    project_author: "Codevedas Inc."
-    project_description: "Edmeen interffees fur meneging PustgreSQL metereeelised feeoos in Reils eppliceshuns."
-    project_tags: "reils, ruby, met feeoos, edmeen, deshbuerd, ui, menegement"
-    refresh: "Reffresh"
-    refresh_contents: "Reffresh cunteents"
-    reloading: "Relueding..."
-    reset: "Reset"
-    run: "Roon"
-    runs: "Roons"
-    save_changes: "Sefe-a chungees"
+      error_tooltip: Errur messege-a iff zee roon fffoels.
+      meta_tooltip: Eddite-iunes meetadeta in JSON.
+      no_runs: Noo roons fffoond.
+      no_runs_if_filtered: Noo roons fur zee feilters.
+      view_details: Feeoo deeteels
+      view_tooltip: Feeoo roon deeteels.
+    no_filter: Eny (noo feelter)
+    no_value: Noo ffeluoo (nil oor empty)
+    per_page: Per pege-a
+    project_author: CodeVedas Inc.
+    project_description: Admeen interffece-a fur munageeng PostgreSQL metereealized-a
+      feeoos in Reils epplifeceshuns.
+    project_tags: rails, ruby, materialized views, admin, dashboard, ui, interface,
+      management
+    refresh: Reffresh
+    refresh_contents: Reffresh cuntenst
+    reloading: Relueding...
+    reset: Reset
+    run: Roon
+    runs: Roons
+    save_changes: Sefe-a chengess
     settings:
-      auto: "Ootu"
-      dark: "Derk"
-      language: "Lengoeege-a"
-      language_hint: "Cheeuse-a yuoor interffees lengoeege-a."
-      light: "Leeght"
-      theme: "Theme-a"
-      theme_hint: "Ootu follows systeem, leeght/derk oferrides."
-      title: "Prefeerences"
-    title: "MetViews Edmeen"
-    view_var: "Feeoo %{name}"
+      auto: Oooto
+      dark: Derk
+      language: Lunguage-a
+      language_hint: Sellect-a yoor interffece-a lunguage-a.
+      light: Leeght
+      theme: Theeme-a
+      theme_hint: Oooto ffollows yoor system, leght und derk oofferride-a.
+      title: Prefurences
+    title: MatViews Burk Burk
+    view_var: Feeoo %{name}
+    x_miliseconds: "%{count} ms"
+  number:
+    format:
+      delimiter: ","
+      separator: "."
+  numbers:
+    eight: 8
+    five: 5
+    four: 4
+    nine: 9
+    one: 1
+    seven: 7
+    six: 6
+    three: 3
+    two: 2
+    zero: 0
   time:
-    am: "EM"
+    am: AM
     formats:
       datetime12hour: "%Y-%m-%d %I:%M:%S %p"
-    pm: "PM"
+    pm: PM

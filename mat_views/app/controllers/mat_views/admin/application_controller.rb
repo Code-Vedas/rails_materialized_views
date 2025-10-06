@@ -37,6 +37,8 @@ module MatViews
       include MatViews::Admin::AuthBridge
 
       helper MatViews::Admin::UiHelper
+      helper MatViews::Admin::LocalizedDigitHelper
+      helper MatViews::Admin::DatatableHelper
       helper MatViews::Helpers::UiTestIds
       layout 'mat_views/admin'
 
@@ -78,10 +80,8 @@ module MatViews
       # @return [void]
       def ensure_frame
         @frame_id = params[:frame_id]
-        if @frame_id.present?
-          @frame_action = params[:frame_action]
-          return
-        end
+        return if @frame_id.present?
+
         redirect_to admin_root_path, alert: I18n.t('mat_views.errors.frame_only')
       end
 

@@ -15,7 +15,7 @@ RSpec.describe MatViews::Admin::DashboardController, type: :controller do
     end
 
     it 'authorizes access with the correct arguments' do
-      expect(controller).to have_received(:authorize_mat_views!).with(:read, :mat_views_dashboard)
+      expect(controller).to have_received(:authorize_mat_views!).with(:view, :mat_views_dashboard)
     end
 
     it 'sets the metrics placeholder note' do

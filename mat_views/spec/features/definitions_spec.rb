@@ -203,7 +203,6 @@ RSpec.describe 'Definitions', :feature do
       end
 
       wait_drawer_closed
-      wait_for_turbo_idle
 
       within_turbo_frame('dash-definitions') do
         expect(page).to have_css('table.mv-table tr', text: 'edit_me_table_edited')
@@ -318,8 +317,8 @@ RSpec.describe 'Definitions', :feature do
 
       wait_for_turbo_idle
 
-      expect(page).to have_current_path("/mat_views/en/admin?mat_view_definition_id=#{defn.id}&tab=runs")
-      expect(page).to have_select('mat_view_definition_id', selected: defn.name)
+      expect(page).to have_current_path("/mat_views/en/admin?dtfilter=definition:#{defn.id}&tab=runs&dtpage=1&dtperpage=10")
+      expect(page).to have_select('definition', selected: defn.name)
     end
   end
 end

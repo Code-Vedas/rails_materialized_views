@@ -1,0 +1,27 @@
+<% dt_humanize_ref = dt_config[:dt_humanize_ref]
+dt_humanize_ref_klass = dt_humanize_ref.constantize
+humanize_attr = ->(attr) { dt_humanize_ref_klass.human_attribute_name(attr) }
+humanize_enum_attr = ->(col, val) { dt_humanize_ref_klass.human_enum_name(col, val) }
+mv_exists_map ||= {} %>
+<tr class="mv-tr">
+  <td class="mv-td">
+    <div class="mv-cell">
+      <%= mv_drawer_link(admin_mat_view_definition_path(row_value, frame_id: 'mv-drawer'), t("mat_views.view_var", name: row_value.name),
+                       variant: :ghost,
+                       testid: 'VIEW_LINK',
+                       testid_identifier: "defn-#{row_value.id}",
+                       underline: true,
+                       tooltip: t("mat_views.mat_view_definition.view_tooltip")) do %>
+        <%= row_value.name %>
+      <% end %>
+    </div>
+  </td>
+  <td class="mv-td"><div class="mv-cell"><%= humanize_enum_attr.call(:refresh_strategy, row_value.refresh_strategy) %></div></td>
+  <td class="mv-td"><div class="mv-cell"><%= row_value.schedule_cron.presence || "-" %></div></td>
+  <td class="mv-td"><div class="mv-cell"><%= row_value.last_run ? l_with_digits(row_value.last_run.started_at.in_time_zone, format: :datetime12hour) : "-" %></div></td>
+  <td class="mv-td mv-td-actions">
+    <div class="mv-cell">
+      <%= render "definition_actions", defn: row_value, mv_exists: mv_exists_map[row_value.name], frame_id: "dash-definitions" %>
+    </div>
+  </td>
+</tr>

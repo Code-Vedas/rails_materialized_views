@@ -24,7 +24,7 @@ module MatViews
       #
       # @return [void]
       def index
-        authorize_mat_views!(:read, :mat_views_dashboard)
+        authorize_mat_views!(:view, :mat_views_dashboard)
         @metrics_note = 'Metrics coming soon (see: Aggregate refresh metrics for reporting).'
       end
     end

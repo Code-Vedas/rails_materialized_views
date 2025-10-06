@@ -1,187 +1,223 @@
+---
 en-AU-ocker:
   activerecord:
     attributes:
       mat_views/mat_view_definition:
-        created_at: "Cooked up at"
-        dependencies: "Mates it leans on"
-        name: "Name"
-        refresh_strategy: "Refresh trick"
-        schedule_cron: "Roster (cron)"
-        sql: "SQL (SELECT ...)"
-        unique_index_columns: "Unique index columns"
-        updated_at: "Spruced up at"
+        created_at: Cooked up at
+        dependencies: Mates it leans on
+        last_run_at: Last spin
+        name: Nickname
+        refresh_strategy: Refresh game plan
+        schedule_cron: Roster (cron)
+        sql: SQL (SELECT ...)
+        unique_index_columns: Unique index bits
+        updated_at: Freshened up
       mat_views/mat_view_run:
-        created_at: "Cooked up at"
-        details: "The nitty-gritty"
-        duration_ms: "How long (ms)"
-        error: "Stuff-up"
-        finished_at: "Wrapped up at"
-        mat_view_definition: "Definition"
-        meta: "Extra bits"
-        operation: "What we did"
-        row_count_after: "Row count after"
-        row_count_before: "Row count before"
-        rows_before_after: "Rows (before/after)"
-        started_at: "Kicked off at"
-        status: "Status"
-        updated_at: "Spruced up at"
+        created_at: Cooked up at
+        details: The goss
+        duration_ms: Time on the clock (ms)
+        error: Stuff-up
+        finished_at: Wrapped up
+        mat_view_definition: Definition
+        meta: Extra bits
+        operation: Play
+        row_count_after: Rows after
+        row_count_before: Rows before
+        rows_before_after: Rows (before/after)
+        started_at: Kicked off
+        status: Status
+        updated_at: Freshened up
     enums:
       mat_views/mat_view_definition:
         refresh_strategy:
-          concurrent: "All at once"
-          regular: "The usual"
-          swap: "Quick swap"
+          concurrent: All-at-once
+          regular: Standard
+          swap: Swaperoo
       mat_views/mat_view_run:
         operation:
-          create: "Spin up"
-          drop: "Chuck out"
-          refresh: "Give it a tickle"
+          create: Spin up
+          drop: Drop
+          refresh: Refresh
         status:
-          failed: "Gone bung"
-          running: "Flat out"
-          success: "All good"
+          failed: Carked it
+          running: Chuggin' along
+          success: Too easy
     errors:
       models:
         mat_views/mat_view_definition:
           attributes:
             name:
-              blank: "ya gotta give it a name"
-              invalid: "nah mate, that's not a fair dinkum PostgreSQL name"
-              taken: "someone's already nabbed that"
+              blank: needs a nickname
+              invalid: ain't a fair-dinkum PostgreSQL identifier
+              taken: has already been snagged
             sql:
-              blank: "chuck in some SQL, mate"
-              invalid: "has to start with SELECT, no muckin' about"
+              blank: needs a SQL statement
+              invalid: has to kick off with SELECT
             unique_index_columns:
-              at_least_one: "need at least one column when usin' the concurrent trick"
+              at_least_one: needs at least one column when you're doing the concurrent
+                refresh caper
     hints:
       mat_views/mat_view_definition:
-        dependencies: "List the tables or views it leans on, comma separated."
-        name: "What we call the materialised view in the DB."
-        refresh_strategy: "How you wanna give it a tickle."
-        schedule_cron: "Use cron format. Leave it blank if ya can't be bothered."
-        sql: "Has to be a proper SELECT statement."
-        unique_index_columns: "Columns for a unique index. Needed for the all-at-once trick."
+        dependencies: Comma-separated roll-call of tables or views this materialised
+          mate relies on.
+        name: What the materialised view's called in the database.
+        refresh_strategy: How the materialised view gets freshened up.
+        schedule_cron: Stick to standard cron yarn. Leave it blank for no schedule.
+        sql: SQL needs to be a fair-dinkum SELECT statement.
+        unique_index_columns: Columns that cop the unique index. Mandatory for concurrent
+          refresh.
       mat_views/mat_view_run:
-        error: "Stuff-up if it went bung."
-        meta: "Extra bits in JSON."
-        operation: "What sort of job we ran."
-        status: "Where it's at."
+        error: Error yarn if the run face-plants.
+        meta: Extra intel in JSON.
+        operation: What sort of caper ran.
+        status: Where the run's at right now.
     models:
-      mat_views/mat_view_definition: "Mat View Def'n"
-      mat_views/mat_view_run: "Mat View Run"
+      mat_views/mat_view_definition: Materialised View Definition
+      mat_views/mat_view_run: Materialised View Run
     placeholders:
       mat_views/mat_view_definition:
-        dependencies: "Chuck in dependencies (comma separated, optional)"
-        name: "Give it a name, mate"
-        refresh_strategy: "Pick how to refresh"
-        schedule_cron: "0 0 * * * for midnight daily, leave blank otherwise"
-        sql: "Type in ya SQL (SELECT ...)"
-        unique_index_columns: "Unique index columns (comma separated, optional)"
+        dependencies: List the mates (comma separated, optional)
+        name: Chuck in a nickname
+        refresh_strategy: Pick a refresh game plan
+        schedule_cron: 0 0 * * * for midnight every day, leave blank for no roster
+        sql: Pop in SQL (SELECT ...)
+        unique_index_columns: Unique index bits (comma separated, optional)
       mat_views/mat_view_run:
-        error: "Error msg"
-        mat_view_definition: "Pick a mat view"
-        meta: "Extra bits (JSON)"
-        operation: "Pick what to do"
-        status: "Pick a status"
+        error: Error yarn
+        mat_view_definition: Pick the materialised view
+        meta: Extra bits (JSON)
+        operation: Pick the play
+        status: Pick the status
   i18n:
-    name: Aussie (Ocker)
+    name: English (Australian Ocker)
   mat_views:
-    actions: "Stuff ya can do"
-    all_definitions: "Every def'n"
-    all_operations: "Every job"
-    all_statuses: "Every status"
-    cancel: "Nah, cancel"
-    close: "Shut it"
-    close_window: "Shut the window"
-    create: "Knock one up"
+    actions: Mates' moves
+    cancel: Nah, cancel
+    close: Shut it
+    close_window: Shut the window
+    create: Spin one up
     dashboard:
       metrics:
-        title: "Stats & that"
-      title: "Dashy board"
-    definition: "Def'n"
-    definitions: "Def'ns"
-    delete: "Chuck it"
-    details: "The nitty-gritty"
-    edit: "Tweak it"
-    edit_var: "Tweak %{name}"
+        title: Stats & yarns
+      title: Dashboard
+    datatable:
+      clear_search_aria_label: Wipe the search
+      search_aria_label: Have a squiz at the table
+      search_placeholder: Have a squiz...
+    definition: Definition
+    definitions: Definitions
+    delete: Chuck it
+    details: The details
+    edit: Tweak
+    edit_var: Tweak %{name}
     errors:
-      frame_only: "Oi, only works in a frame. Back to the dashy board."
+      frame_only: This play only works in a frame, mate. Off you go to the dashboard.
       prevented_saving:
-        one: "1 stuff-up stopped savin':"
-        other: "%{count} stuff-ups stopped savin':"
-    filter_by: "Filter by:"
+        few: "%{count} hiccups blocked the save:"
+        many: "%{count} hiccups blocked the save:"
+        one: 'One hiccup stopped the save:'
+        other: "%{count} hiccups blocked the save:"
+        two: 'Two hiccups blocked the save:'
+        zero: No dramas, mate!
+    filter_by: 'Filter by:'
     footer:
-      copyright: "© %{year} %{company} — all rights, mate."
-      documentation: "The manual"
-      need_help: "Need a hand, cobber?"
-      open_issue: "Yell out (open issue)"
-      project_homepage: "Project home"
-      support: "Fair dinkum support →"
-      tagline: "Built with ❤️ by battlers, for battlers."
+      copyright: "© %{year} %{company} All rights reserved."
+      documentation: Docs
+      need_help: Need rock-solid uptime and a helping hand?
+      open_issue: Lodge an Issue
+      project_homepage: Project homepage
+      support: Grab Pro Support →
+      tagline: Whipped up with ❤️ by devs, for devs.
       tooltip:
-        documentation: "Have a squiz at the docs"
-        gem_version: "Hop over to RubyGems"
-        open_issue: "Report a bug or ask for somethin'"
-        project_homepage: "Check the repo"
-        support: "Paid help if ya keen"
-      version: "v%{version}"
+        documentation: Have a read of the docs
+        gem_version: Hop over to RubyGems
+        open_issue: Report a bug or pitch a feature
+        project_homepage: GitHub repo
+        support: Professional support plans
+      version: v%{version}
     header:
-      signed_in_as: "Signed in as %{email}"
-    history: "Back story"
-    loading: "Hang on..."
-    loading_definitions: "Grabbin' the defs..."
-    loading_runs: "Grabbin' the runs..."
+      signed_in_as: Signed in as %{email}
+    history: History
+    loading: Loading...
+    loading_definitions: Fetching definitions...
+    loading_runs: Fetching runs...
     mat_view_definition:
-      create_mv: "Spin up MV"
-      create_mv_tooltip: "Makes the MV in the DB."
-      delete_confirm: "Sure ya wanna chuck %{name}? (Does NOT drop MV)"
-      delete_tooltip: "Deletes the def'n but leaves the MV."
-      drop_mv: "Drop MV"
-      drop_mv_cascade: "Drop MV (Cascade)"
-      drop_mv_cascade_confirm: "Drop the MV and all the tag-alongs for %{name}?"
-      drop_mv_cascade_tooltip: "Drops MV + mates, but keeps def'n."
-      drop_mv_confirm: "Drop the MV for %{name}?"
-      drop_mv_tooltip: "Drops the MV but keeps def'n."
-      edit_tooltip: "Tweak the mat view def'n."
-      materialized_view: "Mat View"
-      materialized_view_exists: "Mat view's there"
-      materialized_view_not_exists: "Mat view's not made yet!"
-      new_definition: "New def'n"
-      new_definition_tooltip: "Knock up a new mat view def'n."
-      no_definitions: "No defs found. Knock one up to start."
-      refresh_tooltip: "Give the mat view a tickle."
-      sql_summary_tooltip: "Click to open/close SQL"
-      view_tooltip: "See the mat view def'n."
+      create_mv: Spin up MatViews
+      create_mv_tooltip: Builds the materialised view in the database, too right.
+      delete_confirm: Delete %{name}'s definition? (MatViews stays put)
+      delete_tooltip: Drops the definition but leaves the materialised view in the
+        database.
+      drop_mv: Drop MatViews
+      drop_mv_cascade: Drop MatViews (cascade)
+      drop_mv_cascade_confirm: Drop the materialised view and every hanger-on for
+        %{name}?
+      drop_mv_cascade_tooltip: Boots the materialised view and its tag-alongs from
+        the database. Definition hangs about.
+      drop_mv_confirm: Drop the materialised view for %{name}?
+      drop_mv_tooltip: Boots the materialised view from the database. Definition sticks
+        around.
+      edit_tooltip: Tweak the materialised view definition.
+      materialized_view: Materialised view
+      materialized_view_exists: Materialised view's in the shed
+      materialized_view_not_exists: Materialised view isn't built yet!
+      new_definition: New definition
+      new_definition_tooltip: Kick off a fresh materialised view definition.
+      no_definitions: No materialised view definitions found. Spin one up to get rolling.
+      no_definitions_if_filtered: Nothin' matches those filters or search, mate.
+      refresh_tooltip: Refreshes the materialised view in the database.
+      sql_summary_tooltip: Click to open or tuck away the SQL
+      view_tooltip: Suss out the materialised view definition.
     mat_view_run:
-      error_tooltip: "Error if it went bung."
-      meta_tooltip: "Extra bits in JSON."
-      no_runs: "No runs yet."
-      no_runs_if_filtered: "No runs for that filter."
-      view_details: "See the deets"
-      view_tooltip: "See the run deets."
-    project_author: "Codevedas Inc."
-    project_description: "Admin UI for bossin' around Postgres mat views in Rails apps."
-    project_tags: "rails, ruby, mat views, admin, dashy, ui, managing stuff"
-    refresh: "Give it a tickle"
-    refresh_contents: "Tickle contents"
-    reloading: "Reloadin'..."
-    reset: "Start over"
-    run: "Run"
-    runs: "Runs"
-    save_changes: "Save it"
+      error_tooltip: Error yarn if the run stacks it.
+      meta_tooltip: Extra intel in JSON.
+      no_runs: No runs spotted.
+      no_runs_if_filtered: No runs match those filters.
+      view_details: Scope the details
+      view_tooltip: Scope the run details.
+    no_filter: Anything goes
+    no_value: No value (nil or blank)
+    per_page: Per page
+    project_author: CodeVedas Inc.
+    project_description: Admin interface for keeping PostgreSQL materialised views
+      in line for Rails apps.
+    project_tags: rails, ruby, materialized views, admin, dashboard, ui, interface,
+      management
+    refresh: Refresh
+    refresh_contents: Refresh the lot
+    reloading: Reloading...
+    reset: Reset
+    run: Run it
+    runs: Runs
+    save_changes: Lock it in
     settings:
-      auto: "Auto"
-      dark: "Dark"
-      language: "Lingo"
-      language_hint: "Pick ya lingo for the UI."
-      light: "Light"
-      theme: "Theme"
-      theme_hint: "Auto follows system, light/dark overrides."
-      title: "Prefs"
-    title: "MatViews Admin"
-    view_var: "See %{name}"
+      auto: Auto
+      dark: Dark
+      language: Lingo
+      language_hint: Pick the lingo for your interface.
+      light: Light
+      theme: Theme
+      theme_hint: Auto follows your system, light and dark override it.
+      title: Preferences
+    title: MatViews Control
+    view_var: Check out %{name}
+    x_miliseconds: "%{count} ms"
+  number:
+    format:
+      delimiter: ","
+      separator: "."
+  numbers:
+    eight: 8
+    five: 5
+    four: 4
+    nine: 9
+    one: 1
+    seven: 7
+    six: 6
+    three: 3
+    two: 2
+    zero: 0
   time:
-    am: "AM"
+    am: AM
     formats:
       datetime12hour: "%Y-%m-%d %I:%M:%S %p"
-    pm: "PM"
+    pm: PM

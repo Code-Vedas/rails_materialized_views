@@ -8,5 +8,7 @@
 /spec/dummy/tmp/
 .DS_Store
 *.log
+*.log.*
 coverage/
 *.gem
+.idea/

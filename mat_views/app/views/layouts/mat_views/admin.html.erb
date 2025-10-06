@@ -5,9 +5,9 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <meta charset="utf-8">
-    <meta name="description" content="<%= mv_t('project_description') %>">
-    <meta name="author" content="<%= mv_t('project_author') %>">
-    <meta name="keywords" content="<%= mv_t('project_tags') %>">
+    <meta name="description" content="<%= t('mat_views.project_description') %>">
+    <meta name="author" content="<%= t('mat_views.project_author') %>">
+    <meta name="keywords" content="<%= t('mat_views.project_tags') %>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="<%= mat_views_data_theme || 'auto' %>">
     <meta http-equiv="Content-Language" content="<%= I18n.locale %>">
@@ -31,10 +31,10 @@
     <%= javascript_importmap_tags "mat_views/application", importmap: MatViews.importmap %>
 
     <%= javascript_tag do %>
-      window.MatViewsRoutes = { definitionsPath: "<%= admin_mat_view_definitions_path %>", runsPath: "<%= admin_runs_path %>", preferencesPath: "<%= admin_preferences_path %>" }
+      window.MatViewsRoutes = { definitionsPath: "<%= admin_mat_view_definitions_path %>", runsPath: "<%= admin_mat_view_runs_path %>", preferencesPath: "<%= admin_preferences_path %>" }
     <% end %>
   </head>
-  <body class="mv-shell" data-controller="turbo-frame-lifecycle drawer timezone mv-confirm">
+  <body class="mv-shell" data-controller="body-setup turbo-frame-lifecycle drawer mv-confirm" data-drawer-open-class="is-open">
     <%= render "layouts/mat_views/header" %>
     <main class="mv-main">
       <div class="mv-container">

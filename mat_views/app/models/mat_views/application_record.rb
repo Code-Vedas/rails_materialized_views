@@ -30,6 +30,10 @@ module MatViews
     # @return [void]
     #
     self.abstract_class = true
+
+    # Include shared concerns for i18n, queries, and pagination.
     include MatViewsI18n
+    include MatViewsPaginate
+    include MatViewsQueryHelper
   end
 end
