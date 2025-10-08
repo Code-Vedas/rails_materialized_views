@@ -445,7 +445,7 @@ GEM
       websocket (~> 1.0)
     shoulda-matchers (6.5.0)
       activesupport (>= 5.2.0)
-    sidekiq (8.0.7)
+    sidekiq (8.0.8)
       connection_pool (>= 2.5.0)
       json (>= 2.9.0)
       logger (>= 1.6.2)
@@ -541,7 +541,7 @@ DEPENDENCIES
   ruby-lsp-rspec
   selenium-webdriver
   shoulda-matchers
-  sidekiq
+  sidekiq (>= 8.0.8)
   simplecov
   simplecov-console
   stimulus-rails
