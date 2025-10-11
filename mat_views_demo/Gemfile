@@ -13,7 +13,7 @@ gem 'propshaft'
 gem 'puma', '>= 5.0'
 gem 'rails', '~> 8.0.3'
 gem 'solid_cable'
-gem 'solid_cache'
+gem 'solid_cache', '>= 1.0.8'
 gem 'solid_queue'
 gem 'stimulus-rails'
 gem 'thruster', require: false
