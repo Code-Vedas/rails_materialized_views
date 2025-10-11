@@ -42,7 +42,7 @@ group :test do
   gem 'database_cleaner-active_record'
   gem 'resque'
   gem 'selenium-webdriver'
-  gem 'sidekiq'
+  gem 'sidekiq', '>= 8.0.8'
   gem 'simplecov', require: false
   gem 'simplecov-console', require: false
   gem 'webdrivers', require: false
