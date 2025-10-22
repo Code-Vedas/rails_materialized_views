@@ -66,37 +66,50 @@ jobs:
         run: bin/reek
 
   tests:
+    name: Tests (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        gemfile:
+          - rails_8_0.gemfile
+          - rails_7_2.gemfile
+          - rails_edge.gemfile
+        include:
+          - gemfile: rails_8_0.gemfile
+            name: Rails 8.0
+          - gemfile: rails_7_2.gemfile
+            name: Rails 7.2
+          - gemfile: rails_edge.gemfile
+            name: Rails Edge
+
     needs: [lint, reek]
     uses: ./.github/workflows/ruby-unit-tests.yml
     with:
       rspec_task: bin/rspec-unit --profile 10
-      upload_coverage: true
+      upload_coverage: ${{ matrix.gemfile == 'rails_8_0.gemfile' }}
+      bundle_gemfile: mat_views/gemfiles/${{ matrix.gemfile }}
     secrets:
       QLTY_COVERAGE_TOKEN: ${{ secrets.QLTY_COVERAGE_TOKEN }}
   e2e_tests:
     permissions:
       contents: read
+    name: E2E (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        gemfile:
+          - rails_8_0.gemfile
+          - rails_7_2.gemfile
+          - rails_edge.gemfile
+        include:
+          - gemfile: rails_8_0.gemfile
+            name: Rails 8.0
+          - gemfile: rails_7_2.gemfile
+            name: Rails 7.2
+          - gemfile: rails_edge.gemfile
+            name: Rails Edge
     needs: [lint, reek]
     uses: ./.github/workflows/ruby-e2e-tests.yml
     with:
       rspec_task: bin/rspec-e2e --profile 10
-  upsert_screenshots_comment:
-    if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      pull-requests: write
-    needs: [e2e_tests]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          header: 📸 MatViews Admin App Screenshots
-          message: |
-            App screenshots from the latest e2e test run are available.
-
-            | Name | Link |
-            | ---- | ---- |
-            | Commit | ${{ github.event.pull_request.head.sha }} |
-            | Workflow | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
-            | Screenshots | [Download](${{ needs.e2e_tests.outputs.screenshot_files }}) |
+      bundle_gemfile: mat_views/gemfiles/${{ matrix.gemfile }}

@@ -113,6 +113,48 @@ bundle exec rake mat_views:delete_all\[cascade,row_count_strategy,--yes]
 
 ---
 
+## Rails version matrix
+
+Use the pinned Gemfiles in `gemfiles/` to exercise the engine against specific Rails releases:
+
+```bash
+# Rails 7.2.x
+bundle install --gemfile gemfiles/rails_7_2.gemfile
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle exec bin/rspec-unit
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle exec bin/rspec-e2e
+
+# Rails 8.0.x
+bundle install --gemfile gemfiles/rails_8_0.gemfile
+BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec bin/rspec-unit
+BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec bin/rspec-e2e
+
+# Rails main branch
+bundle install --gemfile gemfiles/rails_edge.gemfile
+BUNDLE_GEMFILE=gemfiles/rails_edge.gemfile bundle exec bin/rspec-unit
+BUNDLE_GEMFILE=gemfiles/rails_edge.gemfile bundle exec bin/rspec-e2e
+```
+
+The CI workflow consumes the same Gemfiles to run the unit suite across the compatibility matrix.
+
+---
+
+## Screenshots
+
+The end-to-end tests generate screenshots for visual verification. They are uploaded as artifacts in the GitHub Actions workflow runs.
+After creating a pull request, apply the `e2e-screenshots` label to trigger screenshot generation.
+
+You can trigger screenshot in your local setup as well:
+
+```bash
+# 'en' is the desired locale
+SCREENSHOT_LANG=en bin/rspec-app-screenshot
+
+# OR
+
+# runs for all configured locales (this may take long time)
+bin/rspec-app-screenshots
+```
+
 ## Docs & policies
 
 - Root README: [../README.md](../README.md)
