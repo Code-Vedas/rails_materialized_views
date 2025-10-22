@@ -1,0 +1,132 @@
+name: Upload E2E Test Screenshots
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-e2e-screenshots-{0}', github.event.pull_request.number) || format('ref-e2e-screenshots-{0}', github.ref) }}
+  cancel-in-progress: true
+env:
+  RUBY_VERSION: 3.4.3
+  APP_DIR: ${{ github.workspace }}/mat_views
+jobs:
+  remove_screenshots_comment:
+    if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'e2e-screenshots')
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          header: 📸 MatViews Admin App Screenshots
+          delete: true
+
+  acknowledge:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'e2e-screenshots')
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          header: 📸 MatViews Admin App Screenshots
+          message: |
+            Taking screenshots for the MatViews Admin App in e2e tests. This may take 10-15 minutes depending on the queue.
+
+  app_screenshots:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'e2e-screenshots')
+    needs: [acknowledge]
+    outputs:
+      screenshot_files: ${{ steps.upload_screenshots.outputs.artifact-url }}
+    services:
+      firefox:
+        image: selenium/standalone-firefox:latest
+        ports: [4444:4444]
+        options: >-
+          --add-host=host.docker.internal:host-gateway
+          --health-cmd="/opt/bin/check-grid.sh || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: [5432:5432]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Install apt packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            build-essential git libpq-dev libyaml-dev pkg-config
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+          working-directory: ${{ env.APP_DIR }}
+      - name: Cache Bootsnap
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.APP_DIR }}/spec/dummy/tmp/cache
+          key: bootsnap-${{ runner.os }}-${{ env.RUBY_VERSION }}-${{ hashFiles('**/Gemfile.lock', '**/*.gemfile.lock') }}
+      - name: Prepare database
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+        run: |
+          bin/rails db:drop || true
+          bin/rails db:create
+          bin/rails db:schema:load
+      - name: Take app screenshots for all locales
+        working-directory: ${{ env.APP_DIR }}
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432
+          SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
+        run: |
+          bin/rspec-app-screenshots
+      - name: Upload app screenshots artifact for all locales
+        if: always()
+        id: upload_screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-screenshots
+          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots
+          if-no-files-found: ignore
+
+  upsert_screenshots_comment:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'e2e-screenshots')
+    permissions:
+      contents: read
+      pull-requests: write
+    needs: [app_screenshots]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          header: 📸 MatViews Admin App Screenshots
+          message: |
+            App screenshots from the latest e2e test run are available.
+
+            | Name | Link |
+            | ---- | ---- |
+            | Commit | ${{ github.event.pull_request.head.sha }} |
+            | Workflow | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
+            | Screenshots | [Download](${{ needs.app_screenshots.outputs.screenshot_files }}) |

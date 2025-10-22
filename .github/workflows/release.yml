@@ -66,19 +66,56 @@ jobs:
           working-directory: ${{ env.APP_DIR }}
       - name: Reek
         run: bin/reek
+
   tests:
+    name: Tests (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        gemfile:
+          - rails_8_0.gemfile
+          - rails_7_2.gemfile
+          - rails_edge.gemfile
+        include:
+          - gemfile: rails_8_0.gemfile
+            name: Rails 8.0
+          - gemfile: rails_7_2.gemfile
+            name: Rails 7.2
+          - gemfile: rails_edge.gemfile
+            name: Rails Edge
+
     needs: [lint, reek]
     uses: ./.github/workflows/ruby-unit-tests.yml
     with:
       rspec_task: bin/rspec-unit --profile 10
-      upload_coverage: false
+      upload_coverage: ${{ matrix.gemfile == 'rails_8_0.gemfile' }}
+      bundle_gemfile: mat_views/gemfiles/${{ matrix.gemfile }}
     secrets:
       QLTY_COVERAGE_TOKEN: ${{ secrets.QLTY_COVERAGE_TOKEN }}
   e2e_tests:
+    permissions:
+      contents: read
+    name: E2E (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        gemfile:
+          - rails_8_0.gemfile
+          - rails_7_2.gemfile
+          - rails_edge.gemfile
+        include:
+          - gemfile: rails_8_0.gemfile
+            name: Rails 8.0
+          - gemfile: rails_7_2.gemfile
+            name: Rails 7.2
+          - gemfile: rails_edge.gemfile
+            name: Rails Edge
     needs: [lint, reek]
     uses: ./.github/workflows/ruby-e2e-tests.yml
     with:
       rspec_task: bin/rspec-e2e --profile 10
+      bundle_gemfile: mat_views/gemfiles/${{ matrix.gemfile }}
+
   push:
     name: Build & Push gem
     runs-on: ubuntu-latest

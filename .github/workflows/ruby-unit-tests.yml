@@ -3,10 +3,10 @@ name: Ruby Tests (reusable)
 on:
   workflow_call:
     inputs:
-      gecko_driver_version:
+      bundle_gemfile:
         required: false
         type: string
-        default: 0.36.0
+        description: Path (relative to the repository root) to the Gemfile to use.
       rspec_task:
         required: true
         type: string
@@ -19,13 +19,14 @@ on:
       QLTY_COVERAGE_TOKEN:
         required: false
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-unit-{0}', github.event.pull_request.number) || format('ref-unit-{0}', github.ref) }}
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-unit-{0}', github.event.pull_request.number) || format('ref-unit-{0}', github.ref) }}-${{ inputs.bundle_gemfile }}
   cancel-in-progress: true
 permissions:
   contents: read
 env:
   RUBY_VERSION: 3.4.3
   APP_DIR: ${{ github.workspace }}/mat_views
+  BUNDLE_GEMFILE: ${{ inputs.bundle_gemfile != '' && format('{0}/{1}', github.workspace, inputs.bundle_gemfile) || '' }}
 jobs:
   test:
     permissions:
@@ -60,7 +61,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.APP_DIR }}/spec/dummy/tmp/cache
-          key: bootsnap-${{ runner.os }}-${{ env.RUBY_VERSION }}-${{ hashFiles('**/Gemfile.lock') }}
+          key: bootsnap-${{ runner.os }}-${{ env.RUBY_VERSION }}-${{ hashFiles('**/Gemfile.lock', '**/*.gemfile.lock') }}-${{ inputs.bundle_gemfile || 'mat_views/Gemfile' }}
       - name: Prepare database
         working-directory: ${{ env.APP_DIR }}
         env:

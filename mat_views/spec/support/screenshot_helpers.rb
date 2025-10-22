@@ -7,14 +7,10 @@
 
 # Helpers for taking screenshots on test failures.
 module ScreenshotHelpers
-  def save_failure_screenshot(example, subdir: nil)
+  def save_failure_screenshot(example)
     return unless example.exception
 
-    # Use current I18n.locale, or fallback
-    locale = I18n.locale.to_s
-
-    # tmp/app-screenshots/<locale>[/<subdir>]
-    dir = Rails.root.join('tmp', 'app-screenshots', locale, *Array(subdir))
+    dir = Rails.root.join('tmp', 'screenshots')
     FileUtils.mkdir_p(dir)
 
     stamp = Time.now.strftime('%Y%m%d-%H%M%S')

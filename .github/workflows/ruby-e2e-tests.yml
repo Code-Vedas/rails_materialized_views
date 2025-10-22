@@ -6,18 +6,19 @@ on:
         required: true
         type: string
         description: Command to run tests (e.g., bin/rspec-unit or bin/rspec-e2e)
-    outputs:
-      screenshot_files:
-        description: The uploaded screenshot files artifact name
-        value: ${{ jobs.app_screenshots.outputs.screenshot_files }}
+      bundle_gemfile:
+        required: false
+        type: string
+        description: Path (relative to the repository root) to the Gemfile to use.
 permissions:
   contents: read
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-e2e-{0}', github.event.pull_request.number) || format('ref-e2e-{0}', github.ref) }}
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-e2e-{0}', github.event.pull_request.number) || format('ref-e2e-{0}', github.ref) }}-${{ inputs.bundle_gemfile }}
   cancel-in-progress: true
 env:
   RUBY_VERSION: 3.4.3
   APP_DIR: ${{ github.workspace }}/mat_views
+  BUNDLE_GEMFILE: ${{ inputs.bundle_gemfile != '' && format('{0}/{1}', github.workspace, inputs.bundle_gemfile) || '' }}
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -60,7 +61,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.APP_DIR }}/spec/dummy/tmp/cache
-          key: bootsnap-${{ runner.os }}-${{ env.RUBY_VERSION }}-${{ hashFiles('**/Gemfile.lock') }}
+          key: bootsnap-${{ runner.os }}-${{ env.RUBY_VERSION }}-${{ hashFiles('**/Gemfile.lock', '**/*.gemfile.lock') }}-${{ inputs.bundle_gemfile || 'mat_views/Gemfile' }}
       - name: Prepare database
         working-directory: ${{ env.APP_DIR }}
         env:
@@ -83,74 +84,4 @@ jobs:
         with:
           name: screenshots
           path: ${{ env.APP_DIR }}/spec/dummy/tmp/screenshots
-          if-no-files-found: ignore
-  app_screenshots:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    outputs:
-      screenshot_files: ${{ steps.upload_screenshots.outputs.artifact-url }}
-    services:
-      firefox:
-        image: selenium/standalone-firefox:latest
-        ports: [4444:4444]
-        options: >-
-          --add-host=host.docker.internal:host-gateway
-          --health-cmd="/opt/bin/check-grid.sh || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-        ports: [5432:5432]
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    steps:
-      - name: Install apt packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y \
-            build-essential git libpq-dev libyaml-dev pkg-config
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ env.RUBY_VERSION }}
-          bundler-cache: true
-          working-directory: ${{ env.APP_DIR }}
-      - name: Cache Bootsnap
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/cache
-          key: bootsnap-${{ runner.os }}-${{ env.RUBY_VERSION }}-${{ hashFiles('**/Gemfile.lock') }}
-      - name: Prepare database
-        working-directory: ${{ env.APP_DIR }}
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
-        run: |
-          bin/rails db:drop || true
-          bin/rails db:create
-          bin/rails db:schema:load
-      - name: Take app screenshots for all locales
-        working-directory: ${{ env.APP_DIR }}
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
-          SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
-        run: |
-          bin/rspec-app-screenshots
-      - name: Upload app screenshots artifact for all locales
-        if: always()
-        id: upload_screenshots
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-screenshots
-          path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots
           if-no-files-found: ignore
