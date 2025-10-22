@@ -51,10 +51,11 @@ module MatViews
       # Always returns true in the default implementation.
       #
       # @param _action [Symbol, String] the attempted action (ignored)
+      # @param _type [Symbol, String] the type of resource (ignored)
       # @param _record [Object] the target record or symbol (ignored)
       # @return [Boolean] true
       # rubocop:disable Naming/PredicateMethod
-      def authorize_mat_views!(_action, _record) = true
+      def authorize_mat_views!(_action, _type, _record = nil) = true
       # rubocop:enable Naming/PredicateMethod
     end
   end

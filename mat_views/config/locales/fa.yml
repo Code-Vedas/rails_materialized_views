@@ -1,187 +1,223 @@
+---
 fa:
   activerecord:
     attributes:
       mat_views/mat_view_definition:
-        created_at: "ایجاد شده در"
-        dependencies: "وابستگی‌ها"
-        name: "نام"
-        refresh_strategy: "راهبرد تازه‌سازی"
-        schedule_cron: "زمان‌بندی (کرون)"
-        sql: "SQL (SELECT ...)"
-        unique_index_columns: "ستون‌های نمایه یکتا"
-        updated_at: "به‌روزرسانی در"
+        created_at: ایجاد شده در
+        dependencies: وابستگی‌ها
+        last_run_at: آخرین اجرا
+        name: نام
+        refresh_strategy: راهبرد بازآوری
+        schedule_cron: زمان‌بندی (cron)
+        sql: SQL (SELECT ...)
+        unique_index_columns: ستون‌های شاخص یکتا
+        updated_at: به‌روزرسانی شده در
       mat_views/mat_view_run:
-        created_at: "ایجاد شده در"
-        details: "جزئیات"
-        duration_ms: "مدت (میلی‌ثانیه)"
-        error: "خطا"
-        finished_at: "پایان در"
-        mat_view_definition: "تعریف"
-        meta: "فراداده"
-        operation: "عملیات"
-        row_count_after: "تعداد ردیف پس از"
-        row_count_before: "تعداد ردیف پیش از"
-        rows_before_after: "ردیف‌ها (قبل/بعد)"
-        started_at: "آغاز در"
-        status: "وضعیت"
-        updated_at: "به‌روزرسانی در"
+        created_at: ایجاد شده در
+        details: جزئیات
+        duration_ms: مدت (میلی‌ثانیه)
+        error: خطا
+        finished_at: پایان یافته در
+        mat_view_definition: تعریف
+        meta: فراداده
+        operation: عملیات
+        row_count_after: تعداد ردیف پس از
+        row_count_before: تعداد ردیف پیش از
+        rows_before_after: ردیف‌ها (پیش/پس)
+        started_at: آغاز شده در
+        status: وضعیت
+        updated_at: به‌روزرسانی شده در
     enums:
       mat_views/mat_view_definition:
         refresh_strategy:
-          concurrent: "همزمان"
-          regular: "عادی"
-          swap: "جایگزینی"
+          concurrent: همزمان
+          regular: عادی
+          swap: جابه‌جایی
       mat_views/mat_view_run:
         operation:
-          create: "ایجاد"
-          drop: "حذف"
-          refresh: "تازه‌سازی"
+          create: ایجاد
+          drop: حذف
+          refresh: بازآوری
         status:
-          failed: "ناموفق"
-          running: "در حال اجرا"
-          success: "موفق"
+          failed: ناموفق
+          running: در حال اجرا
+          success: موفق
     errors:
       models:
         mat_views/mat_view_definition:
           attributes:
             name:
-              blank: "باید وارد شود"
-              invalid: "شناسهٔ معتبر PostgreSQL نیست"
-              taken: "باید یکتا باشد"
+              blank: باید وارد شود
+              invalid: شناسه معتبر PostgreSQL نیست
+              taken: باید یکتا باشد
             sql:
-              blank: "باید وارد شود"
-              invalid: "باید با SELECT شروع شود"
+              blank: باید وارد شود
+              invalid: باید با SELECT شروع شود
             unique_index_columns:
-              at_least_one: "هنگام استفاده از راهبرد تازه‌سازی همزمان باید دست‌کم یک ستون داشته باشد"
+              at_least_one: هنگام استفاده از راهبرد بازآوری همزمان باید دست‌کم یک
+                ستون داشته باشد
     hints:
       mat_views/mat_view_definition:
-        dependencies: "فهرستِ جداشده با ویرگول از جدول‌ها یا نماهایی که این نمای مادی به آن‌ها وابسته است."
-        name: "نام نمای مادی در پایگاه‌داده."
-        refresh_strategy: "چگونگی تازه‌سازی نمای مادی را تعیین می‌کند."
-        schedule_cron: "از قالب استاندارد کرون استفاده کنید. برای عدم زمان‌بندی، خالی بگذارید."
-        sql: "پرس‌وجوی SQL باید یک دستور SELECT معتبر باشد."
-        unique_index_columns: "ستون‌هایی برای ایجاد نمایهٔ یکتا. برای تازه‌سازی همزمان الزامی است."
+        dependencies: فهرستی از جدول‌ها یا نماهایی که این نمای مادی به آن‌ها وابسته
+          است (با کاما جدا شود).
+        name: نام نمای مادی در پایگاه داده.
+        refresh_strategy: نشان می‌دهد نمای مادی چگونه بازآوری می‌شود.
+        schedule_cron: از قالب استاندارد cron استفاده کنید. برای نبود زمان‌بندی، خالی
+          بگذارید.
+        sql: کوئری SQL باید یک دستور SELECT معتبر باشد.
+        unique_index_columns: ستون‌هایی برای ساخت شاخص یکتا. برای بازآوری همزمان ضروری
+          است.
       mat_views/mat_view_run:
-        error: "پیام خطا در صورت ناموفق بودن اجرا."
-        meta: "فرادادهٔ افزوده در قالب JSON."
-        operation: "نوع عملیات انجام‌شده."
-        status: "وضعیت کنونی اجرا."
+        error: پیام خطا اگر اجرای کار ناموفق شد.
+        meta: فرادادهٔ اضافی به صورت JSON.
+        operation: نوع عملیات انجام شده.
+        status: وضعیت فعلی اجرا.
     models:
-      mat_views/mat_view_definition: "تعریف نمای مادی"
-      mat_views/mat_view_run: "اجرای نمای مادی"
+      mat_views/mat_view_definition: تعریف نمای مادی
+      mat_views/mat_view_run: اجرای نمای مادی
     placeholders:
       mat_views/mat_view_definition:
-        dependencies: "وابستگی‌ها را وارد کنید (با ویرگول جدا کنید، اختیاری)"
-        name: "نام را وارد کنید"
-        refresh_strategy: "راهبرد تازه‌سازی را برگزینید"
-        schedule_cron: "0 0 * * * برای اجرای روزانه در نیمه‌شب؛ برای عدم زمان‌بندی خالی بگذارید"
-        sql: "SQL را وارد کنید (SELECT ...)"
-        unique_index_columns: "ستون‌های نمایه یکتا را وارد کنید (با ویرگول جدا کنید، اختیاری)"
+        dependencies: وابستگی‌ها را وارد کنید (با کاما جدا شده، اختیاری)
+        name: نام را وارد کنید
+        refresh_strategy: راهبرد بازآوری را انتخاب کنید
+        schedule_cron: 0 0 * * * برای اجرای روزانه در نیمه‌شب، برای بدون زمان‌بندی
+          خالی بگذارید
+        sql: SQL (SELECT ...) را وارد کنید
+        unique_index_columns: ستون‌های شاخص یکتا را وارد کنید (با کاما جدا شده، اختیاری)
       mat_views/mat_view_run:
-        error: "پیام خطا"
-        mat_view_definition: "نمای مادی را برگزینید"
-        meta: "فراداده (JSON)"
-        operation: "عملیات را برگزینید"
-        status: "وضعیت را برگزینید"
+        error: پیام خطا
+        mat_view_definition: نمای مادی را انتخاب کنید
+        meta: فراداده (JSON)
+        operation: عملیات را انتخاب کنید
+        status: وضعیت را انتخاب کنید
   i18n:
     name: فارسی
   mat_views:
-    actions: "اقدامات"
-    all_definitions: "همهٔ تعاریف"
-    all_operations: "همهٔ عملیات"
-    all_statuses: "همهٔ وضعیت‌ها"
-    cancel: "لغو"
-    close: "بستن"
-    close_window: "بستن پنجره"
-    create: "ایجاد"
+    actions: اقدام‌ها
+    cancel: لغو
+    close: بستن
+    close_window: بستن پنجره
+    create: ایجاد
     dashboard:
       metrics:
-        title: "سنجش‌ها"
-      title: "داشبورد"
-    definition: "تعریف"
-    definitions: "تعاریف"
-    delete: "حذف"
-    details: "جزئیات"
-    edit: "ویرایش"
-    edit_var: "ویرایش %{name}"
+        title: شاخص‌ها
+      title: داشبورد
+    datatable:
+      clear_search_aria_label: پاک کردن جستجو
+      search_aria_label: جستجو در جدول
+      search_placeholder: جستجو...
+    definition: تعریف
+    definitions: تعریف‌ها
+    delete: حذف
+    details: جزئیات
+    edit: ویرایش
+    edit_var: ویرایش %{name}
     errors:
-      frame_only: "این اقدام تنها در چارچوب قابل اجراست؛ به داشبورد هدایت شد."
+      frame_only: این کار فقط در یک فریم قابل انجام است؛ به داشبورد هدایت شدید.
       prevented_saving:
-        one: "۱ خطا مانع ذخیره شد:"
-        other: "%{count} خطا مانع ذخیره شد:"
-    filter_by: "فیلتر بر اساس:"
+        few: 'ذخیره توسط %{count} خطا متوقف شد:'
+        many: 'ذخیره توسط %{count} خطا متوقف شد:'
+        one: 'یک خطا ذخیره را متوقف کرد:'
+        other: 'ذخیره توسط %{count} خطا متوقف شد:'
+        two: 'ذخیره توسط ۲ خطا متوقف شد:'
+        zero: خطایی نیست، همه‌چیز عالی است!
+    filter_by: 'فیلتر بر اساس:'
     footer:
-      copyright: "© %{year} %{company} همهٔ حقوق محفوظ است."
-      documentation: "مستندات"
-      need_help: "به زمان کارکرد تضمین‌شده و پشتیبانی کارشناسی نیاز دارید؟"
-      open_issue: "گزارش مشکل"
-      project_homepage: "صفحهٔ خانهٔ پروژه"
-      support: "دریافت پشتیبانی حرفه‌ای →"
-      tagline: "ساخته‌شده با ❤️ توسط برنامه‌نویسان برای برنامه‌نویسان."
+      copyright: "© %{year} %{company} تمامی حقوق محفوظ است."
+      documentation: مستندات
+      need_help: به آپ‌تایم تضمین شده و کمک متخصص نیاز دارید؟
+      open_issue: ایجاد Issue
+      project_homepage: صفحه اصلی پروژه
+      support: دریافت پشتیبانی حرفه‌ای →
+      tagline: با ❤️ توسط توسعه‌دهندگان برای توسعه‌دهندگان ساخته شده است.
       tooltip:
-        documentation: "مطالعهٔ مستندات"
-        gem_version: "مشاهدهٔ صفحهٔ RubyGems"
-        open_issue: "گزارش خطا یا درخواست ویژگی"
-        project_homepage: "مخزن GitHub"
-        support: "طرح‌های پشتیبانی حرفه‌ای"
-      version: "v%{version}"
+        documentation: مستندات را بخوانید
+        gem_version: برای رفتن به صفحه RubyGems کلیک کنید
+        open_issue: گزارش باگ یا درخواست قابلیت
+        project_homepage: مخزن GitHub
+        support: طرح‌های پشتیبانی حرفه‌ای
+      version: v%{version}
     header:
-      signed_in_as: "وارد شده با %{email}"
-    history: "تاریخچه"
-    loading: "در حال بارگذاری..."
-    loading_definitions: "در حال بارگذاری تعاریف..."
-    loading_runs: "در حال بارگذاری اجراها..."
+      signed_in_as: با %{email} وارد شده‌اید
+    history: تاریخچه
+    loading: در حال بارگیری...
+    loading_definitions: در حال بارگیری تعریف‌ها...
+    loading_runs: در حال بارگیری اجراها...
     mat_view_definition:
-      create_mv: "ایجاد MV"
-      create_mv_tooltip: "نمای مادی را در پایگاه‌داده ایجاد می‌کند."
-      delete_confirm: "تعریف %{name} حذف شود؟ (MV حذف نخواهد شد)"
-      delete_tooltip: "تعریف را حذف می‌کند اما نمای مادی را از پایگاه‌داده حذف نمی‌کند."
-      drop_mv: "حذف MV"
-      drop_mv_cascade: "حذف MV (آبشاری)"
-      drop_mv_cascade_confirm: "نمای مادی و همهٔ وابستگی‌ها برای %{name} حذف شود؟"
-      drop_mv_cascade_tooltip: "نمای مادی و اشیای وابسته را حذف می‌کند. تعریف باقی می‌ماند."
-      drop_mv_confirm: "نمای مادی برای %{name} حذف شود؟"
-      drop_mv_tooltip: "فقط نمای مادی را حذف می‌کند. تعریف باقی می‌ماند."
-      edit_tooltip: "ویرایش تعریف نمای مادی."
-      materialized_view: "نمای مادی"
-      materialized_view_exists: "نمای مادی موجود است"
-      materialized_view_not_exists: "نمای مادی هنوز ایجاد نشده است!"
-      new_definition: "تعریف جدید"
-      new_definition_tooltip: "ایجاد تعریف جدید برای نمای مادی."
-      no_definitions: "هیچ تعریفی یافت نشد. برای شروع یکی ایجاد کنید."
-      refresh_tooltip: "نمای مادی را تازه‌سازی می‌کند."
-      sql_summary_tooltip: "برای باز/بسته کردن SQL کلیک کنید"
-      view_tooltip: "مشاهدهٔ تعریف نمای مادی."
+      create_mv: ایجاد MatViews
+      create_mv_tooltip: نمای مادی را در پایگاه داده ایجاد می‌کند.
+      delete_confirm: تعریف %{name} حذف شود؟ (MatViews حذف نمی‌شود)
+      delete_tooltip: تعریف را حذف می‌کند اما نمای مادی را از پایگاه داده حذف نمی‌کند.
+      drop_mv: حذف MatViews
+      drop_mv_cascade: حذف MatViews (آبشاری)
+      drop_mv_cascade_confirm: نمای مادی و همه وابستگی‌های %{name} حذف شود؟
+      drop_mv_cascade_tooltip: نمای مادی و همه وابستگی‌ها را از پایگاه داده حذف می‌کند.
+        تعریف باقی می‌ماند.
+      drop_mv_confirm: نمای مادی %{name} حذف شود؟
+      drop_mv_tooltip: نمای مادی را از پایگاه داده حذف می‌کند. تعریف باقی می‌ماند.
+      edit_tooltip: ویرایش تعریف نمای مادی.
+      materialized_view: نمای مادی
+      materialized_view_exists: نمای مادی وجود دارد
+      materialized_view_not_exists: نمای مادی هنوز ایجاد نشده است!
+      new_definition: تعریف جدید
+      new_definition_tooltip: تعریف جدید نمای مادی ایجاد کنید.
+      no_definitions: هیچ تعریف نمای مادی پیدا نشد. برای شروع یکی بسازید.
+      no_definitions_if_filtered: با فیلترها یا جستجوی انتخاب‌شده تعریفی پیدا نشد.
+      refresh_tooltip: نمای مادی را در پایگاه داده بازآوری می‌کند.
+      sql_summary_tooltip: برای باز یا بستن SQL کلیک کنید
+      view_tooltip: مشاهده تعریف نمای مادی.
     mat_view_run:
-      error_tooltip: "پیام خطا در صورت ناموفق بودن اجرا."
-      meta_tooltip: "فرادادهٔ افزوده در قالب JSON."
-      no_runs: "هیچ اجرایی یافت نشد."
-      no_runs_if_filtered: "برای فیلترهای انتخابی، اجرایی یافت نشد."
-      view_details: "نمایش جزئیات"
-      view_tooltip: "مشاهدهٔ جزئیات اجرا."
-    project_author: "Codevedas Inc."
-    project_description: "رابط مدیریت برای نگهداشت نماهای مادی PostgreSQL در برنامه‌های Rails."
-    project_tags: "rails, ruby, نمای مادی, مدیریت, داشبورد, رابط کاربری"
-    refresh: "تازه‌سازی"
-    refresh_contents: "تازه‌سازی محتوا"
-    reloading: "در حال بارگذاری مجدد..."
-    reset: "بازنشانی"
-    run: "اجرا"
-    runs: "اجراها"
-    save_changes: "ذخیرهٔ تغییرات"
+      error_tooltip: اگر اجرا ناموفق شد پیام خطا.
+      meta_tooltip: فراداده اضافی در قالب JSON.
+      no_runs: هیچ اجرایی یافت نشد.
+      no_runs_if_filtered: برای فیلترهای انتخاب‌شده اجرایی یافت نشد.
+      view_details: مشاهده جزئیات
+      view_tooltip: جزئیات اجرا را ببینید.
+    no_filter: هر نوع (بدون فیلتر)
+    no_value: بدون مقدار (nil یا خالی)
+    per_page: در هر صفحه
+    project_author: CodeVedas Inc.
+    project_description: رابط مدیریتی برای مدیریت نمای مادی PostgreSQL در برنامه‌های
+      Rails.
+    project_tags: rails, ruby, materialized views, admin, dashboard, ui, interface,
+      management
+    refresh: بازآوری
+    refresh_contents: بازآوری محتوا
+    reloading: در حال بازبارگیری...
+    reset: بازنشانی
+    run: اجرا
+    runs: اجراها
+    save_changes: ذخیره تغییرات
     settings:
-      auto: "خودکار"
-      dark: "تیره"
-      language: "زبان"
-      language_hint: "زبان رابط کاربری را انتخاب کنید."
-      light: "روشن"
-      theme: "پوسته"
-      theme_hint: "حالت خودکار از تنظیمات سیستم پیروی می‌کند؛ روشن/تیره آن را بازنویسی می‌کنند."
-      title: "ترجیحات"
-    title: "مدیریت MatViews"
-    view_var: "نمایش %{name}"
+      auto: خودکار
+      dark: تاریک
+      language: زبان
+      language_hint: زبان رابط را انتخاب کنید.
+      light: روشن
+      theme: پوسته
+      theme_hint: خودکار از ترجیح سیستم پیروی می‌کند، روشن و تاریک آن را بازنویسی
+        می‌کنند.
+      title: ترجیحات
+    title: مدیریت MatViews
+    view_var: مشاهده %{name}
+    x_miliseconds: "%{count} میلی‌ثانیه"
+  number:
+    format:
+      delimiter: "٬"
+      separator: "٫"
+  numbers:
+    eight: ۸
+    five: ۵
+    four: ۴
+    nine: ۹
+    one: ۱
+    seven: ۷
+    six: ۶
+    three: ۳
+    two: ۲
+    zero: ۰
   time:
-    am: "ق.ظ"
+    am: قبل از ظهر
     formats:
       datetime12hour: "%Y-%m-%d %I:%M:%S %p"
-    pm: "ب.ظ"
+    pm: بعد از ظهر

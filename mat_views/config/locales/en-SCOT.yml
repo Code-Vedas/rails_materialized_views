@@ -1,187 +1,223 @@
+---
 en-SCOT:
   activerecord:
     attributes:
       mat_views/mat_view_definition:
-        created_at: "Made at"
-        dependencies: "Dependins"
-        name: "Name"
-        refresh_strategy: "Wey o Refreshin"
-        schedule_cron: "Schedule (cron)"
-        sql: "SQL (SELECT ...)"
-        unique_index_columns: "Unique index columns"
-        updated_at: "Updatit at"
+        created_at: Cooked up oan
+        dependencies: Whit's relied oan
+        last_run_at: Last time it ran
+        name: Name
+        refresh_strategy: Refresh scheme
+        schedule_cron: Schedule (cron)
+        sql: SQL (SELECT ...)
+        unique_index_columns: Unique index columns
+        updated_at: Updated oan
       mat_views/mat_view_run:
-        created_at: "Made at"
-        details: "Detail[s]"
-        duration_ms: "Lenth o time (ms)"
-        error: "Mishanter"
-        finished_at: "Feinish't at"
-        mat_view_definition: "Defineetion"
-        meta: "Meta"
-        operation: "Opration"
-        row_count_after: "Row coont efter"
-        row_count_before: "Row coont afore"
-        rows_before_after: "Rows (afore/efter)"
-        started_at: "Stairtit at"
-        status: "Status"
-        updated_at: "Updatit at"
+        created_at: Cooked up oan
+        details: Details
+        duration_ms: Duration (ms)
+        error: Error
+        finished_at: Finished oan
+        mat_view_definition: Definition
+        meta: Extra info
+        operation: Operation
+        row_count_after: Rows efter
+        row_count_before: Rows afore
+        rows_before_after: Rows (afore/efter)
+        started_at: Kicked aff
+        status: Status
+        updated_at: Updated oan
     enums:
       mat_views/mat_view_definition:
         refresh_strategy:
-          concurrent: "Concurrent"
-          regular: "Regular"
-          swap: "Swap"
+          concurrent: A' at once
+          regular: Regular
+          swap: Swap
       mat_views/mat_view_run:
         operation:
-          create: "Mak"
-          drop: "Drap"
-          refresh: "Refresh"
+          create: Mak
+          drop: Drap
+          refresh: Refresh
         status:
-          failed: "Fail't"
-          running: "Rinnin"
-          success: "Succeedit"
+          failed: Scunnered
+          running: Gawn
+          success: Sorted
     errors:
       models:
         mat_views/mat_view_definition:
           attributes:
             name:
-              blank: "Ye maun gie a name."
-              invalid: "No a guid PostgreSQL name."
-              taken: "That name's awready taen."
+              blank: needs tae be filled in
+              invalid: isnae a valid PostgreSQL name
+              taken: needs tae be unique
             sql:
-              blank: "Ye maun gie SQL."
-              invalid: "Maun stairt wi SELECT."
+              blank: needs tae be filled in
+              invalid: has tae start wi SELECT
             unique_index_columns:
-              at_least_one: "Ye'll need at least ae column for concurrent refresh."
+              at_least_one: needs at least ane column when usin the concurrent refresh
+                scheme
     hints:
       mat_views/mat_view_definition:
-        dependencies: "Comma-separatit list o tables or views this yin depends on."
-        name: "The name o the materialised view in the database."
-        refresh_strategy: "Hou the materialised view'll be refresh't."
-        schedule_cron: "Use standard cron. Leave blank gin there's nae schedule."
-        sql: "The SQL query maun be a SELECT statement."
-        unique_index_columns: "Columns tae mak a unique index on; needit for concurrent refresh."
+        dependencies: Comma list o tables or views this materialised yin depends oan.
+        name: Name o the materialised view in the database.
+        refresh_strategy: Shows hoo the materialised view gets refreshed.
+        schedule_cron: Use the usual cron format. Leave it blank if yer no scheduling.
+        sql: The SQL statement needs tae be a proper SELECT.
+        unique_index_columns: Columns that get the unique index. Needed for the concurrent
+          refresh.
       mat_views/mat_view_run:
-        error: "Mishanter message gin the rin fail."
-        meta: "Mair metadata in JSON."
-        operation: "Kynd o opration duin."
-        status: "The noo status o the rin."
+        error: Message if the run went pear-shaped.
+        meta: Extra details in JSON.
+        operation: Type o operation that ran.
+        status: Whit stage the run's at the noo.
     models:
-      mat_views/mat_view_definition: "Materialised View Defineetion"
-      mat_views/mat_view_run: "Materialised View Rin"
+      mat_views/mat_view_definition: Materialised View Definition
+      mat_views/mat_view_run: Materialised View Run
     placeholders:
       mat_views/mat_view_definition:
-        dependencies: "Pit in dependins (comma-separatit, optional)"
-        name: "Pit in name"
-        refresh_strategy: "Pick a refresh wey"
-        schedule_cron: "0 0 * * * for ilka midnicht; leave blank for nae schedule"
-        sql: "Pit in SQL (SELECT ...)"
-        unique_index_columns: "Pit in unique index columns (comma-separatit, optional)"
+        dependencies: Type dependencies (comma separated, optional)
+        name: Type name
+        refresh_strategy: Pick a refresh scheme
+        schedule_cron: 0 0 * * * fer midnight daily, blank fer nae schedule
+        sql: Type SQL (SELECT ...)
+        unique_index_columns: Type unique index columns (comma separated, optional)
       mat_views/mat_view_run:
-        error: "Mishanter message"
-        mat_view_definition: "Wale a materialised view"
-        meta: "Metadata (JSON)"
-        operation: "Wale an opration"
-        status: "Wale status"
+        error: Error message
+        mat_view_definition: Pick the materialised view
+        meta: Extra info (JSON)
+        operation: Pick operation
+        status: Pick status
   i18n:
     name: English (Scots)
   mat_views:
-    actions: "Actions"
-    all_definitions: "A' defineetions"
-    all_operations: "A' oprations"
-    all_statuses: "A' statuses"
-    cancel: "Cancel"
-    close: "Sneck"
-    close_window: "Sneck windae"
-    create: "Mak"
+    actions: Actions
+    cancel: Cancel
+    close: Shut
+    close_window: Shut windae
+    create: Create
     dashboard:
       metrics:
-        title: "Metrics"
-      title: "Dashbuird"
-    definition: "Defineetion"
-    definitions: "Defineetions"
-    delete: "Delyte"
-    details: "Details"
-    edit: "Eedit"
-    edit_var: "Eedit %{name}"
+        title: Metrics
+      title: Dashboard
+    datatable:
+      clear_search_aria_label: Clear the search
+      search_aria_label: Search the table
+      search_placeholder: Hae a keek...
+    definition: Definition
+    definitions: Definitions
+    delete: Delete
+    details: Details
+    edit: Edit
+    edit_var: Edit %{name}
     errors:
-      frame_only: "This kin o action can be duin in a frame alane; ye're sent back tae the dashbuird."
+      frame_only: Ye can only dae this inside a frame, sae ye're heidit back tae the
+        dashboard.
       prevented_saving:
-        one: "Ae faut stappit the savin:"
-        other: "%{count} fauts stappit the savin:"
-    filter_by: "Filter by:"
+        few: "%{count} clangers stopped the save:"
+        many: "%{count} clangers stopped the save:"
+        one: '1 clanger stopped the save:'
+        other: "%{count} clangers stopped the save:"
+        two: '2 clangers stopped the save:'
+        zero: Nae clangers, braw!
+    filter_by: 'Filter by:'
     footer:
-      copyright: "© %{year} %{company} A' richts reservit."
-      documentation: "Docs"
-      need_help: "Dae ye need uptime & expert help?"
-      open_issue: "Open an Issue"
-      project_homepage: "Project Hamepage"
-      support: "Get Professional Support →"
-      tagline: "Biggit wi ❤️ by developers, for developers."
+      copyright: "© %{year} %{company} All rights reserved."
+      documentation: Docs
+      need_help: Need guaranteed uptime & a wee bit o help?
+      open_issue: Open an Issue
+      project_homepage: Project hamepage
+      support: Get Professional Support →
+      tagline: Built wi ❤️ by developers, fer developers.
       tooltip:
-        documentation: "Read the docs"
-        gem_version: "Clap ower tae RubyGems"
-        open_issue: "Report a bug or speir a feature"
-        project_homepage: "Github repository"
-        support: "Support plans"
-      version: "v%{version}"
+        documentation: Read the docs
+        gem_version: Heid ower tae RubyGems
+        open_issue: Report a bug or ask fer a feature
+        project_homepage: GitHub repo
+        support: Professional support plans
+      version: v%{version}
     header:
-      signed_in_as: "Signed in as %{email}"
-    history: "Chronicle"
-    loading: "Loadin..."
-    loading_definitions: "Loadin defineetions..."
-    loading_runs: "Loadin rins..."
+      signed_in_as: Signed in as %{email}
+    history: History
+    loading: Loadin...
+    loading_definitions: Fetchin definitions...
+    loading_runs: Fetchin runs...
     mat_view_definition:
-      create_mv: "Mak MV"
-      create_mv_tooltip: "Maks the materialised view in the database."
-      delete_confirm: "Delyte defineetion %{name}? (Disna drap the MV)"
-      delete_tooltip: "Delytes the defineetion but disna drap the materialised view in the DB."
-      drop_mv: "Drap MV"
-      drop_mv_cascade: "Drap MV (Cascade)"
-      drop_mv_cascade_confirm: "Drap the materialised view an a' dependents for %{name}?"
-      drop_mv_cascade_tooltip: "Draps the materialised view an a' dependents in the DB. Defineetion bides."
-      drop_mv_confirm: "Drap the MV for %{name}?"
-      drop_mv_tooltip: "Draps the MV alane. Defineetion bides."
-      edit_tooltip: "Eedit the materialised view defineetion."
-      materialized_view: "Materialised View"
-      materialized_view_exists: "Materialised view exists"
-      materialized_view_not_exists: "Materialised view no made yet!"
-      new_definition: "New defineetion"
-      new_definition_tooltip: "Mak a new materialised view defineetion."
-      no_definitions: "Nae materialised view defineetions fund. Mak ane tae get stertit."
-      refresh_tooltip: "Refreshes the materialised view in the DB."
-      sql_summary_tooltip: "Click tae shaw/hide the SQL"
-      view_tooltip: "View the materialised view defineetion."
+      create_mv: Create MatViews
+      create_mv_tooltip: Builds the materialised view in the database.
+      delete_confirm: Scrap the definition %{name}? (Disnae drop MatViews)
+      delete_tooltip: Deletes the definition but disnae drop the materialised view
+        in the database.
+      drop_mv: Drop MatViews
+      drop_mv_cascade: Drop MatViews (Cascade)
+      drop_mv_cascade_confirm: Drop the materialised view an aw the hangers-on fer
+        %{name}?
+      drop_mv_cascade_tooltip: Drops the materialised view an aw the dependents in
+        the database. Definition stays put.
+      drop_mv_confirm: Drop the materialised view fer %{name}?
+      drop_mv_tooltip: Drops the materialised view in the database. Definition sticks
+        aroond.
+      edit_tooltip: Edit materialised view definition.
+      materialized_view: Materialised view
+      materialized_view_exists: Materialised view's there
+      materialized_view_not_exists: Materialised view's no ready yet!
+      new_definition: New definition
+      new_definition_tooltip: Spin up a new materialised view definition.
+      no_definitions: Nae materialised view definitions found. Mak ane tae get goin.
+      no_definitions_if_filtered: Nuthin matches yon filters or search.
+      refresh_tooltip: Refreshes the materialised view in the database.
+      sql_summary_tooltip: Tap tae open/close the SQL
+      view_tooltip: See the materialised view definition.
     mat_view_run:
-      error_tooltip: "Mishanter message gin the rin fail."
-      meta_tooltip: "Mair metadata in JSON."
-      no_runs: "Nae rins fund."
-      no_runs_if_filtered: "Nae rins for the pickit filters."
-      view_details: "View details"
-      view_tooltip: "View rin details."
-    project_author: "Codevedas Inc."
-    project_description: "Admin interface for managin PostgreSQL materialised views in Rails apps."
-    project_tags: "rails, ruby, materialised views, admin, dashbuird, UI, interface, management"
-    refresh: "Refresh"
-    refresh_contents: "Refresh contents"
-    reloading: "Reloadin..."
-    reset: "Reset"
-    run: "Rin"
-    runs: "Rins"
-    save_changes: "Save chynges"
+      error_tooltip: Error message if the run went belly up.
+      meta_tooltip: Extra info in JSON.
+      no_runs: Nae runs found.
+      no_runs_if_filtered: Nae runs match thae filters.
+      view_details: View details
+      view_tooltip: View the run details.
+    no_filter: Any (nae filter)
+    no_value: Nae value (nil or empty)
+    per_page: Per page
+    project_author: CodeVedas Inc.
+    project_description: Admin interface fer mindin PostgreSQL materialised views
+      in Rails apps.
+    project_tags: rails, ruby, materialized views, admin, dashboard, ui, interface,
+      management
+    refresh: Refresh
+    refresh_contents: Refresh contents
+    reloading: Reloadin...
+    reset: Reset
+    run: Run
+    runs: Runs
+    save_changes: Save changes
     settings:
-      auto: "Auto"
-      dark: "Derk"
-      language: "Leid"
-      language_hint: "Wale the leid for yer interface."
-      light: "Licht"
-      theme: "Theme"
-      theme_hint: "Auto follaes yer system; licht or derk owerrides it."
-      title: "Prefs"
-    title: "MatViews Admin"
-    view_var: "View %{name}"
+      auto: Auto
+      dark: Dark
+      language: Language
+      language_hint: Choose yer interface lingo.
+      light: Light
+      theme: Theme
+      theme_hint: Auto follows yer system; light an dark override it.
+      title: Preferences
+    title: MatViews Admin
+    view_var: View %{name}
+    x_miliseconds: "%{count} ms"
+  number:
+    format:
+      delimiter: ","
+      separator: "."
+  numbers:
+    eight: 8
+    five: 5
+    four: 4
+    nine: 9
+    one: 1
+    seven: 7
+    six: 6
+    three: 3
+    two: 2
+    zero: 0
   time:
-    am: "AM"
+    am: AM
     formats:
       datetime12hour: "%Y-%m-%d %I:%M:%S %p"
-    pm: "PM"
+    pm: PM

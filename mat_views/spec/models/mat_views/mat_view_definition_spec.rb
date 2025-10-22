@@ -65,4 +65,147 @@ RSpec.describe MatViews::MatViewDefinition do
       expect(model.last_run).to eq(recent_run)
     end
   end
+
+  describe 'scopes' do
+    let!(:defn_one) { create(:mat_view_definition, name: 'A', schedule_cron: '0 0 *') }
+    let!(:defn_two) { create(:mat_view_definition, name: 'B', refresh_strategy: :swap) }
+    let!(:defn_three) { create(:mat_view_definition, name: 'C', schedule_cron: '30 1 *', unique_index_columns: [:id], refresh_strategy: :concurrent) }
+
+    before do
+      defn_one.mat_view_runs.create!(operation: 'create', status: 'success', started_at: '2025-01-01 10:00:00 UTC')
+      defn_two.mat_view_runs.create!(operation: 'create', status: 'success', started_at: '2024-12-31 09:00:00 UTC')
+    end
+
+    describe 'ordered_by_name' do
+      it 'orders ascending' do
+        expect(described_class.ordered_by_name(:asc)).to eq([defn_one, defn_two, defn_three])
+      end
+
+      it 'orders descending' do
+        expect(described_class.ordered_by_name(:desc)).to eq([defn_three, defn_two, defn_one])
+      end
+    end
+
+    describe 'ordered_by_refresh_strategy' do
+      it 'orders ascending' do
+        expect(described_class.ordered_by_refresh_strategy(:asc)).to eq([defn_three, defn_one, defn_two])
+      end
+
+      it 'orders descending' do
+        expect(described_class.ordered_by_refresh_strategy(:desc)).to eq([defn_two, defn_one, defn_three])
+      end
+    end
+
+    describe 'ordered_by_schedule_cron' do
+      it 'orders ascending with NULLS LAST' do
+        expect(described_class.ordered_by_schedule_cron(:asc)).to eq([defn_one, defn_three, defn_two])
+      end
+
+      it 'orders descending with NULLS LAST' do
+        expect(described_class.ordered_by_schedule_cron(:desc)).to eq([defn_three, defn_one, defn_two])
+      end
+    end
+
+    describe 'ordered_by_last_run_at' do
+      it 'orders ascending with NULLS LAST' do
+        expect(described_class.ordered_by_last_run_at(:asc)).to eq([defn_one, defn_two, defn_three])
+      end
+
+      it 'orders descending with NULLS LAST' do
+        expect(described_class.ordered_by_last_run_at(:desc)).to eq([defn_two, defn_one, defn_three])
+      end
+    end
+
+    describe 'search_by_name' do
+      it 'finds by partial match, case insensitive' do
+        expect(described_class.search_by_name('a')).to eq([defn_one])
+        expect(described_class.search_by_name('B')).to eq([defn_two])
+        expect(described_class.search_by_name('z')).to be_empty
+      end
+    end
+
+    describe 'search_by_refresh_strategy' do
+      it 'finds by partial match, case insensitive on human labels' do
+        expect(described_class.search_by_refresh_strategy('reg')).to eq([defn_one])
+        expect(described_class.search_by_refresh_strategy('SWAP')).to eq([defn_two])
+        expect(described_class.search_by_refresh_strategy('xyz')).to be_empty
+      end
+    end
+
+    describe 'search_by_schedule_cron' do
+      it 'finds by partial match, case insensitive' do
+        expect(described_class.search_by_schedule_cron('0 0')).to eq([defn_one])
+        expect(described_class.search_by_schedule_cron('30')).to eq([defn_three])
+        expect(described_class.search_by_schedule_cron('xyz')).to be_empty
+      end
+    end
+
+    describe 'search_by_last_run_at' do
+      it 'finds by partial match, case insensitive on last run timestamp' do
+        expect(described_class.search_by_last_run_at('2025-01-01')).to eq([defn_one])
+        expect(described_class.search_by_last_run_at('2024-12-31')).to eq([defn_two])
+        expect(described_class.search_by_last_run_at('xyz')).to be_empty
+      end
+    end
+
+    describe 'filtered_by_name' do
+      it 'filters by exact match' do
+        expect(described_class.filtered_by_name('A')).to eq([defn_one])
+        expect(described_class.filtered_by_name('B')).to eq([defn_two])
+        expect(described_class.filtered_by_name('Z')).to be_empty
+      end
+    end
+
+    describe 'filtered_by_refresh_strategy' do
+      it 'filters by exact match' do
+        expect(described_class.filtered_by_refresh_strategy('regular')).to eq([defn_one])
+        expect(described_class.filtered_by_refresh_strategy('swap')).to eq([defn_two])
+        expect(described_class.filtered_by_refresh_strategy('xyz')).to be_empty
+      end
+    end
+
+    describe 'filtered_by_schedule_cron' do
+      it 'filters by exact match' do
+        expect(described_class.filtered_by_schedule_cron('0 0 *')).to eq([defn_one])
+        expect(described_class.filtered_by_schedule_cron('30 1 *')).to eq([defn_three])
+        expect(described_class.filtered_by_schedule_cron('xyz')).to be_empty
+      end
+
+      it 'filters by no value' do
+        expect(described_class.filtered_by_schedule_cron('no_value')).to eq([defn_two])
+      end
+    end
+  end
+
+  describe 'select options for filters' do
+    let!(:defn_one) { create(:mat_view_definition, name: 'A', schedule_cron: '0 0 *', refresh_strategy: :regular) }
+    let!(:defn_two) { create(:mat_view_definition, name: 'B', refresh_strategy: :swap) }
+    let!(:defn_three) { create(:mat_view_definition, name: 'C', schedule_cron: '30 1 *', refresh_strategy: :concurrent, unique_index_columns: [:id]) }
+
+    before do
+      defn_one.mat_view_runs.create!(operation: 'create', status: 'success', started_at: '2025-01-01 10:00:00 UTC')
+      defn_two.mat_view_runs.create!(operation: 'create', status: 'success', started_at: '2024-12-31 09:00:00 UTC')
+      defn_three.mat_view_runs.create!(operation: 'create', status: 'failed', started_at: '2024-12-30 08:00:00 UTC')
+    end
+
+    describe '.filter_options_for_name' do
+      it 'returns unique names' do
+        expect(described_class.filter_options_for_name).to eq([%w[A A], %w[B B], %w[C C]])
+      end
+    end
+
+    describe '.filter_options_for_refresh_strategy' do
+      it 'returns unique strategies in human-readable form' do
+        expected_values = [%w[Regular regular], %w[Concurrent concurrent], %w[Swap swap]]
+        expect(described_class.filter_options_for_refresh_strategy).to eq(expected_values)
+      end
+    end
+
+    describe '.filter_options_for_schedule_cron' do
+      it 'returns unique cron expressions including no value option' do
+        expected_values = [['0 0 *', '0_0_*'], ['30 1 *', '30_1_*']]
+        expect(described_class.filter_options_for_schedule_cron).to eq(expected_values)
+      end
+    end
+  end
 end

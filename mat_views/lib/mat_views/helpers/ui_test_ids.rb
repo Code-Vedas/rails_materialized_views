@@ -38,6 +38,12 @@ module MatViews
 
       PREFERENCES_SAVE_BUTTON = 'preferences_save_button'
       PREFERENCES_CANCEL_BUTTON = 'preferences_cancel_button'
+
+      TOGGLE_SORT_BUTTON = 'toggle_sort_button'
+      DT_SEARCH_INPUT = 'dt_search_input'
+      DT_FILTER_SELECT = 'dt_filter_select'
+      DT_CLEAR_SEARCH_BTN = 'dt_clear_search_btn'
+      DT_PAGINATION_BTN = 'dt_pagination_btn'
     end
   end
 end

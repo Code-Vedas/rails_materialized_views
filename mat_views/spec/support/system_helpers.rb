@@ -16,11 +16,13 @@ module SystemHelpers
   end
 
   def open_runs
+    expect(page).to have_css('a[data-testid="runs_tab_link"]', wait: Capybara.default_max_wait_time)
     find('a[data-testid="runs_tab_link"]').click
     wait_for_turbo_idle
   end
 
   def open_definitions
+    expect(page).to have_css('a[data-testid="definitions_tab_link"]', wait: Capybara.default_max_wait_time)
     find('a[data-testid="definitions_tab_link"]').click
     wait_for_turbo_idle
   end

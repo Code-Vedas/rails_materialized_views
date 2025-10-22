@@ -1,10 +1,10 @@
 <div class="mv-toolbar start">
-  <%= mv_drawer_link(new_admin_mat_view_definition_path(frame_id: 'mv-drawer'), mv_t("mat_view_definition.new_definition"),
+  <%= mv_drawer_link(new_admin_mat_view_definition_path(frame_id: 'mv-drawer'), t("mat_views.mat_view_definition.new_definition"),
                      variant: :primary,
                      testid: 'NEW_DEFINITION_LINK',
-                     tooltip: mv_t("mat_view_definition.new_definition_tooltip")) do %>
+                     tooltip: t("mat_views.mat_view_definition.new_definition_tooltip")) do %>
     <%= mv_icon(:plus_circle) %>
-    <%= mv_t("mat_view_definition.new_definition") %>
+    <%= t("mat_views.mat_view_definition.new_definition") %>
   <% end %>
 </div>
-<%= render "table", definitions: @definitions, mv_exists_map: @mv_exists_map %>
+<%= render "mat_views/admin/ui/datatable", dt_config: @dt_config, row_values: @data %>

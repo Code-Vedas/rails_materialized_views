@@ -15,27 +15,28 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
 
   describe '#mv_button_classes' do
     it 'builds the expected class string' do
-      expect(helper.mv_button_classes(:secondary, :lg))
+      expect(helper.send(:mv_button_classes, :secondary, :lg))
         .to eq('mv-btn mv-btn--secondary mv-btn--lg')
     end
   end
 
   describe '#mv_button_link' do
     it 'renders a link with classes, tooltip data and confirm' do
-      html = helper.mv_button_link('/path',
-                                   variant: :secondary,
-                                   size: :lg,
-                                   underline: true,
-                                   tooltip: 'Tip',
-                                   tooltip_placement: 'bottom',
-                                   confirm: 'Are you sure?',
-                                   data: { foo: 'bar' }) { 'Go' }
+      html = helper.send(:mv_button_link, '/path',
+                         variant: :secondary,
+                         size: :lg,
+                         class: 'tea-green',
+                         underline: true,
+                         tooltip: 'Tip',
+                         tooltip_placement: 'bottom',
+                         confirm: 'Are you sure?',
+                         data: { foo: 'bar' }) { 'Go' }
 
       a = first('a', html)
       expect(a.text).to eq('Go')
       expect(a['href']).to eq('/path')
       expect(a['class']).to include('mv-btn mv-btn--secondary mv-btn--lg')
-      expect(a['class']).to include('underline')
+      expect(a['class']).to include('underline tea-green')
       expect(a['data-foo']).to eq('bar')
       expect(a['data-tooltip-text-value']).to eq('Tip')
       expect(a['data-tooltip-placement']).to eq('bottom')
@@ -45,7 +46,7 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
 
   describe '#mv_drawer_link' do
     it 'renders a drawer-triggering link with proper data attributes' do
-      html = helper.mv_drawer_link('/drawer/url', 'My Drawer', variant: :ghost) { 'Open' }
+      html = helper.send(:mv_drawer_link, '/drawer/url', 'My Drawer', variant: :ghost) { 'Open' }
       a = first('a', html)
       expect(a.text).to eq('Open')
       expect(a['href']).to eq('#')
@@ -58,7 +59,7 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
 
   describe '#mv_button_to' do
     it 'renders a form/button with classes and content' do
-      html = helper.mv_button_to('/submit', variant: :primary, size: :sm) { 'Create' }
+      html = helper.send(:mv_button_to, '/submit', variant: :primary, size: :sm) { 'Create' }
       form = first('form', html)
       button = first('form button', html)
 
@@ -71,7 +72,7 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
 
   describe '#mv_drawer_action_button' do
     it 'renders a button with drawer action and optional tooltip' do
-      html = helper.mv_drawer_action_button('Refresh', 'reload', 'Reload now', 'top') { 'R' }
+      html = helper.send(:mv_drawer_action_button, 'Refresh', 'reload', 'Reload now', 'top') { 'R' }
       btn = first('button', html)
 
       expect(btn['class']).to include('mv-drawer-action')
@@ -84,7 +85,7 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
     end
 
     it 'omits tooltip data when not provided' do
-      html = helper.mv_drawer_action_button('Refresh', 'reload') { 'R' }
+      html = helper.send(:mv_drawer_action_button, 'Refresh', 'reload') { 'R' }
       btn = first('button', html)
 
       expect(btn['data-controller']).to be_nil
@@ -95,7 +96,7 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
 
   describe '#mv_link_to' do
     it 'renders a non-block link, defaulting target to _blank and supporting tooltip' do
-      html = helper.mv_link_to('Docs', 'https://example.com', tooltip: 'Open docs')
+      html = helper.send(:mv_link_to, 'Docs', 'https://example.com', tooltip: 'Open docs')
       a = first('a', html)
 
       expect(a.text).to eq('Docs')
@@ -108,14 +109,14 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
     end
 
     it 'renders a block link with content' do
-      html = helper.mv_link_to('/x', {}) { '<strong>Bold</strong>'.html_safe }
+      html = helper.send(:mv_link_to, '/x', {}) { '<strong>Bold</strong>'.html_safe }
       a = first('a', html)
       expect(a['href']).to eq('/x')
       expect(a.inner_html).to include('<strong>Bold</strong>')
     end
 
     it 'renders a non-block link without _blank when is_blank: false' do
-      html = helper.mv_link_to('Internal', '/internal', is_blank: false)
+      html = helper.send(:mv_link_to, 'Internal', '/internal', is_blank: false)
       a = first('a', html)
 
       expect(a.text).to eq('Internal')
@@ -127,7 +128,7 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
     end
 
     it 'renders a non-block link without underline when underline: false' do
-      html = helper.mv_link_to('No Underline', '/no-underline', underline: false)
+      html = helper.send(:mv_link_to, 'No Underline', '/no-underline', underline: false)
       a = first('a', html)
 
       expect(a.text).to eq('No Underline')
@@ -138,7 +139,7 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
 
   describe '#mv_tab_link' do
     it 'renders a tab link with active class when selected' do
-      html = helper.mv_tab_link('runs', selected: true) do
+      html = helper.send(:mv_tab_link, 'runs', selected: true) do
         'Tab 1'
       end
       a = first('a', html)
@@ -152,7 +153,7 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
     end
 
     it 'renders a tab link without active class when not selected' do
-      html = helper.mv_tab_link('definitions', selected: false) do
+      html = helper.send(:mv_tab_link, 'definitions', selected: false) do
         'Tab 2'
       end
       a = first('a', html)
@@ -166,55 +167,39 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
     end
   end
 
-  describe '#mv_t' do
-    around do |ex|
-      old_backend = I18n.backend
-      I18n.backend = I18n::Backend::Simple.new
-      I18n.backend.store_translations(:en, { mat_views: { greet: 'Howdy %<name>s' } })
-      I18n.locale = :en
-      ex.run
-    ensure
-      I18n.backend = old_backend
-    end
-
-    it 'translates under mat_views.*' do
-      expect(helper.mv_t('greet', name: 'Ada')).to eq('Howdy Ada')
-    end
-  end
-
   describe '#mv_badge' do
     it 'renders a success badge' do
-      html = helper.mv_badge(:success, 'success')
+      html = helper.send(:mv_badge, :success, 'success')
       span = first('span', html)
-      expect(span['class']).to include('mv-badge mv-badge--success')
+      expect(span['class']).to include('mv-chip mv-chip--success')
       expect(span.text).to eq('success')
     end
 
     it 'renders a failed badge' do
-      html = helper.mv_badge(:failed, 'failed')
+      html = helper.send(:mv_badge, :failed, 'failed')
       span = first('span', html)
-      expect(span['class']).to include('mv-badge mv-badge--failed')
+      expect(span['class']).to include('mv-chip mv-chip--failed')
       expect(span.text).to eq('failed')
     end
 
     it 'renders a running badge' do
-      html = helper.mv_badge(:running, 'running')
+      html = helper.send(:mv_badge, :running, 'running')
       span = first('span', html)
-      expect(span['class']).to include('mv-badge mv-badge--running')
+      expect(span['class']).to include('mv-chip mv-chip--running')
       expect(span.text).to eq('running')
     end
 
     it 'renders a default badge for unknown status' do
-      html = helper.mv_badge(:custom, 'custom')
+      html = helper.send(:mv_badge, :custom, 'custom')
       span = first('span', html)
-      expect(span['class']).to eq('mv-badge')
+      expect(span['class']).to eq('mv-chip')
       expect(span.text).to eq('custom')
     end
   end
 
   describe '#mv_icon' do
     it 'renders an SVG wrapper with the requested icon body' do
-      html = helper.mv_icon(:refresh, size: 24, class_name: 'extra')
+      html = helper.send(:mv_icon, :refresh, size: 24, class_name: 'extra')
       svg = first('svg', html)
 
       expect(svg['class']).to include('mv-icon')
@@ -227,7 +212,7 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
     end
 
     it 'renders an empty-body SVG when icon name is unknown' do
-      html = helper.mv_icon(:does_not_exist)
+      html = helper.send(:mv_icon, :does_not_exist)
       svg = first('svg', html)
       expect(svg.inner_html.strip).to eq('')
     end
@@ -235,7 +220,7 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
 
   describe '#mv_submit_button' do
     it 'renders a submit button with classes and content' do
-      html = helper.mv_submit_button(variant: :primary, size: :md) { 'Submit' }
+      html = helper.send(:mv_submit_button, variant: :primary, size: :md) { 'Submit' }
       button = first('button', html)
 
       expect(button['type']).to eq('submit')
@@ -246,25 +231,26 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
 
   describe '#mv_cancel_button' do
     it 'renders a cancel button with classes and content' do
-      html = helper.mv_cancel_button(variant: :ghost, size: :sm) { 'Cancel' }
+      html = helper.send(:mv_cancel_button, size: :sm) { 'Cancel' }
       button = first('button', html)
 
       expect(button['type']).to eq('button')
-      expect(button['class']).to include('mv-btn mv-btn--ghost mv-btn--sm')
+      expect(button['class']).to include('mv-btn mv-btn--secondary mv-btn--sm')
       expect(button.text).to eq('Cancel')
     end
   end
 
   describe 'svg icon methods' do
     let(:icon_names) do
-      %i[svg_icon_arrow_right svg_icon_refresh svg_icon_trash svg_icon_hammer svg_icon_x_circle svg_icon_plus_circle svg_icon_check_circle svg_icon_alert
-         svg_icon_history svg_icon_edit svg_icon_layers svg_icon_database svg_icon_gear]
+      %i[svg_icon_arrow_right svg_icon_arrow_left svg_icon_double_arrow_left svg_icon_double_arrow_right svg_icon_refresh
+         svg_icon_trash svg_icon_hammer svg_icon_x_circle svg_icon_plus_circle svg_icon_check_circle svg_icon_alert
+         svg_icon_history svg_icon_edit svg_icon_layers svg_icon_database svg_icon_gear svg_icon_sort_asc svg_icon_sort_desc svg_icon_sort_neutral]
     end
 
     it 'all responds and return string' do
       icon_names.each do |icon_name|
-        expect(helper.respond_to?(icon_name, true)).to be true
-        result = helper.send(icon_name)
+        expect(helper.send(:respond_to?, icon_name, true)).to be true
+        result = helper.send(:send, icon_name)
         expect(result).to be_a(String)
         expect(result).to start_with('<')
         expect(result).to end_with('>')
@@ -274,19 +260,19 @@ RSpec.describe MatViews::Admin::UiHelper, type: :helper do
 
   describe '#assign_test_id' do
     it 'assigns data-test-id attribute when provided' do
-      html = helper.mv_button_link('/path', testid: 'EDIT_LINK') { 'Click' }
+      html = helper.send(:mv_button_link, '/path', testid: 'EDIT_LINK') { 'Click' }
       a = first('a', html)
       expect(a['data-testid']).to eq('edit_link')
     end
 
     it 'assigns data-testid with identifier if provided' do
-      html = helper.mv_button_link('/path', testid: 'EDIT_LINK', testid_identifier: '42') { 'Click' }
+      html = helper.send(:mv_button_link, '/path', testid: 'EDIT_LINK', testid_identifier: '42') { 'Click' }
       a = first('a', html)
       expect(a['data-testid']).to eq('edit_link-42')
     end
 
     it 'does not assign data-testid attribute when not provided' do
-      html = helper.mv_button_link('/path') { 'Click' }
+      html = helper.send(:mv_button_link, '/path') { 'Click' }
       a = first('a', html)
       expect(a['data-testid']).to be_nil
     end

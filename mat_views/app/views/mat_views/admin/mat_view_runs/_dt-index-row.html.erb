@@ -1,0 +1,41 @@
+<% dt_humanize_ref = dt_config[:dt_humanize_ref]
+dt_humanize_ref_klass = dt_humanize_ref.constantize
+humanize_attr = ->(attr) { dt_humanize_ref_klass.human_attribute_name(attr) }
+humanize_enum_attr = ->(col, val) { dt_humanize_ref_klass.human_enum_name(col, val) }
+mv_exists_map ||= {} %>
+
+<tr class="mv-tr" data-testid="RUN_ROW_<%= row_value.id %>">
+  <td class="mv-td"><div class="mv-cell"><%= humanize_enum_attr.call(:operation, row_value.operation) %></div></td>
+  <td class="mv-td">
+    <div class="mv-cell">
+      <%= mv_drawer_link(admin_mat_view_definition_path(row_value.mat_view_definition, frame_id: "mv-drawer"), t("mat_views.view_var", name: row_value.mat_view_definition.name),
+                             variant: :ghost,
+                             underline: true,
+                             testid: 'VIEW_LINK',
+                             testid_identifier: "defn-#{row_value.mat_view_definition.id}",
+                             tooltip: t("mat_views.mat_view_definition.view_tooltip")) do %>
+        <%= row_value.mat_view_definition.name %>
+      <% end %>
+    </div>
+  </td>
+  <td class="mv-td"><div class="mv-cell"><%= l_with_digits(row_value.started_at.in_time_zone, format: :datetime12hour) %></div></td>
+  <td class="mv-td">
+    <div class="mv-cell">
+      <%= mv_badge(row_value.status, humanize_enum_attr.call(:status, row_value.status)) %>
+    </div>
+  </td>
+  <td class="mv-td"><div class="mv-cell"><%= row_value.duration_ms ? localized_digits(t("mat_views.x_miliseconds", count: row_value.duration_ms)) : "-" %></div></td>
+  <td class="mv-td"><div class="mv-cell"><%= localized_digits(row_value.row_count_before || "-") %>/<%= localized_digits(row_value.row_count_after || "-") %></div></td>
+  <td class="mv-td">
+    <div class="mv-cell">
+      <%= mv_drawer_link(admin_mat_view_run_path(id: row_value.id, frame_id: 'mv-drawer'), t('mat_views.mat_view_run.view_details'),
+                             variant: :ghost,
+                             underline: true,
+                             testid: 'VIEW_LINK',
+                             testid_identifier: "run-#{row_value.id}",
+                             tooltip: t("mat_views.mat_view_run.view_tooltip")) do %>
+        <%= t("mat_views.mat_view_run.view_details") %>
+      <% end %>
+    </div>
+  </td>
+</tr>

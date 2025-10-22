@@ -74,7 +74,7 @@ module MatViews
       #
       # @return [void]
       def authorize!
-        authorize_mat_views!(:read, MatViews::MatViewDefinition)
+        authorize_mat_views!(:view, :mat_views_dashboard)
       end
 
       # Reads the theme from cookies.

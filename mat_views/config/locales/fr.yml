@@ -1,187 +1,227 @@
+---
 fr:
   activerecord:
     attributes:
       mat_views/mat_view_definition:
-        created_at: "Créé le"
-        dependencies: "Dépendances"
-        name: "Nom"
-        refresh_strategy: "Stratégie de rafraîchissement"
-        schedule_cron: "Planification (cron)"
-        sql: "SQL (SELECT ...)"
-        unique_index_columns: "Colonnes d'index unique"
-        updated_at: "Mis à jour le"
+        created_at: Créé le
+        dependencies: Dépendances
+        last_run_at: Dernière exécution
+        name: Nom
+        refresh_strategy: Stratégie d’actualisation
+        schedule_cron: Planification (cron)
+        sql: SQL (SELECT ...)
+        unique_index_columns: Colonnes d’index unique
+        updated_at: Mis à jour le
       mat_views/mat_view_run:
-        created_at: "Créé le"
-        details: "Détails"
-        duration_ms: "Durée (ms)"
-        error: "Erreur"
-        finished_at: "Terminé le"
-        mat_view_definition: "Définition"
-        meta: "Métadonnées"
-        operation: "Opération"
-        row_count_after: "Nombre de lignes après"
-        row_count_before: "Nombre de lignes avant"
-        rows_before_after: "Lignes (avant/après)"
-        started_at: "Commencé le"
-        status: "Statut"
-        updated_at: "Mis à jour le"
+        created_at: Créé le
+        details: Détails
+        duration_ms: Durée (ms)
+        error: Erreur
+        finished_at: Terminé le
+        mat_view_definition: Définition
+        meta: Métadonnées
+        operation: Opération
+        row_count_after: Nombre de lignes après
+        row_count_before: Nombre de lignes avant
+        rows_before_after: Lignes (avant/après)
+        started_at: Démarré le
+        status: Statut
+        updated_at: Mis à jour le
     enums:
       mat_views/mat_view_definition:
         refresh_strategy:
-          concurrent: "Simultané"
-          regular: "Régulier"
-          swap: "Échanger"
+          concurrent: Concurrente
+          regular: Classique
+          swap: Permutation
       mat_views/mat_view_run:
         operation:
-          create: "Créer"
-          drop: "Supprimer"
-          refresh: "Rafraîchir"
+          create: Créer
+          drop: Supprimer
+          refresh: Actualiser
         status:
-          failed: "Échoué"
-          running: "En cours"
-          success: "Succès"
+          failed: Échec
+          running: En cours
+          success: Réussite
     errors:
       models:
         mat_views/mat_view_definition:
           attributes:
             name:
-              blank: "doit être fourni"
-              invalid: "n'est pas un identifiant PostgreSQL valide"
-              taken: "doit être unique"
+              blank: doit être renseigné
+              invalid: n’est pas un identifiant PostgreSQL valide
+              taken: doit être unique
             sql:
-              blank: "doit être fourni"
-              invalid: "doit commencer par SELECT"
+              blank: doit être renseigné
+              invalid: doit commencer par SELECT
             unique_index_columns:
-              at_least_one: "doit avoir au moins une colonne lors de l'utilisation de la stratégie de rafraîchissement concurrent"
+              at_least_one: doit comporter au moins une colonne avec la stratégie
+                d’actualisation concurrente
     hints:
       mat_views/mat_view_definition:
-        dependencies: "Liste séparée par des virgules des tables ou vues dont dépend cette vue matérialisée."
-        name: "Nom de la vue matérialisée dans la base de données."
-        refresh_strategy: "Détermine comment la vue matérialisée est rafraîchie."
-        schedule_cron: "Utilisez le format cron standard. Laissez vide pour aucune planification."
-        sql: "La requête SQL doit être une instruction SELECT valide."
-        unique_index_columns: "Colonnes sur lesquelles créer un index unique. Requis pour le rafraîchissement concurrent."
+        dependencies: Liste séparée par des virgules des tables ou vues dont dépend
+          cette vue matérialisée.
+        name: Nom de la vue matérialisée dans la base de données.
+        refresh_strategy: Détermine la façon dont la vue matérialisée est actualisée.
+        schedule_cron: Utilisez le format cron standard. Laissez vide pour aucune
+          planification.
+        sql: La requête SQL doit être une instruction SELECT valide.
+        unique_index_columns: Colonnes utilisées pour créer un index unique. Requis
+          pour l’actualisation concurrente.
       mat_views/mat_view_run:
-        error: "Message d'erreur si l'exécution a échoué."
-        meta: "Métadonnées supplémentaires au format JSON."
-        operation: "Type d'opération effectuée."
-        status: "Statut actuel de l'exécution."
+        error: Message d’erreur si l’exécution a échoué.
+        meta: Métadonnées supplémentaires au format JSON.
+        operation: Type d’opération exécutée.
+        status: Statut actuel de l’exécution.
     models:
-      mat_views/mat_view_definition: "Définition de vue matérialisée"
-      mat_views/mat_view_run: "Exécution de vue matérialisée"
+      mat_views/mat_view_definition: Définition de vue matérialisée
+      mat_views/mat_view_run: Exécution de vue matérialisée
     placeholders:
       mat_views/mat_view_definition:
-        dependencies: "Entrez les dépendances (séparées par des virgules, optionnel)"
-        name: "Entrez le nom"
-        refresh_strategy: "Sélectionnez une stratégie de rafraîchissement"
-        schedule_cron: "0 0 * * * pour quotidien à minuit, laissez vide pour aucune planification"
-        sql: "Entrez SQL (SELECT ...)"
-        unique_index_columns: "Entrez les colonnes d'index unique (séparées par des virgules, optionnel)"
+        dependencies: Indiquez les dépendances (séparées par des virgules, optionnel)
+        name: Indiquez le nom
+        refresh_strategy: Sélectionnez la stratégie d’actualisation
+        schedule_cron: 0 0 * * * pour tous les jours à minuit, laissez vide pour aucune
+          planification
+        sql: Saisissez SQL (SELECT ...)
+        unique_index_columns: Indiquez les colonnes d’index unique (séparées par des
+          virgules, optionnel)
       mat_views/mat_view_run:
-        error: "Message d'erreur"
-        mat_view_definition: "Sélectionnez une vue matérialisée"
-        meta: "Métadonnées (JSON)"
-        operation: "Sélectionnez une opération"
-        status: "Sélectionnez un statut"
+        error: Message d’erreur
+        mat_view_definition: Sélectionnez la vue matérialisée
+        meta: Métadonnées (JSON)
+        operation: Sélectionnez l’opération
+        status: Sélectionnez le statut
   i18n:
     name: Français
   mat_views:
-    actions: "Actions"
-    all_definitions: "Toutes les définitions"
-    all_operations: "Toutes les opérations"
-    all_statuses: "Tous les statuts"
-    cancel: "Annuler"
-    close: "Fermer"
-    close_window: "Fermer la fenêtre"
-    create: "Créer"
+    actions: Actions
+    cancel: Annuler
+    close: Fermer
+    close_window: Fermer la fenêtre
+    create: Créer
     dashboard:
       metrics:
-        title: "Métriques"
-      title: "Tableau de bord"
-    definition: "Définition"
-    definitions: "Définitions"
-    delete: "Supprimer"
-    details: "Détails"
-    edit: "Modifier"
-    edit_var: "Modifier %{name}"
+        title: Indicateurs
+      title: Tableau de bord
+    datatable:
+      clear_search_aria_label: Effacer la recherche
+      search_aria_label: Rechercher dans le tableau
+      search_placeholder: Rechercher...
+    definition: Définition
+    definitions: Définitions
+    delete: Supprimer
+    details: Détails
+    edit: Modifier
+    edit_var: Modifier %{name}
     errors:
-      frame_only: "Cette action ne peut être effectuée que dans un cadre, redirection vers le tableau de bord."
+      frame_only: Cette action ne peut être effectuée que dans un cadre ; redirection
+        vers le tableau de bord.
       prevented_saving:
-        one: "1 erreur a empêché l'enregistrement :"
-        other: "%{count} erreurs ont empêché l'enregistrement :"
-    filter_by: "Filtrer par :"
+        few: "%{count} erreurs ont empêché l’enregistrement :"
+        many: "%{count} erreurs ont empêché l’enregistrement :"
+        one: '1 erreur a empêché l’enregistrement :'
+        other: "%{count} erreurs ont empêché l’enregistrement :"
+        two: '2 erreurs ont empêché l’enregistrement :'
+        zero: Aucune erreur, tout est parfait !
+    filter_by: 'Filtrer par :'
     footer:
       copyright: "© %{year} %{company} Tous droits réservés."
-      documentation: "Documentation"
-      need_help: "Besoin de disponibilité garantie et d'aide experte ?"
-      open_issue: "Ouvrir un ticket"
-      project_homepage: "Page du projet"
-      support: "Obtenir un support professionnel →"
-      tagline: "Construit avec ❤️ par des développeurs, pour des développeurs."
+      documentation: Documentation
+      need_help: Besoin d’une disponibilité garantie et d’une aide experte ?
+      open_issue: Créer un issue
+      project_homepage: Page du projet
+      support: Obtenir un support professionnel →
+      tagline: Conçu avec ❤️ par des développeurs, pour des développeurs.
       tooltip:
-        documentation: "Lire la documentation"
-        gem_version: "Cliquez pour visiter la page RubyGems"
-        open_issue: "Signaler un bug ou demander une fonctionnalité"
-        project_homepage: "Dépôt GitHub"
-        support: "Plans de support professionnel"
-      version: "v%{version}"
+        documentation: Consulter la documentation
+        gem_version: Visiter la page RubyGems
+        open_issue: Signaler un bug ou demander une fonctionnalité
+        project_homepage: Dépôt GitHub
+        support: Formules de support professionnel
+      version: v%{version}
     header:
-      signed_in_as: "Connecté en tant que %{email}"
-    history: "Historique"
-    loading: "Chargement..."
-    loading_definitions: "Chargement des définitions..."
-    loading_runs: "Chargement des exécutions..."
+      signed_in_as: Connecté en tant que %{email}
+    history: Historique
+    loading: Chargement...
+    loading_definitions: Chargement des définitions...
+    loading_runs: Chargement des exécutions...
     mat_view_definition:
-      create_mv: "Créer MV"
-      create_mv_tooltip: "Crée la vue matérialisée dans la base de données."
-      delete_confirm: "Supprimer la définition %{name} ? (Ne supprime PAS la MV)"
-      delete_tooltip: "Supprime la définition mais ne supprime PAS la vue matérialisée dans la base."
-      drop_mv: "Supprimer MV"
-      drop_mv_cascade: "Supprimer MV (Cascade)"
-      drop_mv_cascade_confirm: "Supprimer la vue matérialisée et tous les objets dépendants de %{name} ?"
-      drop_mv_cascade_tooltip: "Supprime la vue matérialisée et tous les objets dépendants dans la base. La définition reste."
-      drop_mv_confirm: "Supprimer la vue matérialisée pour %{name} ?"
-      drop_mv_tooltip: "Supprime la vue matérialisée dans la base. La définition reste."
-      edit_tooltip: "Modifier la définition de la vue matérialisée."
-      materialized_view: "Vue matérialisée"
-      materialized_view_exists: "La vue matérialisée existe"
-      materialized_view_not_exists: "Vue matérialisée non encore créée !"
-      new_definition: "Nouvelle définition"
-      new_definition_tooltip: "Créer une nouvelle définition de vue matérialisée."
-      no_definitions: "Aucune définition de vue matérialisée trouvée. Créez-en une pour commencer."
-      refresh_tooltip: "Actualise la vue matérialisée dans la base."
-      sql_summary_tooltip: "Cliquez pour développer/réduire le SQL"
-      view_tooltip: "Voir la définition de la vue matérialisée."
+      create_mv: Créer MatViews
+      create_mv_tooltip: Crée la vue matérialisée dans la base de données.
+      delete_confirm: Supprimer la définition %{name} ? (Ne supprime PAS MatViews)
+      delete_tooltip: Supprime la définition mais ne supprime PAS la vue matérialisée
+        dans la base de données.
+      drop_mv: Supprimer MatViews
+      drop_mv_cascade: Supprimer MatViews (cascade)
+      drop_mv_cascade_confirm: Supprimer la vue matérialisée et tous les objets dépendants
+        de %{name} ?
+      drop_mv_cascade_tooltip: Supprime la vue matérialisée et tous les objets dépendants
+        de la base de données. La définition demeure.
+      drop_mv_confirm: Supprimer la vue matérialisée de %{name} ?
+      drop_mv_tooltip: Supprime la vue matérialisée de la base de données. La définition
+        demeure.
+      edit_tooltip: Modifier la définition de la vue matérialisée.
+      materialized_view: Vue matérialisée
+      materialized_view_exists: La vue matérialisée existe
+      materialized_view_not_exists: La vue matérialisée n’est pas encore créée !
+      new_definition: Nouvelle définition
+      new_definition_tooltip: Créer une nouvelle définition de vue matérialisée.
+      no_definitions: Aucune définition de vue matérialisée trouvée. Créez-en une
+        pour commencer.
+      no_definitions_if_filtered: Aucune définition correspondant aux filtres ou à
+        la recherche sélectionnés.
+      refresh_tooltip: Actualise la vue matérialisée dans la base de données.
+      sql_summary_tooltip: Cliquer pour développer/réduire le SQL
+      view_tooltip: Afficher la définition de la vue matérialisée.
     mat_view_run:
-      error_tooltip: "Message d'erreur si l'exécution a échoué."
-      meta_tooltip: "Métadonnées supplémentaires au format JSON."
-      no_runs: "Aucune exécution trouvée."
-      no_runs_if_filtered: "Aucune exécution trouvée pour les filtres sélectionnés."
-      view_details: "Voir les détails"
-      view_tooltip: "Voir les détails de l'exécution."
-    project_author: "Codevedas Inc."
-    project_description: "Interface d'administration pour gérer les vues matérialisées PostgreSQL dans les applications Rails."
-    project_tags: "rails, ruby, vues matérialisées, admin, tableau de bord, ui, interface, gestion"
-    refresh: "Actualiser"
-    refresh_contents: "Actualiser le contenu"
-    reloading: "Rechargement..."
-    reset: "Réinitialiser"
-    run: "Exécuter"
-    runs: "Exécutions"
-    save_changes: "Enregistrer les modifications"
+      error_tooltip: Message d’erreur si l’exécution a échoué.
+      meta_tooltip: Métadonnées supplémentaires au format JSON.
+      no_runs: Aucune exécution trouvée.
+      no_runs_if_filtered: Aucune exécution ne correspond aux filtres sélectionnés.
+      view_details: Voir les détails
+      view_tooltip: Voir les détails de l’exécution.
+    no_filter: Tous (sans filtre)
+    no_value: Aucune valeur (nil ou vide)
+    per_page: Par page
+    project_author: CodeVedas Inc.
+    project_description: Interface d’administration pour gérer les vues matérialisées
+      PostgreSQL dans les applications Rails.
+    project_tags: rails, ruby, materialized views, admin, dashboard, ui, interface,
+      management
+    refresh: Actualiser
+    refresh_contents: Actualiser le contenu
+    reloading: Rechargement...
+    reset: Réinitialiser
+    run: Exécuter
+    runs: Exécutions
+    save_changes: Enregistrer les modifications
     settings:
-      auto: "Auto"
-      dark: "Sombre"
-      language: "Langue"
-      language_hint: "Choisissez la langue de votre interface."
-      light: "Clair"
-      theme: "Thème"
-      theme_hint: "Auto suit la préférence système, clair et sombre la remplacent."
-      title: "Préférences"
-    title: "MatViews Admin"
-    view_var: "Voir %{name}"
+      auto: Auto
+      dark: Sombre
+      language: Langue
+      language_hint: Choisissez la langue de l’interface.
+      light: Clair
+      theme: Thème
+      theme_hint: Auto suit la préférence système ; clair et sombre la remplacent.
+      title: Préférences
+    title: Administration MatViews
+    view_var: Voir %{name}
+    x_miliseconds: "%{count} ms"
+  number:
+    format:
+      delimiter: " "
+      separator: ","
+  numbers:
+    eight: 8
+    five: 5
+    four: 4
+    nine: 9
+    one: 1
+    seven: 7
+    six: 6
+    three: 3
+    two: 2
+    zero: 0
   time:
-    am: "AM"
     formats:
-      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
-    pm: "PM"
+      datetime12hour: "%Y-%m-%d %H:%M:%S"

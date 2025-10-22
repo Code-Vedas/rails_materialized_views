@@ -1,0 +1,45 @@
+<% dt_config = @dt_config
+   dt_humanize_ref = dt_config[:dt_humanize_ref]
+   dt_cols = dt_config[:columns]
+   dtfilter_map = params[:dtfilter].present? ? params[:dtfilter].split(",").map { |f| f.split(":") }.to_h : {}
+   dt_humanize_ref_klass = dt_humanize_ref.constantize
+   humanize_attr = ->(attr) { dt_humanize_ref_klass.human_attribute_name(attr) } %>
+<div class="mv-input-group" id="datatable-filters-<%= dt_config[:id] %>">
+  <div class="mv-field-inline">
+    <%= t("mat_views.filter_by") %>
+  </div>
+  <% dt_cols.keys.each do |key| %>
+    <% next unless dt_cols[key][:filter].present? %>
+
+    <% value = dt_cols[key]
+       th_label =
+         if value[:label_type] == "i18n"
+           t("mat_views.#{value[:label_ref]}")
+         elsif value[:label_type] == "humanize_attr"
+           humanize_attr.call(value[:label_ref])
+         else
+           value[:label_ref]
+         end %>
+
+    <% selected_value = dtfilter_map[key.to_s] || "no_filter"
+       options =
+         [[t("mat_views.no_filter"), "no_filter"]] +
+         dt_humanize_ref_klass.send("filter_options_for_#{key.to_s}").map { |v| v[1].present? ? v : [t("mat_views.no_value"), "no_value"] } %>
+    <div class="mv-field-inline">
+      <%= label_tag key, th_label, class: "mv-label" %>
+      <%= select_tag key,
+                     options_for_select(options, selected_value),
+                     class: "mv-select",
+                     autocomplete: "off",
+                     spellcheck: "false",
+                     autocapitalize: "none",
+                     autocorrect: "off",
+                     data: {
+                       action: "change->datatable#onFilterChange",
+                       datatable_target: "filterField",
+                       testid: "#{dt_config[:id]}-#{MatViews::Helpers::UiTestIds::DT_FILTER_SELECT}-#{key}",
+                       key: key,
+                     } %>
+    </div>
+  <% end %>
+</div>

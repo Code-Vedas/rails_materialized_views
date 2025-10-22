@@ -1,0 +1,34 @@
+<% dt_config = @dt_config
+dt_humanize_ref = dt_config[:dt_humanize_ref]
+dt_cols = dt_config[:columns]
+dt_humanize_ref_klass = dt_humanize_ref.constantize
+humanize_attr = ->(attr) { dt_humanize_ref_klass.human_attribute_name(attr) }
+humanize_enum_attr = ->(col, val) { dt_humanize_ref_klass.human_enum_name(col, val) } %>
+
+<div
+  data-controller="datatable"
+  data-datatable-index-url-value="<%= dt_config[:index_url] %>"
+  data-datatable-perpage-default="<%= dt_config[:pagination][:per_page_default]%>"
+>
+  <table class="mv-table with-filters" id="<%= dt_config[:id] %>">
+    <%= render "mat_views/admin/ui/datatable_thead" %>
+    <tbody id="datatable-body-<%= dt_config[:id] %>">
+      <tr class="mv-tr">
+        <td class="mv-td" colspan="<%= dt_cols.size %>">
+          <div class="mv-cell">
+            <%= t("mat_views.loading") %>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr id="datatable-tfoot-<%= dt_config[:id] %>" class="mv-tr">
+        <td class="mv-td" colspan="<%= dt_cols.size %>">
+          <div class="dt-pagination-section" data-datatable-target="pagination" data-testid="DT_PAGINATION" data-testid-identifier="<%= dt_config[:id] %>-pagination">
+            <%= t("mat_views.loading") %>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

@@ -22,10 +22,13 @@ module MatViews
     # - Links: {#mv_link_to}
     # - Badges: {#mv_badge}
     # - Icons: {#mv_icon} with private `svg_icon_*` methods
-    # - Translations: {#mv_t}
     #
     module UiHelper
+      private
+
       # Builds CSS classes for a MatViews-styled button.
+      #
+      # @api private
       #
       # @param variant [Symbol] one of `:primary`, `:secondary`, `:ghost`, `:negative`
       # @param size [Symbol] one of `:sm`, `:md`, `:lg`
@@ -40,6 +43,8 @@ module MatViews
 
       # Renders a styled link button.
       #
+      # @api private
+      #
       # @param href [String] target URL
       # @param opts [Hash] options for styling, data attributes, etc.
       # @yield link body content
@@ -49,6 +54,8 @@ module MatViews
       end
 
       # Renders a button link that opens a drawer via Stimulus.
+      #
+      # @api private
       #
       # @param drawer_url [String] URL to load into the drawer
       # @param drawer_title [String] title for the drawer
@@ -63,6 +70,8 @@ module MatViews
 
       # Renders a styled `button_to` element.
       #
+      # @api private
+      #
       # @param href [String] target URL
       # @param opts [Hash] options for styling, data attributes, etc.
       # @yield button content
@@ -74,6 +83,8 @@ module MatViews
       end
 
       # Renders a drawer action button with optional tooltip.
+      #
+      # @api private
       #
       # @param label [String] ARIA label for accessibility
       # @param action [String] Stimulus action method
@@ -98,6 +109,8 @@ module MatViews
       end
 
       # Renders a styled external or internal link, with optional tooltip.
+      #
+      # @api private
       #
       # @param text [String, nil] link text (nil if using block form)
       # @param url [String, nil] target URL
@@ -135,6 +148,9 @@ module MatViews
       end
 
       # Renders a tab link for the tabs component.
+      #
+      # @api private
+      #
       # @param tab_name [String] unique name of the tab
       # @param args_org [Hash] additional HTML options
       #
@@ -151,31 +167,26 @@ module MatViews
         link_to '#', **args, &
       end
 
-      # Shortcut for translating keys under the `mat_views` namespace.
-      #
-      # @param key [String, Symbol] translation key under `mat_views.*`
-      # @param args [Hash] interpolation values
-      # @return [String] translated string
-      def mv_t(key, **args)
-        I18n.t("mat_views.#{key}", **args)
-      end
-
       # Renders a badge element styled by status.
+      #
+      # @api private
       #
       # @param status [String, Symbol] status name (`success`, `running`, `failed`, etc.)
       # @param text [String] text to display inside the badge
       # @return [String] HTML-safe span tag with badge classes
       def mv_badge(status, text)
         klass = case status.to_s.downcase
-                when 'success' then 'mv-badge mv-badge--success'
-                when 'running' then 'mv-badge mv-badge--running'
-                when 'failed'  then 'mv-badge mv-badge--failed'
-                else 'mv-badge'
+                when 'success' then 'mv-chip mv-chip--success'
+                when 'running' then 'mv-chip mv-chip--running'
+                when 'failed'  then 'mv-chip mv-chip--failed'
+                else 'mv-chip'
                 end
         content_tag(:span, text, class: klass)
       end
 
       # Renders an inline SVG icon.
+      #
+      # @api private
       #
       # @param name [String, Symbol] icon name (method suffix after `svg_icon_`)
       # @param size [Integer] icon width/height in pixels
@@ -196,10 +207,10 @@ module MatViews
 
       # Renders a styled submit button.
       #
+      # @api private
+      #
       # @param opts [Hash] options for styling, data attributes, etc.
-      #
       # @yield button content
-      #
       # @return [String] HTML-safe button tag
       def mv_submit_button(opts = {}, &)
         opts = link_options(assign_test_id(opts))
@@ -208,29 +219,43 @@ module MatViews
         button_tag(capture(&), **opts)
       end
 
-      # Renders a styled cancel button.
+      # Renders a styled generic button.
+      #
+      # @api private
+      #
       # @param opts [Hash] options for styling, data attributes, etc.
-      #
       # @yield button content
-      #
       # @return [String] HTML-safe button tag
-      def mv_cancel_button(opts = {}, &)
+      def mv_button(opts = {}, &)
         opts = link_options(assign_test_id(opts))
         opts[:type] = 'button'
         opts.delete(:method)
         button_tag(capture(&), **opts)
       end
 
-      private
+      # Renders a styled cancel button.
+      #
+      # @api private
+      #
+      # @param opts [Hash] options for styling, data attributes, etc.
+      # @yield button content
+      # @return [String] HTML-safe button tag
+      def mv_cancel_button(opts = {}, &)
+        mv_button(opts.merge(variant: :secondary), &)
+      end
 
       # Builds standardized options hash for button/link helpers.
+      #
+      # @api private
       #
       # @param opts [Hash] options including :variant, :size, :method, :tooltip, etc.
       # @return [Hash] merged HTML attributes (class, method, data)
       def link_options(opts)
         variant = opts.fetch(:variant, :primary)
         size = opts.fetch(:size, :md)
+        classes = opts[:class] ? " #{opts.delete(:class)}" : ''
         method = opts.fetch(:method, :get)
+        disabled = opts.fetch(:disabled, false)
         underline = opts[:underline] ? ' underline' : ''
 
         tip      = opts[:tooltip]
@@ -246,17 +271,60 @@ module MatViews
 
         html_data = (opts[:data] || {}).dup.merge(tooltip)
         html_data[:'turbo-confirm'] = opts.fetch(:confirm, nil)
-        { class: "#{mv_button_classes(variant, size)}#{underline}", method: method, data: html_data }
+        { class: "#{mv_button_classes(variant, size)}#{underline}#{classes}", method: method, disabled: disabled, data: html_data }
       end
 
-      # @return [String] SVG markup for a right-pointing arrow icon
+      # SVG markup for a right-pointing arrow icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_arrow_right
         <<~SVG.strip.freeze
           <polyline points="9 18 15 12 9 6"/>
         SVG
       end
 
-      # @return [String] SVG markup for a refresh/reload icon
+      # SVG markup for a left-pointing arrow icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
+      def svg_icon_arrow_left
+        <<~SVG.strip.freeze
+          <polyline points="15 18 9 12 15 6"/>
+        SVG
+      end
+
+      # SVG markup for a left-pointing double-arrow icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
+      def svg_icon_double_arrow_left
+        <<~SVG.strip.freeze
+          <polyline points="11 17 6 12 11 7"/>
+          <polyline points="18 17 13 12 18 7"/>
+        SVG
+      end
+
+      # SVG markup for a right-pointing double-arrow icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
+      def svg_icon_double_arrow_right
+        <<~SVG.strip.freeze
+          <polyline points="13 17 18 12 13 7"/>
+          <polyline points="6 17 11 12 6 7"/>
+        SVG
+      end
+
+      # SVG markup for a refresh/reload icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_refresh
         <<~SVG.strip.freeze
           <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
@@ -264,7 +332,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for a trash/delete (bin) icon
+      # SVG markup for a trash/delete (bin) icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_trash
         <<~SVG.strip.freeze
           <polyline points="3 6 5 6 21 6"/>
@@ -275,7 +347,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for a hammer/tool icon
+      # SVG markup for a hammer/tool icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_hammer
         <<~SVG.strip.freeze
           <path d="M14 4l7 7"/>
@@ -283,7 +359,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for an “X in a circle” (close/error) icon
+      # SVG markup for an “X in a circle” (close/error) icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_x_circle
         <<~SVG.strip.freeze
           <circle cx="12" cy="12" r="10"/>
@@ -292,7 +372,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for a “plus in a circle” (add) icon
+      # SVG markup for a “plus in a circle” (add) icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_plus_circle
         <<~SVG.strip.freeze
           <circle cx="12" cy="12" r="10"/>
@@ -301,7 +385,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for a checkmark-in-circle (success) icon
+      # SVG markup for a checkmark-in-circle (success) icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_check_circle
         <<~SVG.strip.freeze
           <circle cx="12" cy="12" r="10"/>
@@ -309,7 +397,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for an alert/warning triangle icon
+      # SVG markup for an alert/warning triangle icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_alert
         <<~SVG.strip.freeze
           <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
@@ -318,7 +410,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for a history/clock icon
+      # SVG markup for a history/clock icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_history
         <<~SVG.strip.freeze
           <path d="M3 3v5h5"/>
@@ -327,7 +423,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for an edit/pencil icon
+      # SVG markup for an edit/pencil icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_edit
         <<~SVG.strip.freeze
           <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -335,7 +435,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for a stacked-layers icon
+      # SVG markup for a stacked-layers icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_layers
         <<~SVG.strip.freeze
           <polygon points="12 2 2 7 12 12 22 7 12 2"/>
@@ -344,7 +448,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for a database/cylinder icon
+      # SVG markup for a database/cylinder icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_database
         <<~SVG.strip.freeze
           <ellipse cx="12" cy="5" rx="9" ry="3"/>
@@ -353,7 +461,11 @@ module MatViews
         SVG
       end
 
-      # @return [String] SVG markup for a gear/settings icon
+      # SVG markup for a gear/settings icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
       def svg_icon_gear
         <<~SVG.strip.freeze
           <circle cx="12" cy="12" r="3"></circle>
@@ -361,8 +473,50 @@ module MatViews
         SVG
       end
 
+      # SVG markup for a sort ascending icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
+      def svg_icon_sort_asc
+        <<~SVG.strip.freeze
+          <line x1="6" y1="6" x2="12" y2="6"/>
+          <line x1="6" y1="12" x2="16" y2="12"/>
+          <line x1="6" y1="18" x2="20" y2="18"/>
+        SVG
+      end
+
+      # SVG markup for a sort descending icon
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
+      def svg_icon_sort_desc
+        <<~SVG.strip.freeze
+          <line x1="6" y1="6" x2="20" y2="6"/>
+          <line x1="6" y1="12" x2="16" y2="12"/>
+          <line x1="6" y1="18" x2="12" y2="18"/>
+        SVG
+      end
+
+      # SVG markup for a neutral sort icon (no particular order)
+      #
+      # @api private
+      #
+      # @return [String] SVG markup
+      def svg_icon_sort_neutral
+        # three lines: top line is greater, middle is lower then top, bottom is lower then middle
+        <<~SVG.strip.freeze
+          <line x1="6" y1="6" x2="20" y2="6"/>
+          <line x1="6" y1="12" x2="20" y2="12"/>
+          <line x1="6" y1="18" x2="20" y2="18"/>
+        SVG
+      end
+
       # Maps a symbolic test ID to its actual string value for data attributes.
       # if `:testid` key is not present, returns original args unchanged.
+      #
+      # @api private
       #
       # @param args [Hash] original options hash
       # @return [Hash] modified options hash with `data-testid` set

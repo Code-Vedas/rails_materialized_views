@@ -4,19 +4,57 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+
+/**
+ * Stimulus Controller: ConfirmPopoverController
+ * ---------------------------------------------
+ * Replaces Turbo’s default confirm dialog with a lightweight, positioned
+ * popover that supports keyboard/overlay dismissal and viewport-aware placement.
+ *
+ * Responsibilities:
+ * - Hook into Turbo’s `config.forms.confirm` and `config.links.confirm`.
+ * - Render a reusable popover with Yes/No buttons.
+ * - Position the popover around the triggering element with clamping.
+ * - Resolve a Promise<boolean> back to Turbo to continue/cancel the action.
+ *
+ * Key Components:
+ * - Turbo hooks: `installConfirmHooks`, `uninstallConfirmHooks`, `confirm`, `hasTurbo`
+ * - Lifecycle: `connect`, `disconnect`, `open`, `cleanup`
+ * - DOM helpers: `ensurePopover`, `createPopover`, `getParts`, `show`, `hide`
+ * - Listeners: `bindGlobalListeners`, `unbindGlobalListeners`
+ * - Positioning: `position`, `computePlacement`, `coordsFor`, `fits`, `clampX`, `clampY`, `setPlacementClass`
+ */
+
 import { Controller } from "@hotwired/stimulus";
+
 export default class extends Controller {
+  /**
+   * Values:
+   * - enabled: when false, do not install Turbo confirm hooks.
+   * - gap: pixel gap between trigger and popover.
+   * - margin: minimum margin from viewport edges.
+   */
   static values = {
     enabled: { type: Boolean, default: true },
     gap: { type: Number, default: 8 },
     margin: { type: Number, default: 8 },
   };
 
+  /**
+   * Lifecycle: connect
+   * Installs Turbo hooks if enabled.
+   * @return {void}
+   */
   connect() {
     if (!this.enabledValue) return;
     this.installConfirmHooks();
   }
 
+  /**
+   * Lifecycle: disconnect
+   * Restores Turbo hooks and resolves any pending confirm cleanly.
+   * @return {void}
+   */
   disconnect() {
     this.uninstallConfirmHooks();
     this.cleanup(false);
@@ -25,6 +63,11 @@ export default class extends Controller {
   // ──────────────────────────────────────────────
   // Turbo hook wiring
   // ──────────────────────────────────────────────
+
+  /**
+   * Installs a unified confirm handler for Turbo forms and links.
+   * @return {void}
+   */
   installConfirmHooks() {
     if (!this.hasTurbo()) return;
     this.prevFormsConfirm = window.Turbo.config.forms?.confirm;
@@ -35,6 +78,10 @@ export default class extends Controller {
     if (window.Turbo.config.links) window.Turbo.config.links.confirm = handler;
   }
 
+  /**
+   * Restores previously installed Turbo confirm handlers.
+   * @return {void}
+   */
   uninstallConfirmHooks() {
     if (!this.hasTurbo()) return;
     if (window.Turbo.config.forms)
@@ -43,6 +90,10 @@ export default class extends Controller {
       window.Turbo.config.links.confirm = this.prevLinksConfirm;
   }
 
+  /**
+   * Returns true if Turbo configuration is available.
+   * @return {boolean}
+   */
   hasTurbo() {
     return !!window.Turbo?.config;
   }
@@ -50,6 +101,14 @@ export default class extends Controller {
   // ──────────────────────────────────────────────
   // Confirm entry point
   // ──────────────────────────────────────────────
+
+  /**
+   * Turbo confirm entry. Shows a popover and resolves to true/false.
+   * Falls back to `window.confirm` if Turbo is unavailable.
+   * @param {string} message
+   * @param {HTMLElement} element
+   * @return {Promise<boolean>}
+   */
   confirm(message, element) {
     // Fallback for Turbo < 8 or if anything is missing
     if (!this.hasTurbo()) return Promise.resolve(window.confirm(message));
@@ -63,6 +122,13 @@ export default class extends Controller {
   // ──────────────────────────────────────────────
   // Open/close lifecycle
   // ──────────────────────────────────────────────
+
+  /**
+   * Opens the confirm popover near the triggering element.
+   * @param {string} message
+   * @param {HTMLElement} element
+   * @return {void}
+   */
   open(message, element) {
     this.pop = this.ensurePopover();
     this.triggerEl = element;
@@ -75,6 +141,11 @@ export default class extends Controller {
     this.bindGlobalListeners();
   }
 
+  /**
+   * Hides the popover, unbinds listeners, and resolves the pending Promise.
+   * @param {boolean} result
+   * @return {void}
+   */
   cleanup(result) {
     if (!this.pop) return;
     this.hide(this.pop);
@@ -87,6 +158,11 @@ export default class extends Controller {
   // ──────────────────────────────────────────────
   // DOM helpers
   // ──────────────────────────────────────────────
+
+  /**
+   * Ensures a single reusable popover exists in the DOM.
+   * @return {HTMLElement}
+   */
   ensurePopover() {
     let el = document.getElementById("mv-confirm");
     if (el) return el;
@@ -95,6 +171,10 @@ export default class extends Controller {
     return el;
   }
 
+  /**
+   * Creates the popover element structure (content, buttons, arrow).
+   * @return {HTMLElement}
+   */
   createPopover() {
     const el = document.createElement("div");
     el.id = "mv-confirm";
@@ -115,6 +195,11 @@ export default class extends Controller {
     return el;
   }
 
+  /**
+   * Returns references to key elements inside the popover.
+   * @param {HTMLElement} pop
+   * @return {{content: HTMLElement, yes: HTMLButtonElement, no: HTMLButtonElement}}
+   */
   getParts(pop) {
     return {
       content: pop.querySelector(".mv-confirm__content"),
@@ -123,10 +208,20 @@ export default class extends Controller {
     };
   }
 
+  /**
+   * Marks the popover visible (CSS-driven).
+   * @param {HTMLElement} pop
+   * @return {void}
+   */
   show(pop) {
     pop.setAttribute("data-show", "true");
   }
 
+  /**
+   * Hides the popover and moves it off-screen.
+   * @param {HTMLElement} pop
+   * @return {void}
+   */
   hide(pop) {
     pop.removeAttribute("data-show");
     pop.style.transform = "translate(-9999px,-9999px)";
@@ -135,6 +230,11 @@ export default class extends Controller {
   // ──────────────────────────────────────────────
   // Listeners
   // ──────────────────────────────────────────────
+
+  /**
+   * Binds global listeners (clicks, esc, scroll/resize) and button clicks.
+   * @return {void}
+   */
   bindGlobalListeners() {
     const { yes, no } = this.getParts(this.pop);
 
@@ -155,6 +255,10 @@ export default class extends Controller {
     window.addEventListener("resize", this.onScrollOrResize, true);
   }
 
+  /**
+   * Unbinds all previously attached listeners.
+   * @return {void}
+   */
   unbindGlobalListeners() {
     if (!this.pop) return;
     const { yes, no } = this.getParts(this.pop);
@@ -177,6 +281,13 @@ export default class extends Controller {
   // ──────────────────────────────────────────────
   // Positioning
   // ──────────────────────────────────────────────
+
+  /**
+   * Positions the popover relative to the triggering element.
+   * @param {HTMLElement} pop
+   * @param {HTMLElement} element
+   * @return {void}
+   */
   position(pop, element) {
     // Prep for measurement
     pop.style.opacity = "1";
@@ -190,6 +301,12 @@ export default class extends Controller {
     pop.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
   }
 
+  /**
+   * Computes best placement (bottom/top/right/left) with clamping.
+   * @param {DOMRect} rect - trigger rect
+   * @param {DOMRect} pr - popover rect
+   * @return {{x:number, y:number, placement:"bottom"|"top"|"right"|"left"}}
+   */
   computePlacement(rect, pr) {
     const gap = this.gapValue;
     const margin = this.marginValue;
@@ -216,6 +333,14 @@ export default class extends Controller {
     };
   }
 
+  /**
+   * Returns the (x,y) coordinates for a given placement.
+   * @param {"bottom"|"top"|"right"|"left"} p
+   * @param {DOMRect} rect
+   * @param {DOMRect} pr
+   * @param {number} gap
+   * @return {{x:number, y:number}}
+   */
   coordsFor(p, rect, pr, gap) {
     switch (p) {
       case "bottom":
@@ -243,6 +368,15 @@ export default class extends Controller {
     }
   }
 
+  /**
+   * Checks if the popover fits within viewport for a given placement.
+   * @param {"bottom"|"top"|"right"|"left"} p
+   * @param {number} x
+   * @param {number} y
+   * @param {DOMRect} pr
+   * @param {number} margin
+   * @return {boolean}
+   */
   fits(p, x, y, pr, margin) {
     switch (p) {
       case "bottom":
@@ -258,10 +392,24 @@ export default class extends Controller {
     }
   }
 
+  /**
+   * Clamps X coordinate within viewport margins.
+   * @param {number} x
+   * @param {DOMRect} pr
+   * @param {number} margin
+   * @return {number}
+   */
   clampX(x, pr, margin) {
     return Math.max(margin, Math.min(x, window.innerWidth - pr.width - margin));
   }
 
+  /**
+   * Clamps Y coordinate within viewport margins.
+   * @param {number} y
+   * @param {DOMRect} pr
+   * @param {number} margin
+   * @return {number}
+   */
   clampY(y, pr, margin) {
     return Math.max(
       margin,
@@ -269,6 +417,12 @@ export default class extends Controller {
     );
   }
 
+  /**
+   * Applies a placement modifier class to the popover element.
+   * @param {HTMLElement} pop
+   * @param {"bottom"|"top"|"right"|"left"} placement
+   * @return {void}
+   */
   setPlacementClass(pop, placement) {
     pop.classList.remove(
       "mv-confirm--top",

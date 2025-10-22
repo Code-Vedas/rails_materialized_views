@@ -1,0 +1,70 @@
+<% dt_config = @dt_config %>
+<% dt_cols = dt_config[:columns] %>
+<tr id="datatable-tfoot-<%= dt_config[:id] %>" class="mv-tr">
+  <td class="mv-td" colspan="<%= dt_cols.size %>">
+    <div class="dt-pagination-section">
+      <%= label_tag :per_page, t("mat_views.per_page"), class: "mv-label mr-2" %>
+      <%= select_tag :per_page,
+      options_for_select(dt_config[:pagination][:per_page_options].map { |opt| [opt, opt] }, @dt_per_page),
+      data: {
+        action: "change->datatable#changePerPage",
+        "datatable-target": "perPageSelect",
+        testid: "dt_pagination_btn-#{dt_config[:id]}-per-page",
+      },
+      class: "mv-input mv-input-sm",
+      aria: {
+        label: t("mat_views.per_page"),
+      } %>
+
+      <%= mv_button data: { action: "click->datatable#goToPage", page: 1,
+                            'datatable-target': 'pageBtn' },  
+                    testid: "DT_PAGINATION_BTN",
+                    testid_identifier: "#{dt_config[:id]}-page-first",
+                    disabled: @dt_page == 1 do %>
+        <%= mv_icon(:double_arrow_left) %>
+      <% end %>
+      <%= mv_button variant: :ghost,
+                    data: { action: "click->datatable#goToPage",
+                            page: @dt_page - 1,
+                            'datatable-target': 'pageBtn' },
+                    testid: "DT_PAGINATION_BTN",
+                    testid_identifier: "#{dt_config[:id]}-page-previous",
+                    disabled: @dt_page == 1 do %>
+        <%= mv_icon(:arrow_left) %>
+      <% end %>
+      <% pages = pagination_window(current_page: @dt_page, total_pages: @dt_total_pages) %>
+      <% pages.each_with_index do |page, index| %>
+        <% if page == :gap %>
+          <span class="mv-text-muted" data-testid="dt_pagination_btn_gap_<%= index %>">...</span>
+        <% else %>
+          <%= mv_button variant: (page == @dt_page ? :primary : :ghost),
+                        data: { action: "click->datatable#goToPage",
+                                page: page,
+                                'datatable-target': 'pageBtn' },
+                    testid: "DT_PAGINATION_BTN",
+                    testid_identifier: "#{dt_config[:id]}-page-#{page}" do %>
+            <%= localized_digits(page) %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= mv_button variant: :ghost,
+                    data: { action: "click->datatable#goToPage",
+                            page: @dt_page + 1,
+                            'datatable-target': 'pageBtn' },
+                    testid: "DT_PAGINATION_BTN",
+                    testid_identifier: "#{dt_config[:id]}-page-next",
+                    disabled: @dt_page == pages.last do %>
+        <%= mv_icon(:arrow_right) %>
+      <% end %>
+      <%= mv_button data: { action: "click->datatable#goToPage",
+                            page: pages.last,
+                            'datatable-target': 'pageBtn' },
+
+                    testid: "DT_PAGINATION_BTN",
+                    testid_identifier: "#{dt_config[:id]}-page-last",
+                    disabled: @dt_page == pages.last do %>
+        <%= mv_icon(:double_arrow_right) %>
+      <% end %>
+    </div>
+  </td>
+</tr>
