@@ -11,6 +11,8 @@ require 'selenium/webdriver'
 require 'support/screenshot_helpers'
 
 def setup_with_selenium_manager
+  return if ENV['CI'].present?
+
   driver = Selenium::WebDriver.for(:firefox)
   driver.get('https://www.selenium.dev/documentation/selenium_manager/')
   driver.quit
