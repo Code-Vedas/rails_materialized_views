@@ -10,6 +10,14 @@ require 'capybara/rspec'
 require 'selenium/webdriver'
 require 'support/screenshot_helpers'
 
+def setup_with_selenium_manager
+  return if ENV['CI'].present?
+
+  driver = Selenium::WebDriver.for(:firefox)
+  driver.get('https://www.selenium.dev/documentation/selenium_manager/')
+  driver.quit
+end
+
 Capybara.server = :puma, { Silent: true }
 Capybara.default_max_wait_time = ENV.fetch('CAPYBARA_WAIT_TIME', 6).to_i
 Capybara.match = :smart
@@ -47,6 +55,7 @@ if ENV['SELENIUM_REMOTE_URL'].present?
   Capybara.app_host    = "http://#{ENV.fetch('CAPYBARA_APP_HOST', 'host.docker.internal')}:#{Capybara.server_port}"
   Capybara.always_include_port = true
 else
+  setup_with_selenium_manager
   Capybara.default_driver = :firefox_headless
   Capybara.javascript_driver = :firefox_headless
 end
