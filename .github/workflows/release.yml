@@ -23,7 +23,7 @@ jobs:
       run:
         working-directory: ${{ env.APP_DIR }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -40,7 +40,7 @@ jobs:
       run:
         working-directory: ${{ env.APP_DIR }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -58,7 +58,7 @@ jobs:
       run:
         working-directory: ${{ env.APP_DIR }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -125,7 +125,7 @@ jobs:
       id-token: write
     environment: release
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
       - uses: ruby/setup-ruby@v1
