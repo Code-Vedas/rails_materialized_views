@@ -22,7 +22,7 @@ group :development, :test do
   gem 'faker'
   gem 'faraday-retry'
   gem 'generator_spec'
-  gem 'i18n-tasks', '~> 1.0'
+  gem 'i18n-tasks', '~> 1.1'
   gem 'importmap-rails'
   gem 'reek'
   gem 'rspec-rails'
