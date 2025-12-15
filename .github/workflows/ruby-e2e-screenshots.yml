@@ -104,7 +104,7 @@ jobs:
       - name: Upload app screenshots artifact for all locales
         if: always()
         id: upload_screenshots
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: app-screenshots
           path: ${{ env.APP_DIR }}/spec/dummy/tmp/app-screenshots
