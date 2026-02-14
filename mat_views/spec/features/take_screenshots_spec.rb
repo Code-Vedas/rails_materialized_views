@@ -65,7 +65,9 @@ RSpec.describe 'UI screenshots', :feature_app_screenshots do
             end
 
   locales.each do |lang_code|
+    # rubocop:disable RSpec/LeakyLocalVariable
     lang_name = MatViews::Engine.locale_code_mapping[lang_code.to_sym]
+    # rubocop:enable RSpec/LeakyLocalVariable
 
     %w[light dark].freeze.each do |theme|
       it "captures screenshots for #{lang_name} (#{lang_code}) in #{theme} theme", :js do

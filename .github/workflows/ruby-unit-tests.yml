@@ -58,7 +58,7 @@ jobs:
           bundler-cache: true
           working-directory: ${{ env.APP_DIR }}
       - name: Cache Bootsnap
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.APP_DIR }}/spec/dummy/tmp/cache
           key: bootsnap-${{ runner.os }}-${{ env.RUBY_VERSION }}-${{ hashFiles('**/Gemfile.lock', '**/*.gemfile.lock') }}-${{ inputs.bundle_gemfile || 'mat_views/Gemfile' }}
