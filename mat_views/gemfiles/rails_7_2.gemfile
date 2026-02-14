@@ -8,5 +8,5 @@
 # Pinned to Rails 7.2.x for CI matrix coverage.
 eval_gemfile File.expand_path('../Gemfile', __dir__)
 
-gem 'rails', '~> 7.2.0'
+gem 'rails', '~> 7.2'
 gem 'rails-i18n', '~> 7.0'

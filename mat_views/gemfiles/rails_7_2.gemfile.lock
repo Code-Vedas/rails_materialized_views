@@ -548,7 +548,7 @@ DEPENDENCIES
   pg
   propshaft
   puma
-  rails (~> 7.2.0)
+  rails (~> 7.2)
   rails-i18n (~> 7.0)
   reek
   resque
