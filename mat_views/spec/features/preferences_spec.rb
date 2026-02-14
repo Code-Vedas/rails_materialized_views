@@ -74,6 +74,7 @@ RSpec.describe 'Preferences', :feature do
     end
   end
 
+  # rubocop:disable RSpec/LeakyLocalVariable
   describe 'Change Theme', :js do
     it_behaves_like 'change theme', 'auto', 'light'
     it_behaves_like 'change theme', 'auto', 'dark'
@@ -91,4 +92,5 @@ RSpec.describe 'Preferences', :feature do
     it_behaves_like 'change language', lang_name_before, lang_name_after, language_txt_before, language_txt_after
     it_behaves_like 'change language', lang_name_after, lang_name_before, language_txt_after, language_txt_before
   end
+  # rubocop:enable RSpec/LeakyLocalVariable
 end
