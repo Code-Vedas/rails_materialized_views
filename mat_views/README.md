@@ -128,6 +128,11 @@ bundle install --gemfile gemfiles/rails_8_0.gemfile
 BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec bin/rspec-unit
 BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec bin/rspec-e2e
 
+# Rails 8.1.x
+bundle install --gemfile gemfiles/rails_8_1.gemfile
+BUNDLE_GEMFILE=gemfiles/rails_8_1.gemfile bundle exec bin/rspec-unit
+BUNDLE_GEMFILE=gemfiles/rails_8_1.gemfile bundle exec bin/rspec-e2e
+
 # Rails main branch
 bundle install --gemfile gemfiles/rails_edge.gemfile
 BUNDLE_GEMFILE=gemfiles/rails_edge.gemfile bundle exec bin/rspec-unit

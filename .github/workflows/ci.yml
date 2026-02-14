@@ -71,10 +71,13 @@ jobs:
       fail-fast: false
       matrix:
         gemfile:
+          - rails_8_1.gemfile
           - rails_8_0.gemfile
           - rails_7_2.gemfile
           - rails_edge.gemfile
         include:
+          - gemfile: rails_8_1.gemfile
+            name: Rails 8.1
           - gemfile: rails_8_0.gemfile
             name: Rails 8.0
           - gemfile: rails_7_2.gemfile
@@ -98,10 +101,13 @@ jobs:
       fail-fast: false
       matrix:
         gemfile:
+          - rails_8_1.gemfile
           - rails_8_0.gemfile
           - rails_7_2.gemfile
           - rails_edge.gemfile
         include:
+          - gemfile: rails_8_1.gemfile
+            name: Rails 8.1
           - gemfile: rails_8_0.gemfile
             name: Rails 8.0
           - gemfile: rails_7_2.gemfile
