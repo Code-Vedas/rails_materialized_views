@@ -1,0 +1,47 @@
+<footer class="mv-footer">
+  <div class="mv-container mv-footer-row">
+    <div>
+      <%= t("smriti.footer.tagline") %><br>
+      <%= t("smriti.footer.copyright", year: Time.current.year, company: Smriti::Engine.company_name) %>
+    </div>
+    <div class="mv-text-right">
+      <%= mv_link_to Smriti::Engine.rubygems_uri, tooltip: t("smriti.footer.tooltip.gem_version"), testid: 'GEM_LINK' do %>
+        <strong><%= Smriti::Engine.project_name %></strong>
+        <%= t("smriti.footer.version", version: Smriti::Engine.project_version) %><br>
+      <% end %>
+      <%= mv_link_to t("smriti.footer.project_homepage"),
+      Smriti::Engine.project_homepage,
+      tooltip: t("smriti.footer.tooltip.project_homepage"),
+      testid: "PROJECT_HOMEPAGE_LINK" %>
+      <%= mv_link_to t("smriti.footer.open_issue"), Smriti::Engine.bug_tracker_uri, tooltip: t("smriti.footer.tooltip.open_issue"), testid: "OPEN_ISSUE_LINK" %>
+      <%= mv_link_to t("smriti.footer.documentation"),
+      Smriti::Engine.documentation_uri,
+      tooltip: t("smriti.footer.tooltip.documentation"),
+      testid: "DOCUMENTATION_LINK" %>
+      <br/>
+      <span class="text-rose-700"><%= t("smriti.footer.need_help") %></span>
+      <%= mv_link_to t("smriti.footer.support"), Smriti::Engine.support_uri, tooltip: t("smriti.footer.tooltip.support"), testid: "SUPPORT_LINK" %>
+    </div>
+  </div>
+</footer>
+<div class="mv-drawer-root" aria-hidden="true" data-drawer-target="root">
+  <div data-drawer-target="overlay" class="mv-drawer-overlay" data-action="click->drawer#close"></div>
+  <aside data-drawer-target="panel" class="mv-drawer" role="dialog" aria-modal="true">
+    <div class="mv-drawer-head" aria-label="<%= t('smriti.details') %>" data-drawer-target="header">
+      <h2 id="mv-drawer-title" data-drawer-target="title">
+        <%= t("smriti.details") %>
+      </h2>
+      <div class='row-item'>
+        <%= mv_drawer_action_button(t("smriti.refresh"), "refresh", t("smriti.refresh_contents"), "left", testid: "DRAWER_REFRESH_LINK") { mv_icon(:refresh) } %>
+        <%= mv_drawer_action_button(t("smriti.close"), "close", t("smriti.close_window"), "left", testid: "DRAWER_CLOSE_LINK") { mv_icon(:x_circle) } %>
+      </div>
+    </div>
+    <div class="mv-drawer-body">
+      <turbo-frame id="mv-drawer" data-drawer-target="frame" data-turbo-frame-lifecycle-target="frame">
+        <div class="mv-card">
+          <div class="mv-card-b"><%= t("smriti.loading") %></div>
+        </div>
+      </turbo-frame>
+    </div>
+  </aside>
+</div>

@@ -4,13 +4,13 @@ nav_order: 3
 permalink: /install
 ---
 
-This page explains how to install the `mat_views` gem, configure it, and use the CLI tasks for managing materialized views in your Rails application.
+This page explains how to install the `smriti` gem, configure it, and use the CLI tasks for managing materialized views in your Rails application.
 
 ## Install (engine)
 
 ```ruby
 # Gemfile
-gem 'mat_views'
+gem 'smriti'
 ```
 
 ```bash
@@ -18,7 +18,7 @@ gem 'mat_views'
 bundle install
 
 # Generate the initializer and migrations
-bin/rails g mat_views:install
+bin/rails g smriti:install
 
 # Run the migrations
 bin/rails db:migrate
@@ -26,11 +26,11 @@ bin/rails db:migrate
 
 ## Initializer
 
-`bin/rails g mat_views:install` creates an initializer file at `config/initializers/mat_views.rb` and migrations for the run tracking tables and the materialized views definitions table.
+`bin/rails g smriti:install` creates an initializer file at `config/initializers/smriti.rb` and migrations for the run tracking tables and the materialized views definitions table.
 
 ```ruby
-# config/initializers/mat_views.rb
-MatViews.configure do |c|
+# config/initializers/smriti.rb
+Smriti.configure do |c|
   # you can set different name, make sure job queue is set to the same as in your job adapter
   # otherwise no views will be created/updated/deleted
   c.job_queue = :default # default queue for background jobs

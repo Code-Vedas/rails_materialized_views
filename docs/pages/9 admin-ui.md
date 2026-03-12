@@ -13,42 +13,42 @@ The Admin UI provides a user-friendly interface to manage and monitor your mater
 
 To secure the Admin UI, you can configure authentication using any authentication system of your choice.
 
-The Admin UI accepts a module similar to `MatViews::Admin::DefaultAuth` just create a module named `MatViewsAdmin` or `MatViews::Admin::HostAuth` in your application and implmenent similar methods as in `MatViews::Admin::DefaultAuth`. `MatViews::Admin::AuthBridge` will include your module if it exists, otherwise it will fall back to `MatViews::Admin::DefaultAuth`.
+The Admin UI accepts a module similar to `Smriti::Admin::DefaultAuth` just create a module named `SmritiAdmin` or `Smriti::Admin::HostAuth` in your application and implmenent similar methods as in `Smriti::Admin::DefaultAuth`. `Smriti::Admin::AuthBridge` will include your module if it exists, otherwise it will fall back to `Smriti::Admin::DefaultAuth`.
 
-_important_ `MatViews::Admin::AuthBridge` is permisve by default and allows all access. You can override the methods to implement your own authentication and authorization logic.
+_important_ `Smriti::Admin::AuthBridge` is permisve by default and allows all access. You can override the methods to implement your own authentication and authorization logic.
 
-## authorize_mat_views! method
+## authorize_smriti! method
 
-The `authorize_mat_views!` method is called to check if the current user is authorized to perform a specific action on a resource. You can implement your own logic to check if the user has the required permissions.
+The `authorize_smriti!` method is called to check if the current user is authorized to perform a specific action on a resource. You can implement your own logic to check if the user has the required permissions.
 
 Following are the actions and resources that you can authorize:
 
 | Action     | Resource                     | Description                                           | Object/Record                        |
 | ---------- | ---------------------------- | ----------------------------------------------------- | ------------------------------------ |
-| `:view`    | `:mat_views_dashboard`       | View the dashboard, preferences page                  | nil                                  |
-| `:read`    | `:mat_views_definitions`     | View the list of materialized views                   | nil                                  |
-| `:create`  | `:mat_views_definition`      | Create a new materialized view                        | nil                                  |
-| `:update`  | `:mat_views_definition`      | Update an existing materialized view                  | MatViews::MatViewDefinition instance |
-| `:destroy` | `:mat_views_definition`      | Delete a materialized view                            | MatViews::MatViewDefinition instance |
-| `:create`  | `:mat_views_definition_view` | Create actual database view for a materialized view   | MatViews::MatViewDefinition instance |
-| `:update`  | `:mat_views_definition_view` | Refresh the materialized view                         | MatViews::MatViewDefinition instance |
-| `:destroy` | `:mat_views_definition_view` | Drop the actual database view for a materialized view | MatViews::MatViewDefinition instance |
-| `:read`    | `:mat_views_runs`            | View the list of materialized view runs               | nil                                  |
-| `:read`    | `:mat_views_run`             | View details of a materialized view run               | MatViews::MatViewRun instance        |
+| `:view`    | `:smriti_dashboard`       | View the dashboard, preferences page                  | nil                                  |
+| `:read`    | `:smriti_definitions`     | View the list of materialized views                   | nil                                  |
+| `:create`  | `:smriti_definition`      | Create a new materialized view                        | nil                                  |
+| `:update`  | `:smriti_definition`      | Update an existing materialized view                  | Smriti::MatViewDefinition instance |
+| `:destroy` | `:smriti_definition`      | Delete a materialized view                            | Smriti::MatViewDefinition instance |
+| `:create`  | `:smriti_definition_view` | Create actual database view for a materialized view   | Smriti::MatViewDefinition instance |
+| `:update`  | `:smriti_definition_view` | Refresh the materialized view                         | Smriti::MatViewDefinition instance |
+| `:destroy` | `:smriti_definition_view` | Drop the actual database view for a materialized view | Smriti::MatViewDefinition instance |
+| `:read`    | `:smriti_runs`            | View the list of materialized view runs               | nil                                  |
+| `:read`    | `:smriti_run`             | View details of a materialized view run               | Smriti::MatViewRun instance        |
 
-## `MatViews::Admin::DefaultAuth`
+## `Smriti::Admin::DefaultAuth`
 
 ```ruby
-# MatViews::Admin::DefaultAuth
+# Smriti::Admin::DefaultAuth
 # ----------------------------
-# Development-friendly **fallback** authentication/authorization for the MatViews
-# admin UI. It is included first by {MatViews::Admin::AuthBridge}, and is meant
-# to be overridden by a host-provided module (`MatViewsAdmin` or
-# `MatViews::Admin::HostAuth`).
+# Development-friendly **fallback** authentication/authorization for the Smriti
+# admin UI. It is included first by {Smriti::Admin::AuthBridge}, and is meant
+# to be overridden by a host-provided module (`SmritiAdmin` or
+# `Smriti::Admin::HostAuth`).
 #
 # ❗ **Not for production**: this module allows all access and returns a dummy user.
 #
-# @see MatViews::Admin::AuthBridge
+# @see Smriti::Admin::AuthBridge
 #
 module DefaultAuth
   # Minimal stand-in user object used by the default auth.
@@ -70,14 +70,14 @@ module DefaultAuth
   #
   # @return [Boolean] true
   # rubocop:disable Naming/PredicateMethod
-  def authenticate_mat_views! = true
+  def authenticate_smriti! = true
   # rubocop:enable Naming/PredicateMethod
 
   # Returns the current user object.
   # In the default implementation this is a {SampleUser}.
   #
   # @return [SampleUser]
-  def mat_views_current_user = SampleUser.new('sample-user@example.com')
+  def smriti_current_user = SampleUser.new('sample-user@example.com')
 
   # Authorizes an action on a record.
   # Always returns true in the default implementation.
@@ -87,7 +87,7 @@ module DefaultAuth
   # @param _record [Object] the target record or symbol (ignored)
   # @return [Boolean] true
   # rubocop:disable Naming/PredicateMethod
-  def authorize_mat_views!(_action, _type, _record = nil) = true
+  def authorize_smriti!(_action, _type, _record = nil) = true
   # rubocop:enable Naming/PredicateMethod
 end
 ```

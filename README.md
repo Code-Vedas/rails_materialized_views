@@ -1,16 +1,16 @@
-# rails_materialized_views (mat_views)
+# smriti (smriti)
 
-[![Gem](https://img.shields.io/gem/v/mat_views.svg?style=flat-square)](https://rubygems.org/gems/mat_views)
-[![CI](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml/badge.svg)](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml)
-[![Maintainability](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views/maintainability.svg)](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views)
-[![Code Coverage](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views/coverage.svg)](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views)
+[![Gem](https://img.shields.io/gem/v/smriti.svg?style=flat-square)](https://rubygems.org/gems/smriti)
+[![CI](https://github.com/Code-Vedas/smriti/actions/workflows/ci.yml/badge.svg)](https://github.com/Code-Vedas/smriti/actions/workflows/ci.yml)
+[![Maintainability](https://qlty.sh/gh/Code-Vedas/projects/smriti/maintainability.svg)](https://qlty.sh/gh/Code-Vedas/projects/smriti)
+[![Code Coverage](https://qlty.sh/gh/Code-Vedas/projects/smriti/coverage.svg)](https://qlty.sh/gh/Code-Vedas/projects/smriti)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12%2B-336791?style=flat-square&logo=postgresql&logoColor=white)
 
 > A Rails engine to define, create, refresh, and delete **PostgreSQL materialized views** with clean APIs, background jobs, observability, and CLI tasks. Built for **high availability** and **repeatable ops**.
 
-- 📦 Engine/gem: [`mat_views/`](./mat_views)
-- 🧪 Demo app: [`mat_views_demo/`](./mat_views_demo) _(not shipped with the gem)_
+- 📦 Engine/gem: [`smriti/`](./smriti)
+- 🧪 Demo app: [`smriti_demo/`](./smriti_demo) _(not shipped with the gem)_
 
 ---
 
@@ -80,20 +80,20 @@ With 50,000 rows
 
 ```ruby
 # Gemfile
-gem 'mat_views'
+gem 'smriti'
 ```
 
 ```bash
 bundle install
-bin/rails g mat_views:install
+bin/rails g smriti:install
 bin/rails db:migrate
 ```
 
 Init:
 
 ```ruby
-# config/initializers/mat_views.rb
-MatViews.configure do |c|
+# config/initializers/smriti.rb
+Smriti.configure do |c|
   c.job_queue = :default # default queue for background jobs
   c.job_adapter = :active_job # (default), :sidekiq, :resque
 end
@@ -106,9 +106,9 @@ end
 All enqueues go through the adapter - it **does not guess** backends; it uses what **you** configured:
 
 ```ruby
-MatViews::Jobs::Adapter.enqueue(
-  MatViews::RefreshViewJob,
-  queue: MatViews.configuration.job_queue,
+Smriti::Jobs::Adapter.enqueue(
+  Smriti::RefreshViewJob,
+  queue: Smriti.configuration.job_queue,
   args:  [mat_view_definition_id, :estimated]
 )
 ```
@@ -122,26 +122,26 @@ MatViews::Jobs::Adapter.enqueue(
 
 ```bash
 # Create
-bundle exec rake mat_views:create_by_name\[VIEW_NAME,force,row_count_strategy,--yes]
-bundle exec rake mat_views:create_by_id\[ID,force,row_count_strategy,--yes]
-bundle exec rake mat_views:create_all\[force,row_count_strategy,--yes]
+bundle exec rake smriti:create_by_name\[VIEW_NAME,force,row_count_strategy,--yes]
+bundle exec rake smriti:create_by_id\[ID,force,row_count_strategy,--yes]
+bundle exec rake smriti:create_all\[force,row_count_strategy,--yes]
 
 # Refresh
-bundle exec rake mat_views:refresh_by_name\[VIEW_NAME,row_count_strategy,--yes]
-bundle exec rake mat_views:refresh_by_id\[ID,row_count_strategy,--yes]
-bundle exec rake mat_views:refresh_all\[row_count_strategy,--yes]
+bundle exec rake smriti:refresh_by_name\[VIEW_NAME,row_count_strategy,--yes]
+bundle exec rake smriti:refresh_by_id\[ID,row_count_strategy,--yes]
+bundle exec rake smriti:refresh_all\[row_count_strategy,--yes]
 
 # Delete
-bundle exec rake mat_views:delete_by_name\[VIEW_NAME,cascade,row_count_strategy,--yes]
-bundle exec rake mat_views:delete_by_id\[ID,cascade,row_count_strategy,--yes]
-bundle exec rake mat_views:delete_all\[cascade,row_count_strategy,--yes]
+bundle exec rake smriti:delete_by_name\[VIEW_NAME,cascade,row_count_strategy,--yes]
+bundle exec rake smriti:delete_by_id\[ID,cascade,row_count_strategy,--yes]
+bundle exec rake smriti:delete_all\[cascade,row_count_strategy,--yes]
 ```
 
 ---
 
 ## Demo app
 
-See [`mat_views_demo/`](./mat_views_demo) for seeds, MV definitions, and reproducible benchmarks (not shipped with the gem).
+See [`smriti_demo/`](./smriti_demo) for seeds, MV definitions, and reproducible benchmarks (not shipped with the gem).
 
 ---
 
