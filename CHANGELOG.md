@@ -175,7 +175,7 @@
 
 - ci: Integrate Qlty coverage reporting @niteshpurohit (#93)
 
- ## 0.1.1 Skipped
+## 0.1.1 Skipped
 
 Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 
