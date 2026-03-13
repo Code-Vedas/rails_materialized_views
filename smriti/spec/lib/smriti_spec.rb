@@ -15,6 +15,6 @@ RSpec.describe Smriti do
   end
 
   it 'has the correct version number' do
-    expect(Smriti::VERSION).to eq('0.4.0')
+    expect(Smriti::VERSION).to eq('0.5.0')
   end
 end

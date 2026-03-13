@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+bundle update
+BUNDLE_GEMFILE=gemfiles/rails_edge.gemfile bundle update
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle update
+BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle update
+BUNDLE_GEMFILE=gemfiles/rails_8_1.gemfile bundle update
