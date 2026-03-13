@@ -59,8 +59,8 @@ module Smriti
       definition = Smriti::MatViewDefinition.find(mat_view_definition_id)
       record_run(definition, :drop) do
         Smriti::Services::DeleteView.new(definition,
-                                           cascade: cascade?(cascade_arg),
-                                           row_count_strategy: normalize_strategy(row_count_strategy_arg)).call
+                                         cascade: cascade?(cascade_arg),
+                                         row_count_strategy: normalize_strategy(row_count_strategy_arg)).call
       end
     end
 

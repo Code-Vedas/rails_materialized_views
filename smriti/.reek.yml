@@ -47,6 +47,7 @@ detectors:
       - Smriti::Admin::UiHelper#mv_badge
       - Smriti::Admin::UiHelper#mv_drawer_action_button
       - Smriti::Admin::UiHelper#mv_tab_link
+      - ScreenshotHelpers#save_failure_screenshot 
   TooManyMethods:
     enabled: true
     exclude:

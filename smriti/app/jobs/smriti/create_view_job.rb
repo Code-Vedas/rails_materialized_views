@@ -61,8 +61,8 @@ module Smriti
 
       record_run(definition, :create) do
         Smriti::Services::CreateView.new(definition,
-                                           force: force?(force_arg),
-                                           row_count_strategy: normalize_strategy(row_count_strategy_arg)).call
+                                         force: force?(force_arg),
+                                         row_count_strategy: normalize_strategy(row_count_strategy_arg)).call
       end
     end
 
