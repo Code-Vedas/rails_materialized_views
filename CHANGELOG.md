@@ -11,13 +11,13 @@
 
 - chore(deps): Bump actions/upload-artifact from 6 to 7 @[dependabot[bot]](https://github.com/apps/dependabot) (#398)
 - chore(deps-dev): Bump nokogiri from 1.19.0 to 1.19.1 in /docs in the bundler group across 1 directory @[dependabot[bot]](https://github.com/apps/dependabot) (#391)
-- chore(deps): Bump rack from 3.2.4 to 3.2.5 in /mat_views in the bundler group across 1 directory @[dependabot[bot]](https://github.com/apps/dependabot) (#387)
-- chore(deps-dev): Bump rspec-rails from 8.0.2 to 8.0.3 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#389)
-- chore(deps-dev): Bump sidekiq from 8.1.0 to 8.1.1 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#388)
-- chore(deps-dev): Bump ruby-lsp from 0.26.6 to 0.26.7 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#390)
-- chore(deps): Bump solid_queue from 1.3.1 to 1.3.2 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#392)
-- chore(deps-dev): Bump selenium-webdriver from 4.40.0 to 4.41.0 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#393)
-- chore(deps-dev): Bump web-console from 4.2.1 to 4.3.0 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#394)
+- chore(deps): Bump rack from 3.2.4 to 3.2.5 in /smriti in the bundler group across 1 directory @[dependabot[bot]](https://github.com/apps/dependabot) (#387)
+- chore(deps-dev): Bump rspec-rails from 8.0.2 to 8.0.3 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#389)
+- chore(deps-dev): Bump sidekiq from 8.1.0 to 8.1.1 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#388)
+- chore(deps-dev): Bump ruby-lsp from 0.26.6 to 0.26.7 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#390)
+- chore(deps): Bump solid_queue from 1.3.1 to 1.3.2 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#392)
+- chore(deps-dev): Bump selenium-webdriver from 4.40.0 to 4.41.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#393)
+- chore(deps-dev): Bump web-console from 4.2.1 to 4.3.0 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#394)
 
 ### 🧪 Tests
 
@@ -26,8 +26,6 @@
 ### 📦 Build
 
 - build: fix dependencies @niteshpurohit (#396)
-
-
 
 ## [0.4.0](https://github.com/code-vedas/smriti/tree/v0.4.0) (2026-02-14)
 
