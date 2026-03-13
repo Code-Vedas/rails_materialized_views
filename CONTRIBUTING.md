@@ -81,7 +81,7 @@ Seed data for dummy app tables (`users`, `accounts`, `events`, `sessions`) is pr
 
 ### Testing job adapters
 
-Our engine supports multiple background processors via `Smriti.config.job_adapter`:
+Our engine supports multiple background processors via `Smriti.configuration.job_adapter`:
 
 - `:active_job` (default)
 - `:sidekiq`

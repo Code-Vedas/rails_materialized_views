@@ -4,7 +4,7 @@ title: Home
 nav_order: 1
 ---
 
-# smriti (smriti)
+# Smriti
 
 [![Gem](https://img.shields.io/gem/v/smriti.svg?style=flat-square)](https://rubygems.org/gems/smriti)
 [![CI](https://github.com/Code-Vedas/smriti/actions/workflows/ci.yml/badge.svg)](https://github.com/Code-Vedas/smriti/actions/workflows/ci.yml)

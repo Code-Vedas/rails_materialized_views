@@ -4,7 +4,7 @@ description: >-
   From declaration to concurrent refresh, automated scheduling, metrics tracking, and 
   large-dataset validation - Smriti helps you tame big queries and keep your reports lightning-fast.
 baseurl: ""
-domain: mat-views.codevedas.com
+domain: smriti.codevedas.com
 repository: Code-Vedas/smriti
 # Build settings
 theme: just-the-docs

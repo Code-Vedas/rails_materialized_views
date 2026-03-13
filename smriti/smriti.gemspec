@@ -18,11 +18,11 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
   spec.metadata['bug_tracker_uri'] = 'https://github.com/Code-Vedas/smriti/issues'
   spec.metadata['changelog_uri'] = 'https://github.com/Code-Vedas/smriti/blob/main/CHANGELOG.md'
-  spec.metadata['documentation_uri'] = 'https://mat-views.codevedas.com'
+  spec.metadata['documentation_uri'] = 'https://smriti.codevedas.com'
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/Code-Vedas/smriti.git'
   spec.metadata['funding_uri'] = 'https://github.com/sponsors/Code-Vedas'
-  spec.metadata['support_uri'] = 'https://mat-views.codevedas.com/support'
+  spec.metadata['support_uri'] = 'https://smriti.codevedas.com/support'
   spec.metadata['rubygems_uri'] = 'https://rubygems.org/gems/smriti'
   spec.metadata['rubygems_mfa_required'] = 'true'
 
