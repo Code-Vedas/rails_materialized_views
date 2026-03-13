@@ -1,4 +1,4 @@
-title: Rails Materialized Views
+title: Smriti (Rails Materialized Views)
 description: >-
   Smriti is a mountable Ruby on Rails engine that makes PostgreSQL materialised views first-class citizens in your app.
   From declaration to concurrent refresh, automated scheduling, metrics tracking, and 

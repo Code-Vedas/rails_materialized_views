@@ -175,7 +175,7 @@
 
 - ci: Integrate Qlty coverage reporting @niteshpurohit (#93)
 
-## [0.1.1](https://github.com/code-vedas/smriti/tree/v0.1.1) Skipped
+ ## 0.1.1 Skipped
 
 Skipped: Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 

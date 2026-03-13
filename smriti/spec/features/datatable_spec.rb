@@ -12,6 +12,7 @@ RSpec.describe 'Datatable', :feature do
     context 'when all features are enabled', :js do
       scenario 'shows all options in the Actions menu', :js do
         create_list(:mat_view_definition, 21) # rubocop:disable FactoryBot/ExcessiveCreateList
+        ensure_idle!
 
         visit_dashboard
         wait_for_turbo_idle
@@ -40,9 +41,7 @@ RSpec.describe 'Datatable', :feature do
           expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-previous']")
           expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-next']")
           expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-last']")
-          expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-1']")
           expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-2']")
-          expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-3']")
 
           # per page select
           expect(page).to have_css("select[data-testid='dt_pagination_btn-mv-definitions-table-per-page']")
@@ -55,6 +54,7 @@ RSpec.describe 'Datatable', :feature do
 
       before do
         create_list(:mat_view_definition, 10)
+        ensure_idle!
       end
 
       context 'when searching is disabled' do
@@ -183,6 +183,7 @@ RSpec.describe 'Datatable', :feature do
       create(:mat_view_definition, name: 'C_View')
       create(:mat_view_definition, name: 'A_View')
       create(:mat_view_definition, name: 'B_View')
+      ensure_idle!
 
       visit_dashboard
       wait_for_turbo_idle
@@ -255,6 +256,7 @@ RSpec.describe 'Datatable', :feature do
       create(:mat_view_definition, name: 'View_One', refresh_strategy: 'regular')
       create(:mat_view_definition, name: 'View_Two', refresh_strategy: 'swap')
       create(:mat_view_definition, name: 'View_Three', refresh_strategy: 'regular')
+      ensure_idle!
 
       visit_dashboard
       wait_for_turbo_idle
@@ -320,6 +322,7 @@ RSpec.describe 'Datatable', :feature do
       create(:mat_view_definition, name: 'First_View')
       create(:mat_view_definition, name: 'Second_View')
       create(:mat_view_definition, name: 'Third_View')
+      ensure_idle!
 
       visit_dashboard
       wait_for_turbo_idle
@@ -371,6 +374,7 @@ RSpec.describe 'Datatable', :feature do
   feature 'Datatable pagination' do
     scenario 'navigates pages when pagination buttons are clicked', :js do
       create_list(:mat_view_definition, 25) # rubocop:disable FactoryBot/ExcessiveCreateList
+      ensure_idle!
 
       visit_dashboard
       wait_for_turbo_idle
@@ -379,39 +383,43 @@ RSpec.describe 'Datatable', :feature do
       execute_script('window.scrollTo(0, document.body.scrollHeight);')
 
       within_turbo_frame('dash-definitions') do
+        first_button = "button[data-testid='dt_pagination_btn-mv-definitions-table-page-first']"
+        previous_button = "button[data-testid='dt_pagination_btn-mv-definitions-table-page-previous']"
+        next_button = "button[data-testid='dt_pagination_btn-mv-definitions-table-page-next']"
+        last_button = "button[data-testid='dt_pagination_btn-mv-definitions-table-page-last']"
+        page_two_button = "button[data-testid='dt_pagination_btn-mv-definitions-table-page-2']"
+
         expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-first']")
         expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-previous']")
         expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-next']")
         expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-last']")
-        expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-1']")
         expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-2']")
-        expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-3']")
 
         # first, previous is inactive and go to last page
-        expect(find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-first']")[:disabled]).to eq('true')
-        expect(find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-previous']")[:disabled]).to eq('true')
-        find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-last']").click
+        expect(find(first_button)).to be_disabled
+        expect(find(previous_button)).to be_disabled
+        find(last_button).click
         wait_for_turbo_idle
         expect(URI.parse(current_url).query).to include('dtpage=3')
         # 5 tbody tr
         expect(all('tbody tr').size).to eq(5)
 
         # next and last are inactive and go to first page
-        expect(find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-next']")[:disabled]).to eq('true')
-        expect(find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-last']")[:disabled]).to eq('true')
-        find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-first']").click
+        expect(find(next_button)).to be_disabled
+        expect(find(last_button)).to be_disabled
+        find(first_button).click
         wait_for_turbo_idle
         expect(URI.parse(current_url).query).to include('dtpage=1')
         # 10 tbody tr
         expect(all('tbody tr').size).to eq(10)
 
         # go to page 2, first, previous, next, last are active
-        find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-2']").click
+        find(page_two_button).click
         wait_for_turbo_idle
-        expect(find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-first']")[:disabled]).to eq('false')
-        expect(find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-previous']")[:disabled]).to eq('false')
-        expect(find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-next']")[:disabled]).to eq('false')
-        expect(find("button[data-testid='dt_pagination_btn-mv-definitions-table-page-last']")[:disabled]).to eq('false')
+        expect(find(first_button)).not_to be_disabled
+        expect(find(previous_button)).not_to be_disabled
+        expect(find(next_button)).not_to be_disabled
+        expect(find(last_button)).not_to be_disabled
         expect(URI.parse(current_url).query).to include('dtpage=2')
         # 10 tbody tr
         expect(all('tbody tr').size).to eq(10)

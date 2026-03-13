@@ -78,6 +78,7 @@ detectors:
       - Smriti::Configuration#admin_ui
       - Smriti::Admin::DefaultAuth::SampleUser#email
       - Smriti::Services::BaseService#use_transaction
+      - Smriti#configuration
   InstanceVariableAssumption:
     enabled: true
     exclude:

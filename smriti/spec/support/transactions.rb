@@ -9,14 +9,18 @@ require 'pg'
 
 RSpec.configure do |config|
   # Run each example in its own transaction that we always roll back…
-  # …except those tagged :no_txn (needed for CONCURRENTLY), which run truly outside any tx.
+  # …except those tagged :no_txn and browser-driven :js examples, which must
+  # run outside the transaction so the app server can observe committed rows.
   config.around do |example|
     conn = ActiveRecord::Base.connection
 
-    if example.metadata[:no_txn]
+    if example.metadata[:no_txn] || example.metadata[:js]
       ensure_idle!(conn)        # no open/failed tx before
+      cleanup_persisted_test_data!(conn)
+      drop_test_matviews!(conn)
       example.run
       ensure_idle!(conn)        # and after
+      cleanup_persisted_test_data!(conn)
       drop_test_matviews!(conn) # tidy MVs created in these specs
     else
       # Use a new (non-joinable) tx and always roll it back so nothing persists or poisons the conn.
@@ -26,6 +30,12 @@ RSpec.configure do |config|
       end
       ensure_idle!(conn)
     end
+  end
+end
+
+def cleanup_persisted_test_data!(conn = ActiveRecord::Base.connection)
+  %w[mat_view_runs mat_view_definitions].each do |table|
+    conn.execute(%(TRUNCATE TABLE public."#{table}" RESTART IDENTITY CASCADE))
   end
 end
 
