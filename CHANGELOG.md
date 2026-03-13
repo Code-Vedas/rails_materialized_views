@@ -161,7 +161,7 @@
 - chore: add workspace @niteshpurohit (#166)
 - chore(deps): Bump actions/upload-pages-artifact from 3 to 4 @[dependabot[bot]](https://github.com/apps/dependabot) (#99)
 
-## [0.1.2](https://github.com/code-vedas/smriti/tree/v0.1.1) (2025-08-22)
+## [0.1.2](https://github.com/code-vedas/smriti/tree/v0.1.2) (2025-08-22)
 
 [Full Changelog](https://github.com/code-vedas/smriti/compare/v0.1.0...v0.1.2)
 
@@ -175,9 +175,9 @@
 
 - ci: Integrate Qlty coverage reporting @niteshpurohit (#93)
 
-## [0.1.1](https://github.com/code-vedas/smriti/compare/v0.1.0...v0.1.1) Skipped
+## [0.1.1](https://github.com/code-vedas/smriti/tree/v0.1.1) Skipped
 
-Due to issues with rubygems.org, the 0.1.1 release has been skipped.
+Skipped: Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 
 ## [0.1.0](https://github.com/code-vedas/smriti/tree/v0.1.0) (2025-08-18)
 
