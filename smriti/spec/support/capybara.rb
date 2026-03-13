@@ -49,12 +49,12 @@ end
 
 if ENV['E2E'] == '1'
   if ENV['SELENIUM_REMOTE_URL'].present?
-  Capybara.default_driver = :remote_firefox
-  Capybara.javascript_driver = :remote_firefox
-  Capybara.server_host = '0.0.0.0'
-  Capybara.server_port = ENV.fetch('CAPYBARA_PORT', '3000').to_i
-  Capybara.app_host    = "http://#{ENV.fetch('CAPYBARA_APP_HOST', 'host.docker.internal')}:#{Capybara.server_port}"
-  Capybara.always_include_port = true
+    Capybara.default_driver = :remote_firefox
+    Capybara.javascript_driver = :remote_firefox
+    Capybara.server_host = '0.0.0.0'
+    Capybara.server_port = ENV.fetch('CAPYBARA_PORT', '3000').to_i
+    Capybara.app_host    = "http://#{ENV.fetch('CAPYBARA_APP_HOST', 'host.docker.internal')}:#{Capybara.server_port}"
+    Capybara.always_include_port = true
   else
     setup_with_selenium_manager
     Capybara.default_driver = :firefox_headless
