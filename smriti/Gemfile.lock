@@ -549,7 +549,6 @@ DEPENDENCIES
   generator_spec
   i18n-tasks (~> 1.1)
   importmap-rails
-  smriti!
   pg
   propshaft
   puma
@@ -570,6 +569,7 @@ DEPENDENCIES
   sidekiq (>= 8.1.1)
   simplecov
   simplecov-console
+  smriti!
   stimulus-rails
   turbo-rails
 

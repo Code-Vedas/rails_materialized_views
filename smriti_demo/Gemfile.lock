@@ -288,11 +288,11 @@ DEPENDENCIES
   csv
   debug
   importmap-rails
-  smriti!
   pg (~> 1.1)
   propshaft
   puma (>= 5.0)
   rails (~> 8.1.1)
+  smriti!
   solid_cable
   solid_cache (>= 1.0.8)
   solid_queue
