@@ -45,7 +45,7 @@ module Smriti
   class << self
     # Global configuration for Smriti
     # @return [Smriti::Configuration]
-    attr_reader :configuration
+    attr_accessor :configuration
 
     # Configure Smriti via block.
     #

@@ -23,17 +23,17 @@ The `authorize_smriti!` method is called to check if the current user is authori
 
 Following are the actions and resources that you can authorize:
 
-| Action     | Resource                     | Description                                           | Object/Record                        |
-| ---------- | ---------------------------- | ----------------------------------------------------- | ------------------------------------ |
-| `:view`    | `:smriti_dashboard`       | View the dashboard, preferences page                  | nil                                  |
-| `:read`    | `:smriti_definitions`     | View the list of materialized views                   | nil                                  |
-| `:create`  | `:smriti_definition`      | Create a new materialized view                        | nil                                  |
+| Action     | Resource                  | Description                                           | Object/Record                      |
+| ---------- | ------------------------- | ----------------------------------------------------- | ---------------------------------- |
+| `:view`    | `:smriti_dashboard`       | View the dashboard, preferences page                  | nil                                |
+| `:read`    | `:smriti_definitions`     | View the list of materialized views                   | nil                                |
+| `:create`  | `:smriti_definition`      | Create a new materialized view                        | nil                                |
 | `:update`  | `:smriti_definition`      | Update an existing materialized view                  | Smriti::MatViewDefinition instance |
 | `:destroy` | `:smriti_definition`      | Delete a materialized view                            | Smriti::MatViewDefinition instance |
 | `:create`  | `:smriti_definition_view` | Create actual database view for a materialized view   | Smriti::MatViewDefinition instance |
 | `:update`  | `:smriti_definition_view` | Refresh the materialized view                         | Smriti::MatViewDefinition instance |
 | `:destroy` | `:smriti_definition_view` | Drop the actual database view for a materialized view | Smriti::MatViewDefinition instance |
-| `:read`    | `:smriti_runs`            | View the list of materialized view runs               | nil                                  |
+| `:read`    | `:smriti_runs`            | View the list of materialized view runs               | nil                                |
 | `:read`    | `:smriti_run`             | View details of a materialized view run               | Smriti::MatViewRun instance        |
 
 ## `Smriti::Admin::DefaultAuth`

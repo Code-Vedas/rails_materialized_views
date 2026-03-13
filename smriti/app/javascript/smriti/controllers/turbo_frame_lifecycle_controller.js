@@ -224,11 +224,10 @@ export default class extends Controller {
     // target="id"
     if (targetId) {
       const el = document.getElementById(targetId);
-      const frame = el
-        ? el.tagName === "TURBO-FRAME"
-          ? el
-          : el.closest("turbo-frame")
-        : null;
+      let frame = null;
+      if (el) {
+        frame = el.tagName === "TURBO-FRAME" ? el : el.closest("turbo-frame");
+      }
       if (frame && this._isManagedFrame(frame)) out.add(frame);
     }
 

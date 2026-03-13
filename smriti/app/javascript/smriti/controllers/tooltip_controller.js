@@ -23,7 +23,7 @@
  * - Listeners: `_bindHandlers`, `_addListeners`, `_removeListeners`
  * - DOM helpers: `_ensureTooltipEl`, `_prepareForMeasure`, `_applyPlacementClass`,
  *                `_removeAllPlacementClasses`, `_setTransform`, `_offscreen`,
- *                `_setVisible`, `_setDescribedBy`, `_clearDescribedBy`
+ *                `_showTooltip`, `_hideTooltip`, `_setDescribedBy`, `_clearDescribedBy`
  * - Data/title: `_resolveText`, `_resolvePlacement`, `_saveAndRemoveTitle`, `_restoreTitle`
  * - Timers: `_schedule`, `_clearTimer`, `_clearAllTimers`, `_isVisible`
  * - Geometry: `_computePosition`, `_coordsFor`, `_clampX`, `_clampY`
@@ -165,7 +165,7 @@ export default class extends Controller {
 
     this._applyPlacementClass(placement);
     this._setTransform(x, y);
-    this._setVisible(true);
+    this._showTooltip();
     this._setDescribedBy();
   }
 
@@ -175,7 +175,7 @@ export default class extends Controller {
    * @return {void}
    */
   _actuallyHide(immediate = false) {
-    this._setVisible(false);
+    this._hideTooltip();
 
     if (immediate) {
       this._offscreen();
@@ -326,19 +326,21 @@ export default class extends Controller {
   }
 
   /**
-   * Toggles visibility via opacity/data attribute (for CSS transitions).
-   * @param {boolean} visible
+   * Shows the tooltip via opacity/data attribute (for CSS transitions).
    * @return {void}
    */
-  _setVisible(visible) {
-    /* radarlint-js ignore-next-line */
-    if (visible) {
-      this.tooltipEl.style.opacity = "1";
-      this.tooltipEl.setAttribute("data-show", "true");
-    } else {
-      this.tooltipEl.removeAttribute("data-show");
-      this.tooltipEl.style.opacity = "0";
-    }
+  _showTooltip() {
+    this.tooltipEl.style.opacity = "1";
+    this.tooltipEl.setAttribute("data-show", "true");
+  }
+
+  /**
+   * Hides the tooltip via opacity/data attribute (for CSS transitions).
+   * @return {void}
+   */
+  _hideTooltip() {
+    this.tooltipEl.removeAttribute("data-show");
+    this.tooltipEl.style.opacity = "0";
   }
 
   /**

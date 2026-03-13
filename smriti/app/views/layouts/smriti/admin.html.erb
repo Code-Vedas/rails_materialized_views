@@ -9,7 +9,7 @@
     <meta name="author" content="<%= t('smriti.project_author') %>">
     <meta name="keywords" content="<%= t('smriti.project_tags') %>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="<%= smriti_data_theme || 'auto' %>">
+    <meta name="color-scheme" content="<%= %w[light dark].include?(smriti_data_theme) ? smriti_data_theme : 'light dark' %>">
     <meta http-equiv="Content-Language" content="<%= I18n.locale %>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

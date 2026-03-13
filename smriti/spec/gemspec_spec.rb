@@ -8,11 +8,11 @@
 RSpec.describe 'smriti.gemspec' do # rubocop:disable RSpec/DescribeClass
   subject(:spec) { Gem::Specification.load('smriti.gemspec') }
 
-  it 'has mat_view name' do
+  it 'has smriti name' do
     expect(spec.name).to eq('smriti')
   end
 
-  it 'has mat_view version' do
+  it 'has smriti version' do
     expect(spec.version).to eq(Smriti::VERSION)
   end
 end

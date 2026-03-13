@@ -73,7 +73,7 @@ Smriti::Services::RegularRefresh.new(defn, row_count_strategy: :estimated).call
 Smriti::RefreshViewJob.perform_later(defn.id, row_count_strategy: :exact)
 
 # Delete
-Smriti::Services::DeleteView.new(defn, cascade: false, if_exists: true).call
+ Smriti::Services::DeleteView.new(defn, cascade: false).call
 Smriti::DeleteViewJob.perform_later(defn.id, cascade: true)
 ```
 

@@ -8,7 +8,7 @@
 # Helpers for system tests (feature specs).
 module SystemHelpers
   def visit_dashboard
-    visit '/smriti/en-US/admin'
+    visit "/smriti/#{Smriti::Engine.default_locale}/admin"
   end
 
   def reload_page

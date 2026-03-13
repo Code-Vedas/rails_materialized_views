@@ -22,10 +22,10 @@ This project comprises various modules/components, each housed in its dedicated 
 
 The table below provides an overview of all possible modules/components:
 
-| Module/Component | Description                           | Related Language/Framework |
-| ---------------- | ------------------------------------- | -------------------------- |
-| smriti        | Rails Materialized Views Engine       | Ruby on Rails              |
-| smriti_demo   | Demo Application for smriti Engine | Ruby on Rails              |
+| Module/Component | Description                        | Related Language/Framework |
+| ---------------- | ---------------------------------- | -------------------------- |
+| smriti           | Rails Materialized Views Engine    | Ruby on Rails              |
+| smriti_demo      | Demo Application for smriti Engine | Ruby on Rails              |
 
 ## Improve Documentation
 
