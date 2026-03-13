@@ -1,10 +1,37 @@
 # CHANGELOG
 
+## [0.5.0](https://github.com/code-vedas/smriti/tree/v0.5.0) (2026-03-12)
+
+[Full Changelog](https://github.com/code-vedas/smriti/compare/v0.4.0...v0.5.0)
+
+### Breaking Changes
+- refactor: hard rename mat_views to smriti @niteshpurohit (#404)
+
+### 🧰 Maintenance
+
+- chore(deps): Bump actions/upload-artifact from 6 to 7 @[dependabot[bot]](https://github.com/apps/dependabot) (#398)
+- chore(deps-dev): Bump nokogiri from 1.19.0 to 1.19.1 in /docs in the bundler group across 1 directory @[dependabot[bot]](https://github.com/apps/dependabot) (#391)
+- chore(deps): Bump rack from 3.2.4 to 3.2.5 in /smriti in the bundler group across 1 directory @[dependabot[bot]](https://github.com/apps/dependabot) (#387)
+- chore(deps-dev): Bump rspec-rails from 8.0.2 to 8.0.3 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#389)
+- chore(deps-dev): Bump sidekiq from 8.1.0 to 8.1.1 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#388)
+- chore(deps-dev): Bump ruby-lsp from 0.26.6 to 0.26.7 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#390)
+- chore(deps): Bump solid_queue from 1.3.1 to 1.3.2 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#392)
+- chore(deps-dev): Bump selenium-webdriver from 4.40.0 to 4.41.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#393)
+- chore(deps-dev): Bump web-console from 4.2.1 to 4.3.0 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#394)
+
+### 🧪 Tests
+
+- test: Adds Rails 8.1 support to CI and test matrix @niteshpurohit (#386)
+
+### 📦 Build
+
+- build: fix dependencies @niteshpurohit (#396)
+
 ## [0.4.0](https://github.com/code-vedas/smriti/tree/v0.4.0) (2026-02-14)
 
 [Full Changelog](https://github.com/code-vedas/smriti/compare/v0.3.0...v0.4.0)
 
-## 🌐 Localization
+### 🌐 Localization
 
 - lang: Add en-AU localization for Admin UI @niteshpurohit (#315)
 - feat: Add zh-CN localization for Admin UI @niteshpurohit (#312)
@@ -24,11 +51,11 @@
 - lang: Add Arabic language support @niteshpurohit (#299)
 - refactor: Remove redundant English locale files @niteshpurohit (#283)
 
-## 🚀 Features
+### 🚀 Features
 
 - feat: Introduce server-side datatables @niteshpurohit (#323)
 
-## 🧰 Maintenance
+### 🧰 Maintenance
 
 - chore(deps-dev): Bump i18n-tasks from 1.0.15 to 1.1.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#359)
 - chore(deps): Bump bootsnap from 1.18.6 to 1.19.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#362)
@@ -77,7 +104,7 @@
 - chore(deps): Bump rails from 8.0.2.1 to 8.0.3 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#274)
 - chore(deps): Bump rails from 8.0.2.1 to 8.0.3 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#273)
 
-## 📦 Build
+### 📦 Build
 
 - build: Remove webdrivers gem and rely on Selenium Manager @niteshpurohit (#355)
 - build: Simplify demo application dependencies @niteshpurohit (#352)
@@ -87,7 +114,7 @@
 
 [Full Changelog](https://github.com/code-vedas/smriti/compare/v0.2.0...v0.3.0)
 
-## 🌐 Localization
+### 🌐 Localization
 
 - lang: Add localization: en-GI @niteshpurohit (#269)
 - lang: Add localization: en-CY @niteshpurohit (#268)
@@ -139,11 +166,11 @@
 - lang: Add localization: en-US-pirate @niteshpurohit (#189)
 - lang: Add localization: en-au-ocker @niteshpurohit (#187)
 
-## 🚀 Features
+### 🚀 Features
 
 - feat: Add mountable admin UI for managing views @niteshpurohit (#186)
 
-## ⚙️ CI
+### ⚙️ CI
 
 - ci: change individual jobs for screenshot to single @niteshpurohit (#270)
 
@@ -151,11 +178,11 @@
 
 [Full Changelog](https://github.com/code-vedas/smriti/compare/v0.1.2...v0.2.0)
 
-## 🚀 Features
+### 🚀 Features
 
 - feat: Add row count strategy to create and delete tasks @niteshpurohit (#168)
 
-## 🧰 Maintenance
+### 🧰 Maintenance
 
 - refactor: Improve job and service architecture @niteshpurohit (#167)
 - chore: add workspace @niteshpurohit (#166)
@@ -165,17 +192,17 @@
 
 [Full Changelog](https://github.com/code-vedas/smriti/compare/v0.1.0...v0.1.2)
 
-## 🧰 Maintenance
+### 🧰 Maintenance
 
 - refactor: Unify run tracking into a single `mat_view_runs` table @niteshpurohit (#97)
 - chore(deps): Bump actions/checkout from 4 to 5 @[dependabot[bot]](https://github.com/apps/dependabot) (#95)
 - refactor: qlty fixes @niteshpurohit (#94)
 
-## ⚙️ CI
+### ⚙️ CI
 
 - ci: Integrate Qlty coverage reporting @niteshpurohit (#93)
 
-## 0.1.1 Skipped
+### 0.1.1 Skipped
 
 Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 
@@ -183,7 +210,7 @@ Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 
 [Full Changelog](https://github.com/code-vedas/smriti/compare/080a0c5f8f42eb55e971677f0468ed626e2b3b44...v0.1.0)
 
-## 🚀 Features
+### 🚀 Features
 
 - feat: Adds rake task to validate MV performance @niteshpurohit (#82)
 - feat: Add Rails demo application for smriti gem @niteshpurohit (#81)
@@ -203,13 +230,13 @@ Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 - feat: Add install generator and configuration @niteshpurohit (#46)
 - feat: Initialize smriti Rails engine @niteshpurohit (#42)
 
-## 📝 Documentation
+### 📝 Documentation
 
 - docs: Add comprehensive documentation site @niteshpurohit (#91)
 - docs: Add release process and enhance README @niteshpurohit (#88)
 - docs: Overhaul project documentation @niteshpurohit (#83)
 
-## 🧰 Maintenance
+### 🧰 Maintenance
 
 - chore(deps): Update rails requirement from ~> 7.1 to >= 7.1, < 9.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#90)
 - chore(deps): Bump rails from 8.0.2 to 8.0.2.1 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#80)
@@ -221,7 +248,7 @@ Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 - refactor: Introduce enum for refresh strategies @niteshpurohit (#52)
 - chore: Apply consistent style and update linting rules @niteshpurohit (#45)
 
-## ⚙️ CI
+### ⚙️ CI
 
 - ci: Add release workflow and lock Rails version @niteshpurohit (#89)
 - ci: Add SimpleCov for test coverage reporting @niteshpurohit (#66)

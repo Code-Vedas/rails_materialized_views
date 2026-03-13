@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    smriti (0.4.0)
+    smriti (0.5.0)
       rails (>= 7.1, < 9.0)
       rails-i18n (>= 7.0)
 

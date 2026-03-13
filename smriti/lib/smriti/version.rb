@@ -17,5 +17,5 @@ module Smriti
   # - PATCH: Backwards-compatible bug fixes
   #
   # @return [String] the current gem version
-  VERSION = '0.4.0'
+  VERSION = '0.5.0'
 end
