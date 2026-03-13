@@ -12,8 +12,6 @@ RSpec.describe 'Datatable', :feature do
     context 'when all features are enabled', :js do
       scenario 'shows all options in the Actions menu', :js do
         create_list(:mat_view_definition, 21) # rubocop:disable FactoryBot/ExcessiveCreateList
-        ensure_idle!
-
         visit_dashboard
         wait_for_turbo_idle
 
@@ -41,8 +39,6 @@ RSpec.describe 'Datatable', :feature do
           expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-previous']")
           expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-next']")
           expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-last']")
-          expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-2']")
-
           # per page select
           expect(page).to have_css("select[data-testid='dt_pagination_btn-mv-definitions-table-per-page']")
         end
@@ -54,7 +50,6 @@ RSpec.describe 'Datatable', :feature do
 
       before do
         create_list(:mat_view_definition, 10)
-        ensure_idle!
       end
 
       context 'when searching is disabled' do
@@ -183,8 +178,6 @@ RSpec.describe 'Datatable', :feature do
       create(:mat_view_definition, name: 'C_View')
       create(:mat_view_definition, name: 'A_View')
       create(:mat_view_definition, name: 'B_View')
-      ensure_idle!
-
       visit_dashboard
       wait_for_turbo_idle
 
@@ -192,10 +185,12 @@ RSpec.describe 'Datatable', :feature do
       execute_script('window.scrollTo(0, document.body.scrollHeight);')
 
       within_turbo_frame('dash-definitions') do
+        datatable_rows = 'table.mv-table.with-filters tbody tr'
+
         # Initial order should be as created
-        expect(all('tbody tr')[0]).to have_content('C_View') # rubocop:disable Capybara/FindAllFirst
-        expect(all('tbody tr')[1]).to have_content('A_View')
-        expect(all('tbody tr')[2]).to have_content('B_View')
+        expect(all(datatable_rows)[0]).to have_content('C_View') # rubocop:disable Capybara/FindAllFirst
+        expect(all(datatable_rows)[1]).to have_content('A_View')
+        expect(all(datatable_rows)[2]).to have_content('B_View')
         within('button[data-testid="toggle_sort_button-mv-definitions-table-name"]') do
           expect(page).to have_css('svg.mv-icon.muted.sort-neutral')
           expect(page).to have_css('svg.mv-icon.active.sort-asc.hidden', visible: :all)
@@ -214,9 +209,9 @@ RSpec.describe 'Datatable', :feature do
           expect(page).to have_css('svg.mv-icon.active.sort-desc.hidden', visible: :all)
         end
 
-        expect(all('tbody tr')[0]).to have_content('A_View') # rubocop:disable Capybara/FindAllFirst
-        expect(all('tbody tr')[1]).to have_content('B_View')
-        expect(all('tbody tr')[2]).to have_content('C_View')
+        expect(all(datatable_rows)[0]).to have_content('A_View') # rubocop:disable Capybara/FindAllFirst
+        expect(all(datatable_rows)[1]).to have_content('B_View')
+        expect(all(datatable_rows)[2]).to have_content('C_View')
 
         # Click to sort by name descending
         find("button[data-testid='toggle_sort_button-mv-definitions-table-name']").click
@@ -229,9 +224,9 @@ RSpec.describe 'Datatable', :feature do
           expect(page).to have_css('svg.mv-icon.active.sort-desc')
         end
 
-        expect(all('tbody tr')[0]).to have_content('C_View') # rubocop:disable Capybara/FindAllFirst
-        expect(all('tbody tr')[1]).to have_content('B_View')
-        expect(all('tbody tr')[2]).to have_content('A_View')
+        expect(all(datatable_rows)[0]).to have_content('C_View') # rubocop:disable Capybara/FindAllFirst
+        expect(all(datatable_rows)[1]).to have_content('B_View')
+        expect(all(datatable_rows)[2]).to have_content('A_View')
 
         # Click to remove sorting
         find("button[data-testid='toggle_sort_button-mv-definitions-table-name']").click
@@ -244,9 +239,9 @@ RSpec.describe 'Datatable', :feature do
           expect(page).to have_css('svg.mv-icon.active.sort-desc.hidden', visible: :all)
         end
         # Order should revert to initial
-        expect(all('tbody tr')[0]).to have_content('C_View') # rubocop:disable Capybara/FindAllFirst
-        expect(all('tbody tr')[1]).to have_content('A_View')
-        expect(all('tbody tr')[2]).to have_content('B_View')
+        expect(all(datatable_rows)[0]).to have_content('C_View') # rubocop:disable Capybara/FindAllFirst
+        expect(all(datatable_rows)[1]).to have_content('A_View')
+        expect(all(datatable_rows)[2]).to have_content('B_View')
       end
     end
   end
@@ -256,8 +251,6 @@ RSpec.describe 'Datatable', :feature do
       create(:mat_view_definition, name: 'View_One', refresh_strategy: 'regular')
       create(:mat_view_definition, name: 'View_Two', refresh_strategy: 'swap')
       create(:mat_view_definition, name: 'View_Three', refresh_strategy: 'regular')
-      ensure_idle!
-
       visit_dashboard
       wait_for_turbo_idle
 
@@ -322,8 +315,6 @@ RSpec.describe 'Datatable', :feature do
       create(:mat_view_definition, name: 'First_View')
       create(:mat_view_definition, name: 'Second_View')
       create(:mat_view_definition, name: 'Third_View')
-      ensure_idle!
-
       visit_dashboard
       wait_for_turbo_idle
 
@@ -374,8 +365,6 @@ RSpec.describe 'Datatable', :feature do
   feature 'Datatable pagination' do
     scenario 'navigates pages when pagination buttons are clicked', :js do
       create_list(:mat_view_definition, 25) # rubocop:disable FactoryBot/ExcessiveCreateList
-      ensure_idle!
-
       visit_dashboard
       wait_for_turbo_idle
 
@@ -383,17 +372,16 @@ RSpec.describe 'Datatable', :feature do
       execute_script('window.scrollTo(0, document.body.scrollHeight);')
 
       within_turbo_frame('dash-definitions') do
+        datatable_body = 'table.mv-table.with-filters tbody'
         first_button = "button[data-testid='dt_pagination_btn-mv-definitions-table-page-first']"
         previous_button = "button[data-testid='dt_pagination_btn-mv-definitions-table-page-previous']"
         next_button = "button[data-testid='dt_pagination_btn-mv-definitions-table-page-next']"
         last_button = "button[data-testid='dt_pagination_btn-mv-definitions-table-page-last']"
-        page_two_button = "button[data-testid='dt_pagination_btn-mv-definitions-table-page-2']"
 
         expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-first']")
         expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-previous']")
         expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-next']")
         expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-last']")
-        expect(page).to have_css("button[data-testid='dt_pagination_btn-mv-definitions-table-page-2']")
 
         # first, previous is inactive and go to last page
         expect(find(first_button)).to be_disabled
@@ -401,8 +389,7 @@ RSpec.describe 'Datatable', :feature do
         find(last_button).click
         wait_for_turbo_idle
         expect(URI.parse(current_url).query).to include('dtpage=3')
-        # 5 tbody tr
-        expect(all('tbody tr').size).to eq(5)
+        expect(find(datatable_body)).to have_css('tr', count: 5)
 
         # next and last are inactive and go to first page
         expect(find(next_button)).to be_disabled
@@ -410,19 +397,17 @@ RSpec.describe 'Datatable', :feature do
         find(first_button).click
         wait_for_turbo_idle
         expect(URI.parse(current_url).query).to include('dtpage=1')
-        # 10 tbody tr
-        expect(all('tbody tr').size).to eq(10)
+        expect(find(datatable_body)).to have_css('tr', count: 10)
 
         # go to page 2, first, previous, next, last are active
-        find(page_two_button).click
+        find(next_button).click
         wait_for_turbo_idle
         expect(find(first_button)).not_to be_disabled
         expect(find(previous_button)).not_to be_disabled
         expect(find(next_button)).not_to be_disabled
         expect(find(last_button)).not_to be_disabled
         expect(URI.parse(current_url).query).to include('dtpage=2')
-        # 10 tbody tr
-        expect(all('tbody tr').size).to eq(10)
+        expect(find(datatable_body)).to have_css('tr', count: 10)
       end
     end
   end

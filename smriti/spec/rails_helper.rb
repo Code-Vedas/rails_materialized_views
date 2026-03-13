@@ -43,7 +43,7 @@ RSpec.configure do |config|
   config.include ActiveJob::TestHelper
   config.include FactoryBot::Syntax::Methods
 
-  config.use_transactional_fixtures = ENV['E2E'] == '1'
+  config.use_transactional_fixtures = false
   config.fixture_paths = [Rails.root.join('spec/fixtures')]
   config.filter_rails_from_backtrace!
 
