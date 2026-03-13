@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## [0.4.0](https://github.com/code-vedas/rails_materialized_views/tree/v0.4.0) (2026-02-14)
+## [0.4.0](https://github.com/code-vedas/smriti/tree/v0.4.0) (2026-02-14)
 
-[Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.3.0...v0.4.0)
+[Full Changelog](https://github.com/code-vedas/smriti/compare/v0.3.0...v0.4.0)
 
 ## 🌐 Localization
 
@@ -30,52 +30,52 @@
 
 ## 🧰 Maintenance
 
-- chore(deps-dev): Bump i18n-tasks from 1.0.15 to 1.1.0 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#359)
-- chore(deps): Bump bootsnap from 1.18.6 to 1.19.0 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#362)
+- chore(deps-dev): Bump i18n-tasks from 1.0.15 to 1.1.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#359)
+- chore(deps): Bump bootsnap from 1.18.6 to 1.19.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#362)
 - chore(deps-dev): Bump just-the-docs from `d3a2aa9` to `32b6141` in /docs @[dependabot[bot]](https://github.com/apps/dependabot) (#365)
-- chore(deps): Bump rails-i18n from 8.0.2 to 8.1.0 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#364)
+- chore(deps): Bump rails-i18n from 8.0.2 to 8.1.0 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#364)
 - chore(deps): Bump actions/checkout from 5 to 6 @[dependabot[bot]](https://github.com/apps/dependabot) (#363)
-- chore(deps-dev): Bump rubocop-factory_bot from 2.27.1 to 2.28.0 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#361)
-- chore(deps-dev): Bump ruby-lsp from 0.26.2 to 0.26.3 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#360)
-- chore(deps-dev): Bump rubocop-rspec_rails from 2.31.0 to 2.32.0 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#358)
-- chore(deps): Bump bootsnap from 1.18.6 to 1.19.0 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#357)
-- chore(deps): Bump solid_cache from 1.0.8 to 1.0.10 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#356)
-- chore(deps): Bump solid_queue from 1.2.2 to 1.2.4 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#353)
-- chore(deps): Bump rails from 8.0.3 to 8.1.1 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#351)
-- chore(deps-dev): Bump shoulda-matchers from 6.5.0 to 7.0.1 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#354)
-- chore(deps): Bump rails from 8.0.3 to 8.1.1 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#350)
-- chore(deps-dev): Bump turbo-rails from 2.0.17 to 2.0.20 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#349)
-- chore(deps): Bump turbo-rails from 2.0.17 to 2.0.20 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#347)
-- chore(deps-dev): Bump ruby-lsp from 0.26.1 to 0.26.2 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#346)
-- chore(deps-dev): Bump selenium-webdriver from 4.37.0 to 4.38.0 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#344)
-- chore(deps-dev): Bump selenium-webdriver from 4.37.0 to 4.38.0 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#343)
+- chore(deps-dev): Bump rubocop-factory_bot from 2.27.1 to 2.28.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#361)
+- chore(deps-dev): Bump ruby-lsp from 0.26.2 to 0.26.3 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#360)
+- chore(deps-dev): Bump rubocop-rspec_rails from 2.31.0 to 2.32.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#358)
+- chore(deps): Bump bootsnap from 1.18.6 to 1.19.0 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#357)
+- chore(deps): Bump solid_cache from 1.0.8 to 1.0.10 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#356)
+- chore(deps): Bump solid_queue from 1.2.2 to 1.2.4 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#353)
+- chore(deps): Bump rails from 8.0.3 to 8.1.1 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#351)
+- chore(deps-dev): Bump shoulda-matchers from 6.5.0 to 7.0.1 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#354)
+- chore(deps): Bump rails from 8.0.3 to 8.1.1 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#350)
+- chore(deps-dev): Bump turbo-rails from 2.0.17 to 2.0.20 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#349)
+- chore(deps): Bump turbo-rails from 2.0.17 to 2.0.20 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#347)
+- chore(deps-dev): Bump ruby-lsp from 0.26.1 to 0.26.2 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#346)
+- chore(deps-dev): Bump selenium-webdriver from 4.37.0 to 4.38.0 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#344)
+- chore(deps-dev): Bump selenium-webdriver from 4.37.0 to 4.38.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#343)
 - chore(deps): Bump actions/upload-artifact from 4 to 5 @[dependabot[bot]](https://github.com/apps/dependabot) (#342)
-- chore(deps): Bump kamal from 2.7.0 to 2.8.1 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#337)
-- chore(deps-dev): Bump selenium-webdriver from 4.36.0 to 4.37.0 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#334)
-- chore(deps): Bump puma from 7.0.4 to 7.1.0 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#335)
-- chore(deps-dev): Bump selenium-webdriver from 4.36.0 to 4.37.0 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#331)
-- chore(deps-dev): Bump rubocop-performance from 1.26.0 to 1.26.1 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#333)
-- chore(deps): Bump thruster from 0.1.15 to 0.1.16 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#330)
-- chore(deps): Bump solid_queue from 1.2.1 to 1.2.2 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#336)
-- chore(deps): Bump puma from 7.0.4 to 7.1.0 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#329)
+- chore(deps): Bump kamal from 2.7.0 to 2.8.1 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#337)
+- chore(deps-dev): Bump selenium-webdriver from 4.36.0 to 4.37.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#334)
+- chore(deps): Bump puma from 7.0.4 to 7.1.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#335)
+- chore(deps-dev): Bump selenium-webdriver from 4.36.0 to 4.37.0 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#331)
+- chore(deps-dev): Bump rubocop-performance from 1.26.0 to 1.26.1 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#333)
+- chore(deps): Bump thruster from 0.1.15 to 0.1.16 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#330)
+- chore(deps): Bump solid_queue from 1.2.1 to 1.2.2 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#336)
+- chore(deps): Bump puma from 7.0.4 to 7.1.0 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#329)
 - chore: Updates gem dependencies @niteshpurohit (#328)
 - chore(deps): [Synk] Security upgrade sidekiq from 8.0.7 to 8.0.8 @niteshpurohit (#321)
-- chore(deps): Bump solid_cache from 1.0.7 to 1.0.8 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#322)
-- chore(deps-dev): Bump sidekiq from 8.0.7 to 8.0.8 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#320)
-- chore(deps): Bump rack from 3.2.1 to 3.2.2 in /mat_views in the bundler group across 1 directory @[dependabot[bot]](https://github.com/apps/dependabot) (#318)
-- chore(deps): Bump rack from 3.2.1 to 3.2.2 in /mat_views_demo in the bundler group across 1 directory @[dependabot[bot]](https://github.com/apps/dependabot) (#319)
-- chore(deps-dev): Bump selenium-webdriver from 4.35.0 to 4.36.0 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#316)
-- chore(deps-dev): Bump selenium-webdriver from 4.35.0 to 4.36.0 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#317)
+- chore(deps): Bump solid_cache from 1.0.7 to 1.0.8 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#322)
+- chore(deps-dev): Bump sidekiq from 8.0.7 to 8.0.8 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#320)
+- chore(deps): Bump rack from 3.2.1 to 3.2.2 in /smriti in the bundler group across 1 directory @[dependabot[bot]](https://github.com/apps/dependabot) (#318)
+- chore(deps): Bump rack from 3.2.1 to 3.2.2 in /smriti_demo in the bundler group across 1 directory @[dependabot[bot]](https://github.com/apps/dependabot) (#319)
+- chore(deps-dev): Bump selenium-webdriver from 4.35.0 to 4.36.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#316)
+- chore(deps-dev): Bump selenium-webdriver from 4.35.0 to 4.36.0 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#317)
 - refactor: Remove redundant English locale files @niteshpurohit (#283)
-- chore(deps-dev): Bump rubocop-rails from 2.33.3 to 2.33.4 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#280)
-- chore(deps-dev): Bump turbo-rails from 2.0.16 to 2.0.17 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#281)
-- chore(deps): Bump turbo-rails from 2.0.16 to 2.0.17 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#279)
-- chore(deps): Bump propshaft from 1.2.1 to 1.3.1 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#278)
-- chore(deps): Bump puma from 7.0.3 to 7.0.4 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#277)
-- chore(deps): Bump propshaft from 1.2.1 to 1.3.1 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#276)
-- chore(deps): Bump puma from 7.0.3 to 7.0.4 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#275)
-- chore(deps): Bump rails from 8.0.2.1 to 8.0.3 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#274)
-- chore(deps): Bump rails from 8.0.2.1 to 8.0.3 in /mat_views_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#273)
+- chore(deps-dev): Bump rubocop-rails from 2.33.3 to 2.33.4 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#280)
+- chore(deps-dev): Bump turbo-rails from 2.0.16 to 2.0.17 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#281)
+- chore(deps): Bump turbo-rails from 2.0.16 to 2.0.17 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#279)
+- chore(deps): Bump propshaft from 1.2.1 to 1.3.1 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#278)
+- chore(deps): Bump puma from 7.0.3 to 7.0.4 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#277)
+- chore(deps): Bump propshaft from 1.2.1 to 1.3.1 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#276)
+- chore(deps): Bump puma from 7.0.3 to 7.0.4 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#275)
+- chore(deps): Bump rails from 8.0.2.1 to 8.0.3 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#274)
+- chore(deps): Bump rails from 8.0.2.1 to 8.0.3 in /smriti_demo @[dependabot[bot]](https://github.com/apps/dependabot) (#273)
 
 ## 📦 Build
 
@@ -83,9 +83,9 @@
 - build: Simplify demo application dependencies @niteshpurohit (#352)
 - build: Add gemfiles for Rails 8.0.x, 7.2.x, and Edge @niteshpurohit (#339)
 
-## [0.3.0](https://github.com/code-vedas/rails_materialized_views/tree/v0.3.0) (2025-08-22)
+## [0.3.0](https://github.com/code-vedas/smriti/tree/v0.3.0) (2025-08-22)
 
-[Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.2.0...v0.3.0)
+[Full Changelog](https://github.com/code-vedas/smriti/compare/v0.2.0...v0.3.0)
 
 ## 🌐 Localization
 
@@ -147,9 +147,9 @@
 
 - ci: change individual jobs for screenshot to single @niteshpurohit (#270)
 
-## [0.2.0](https://github.com/code-vedas/rails_materialized_views/tree/v0.2.0) (2025-08-22)
+## [0.2.0](https://github.com/code-vedas/smriti/tree/v0.2.0) (2025-08-22)
 
-[Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.1.2...v0.2.0)
+[Full Changelog](https://github.com/code-vedas/smriti/compare/v0.1.2...v0.2.0)
 
 ## 🚀 Features
 
@@ -161,9 +161,9 @@
 - chore: add workspace @niteshpurohit (#166)
 - chore(deps): Bump actions/upload-pages-artifact from 3 to 4 @[dependabot[bot]](https://github.com/apps/dependabot) (#99)
 
-## [0.1.2](https://github.com/code-vedas/rails_materialized_views/tree/v0.1.1) (2025-08-22)
+## [0.1.2](https://github.com/code-vedas/smriti/tree/v0.1.2) (2025-08-22)
 
-[Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/v0.1.0...v0.1.2)
+[Full Changelog](https://github.com/code-vedas/smriti/compare/v0.1.0...v0.1.2)
 
 ## 🧰 Maintenance
 
@@ -175,18 +175,18 @@
 
 - ci: Integrate Qlty coverage reporting @niteshpurohit (#93)
 
-## [0.1.1](https://github.com/code-vedas/rails_materialized_views/compare/v0.1.0...v0.1.1) Skiped
+## 0.1.1 Skipped
 
 Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 
-## [0.1.0](https://github.com/code-vedas/rails_materialized_views/tree/v0.1.0) (2025-08-18)
+## [0.1.0](https://github.com/code-vedas/smriti/tree/v0.1.0) (2025-08-18)
 
-[Full Changelog](https://github.com/code-vedas/rails_materialized_views/compare/080a0c5f8f42eb55e971677f0468ed626e2b3b44...v0.1.0)
+[Full Changelog](https://github.com/code-vedas/smriti/compare/080a0c5f8f42eb55e971677f0468ed626e2b3b44...v0.1.0)
 
 ## 🚀 Features
 
 - feat: Adds rake task to validate MV performance @niteshpurohit (#82)
-- feat: Add Rails demo application for mat_views gem @niteshpurohit (#81)
+- feat: Add Rails demo application for smriti gem @niteshpurohit (#81)
 - feat: Add rake tasks to delete materialized views @niteshpurohit (#79)
 - feat: Add service and job to delete materialized views @niteshpurohit (#78)
 - feat: Add tracking for materialized view deletions @niteshpurohit (#76)
@@ -201,7 +201,7 @@ Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 - feat: Add data models and seeds to dummy app @niteshpurohit (#54)
 - feat: Add models for managing materialized views @niteshpurohit (#47)
 - feat: Add install generator and configuration @niteshpurohit (#46)
-- feat: Initialize mat_views Rails engine @niteshpurohit (#42)
+- feat: Initialize smriti Rails engine @niteshpurohit (#42)
 
 ## 📝 Documentation
 
@@ -211,9 +211,9 @@ Due to issues with rubygems.org, the 0.1.1 release has been skipped.
 
 ## 🧰 Maintenance
 
-- chore(deps): Update rails requirement from ~> 7.1 to >= 7.1, < 9.0 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#90)
-- chore(deps): Bump rails from 8.0.2 to 8.0.2.1 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#80)
-- chore(deps-dev): Bump rspec-rails from 8.0.1 to 8.0.2 in /mat_views @[dependabot[bot]](https://github.com/apps/dependabot) (#77)
+- chore(deps): Update rails requirement from ~> 7.1 to >= 7.1, < 9.0 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#90)
+- chore(deps): Bump rails from 8.0.2 to 8.0.2.1 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#80)
+- chore(deps-dev): Bump rspec-rails from 8.0.1 to 8.0.2 in /smriti @[dependabot[bot]](https://github.com/apps/dependabot) (#77)
 - chore(deps): Bump actions/checkout from 4 to 5 @[dependabot[bot]](https://github.com/apps/dependabot) (#75)
 - chore: Add copyright and license headers @niteshpurohit (#69)
 - chore(deps): Bump release-drafter/release-drafter from 5 to 6 @[dependabot[bot]](https://github.com/apps/dependabot) (#55)

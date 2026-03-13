@@ -4,19 +4,19 @@ title: Home
 nav_order: 1
 ---
 
-# rails_materialized_views (mat_views)
+# Smriti
 
-[![Gem](https://img.shields.io/gem/v/mat_views.svg?style=flat-square)](https://rubygems.org/gems/mat_views)
-[![CI](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml/badge.svg)](https://github.com/Code-Vedas/rails_materialized_views/actions/workflows/ci.yml)
-[![Maintainability](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views/maintainability.svg)](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views)
-[![Code Coverage](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views/coverage.svg)](https://qlty.sh/gh/Code-Vedas/projects/rails_materialized_views)
+[![Gem](https://img.shields.io/gem/v/smriti.svg?style=flat-square)](https://rubygems.org/gems/smriti)
+[![CI](https://github.com/Code-Vedas/smriti/actions/workflows/ci.yml/badge.svg)](https://github.com/Code-Vedas/smriti/actions/workflows/ci.yml)
+[![Maintainability](https://qlty.sh/gh/Code-Vedas/projects/smriti/maintainability.svg)](https://qlty.sh/gh/Code-Vedas/projects/smriti)
+[![Code Coverage](https://qlty.sh/gh/Code-Vedas/projects/smriti/coverage.svg)](https://qlty.sh/gh/Code-Vedas/projects/smriti)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12%2B-336791?style=flat-square&logo=postgresql&logoColor=white)
 
 > A Rails engine to define, create, refresh, and delete **PostgreSQL materialized views** with clean APIs, background jobs, observability, and CLI tasks. Built for **high availability** and **repeatable ops**.
 
-- 📦 Engine/gem: [`mat_views/`](https://github.com/Code-Vedas/rails_materialized_views/tree/main/mat_views)
-- 🧪 Demo app: [`mat_views_demo/`](https://github.com/Code-Vedas/rails_materialized_views/tree/main/mat_views_demo) _(not shipped with the gem)_
+- 📦 Engine/gem: [`smriti/`](https://github.com/Code-Vedas/smriti/tree/main/smriti)
+- 🧪 Demo app: [`smriti_demo/`](https://github.com/Code-Vedas/smriti/tree/main/smriti_demo) _(not shipped with the gem)_
 
 ---
 
@@ -24,7 +24,7 @@ nav_order: 1
 
 ```ruby
 # Gemfile
-gem 'mat_views'
+gem 'smriti'
 ```
 
 ```bash
@@ -32,7 +32,7 @@ gem 'mat_views'
 bundle install
 
 # Generate the initializer and migrations
-bin/rails g mat_views:install
+bin/rails g smriti:install
 
 # Run the migrations
 bin/rails db:migrate
@@ -40,12 +40,12 @@ bin/rails db:migrate
 
 ## Links
 
-- [Installation & Setup](./install) for how to install the `mat_views` gem, configure it, and use the CLI tasks for managing materialized views in your Rails application.
-- [Usage & Examples](./usage) section for detailed guides on defining, creating, refreshing, and deleting materialized views using the `mat_views` gem.
+- [Installation & Setup](./install) for how to install the `smriti` gem, configure it, and use the CLI tasks for managing materialized views in your Rails application.
+- [Usage & Examples](./usage) section for detailed guides on defining, creating, refreshing, and deleting materialized views using the `smriti` gem.
 - [Engine](./engine) section for an overview of the engine's structure, configuration, and how it integrates with your Rails application.
 - [Validation & Benchmarking](./validation) for how to validate your materialized views and benchmark their performance.
 - [PostgreSQL MV Best Practices](./pg-best-practices) for practical, production-oriented advice on managing materialized views in PostgreSQL.
-- [FAQ / Troubleshooting](./faq) for answers to common questions and troubleshooting tips when working with the `mat_views` gem and PostgreSQL materialized views.
+- [FAQ / Troubleshooting](./faq) for answers to common questions and troubleshooting tips when working with the `smriti` gem and PostgreSQL materialized views.
 
 ## Features
 
@@ -65,7 +65,7 @@ bin/rails db:migrate
 - **Notifications**: alerts for failures, performance metrics
 - **More job adapters**: support for additional background job systems
 - **Definition lifecycle**: refresh or delete on definition changes
-- **Any Ideas?** [Open an issue or PR on GitHub!](https://github.com/Code-Vedas/rails_materialized_views/issues/new/choose)
+- **Any Ideas?** [Open an issue or PR on GitHub!](https://github.com/Code-Vedas/smriti/issues/new/choose)
 
 ## Professional support
 

@@ -1,0 +1,223 @@
+---
+en-SCOT:
+  activerecord:
+    attributes:
+      smriti/mat_view_definition:
+        created_at: Cooked up oan
+        dependencies: Whit's relied oan
+        last_run_at: Last time it ran
+        name: Name
+        refresh_strategy: Refresh scheme
+        schedule_cron: Schedule (cron)
+        sql: SQL (SELECT ...)
+        unique_index_columns: Unique index columns
+        updated_at: Updated oan
+      smriti/mat_view_run:
+        created_at: Cooked up oan
+        details: Details
+        duration_ms: Duration (ms)
+        error: Error
+        finished_at: Finished oan
+        mat_view_definition: Definition
+        meta: Extra info
+        operation: Operation
+        row_count_after: Rows efter
+        row_count_before: Rows afore
+        rows_before_after: Rows (afore/efter)
+        started_at: Kicked aff
+        status: Status
+        updated_at: Updated oan
+    enums:
+      smriti/mat_view_definition:
+        refresh_strategy:
+          concurrent: A' at once
+          regular: Regular
+          swap: Swap
+      smriti/mat_view_run:
+        operation:
+          create: Mak
+          drop: Drap
+          refresh: Refresh
+        status:
+          failed: Scunnered
+          running: Gawn
+          success: Sorted
+    errors:
+      models:
+        smriti/mat_view_definition:
+          attributes:
+            name:
+              blank: needs tae be filled in
+              invalid: isnae a valid PostgreSQL name
+              taken: needs tae be unique
+            sql:
+              blank: needs tae be filled in
+              invalid: has tae start wi SELECT
+            unique_index_columns:
+              at_least_one: needs at least ane column when usin the concurrent refresh
+                scheme
+    hints:
+      smriti/mat_view_definition:
+        dependencies: Comma list o tables or views this materialised yin depends oan.
+        name: Name o the materialised view in the database.
+        refresh_strategy: Shows hoo the materialised view gets refreshed.
+        schedule_cron: Use the usual cron format. Leave it blank if yer no scheduling.
+        sql: The SQL statement needs tae be a proper SELECT.
+        unique_index_columns: Columns that get the unique index. Needed for the concurrent
+          refresh.
+      smriti/mat_view_run:
+        error: Message if the run went pear-shaped.
+        meta: Extra details in JSON.
+        operation: Type o operation that ran.
+        status: Whit stage the run's at the noo.
+    models:
+      smriti/mat_view_definition: Materialised View Definition
+      smriti/mat_view_run: Materialised View Run
+    placeholders:
+      smriti/mat_view_definition:
+        dependencies: Type dependencies (comma separated, optional)
+        name: Type name
+        refresh_strategy: Pick a refresh scheme
+        schedule_cron: 0 0 * * * fer midnight daily, blank fer nae schedule
+        sql: Type SQL (SELECT ...)
+        unique_index_columns: Type unique index columns (comma separated, optional)
+      smriti/mat_view_run:
+        error: Error message
+        mat_view_definition: Pick the materialised view
+        meta: Extra info (JSON)
+        operation: Pick operation
+        status: Pick status
+  i18n:
+    name: English (Scots)
+  smriti:
+    actions: Actions
+    cancel: Cancel
+    close: Shut
+    close_window: Shut windae
+    create: Create
+    dashboard:
+      metrics:
+        title: Metrics
+      title: Dashboard
+    datatable:
+      clear_search_aria_label: Clear the search
+      search_aria_label: Search the table
+      search_placeholder: Hae a keek...
+    definition: Definition
+    definitions: Definitions
+    delete: Delete
+    details: Details
+    edit: Edit
+    edit_var: Edit %{name}
+    errors:
+      frame_only: Ye can only dae this inside a frame, sae ye're heidit back tae the
+        dashboard.
+      prevented_saving:
+        few: "%{count} clangers stopped the save:"
+        many: "%{count} clangers stopped the save:"
+        one: '1 clanger stopped the save:'
+        other: "%{count} clangers stopped the save:"
+        two: '2 clangers stopped the save:'
+        zero: Nae clangers, braw!
+    filter_by: 'Filter by:'
+    footer:
+      copyright: "© %{year} %{company} All rights reserved."
+      documentation: Docs
+      need_help: Need guaranteed uptime & a wee bit o help?
+      open_issue: Open an Issue
+      project_homepage: Project hamepage
+      support: Get Professional Support →
+      tagline: Built wi ❤️ by developers, fer developers.
+      tooltip:
+        documentation: Read the docs
+        gem_version: Heid ower tae RubyGems
+        open_issue: Report a bug or ask fer a feature
+        project_homepage: GitHub repo
+        support: Professional support plans
+      version: v%{version}
+    header:
+      signed_in_as: Signed in as %{email}
+    history: History
+    loading: Loadin...
+    loading_definitions: Fetchin definitions...
+    loading_runs: Fetchin runs...
+    mat_view_definition:
+      create_mv: Create Smriti
+      create_mv_tooltip: Builds the materialised view in the database.
+      delete_confirm: Scrap the definition %{name}? (Disnae drop Smriti)
+      delete_tooltip: Deletes the definition but disnae drop the materialised view
+        in the database.
+      drop_mv: Drop Smriti
+      drop_mv_cascade: Drop Smriti (Cascade)
+      drop_mv_cascade_confirm: Drop the materialised view an aw the hangers-on fer
+        %{name}?
+      drop_mv_cascade_tooltip: Drops the materialised view an aw the dependents in
+        the database. Definition stays put.
+      drop_mv_confirm: Drop the materialised view fer %{name}?
+      drop_mv_tooltip: Drops the materialised view in the database. Definition sticks
+        aroond.
+      edit_tooltip: Edit materialised view definition.
+      materialized_view: Materialised view
+      materialized_view_exists: Materialised view's there
+      materialized_view_not_exists: Materialised view's no ready yet!
+      new_definition: New definition
+      new_definition_tooltip: Spin up a new materialised view definition.
+      no_definitions: Nae materialised view definitions found. Mak ane tae get goin.
+      no_definitions_if_filtered: Nuthin matches yon filters or search.
+      refresh_tooltip: Refreshes the materialised view in the database.
+      sql_summary_tooltip: Tap tae open/close the SQL
+      view_tooltip: See the materialised view definition.
+    mat_view_run:
+      error_tooltip: Error message if the run went belly up.
+      meta_tooltip: Extra info in JSON.
+      no_runs: Nae runs found.
+      no_runs_if_filtered: Nae runs match thae filters.
+      view_details: View details
+      view_tooltip: View the run details.
+    no_filter: Any (nae filter)
+    no_value: Nae value (nil or empty)
+    per_page: Per page
+    project_author: CodeVedas Inc.
+    project_description: Admin interface fer mindin PostgreSQL materialised views
+      in Rails apps.
+    project_tags: rails, ruby, materialized views, admin, dashboard, ui, interface,
+      management
+    refresh: Refresh
+    refresh_contents: Refresh contents
+    reloading: Reloadin...
+    reset: Reset
+    run: Run
+    runs: Runs
+    save_changes: Save changes
+    settings:
+      auto: Auto
+      dark: Dark
+      language: Language
+      language_hint: Choose yer interface lingo.
+      light: Light
+      theme: Theme
+      theme_hint: Auto follows yer system; light an dark override it.
+      title: Preferences
+    title: Smriti Admin
+    view_var: View %{name}
+    x_miliseconds: "%{count} ms"
+  number:
+    format:
+      delimiter: ","
+      separator: "."
+  numbers:
+    eight: 8
+    five: 5
+    four: 4
+    nine: 9
+    one: 1
+    seven: 7
+    six: 6
+    three: 3
+    two: 2
+    zero: 0
+  time:
+    am: AM
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: PM

@@ -1,0 +1,230 @@
+---
+de:
+  activerecord:
+    attributes:
+      smriti/mat_view_definition:
+        created_at: Erstellt am
+        dependencies: Abhängigkeiten
+        last_run_at: Letzte Ausführung
+        name: Bezeichnung
+        refresh_strategy: Aktualisierungsstrategie
+        schedule_cron: Zeitplan (cron)
+        sql: SQL (SELECT ...)
+        unique_index_columns: Spalten für eindeutigen Index
+        updated_at: Aktualisiert am
+      smriti/mat_view_run:
+        created_at: Erstellt am
+        details: Details
+        duration_ms: Dauer (ms)
+        error: Fehler
+        finished_at: Beendet am
+        mat_view_definition: Definition
+        meta: Metadaten
+        operation: Vorgang
+        row_count_after: Zeilenanzahl nachher
+        row_count_before: Zeilenanzahl vorher
+        rows_before_after: Zeilen (vorher/nachher)
+        started_at: Gestartet am
+        status: Status
+        updated_at: Aktualisiert am
+    enums:
+      smriti/mat_view_definition:
+        refresh_strategy:
+          concurrent: Parallel
+          regular: Regulär
+          swap: Austausch
+      smriti/mat_view_run:
+        operation:
+          create: Erstellen
+          drop: Löschen
+          refresh: Aktualisieren
+        status:
+          failed: Fehlgeschlagen
+          running: Laufend
+          success: Erfolgreich
+    errors:
+      models:
+        smriti/mat_view_definition:
+          attributes:
+            name:
+              blank: muss angegeben werden
+              invalid: ist kein gültiger PostgreSQL-Bezeichner
+              taken: muss eindeutig sein
+            sql:
+              blank: muss angegeben werden
+              invalid: muss mit SELECT beginnen
+            unique_index_columns:
+              at_least_one: muss bei paralleler Aktualisierung mindestens eine Spalte
+                enthalten
+    hints:
+      smriti/mat_view_definition:
+        dependencies: Kommagetrennte Liste der Tabellen oder Views, von denen diese
+          materialisierte Ansicht abhängt.
+        name: Name der materialisierten Ansicht in der Datenbank.
+        refresh_strategy: Legt fest, wie die materialisierte Ansicht aktualisiert
+          wird.
+        schedule_cron: Standard-Cron-Format verwenden. Leer lassen für keine Planung.
+        sql: Die SQL-Abfrage muss eine gültige SELECT-Anweisung sein.
+        unique_index_columns: Spalten, für die ein eindeutiger Index erstellt wird.
+          Erforderlich für parallele Aktualisierung.
+      smriti/mat_view_run:
+        error: Fehlermeldung, falls die Ausführung fehlgeschlagen ist.
+        meta: Zusätzliche Metadaten im JSON-Format.
+        operation: Art des ausgeführten Vorgangs.
+        status: Aktueller Status der Ausführung.
+    models:
+      smriti/mat_view_definition: Definition der materialisierten Ansicht
+      smriti/mat_view_run: Ausführung der materialisierten Ansicht
+    placeholders:
+      smriti/mat_view_definition:
+        dependencies: Abhängigkeiten eingeben (kommagetrennt, optional)
+        name: Name eingeben
+        refresh_strategy: Aktualisierungsstrategie auswählen
+        schedule_cron: 0 0 * * * für täglich um Mitternacht, leer lassen ohne Planung
+        sql: SQL (SELECT ...) eingeben
+        unique_index_columns: Spalten für eindeutigen Index eingeben (kommagetrennt,
+          optional)
+      smriti/mat_view_run:
+        error: Fehlermeldung
+        mat_view_definition: Materialisierte Ansicht auswählen
+        meta: Metadaten (JSON)
+        operation: Vorgang auswählen
+        status: Status auswählen
+  i18n:
+    name: Deutsch
+  smriti:
+    actions: Aktionen
+    cancel: Abbrechen
+    close: Schließen
+    close_window: Fenster schließen
+    create: Erstellen
+    dashboard:
+      metrics:
+        title: Kennzahlen
+      title: Dashboard
+    datatable:
+      clear_search_aria_label: Suche löschen
+      search_aria_label: Tabelle durchsuchen
+      search_placeholder: Suche...
+    definition: Definition
+    definitions: Definitionen
+    delete: Löschen
+    details: Details
+    edit: Bearbeiten
+    edit_var: "%{name} bearbeiten"
+    errors:
+      frame_only: Diese Aktion kann nur innerhalb eines Frames ausgeführt werden;
+        Weiterleitung zum Dashboard.
+      prevented_saving:
+        few: "%{count} Fehler verhinderten das Speichern:"
+        many: "%{count} Fehler verhinderten das Speichern:"
+        one: '1 Fehler hat das Speichern verhindert:'
+        other: "%{count} Fehler verhinderten das Speichern:"
+        two: '2 Fehler verhinderten das Speichern:'
+        zero: Keine Fehler, alles in Ordnung!
+    filter_by: 'Filtern nach:'
+    footer:
+      copyright: "© %{year} %{company} Alle Rechte vorbehalten."
+      documentation: Dokumentation
+      need_help: Benötigen Sie garantierte Verfügbarkeit und Expertenhilfe?
+      open_issue: Issue eröffnen
+      project_homepage: Projekt-Homepage
+      support: Professionellen Support erhalten →
+      tagline: Mit ❤️ von Entwickler:innen für Entwickler:innen gebaut.
+      tooltip:
+        documentation: Dokumentation lesen
+        gem_version: Zur RubyGems-Seite wechseln
+        open_issue: Fehler melden oder Feature anfragen
+        project_homepage: GitHub-Repository
+        support: Professionelle Supportpläne
+      version: v%{version}
+    header:
+      signed_in_as: Angemeldet als %{email}
+    history: Verlauf
+    loading: Laden...
+    loading_definitions: Definitionen werden geladen...
+    loading_runs: Ausführungen werden geladen...
+    mat_view_definition:
+      create_mv: Smriti erstellen
+      create_mv_tooltip: Erstellt die materialisierte Ansicht in der Datenbank.
+      delete_confirm: Definition %{name} löschen? (Materialisierte Ansicht bleibt
+        bestehen)
+      delete_tooltip: Löscht die Definition, entfernt die materialisierte Ansicht
+        jedoch nicht aus der Datenbank.
+      drop_mv: Smriti löschen
+      drop_mv_cascade: Smriti löschen (kaskadierend)
+      drop_mv_cascade_confirm: Materialisierte Ansicht und alle abhängigen Objekte
+        für %{name} löschen?
+      drop_mv_cascade_tooltip: Löscht die materialisierte Ansicht und alle abhängigen
+        Objekte in der Datenbank. Die Definition bleibt bestehen.
+      drop_mv_confirm: Materialisierte Ansicht für %{name} löschen?
+      drop_mv_tooltip: Löscht die materialisierte Ansicht in der Datenbank. Die Definition
+        bleibt.
+      edit_tooltip: Definition der materialisierten Ansicht bearbeiten.
+      materialized_view: Materialisierte Ansicht
+      materialized_view_exists: Materialisierte Ansicht vorhanden
+      materialized_view_not_exists: Materialisierte Ansicht noch nicht erstellt!
+      new_definition: Neue Definition
+      new_definition_tooltip: Neue Definition einer materialisierten Ansicht erstellen.
+      no_definitions: Keine Definitionen für materialisierte Ansichten gefunden. Erstellen
+        Sie eine, um zu beginnen.
+      no_definitions_if_filtered: Für die gewählten Filter oder die Suche wurden keine
+        Definitionen materialisierter Ansichten gefunden.
+      refresh_tooltip: Aktualisiert die materialisierte Ansicht in der Datenbank.
+      sql_summary_tooltip: Zum Ein- oder Ausklappen der SQL klicken
+      view_tooltip: Definition der materialisierten Ansicht anzeigen.
+    mat_view_run:
+      error_tooltip: Fehlermeldung, falls die Ausführung fehlgeschlagen ist.
+      meta_tooltip: Zusätzliche Metadaten im JSON-Format.
+      no_runs: Keine Ausführungen gefunden.
+      no_runs_if_filtered: Für die gewählten Filter wurden keine Ausführungen gefunden.
+      view_details: Details anzeigen
+      view_tooltip: Ausführungsdetails anzeigen.
+    no_filter: Beliebig (kein Filter)
+    no_value: Kein Wert (nil oder leer)
+    per_page: Pro Seite
+    project_author: CodeVedas Inc.
+    project_description: Administrationsoberfläche zur Verwaltung von PostgreSQL materialized
+      views in Rails-Anwendungen.
+    project_tags: rails, ruby, materialized views, admin, dashboard, ui, interface,
+      management
+    refresh: Aktualisieren
+    refresh_contents: Inhalte aktualisieren
+    reloading: Wird neu geladen...
+    reset: Zurücksetzen
+    run: Ausführen
+    runs: Ausführungen
+    save_changes: Änderungen speichern
+    settings:
+      auto: Automatisch
+      dark: Dunkel
+      language: Sprache
+      language_hint: Wählen Sie Ihre Oberflächensprache.
+      light: Hell
+      theme: Theme
+      theme_hint: Automatisch folgt der Systemeinstellung, Hell und Dunkel überschreiben
+        sie.
+      title: Einstellungen
+    title: Smriti Verwaltung
+    view_var: "%{name} ansehen"
+    x_miliseconds: "%{count} ms"
+  number:
+    format:
+      delimiter: "."
+      separator: ","
+  numbers:
+    eight: 8
+    five: 5
+    four: 4
+    nine: 9
+    one: 1
+    seven: 7
+    six: 6
+    three: 3
+    two: 2
+    zero: 0
+  time:
+    am: vorm.
+    formats:
+      datetime12hour: "%Y-%m-%d %I:%M:%S %p"
+    pm: nachm.

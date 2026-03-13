@@ -18,7 +18,7 @@ Generally, most of your contributions can be made using standard GitHub workflow
 
    ```bash
       git clone <your-forked-repo-url>
-      cd rails_materialized_views
+      cd smriti
       git checkout -b <your-feature-branch> # or any other branch name
    ```
 
@@ -48,7 +48,7 @@ Generally, most of your contributions can be made using standard GitHub workflow
 8. **Address Feedback:** Be responsive to any feedback or requests for changes from the maintainers.
 9. **Celebrate Your Contribution:** Once your pull request is merged, celebrate your contribution to the project!
 
-You must follow the [Code of Conduct](https://github.com/Code-Vedas/rails_materialized_views/blob/main/CODE_OF_CONDUCT.md) and adhere to the [Contribution Guidelines](https://github.com/Code-Vedas/rails_materialized_views/blob/main/CONTRIBUTING.md)
+You must follow the [Code of Conduct](https://github.com/Code-Vedas/smriti/blob/main/CODE_OF_CONDUCT.md) and adhere to the [Contribution Guidelines](https://github.com/Code-Vedas/smriti/blob/main/CONTRIBUTING.md)
 
 ## Reporting Issues
 

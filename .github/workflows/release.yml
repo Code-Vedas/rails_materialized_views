@@ -13,7 +13,7 @@ concurrency:
 
 env:
   RUBY_VERSION: 3.4.3
-  APP_DIR: ${{ github.workspace }}/mat_views
+  APP_DIR: ${{ github.workspace }}/smriti
 
 jobs:
   setup:
@@ -89,7 +89,7 @@ jobs:
     with:
       rspec_task: bin/rspec-unit --profile 10
       upload_coverage: ${{ matrix.gemfile == 'rails_8_0.gemfile' }}
-      bundle_gemfile: mat_views/gemfiles/${{ matrix.gemfile }}
+      bundle_gemfile: smriti/gemfiles/${{ matrix.gemfile }}
     secrets:
       QLTY_COVERAGE_TOKEN: ${{ secrets.QLTY_COVERAGE_TOKEN }}
   e2e_tests:
@@ -117,7 +117,7 @@ jobs:
     uses: ./.github/workflows/ruby-e2e-tests.yml
     with:
       rspec_task: bin/rspec-e2e --profile 10
-      bundle_gemfile: mat_views/gemfiles/${{ matrix.gemfile }}
+      bundle_gemfile: smriti/gemfiles/${{ matrix.gemfile }}
 
   push:
     name: Build & Push gem
@@ -140,6 +140,6 @@ jobs:
         uses: rubygems/configure-rubygems-credentials@main
       - name: Release
         run: |
-          cd mat_views
-          gem build mat_views.gemspec
-          gem push mat_views-*.gem
+          cd smriti
+          gem build smriti.gemspec
+          gem push smriti-*.gem

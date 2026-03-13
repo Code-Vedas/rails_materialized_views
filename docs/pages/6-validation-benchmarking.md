@@ -6,7 +6,7 @@ permalink: /validation
 
 # Validation & Benchmarking
 
-This guide shows how we **verify correctness** (materialized view rows match the baseline SQL) and **measure performance** (baseline vs. MV reads) using the companion demo app **`mat_views_demo`**.
+This guide shows how we **verify correctness** (materialized view rows match the baseline SQL) and **measure performance** (baseline vs. MV reads) using the companion demo app **`smriti_demo`**.
 
 It uses two sets of tasks:
 
@@ -22,9 +22,9 @@ Everything logs via `Rails.logger` and produces a CSV report suitable for docs a
 1. **Project layout (adjacent repos)**
 
    ```bash
-   rails_materialized_views/
-     mat_views/         # the engine
-     mat_views_demo/    # the demo app (docs/examples live here)
+   smriti/
+     smriti/         # the engine
+     smriti_demo/    # the demo app (docs/examples live here)
    ```
 
 2. **Demo app configured** with a working Postgres connection.
@@ -32,7 +32,7 @@ Everything logs via `Rails.logger` and produces a CSV report suitable for docs a
 3. **Queue backend** (optional for this guide) if you plan to run create/refresh via jobs. The demo bootstrap uses the engine’s rake tasks which enqueue via:
 
    ```ruby
-   MatViews::Jobs::Adapter.enqueue(job_class, queue: MatViews.configuration.job_queue, args: [...])
+   Smriti::Jobs::Adapter.enqueue(job_class, queue: Smriti.configuration.job_queue, args: [...])
    ```
 
    The adapter assumes your backend is configured (ActiveJob, Sidekiq, Resque).
@@ -41,12 +41,12 @@ Everything logs via `Rails.logger` and produces a CSV report suitable for docs a
 
 ## 1) Demo data & views (one-shot bootstrap)
 
-From the **`mat_views_demo/`** directory:
+From the **`smriti_demo/`** directory:
 
 ```bash
 # Seed ~500 users (× scale), define 4 MV definitions,
 # create them, add unique indexes, and do an initial refresh.
-bin/rake 'mat_views:bootstrap_demo[1,--yes]'
+bin/rake 'smriti:bootstrap_demo[1,--yes]'
 ```
 
 What it does:
@@ -70,36 +70,36 @@ What it does:
 > Prefer the bootstrap for a clean slate. If you want the steps separately:
 
 ```bash
-bin/rake 'mat_views:seed_demo[1,--yes]'
-bin/rake mat_views:define_demo_views
-bin/rake 'mat_views:create_all[,--yes]'
-bin/rake 'mat_views:refresh_all[,--yes]'
+bin/rake 'smriti:seed_demo[1,--yes]'
+bin/rake smriti:define_demo_views
+bin/rake 'smriti:create_all[,--yes]'
+bin/rake 'smriti:refresh_all[,--yes]'
 ```
 
 ### Notes
 
-- `mat_views:seed_demo[scale,--yes]` accepts `scale` (integer) and a confirmation skip flag (`--yes` or `YES=1`).
+- `smriti:seed_demo[scale,--yes]` accepts `scale` (integer) and a confirmation skip flag (`--yes` or `YES=1`).
 - All actions write progress via `Rails.logger` (not `puts`). Make sure your dev logger outputs to STDOUT.
 
 ---
 
 ## 2) Validate & benchmark
 
-From **`mat_views_demo/`**:
+From **`smriti_demo/`**:
 
 ```bash
 # Run the validator for N iterations per view (default: 5)
-bin/rake 'mat_views:validate_demo[100]'
+bin/rake 'smriti:validate_demo[100]'
 
 # or with an env var:
-ITER=100 bin/rake mat_views:validate_demo
+ITER=100 bin/rake smriti:validate_demo
 ```
 
 ### What the validator does
 
 - Discovers existing materialized views from `pg_matviews`
   _(excluding system schemas)_.
-- Matches them to `MatViews::MatViewDefinition` records (to fetch the baseline SQL).
+- Matches them to `Smriti::MatViewDefinition` records (to fetch the baseline SQL).
 - For each definition present as a physical MV:
   - Runs the **baseline** SQL (the definition’s `SELECT`) `iterations` times and records per-iteration duration.
   - Runs the **MV read** (a `SELECT` from the MV) `iterations` times and records per-iteration duration.
@@ -134,7 +134,7 @@ rows_baseline,rows_mv
 
 ### Where the numbers come from
 
-- Timing uses a monotonic clock in `MatViewsDemo::Validator`.
+- Timing uses a monotonic clock in `SmritiDemo::Validator`.
 - No “warmup” by default (we measure cold/hot mixed reality). If you prefer warm cache, run the task twice and use the second run, or extend the validator with a warmup loop.
 
 ---
@@ -168,7 +168,7 @@ rows_baseline,rows_mv
 ## Correctness checks
 
 - The validator compares **row counts** between the baseline and MV read.
-- For tighter guarantees, you can extend `MatViewsDemo::Validator` to:
+- For tighter guarantees, you can extend `SmritiDemo::Validator` to:
   - Compare **aggregates** (e.g., `SUM`/`COUNT DISTINCT`)
   - Sample keys and compare **row contents**
   - Do a full **set diff** in staging (expensive!)

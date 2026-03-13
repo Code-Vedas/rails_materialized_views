@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 env:
   RUBY_VERSION: 3.4.3
-  APP_DIR: ${{ github.workspace }}/mat_views
+  APP_DIR: ${{ github.workspace }}/smriti
 jobs:
   remove_screenshots_comment:
     if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'e2e-screenshots')
@@ -21,7 +21,7 @@ jobs:
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          header: 📸 MatViews Admin App Screenshots
+          header: 📸 Smriti Admin App Screenshots
           delete: true
 
   acknowledge:
@@ -34,9 +34,9 @@ jobs:
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          header: 📸 MatViews Admin App Screenshots
+          header: 📸 Smriti Admin App Screenshots
           message: |
-            Taking screenshots for the MatViews Admin App in e2e tests. This may take 10-15 minutes depending on the queue.
+            Taking screenshots for the Smriti Admin App in e2e tests. This may take 10-15 minutes depending on the queue.
 
   app_screenshots:
     runs-on: ubuntu-latest
@@ -121,7 +121,7 @@ jobs:
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          header: 📸 MatViews Admin App Screenshots
+          header: 📸 Smriti Admin App Screenshots
           message: |
             App screenshots from the latest e2e test run are available.
 

@@ -1,0 +1,26 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+gem 'bootsnap', require: false
+gem 'csv'
+gem 'importmap-rails'
+gem 'smriti', path: '../smriti'
+gem 'pg', '~> 1.1'
+gem 'propshaft'
+gem 'puma', '>= 5.0'
+gem 'rails', '~> 8.1.1'
+gem 'solid_cable'
+gem 'solid_cache', '>= 1.0.8'
+gem 'solid_queue'
+gem 'stimulus-rails'
+gem 'turbo-rails'
+gem 'tzinfo-data', platforms: %i[windows jruby]
+group :development, :test do
+  gem 'debug', platforms: %i[mri windows],
+               require: 'debug/prelude'
+end
+
+group :development do
+  gem 'web-console'
+end

@@ -1,11 +1,11 @@
 version: 2
 updates:
   - package-ecosystem: bundler
-    directory: /mat_views
+    directory: /smriti
     schedule:
       interval: daily
   - package-ecosystem: bundler
-    directory: /mat_views_demo
+    directory: /smriti_demo
     schedule:
       interval: daily
   - package-ecosystem: bundler
