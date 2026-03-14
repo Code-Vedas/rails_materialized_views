@@ -65,7 +65,7 @@ module Smriti
       def mv_drawer_link(drawer_url, drawer_title, args = {}, &)
         data = { action: 'click->drawer#open', drawer_title: drawer_title, drawer_url: drawer_url }
         args[:data] = (args[:data] || {}).merge(data)
-        mv_button_link '#', assign_test_id(args), &
+        mv_button_link('#', assign_test_id(args), &)
       end
 
       # Renders a styled `button_to` element.
@@ -164,7 +164,7 @@ module Smriti
         classes << (selected ? 'mv-tab--on' : '')
         args[:class] = [args[:class], classes.compact.join(' ')].compact.join(' ').strip
         args[:data] = args.fetch(:data, {}).merge({ action: 'click->tabs#show', 'tabs-target': 'link', name: tab_name })
-        link_to '#', **args, &
+        link_to('#', **args, &)
       end
 
       # Renders a badge element styled by status.
